@@ -45,7 +45,7 @@ define("DEFAULT_TITLE", "My website");
 /**
  * This is the default locale of the website
  */
-define("DEFAULT_LOCALE", "en-US");
+define("DEFAULT_LOCALE", "fr-FR");
 
-define("CACHE_PREFIX", "your_app_name");
+define("CACHE_PREFIX", "smartblocks");
 define("NODE_PORT", "8899");
