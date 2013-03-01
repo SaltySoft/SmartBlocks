@@ -47,6 +47,12 @@ class User extends UserBase
      */
     private $roles;
 
+    public function __construct()
+    {
+        $this->firstname = "";
+        $this->lastname = "";
+    }
+
     public function getId()
     {
         return $this->id;
@@ -94,5 +100,35 @@ class User extends UserBase
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname()
         );
+    }
+
+    /**
+     * Returns true if the user has the right somewhere, or in
+     * the specified group (the group must be a token).
+     *
+     * @param $right_token
+     * @param null $group_token
+     * @return bool
+     */
+    public function hasRight($right_token, $group_token = null)
+    {
+        $hasright = false;
+        foreach ($this->roles as $role)
+        {
+
+            foreach ($role->getJob()->getRights() as $right)
+            {
+                if ($group_token == null)
+                {
+                    $hasright = $right->getToken() == $right_token;
+                }
+                else
+                {
+                    $hasright = $right->getToken() == $token && $role->getGroup()->getToken() == $group_token;
+                }
+            }
+
+        }
+        return $hasright;
     }
 }

@@ -24,16 +24,31 @@
 class UsersController extends Controller
 {
 
-    private function security_check()
+    private function security_check($user = null)
     {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
+            $this->redirect("/Users/user_error");
+        }
+    }
 
+    public function user_error($params = array())
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+        $response = array(
+            "message" => "There was an error"
+        );
+        echo json_encode($response);
     }
 
     function login($params = array())
     {
-        if (isset($_POST["name"]) && isset($_POST["password"])) {
+        if (isset($_POST["name"]) && isset($_POST["password"]))
+        {
             $users = User::where(array("name" => $_POST["name"], "hash" => sha1($_POST["password"])));
-            if (count($users) > 0) {
+            if (count($users) > 0)
+            {
                 $user = $users[0];
                 $user->login();
             }
@@ -45,7 +60,8 @@ class UsersController extends Controller
     function logout($params = array())
     {
         $user = User::current_user();
-        if ($user != null) {
+        if ($user != null)
+        {
             $user->logout();
         }
         $this->redirect("/");
@@ -59,6 +75,11 @@ class UsersController extends Controller
 
     function create($params = array())
     {
+        $users = User::where(array("admin" => 1));
+        if (count($users) > 0)
+        {
+            $this->security_check();
+        }
         $user = new User();
         $usernames = User::where(array("name" => $_POST["name"]));
         $usermail = User::where(array("email" => $_POST["mail"]));
@@ -67,7 +88,8 @@ class UsersController extends Controller
             $user->setName($_POST["name"]);
             $user->setMail($_POST["mail"]);
             $users = User::where(array("admin" => 1));
-            if (count($users) == 0) {
+            if (count($users) == 0)
+            {
                 $user->setAdmin();
             }
             else
@@ -88,7 +110,6 @@ class UsersController extends Controller
     }
 
 
-
     function add($params = array())
     {
 
@@ -105,9 +126,9 @@ class UsersController extends Controller
         $this->render = false;
         header("Content-Type: application/json");
         $user = User::find($params["id"]);
-        $response = array();
-        if (is_object($user))
+        if (is_object($user) && $this->security_check($user))
         {
+            $this->security_check();
             $data = $this->getRequestData();
 
             $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : $user->getFirstname());
@@ -118,8 +139,23 @@ class UsersController extends Controller
                 "id" => $user->getId(),
                 "firstname" => $user->getFirstname(),
             );
+            echo json_encode($response);
         }
-        echo json_encode($response);
+        else
+        {
+            $this->redirect("/Users/user_error");
+        }
+
+
+    }
+
+    /**
+     * This action is an admin page to access user management javascript apps.
+     * @param array $params
+     */
+    public function user_management($params = array())
+    {
+
     }
 
 
