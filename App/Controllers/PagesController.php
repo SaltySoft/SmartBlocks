@@ -22,11 +22,12 @@
  */
 
 require_once (ROOT.DS."Config".DS."database.php");
+require_once(ROOT.DS."App".DS."BusinessManagement".DS."SmartBlocks.php");
 class PagesController extends Controller
 {
     function home($params = array())
     {
-
+        SmartBlocks::getApplicationBlocks();
     }
 
     /**
