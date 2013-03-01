@@ -23,6 +23,12 @@
 
 class UsersController extends Controller
 {
+
+    private function security_check()
+    {
+
+    }
+
     function login($params = array())
     {
         if (isset($_POST["name"]) && isset($_POST["password"])) {
@@ -78,7 +84,6 @@ class UsersController extends Controller
         {
             $this->flash("This user already exists");
             $this->redirect("/Users/login_form");
-            //error user exists
         }
     }
 
@@ -86,30 +91,35 @@ class UsersController extends Controller
 
     function add($params = array())
     {
-        /*
-         * This code would keep users to create their own account once an admin has created his account.
-         *
-        $admin_created = true;
-        $user = User::current_user();
-        if ($user != null) {
-            if (!$user->isAdmin()) {
-                $this->redirect("/");
-            }
 
-        }
-        else
+    }
+
+
+    /**
+     * This webservice waits for the following information :
+     * firstname - first name of the user to update
+     * lastname - last name of the user to update
+     */
+    function update($params = array())
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+        $user = User::find($params["id"]);
+        $response = array();
+        if (is_object($user))
         {
-            $users = User::where(array("admin" => 1));
-            if (count($users) > 0) {
-                $this->redirect("/");
-            }
-            else
-            {
-                $admin_created = false;
-            }
+            $data = $this->getRequestData();
+
+            $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : $user->getFirstname());
+            $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : $user->getLastname());
+
+            $user->save();
+            $response = array(
+                "id" => $user->getId(),
+                "firstname" => $user->getFirstname(),
+            );
         }
-        $this->set("message", $admin_created);
-        */
+        echo json_encode($response);
     }
 
 

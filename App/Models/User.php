@@ -32,8 +32,67 @@ class User extends UserBase
      */
     public $id;
 
+    /**
+     * @Column(type="string")
+     */
+    private $lastname;
+
+    /**
+     * @Column(type="string")
+     */
+    private $firstname;
+
+    /**
+     * @OneToMany(targetEntity="Role", mappedBy="user")
+     */
+    private $roles;
+
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    public function setLastActivity($last_activity)
+    {
+        $this->last_activity = $last_activity;
+    }
+
+    public function getLastActivity()
+    {
+        return $this->last_activity;
+    }
+
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+
+    public function toArray()
+    {
+        return array(
+            "id" => $this->getId(),
+            "firstname" => $this->getFirstname(),
+            "lastname" => $this->getLastname()
+        );
     }
 }
