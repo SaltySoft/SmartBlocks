@@ -32,6 +32,7 @@ class UsersController extends Controller
         }
     }
 
+
     public function user_error($params = array())
     {
         $this->render = false;
@@ -40,6 +41,38 @@ class UsersController extends Controller
             "message" => "There was an error"
         );
         echo json_encode($response);
+    }
+
+    public function index()
+    {
+        $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
+        $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
+
+        $em = Model::getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select("u")
+            ->from("User", "u")
+            ->setFirstResult(($page - 1) * $page_size)
+            ->setMaxResults($page_size);
+
+        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        {
+            $qb->andWhere("u.name LIKE :username")
+            ->setParameter("username", '%'.mysql_real_escape_string($_GET["filter"]).'%');
+        }
+
+        $users = $qb->getQuery()->getResult();
+
+        $response = array();
+
+        foreach ($users as $user)
+        {
+            $response[] = $user->toArray();
+        }
+        $this->render = false;
+        header("Content-Type: application/json");
+        echo json_encode($response);
+
     }
 
     function login($params = array())
@@ -70,6 +103,26 @@ class UsersController extends Controller
 
     function login_form()
     {
+
+    }
+
+    public function show($params = array())
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+
+        $user = User::find($params["id"]);
+        if (is_object($user))
+        {
+            $response = $user->toArray();
+        }
+        else
+        {
+            $response = array();
+        }
+
+        echo json_encode($response);
+
 
     }
 
@@ -114,7 +167,6 @@ class UsersController extends Controller
     {
 
     }
-
 
     /**
      * This webservice waits for the following information :

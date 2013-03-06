@@ -5,14 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>My website</title>
     {{ HtmlHelper.importCss("default") }}
-    {{ HtmlHelper.importJs("jquery-1.9.1") }}
-    {{ HtmlHelper.importJs("slides.jquery") }}
-    {{ HtmlHelper.importJs("jquery-ui-1.10.1.min") }}
+    {#{{ HtmlHelper.importJs("jquery-1.9.1") }}#}
+    {#{{ HtmlHelper.importJs("jquery-ui-1.10.1.min") }}#}
+    {{ HtmlHelper.importJs("require") }}
 
-    {{ HtmlHelper.importJs("underscore") }}
-    {{ HtmlHelper.importJs("backbone") }}
+    {#{{ HtmlHelper.importJs("underscore") }}#}
+    {#{{ HtmlHelper.importJs("backbone") }}#}
 
-    {{ HtmlHelper.importJs("default") }}
+    {#{{ HtmlHelper.importJs("default") }}#}
     <link rel="icon" type="image/jpg" href="/images/favicon.png"/>
     {{ _content_for_header_|raw }}
     <style type="text/css">
@@ -25,13 +25,17 @@
         }
     </style>
     <script type="text/javascript">
-        {% if _socket_serv is defined %}
-            var websocket = "";
-            $(document).ready(function () {
-                 websocket = new WebSocket("{{ _socket_serv }}", "muffin-protocol");
-                server_handshake(websocket, "{{ _session_id }}");
-            });
-        {% endif %}
+        {#{% if _socket_serv is defined %}#}
+            {#var websocket = "";#}
+            {#$(document).ready(function () {#}
+                 {#websocket = new WebSocket("{{ _socket_serv }}", "muffin-protocol");#}
+                {#server_handshake(websocket, "{{ _session_id }}");#}
+            {#});#}
+        {#{% endif %}#}
+        {#SmartBlocks.setUserId({% if user %}{{ user.getId  }}{% else %}0{% endif %});#}
+
+
+
     </script>
 </head>
 <body>
@@ -149,15 +153,15 @@
                 {% set errornb = errornb + 1 %}
             {% endfor %}
             <script type="text/javascript">
-                $(document).ready(function () {
-                    $(".muffin_error").click(function () {
-                        id = $(this).attr("data-error");
-                        $("#error" + id).show();
-                    });
-                    $(".error_message_b").click(function () {
-                        $(this).parent().hide();
-                    });
-                });
+//                $(document).ready(function () {
+//                    $(".muffin_error").click(function () {
+//                        id = $(this).attr("data-error");
+//                        $("#error" + id).show();
+//                    });
+//                    $(".error_message_b").click(function () {
+//                        $(this).parent().hide();
+//                    });
+//                });
             </script>
         </div>
     {% endif %}

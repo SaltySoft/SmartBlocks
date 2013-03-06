@@ -98,7 +98,8 @@ class User extends UserBase
         return array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
-            "lastname" => $this->getLastname()
+            "lastname" => $this->getLastname(),
+            "username" => $this->getName()
         );
     }
 

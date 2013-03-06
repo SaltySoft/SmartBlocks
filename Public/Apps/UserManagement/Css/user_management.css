@@ -1,0 +1,45 @@
+.k_um_card {
+    width: 300px;
+    height: 400px;
+    background: white;
+    padding: 10px;
+}
+
+.k_um_card_title {
+    font-size:  20px;
+}
+
+.k_um_card_field {
+    clear: both;
+}
+
+.k_um_card_field input[type="text"] {
+    float: right
+}
+
+.k_um_card_field label {
+    line-height: 20px;
+}
+
+.k_um_user_list {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+
+}
+
+.k_um_user_list li {
+    padding: 0px;
+    margin: 0px;
+}
+
+.k_users_list {
+    width: 200px;
+    background-color: #c4e7e2;
+    padding: 10px;
+    float: left;
+}
+
+.k_um_user_list_controls {
+    text-align: center;
+}
