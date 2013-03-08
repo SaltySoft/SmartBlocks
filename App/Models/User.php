@@ -129,14 +129,28 @@ class User extends UserBase
     }
 
 
-
     public function toArray()
     {
+
+        $jobs = array();
+        foreach ($this->jobs as $job)
+        {
+            $jobs[] = $job->toArray();
+        }
+
+        $groups = array();
+        foreach ($this->groups as $group)
+        {
+            $groups[] = array("id" => $group->getId());
+        }
+
         return array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname(),
-            "username" => $this->getName()
+            "username" => $this->getName(),
+            "jobs" => $jobs,
+            "groups" => $groups
         );
     }
 

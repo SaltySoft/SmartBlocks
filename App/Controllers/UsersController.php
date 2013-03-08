@@ -66,7 +66,7 @@ class UsersController extends Controller
         if (isset($_GET["filter"]) && $_GET["filter"] != "")
         {
             $qb->andWhere("u.name LIKE :username")
-            ->setParameter("username", '%'.mysql_real_escape_string($_GET["filter"]).'%');
+                ->setParameter("username", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
 
         $users = $qb->getQuery()->getResult();
@@ -183,30 +183,66 @@ class UsersController extends Controller
      */
     function update($params = array())
     {
+        $this->security_check();
         $this->render = false;
         header("Content-Type: application/json");
         $user = User::find($params["id"]);
-        if (is_object($user) && $this->security_check($user))
+        if (is_object($user))
         {
             $this->security_check();
             $data = $this->getRequestData();
-
+            $user->setName(isset($data["username"]) ? $data["username"] : $user->getName());
             $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : $user->getFirstname());
             $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : $user->getLastname());
+            $user->getJobs()->clear();
+            foreach ($data["jobs"] as $job_array)
+            {
+                $job = Job::find($job_array["id"]);
 
+                if (is_object($job) && !$user->getJobs()->contains($job))
+                {
+                    $user->addJob($job);
+                }
+            }
             $user->save();
-            $response = array(
-                "id" => $user->getId(),
-                "firstname" => $user->getFirstname(),
-            );
+            $response = $user->toArray();
             echo json_encode($response);
         }
         else
         {
             $this->redirect("/Users/user_error");
         }
+    }
 
+    /**
+     * Adds a job to the given user
+     * GET/POST request
+     */
+    public function add_job($params = array())
+    {
+        $this->security_check();
+        $this->render = false;
+        header("Content-Type: application/json");
 
+        $data = $this->getRequestData();
+
+        $user = User::find($data["user_id"]);
+        $job = Job::find($data["job_id"]);
+
+        if (is_object($user) && is_object($job))
+        {
+            $user->addJob($job);
+            $user->save();
+            echo json_encode(array(
+                "status" => "success"
+            ));
+        }
+        else
+        {
+            echo json_encode(array(
+                "status" => "error"
+            ));
+        }
     }
 
     /**

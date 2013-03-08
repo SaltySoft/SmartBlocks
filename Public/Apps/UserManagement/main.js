@@ -4,7 +4,8 @@ requirejs.config({
         jquery:"/javascript/jquery-1.9.1",
         underscore:"/javascript/underscore",
         backbone:"/javascript/backbone",
-        text:"/javascript/text"
+        text:"/javascript/text",
+        default: "/javascript/default"
 
     },
     shim:{

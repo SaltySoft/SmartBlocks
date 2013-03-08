@@ -20,6 +20,9 @@ define([
             base.collection = new UsersCollection();
             base.timer = 0;
             base.page_size = 5;
+        },
+        init:function (AppEvents) {
+            this.AppEvents = AppEvents;
             this.render();
             this.load_page(this.current_page);
         },
@@ -29,6 +32,10 @@ define([
             var template = _.template(UsersListTemplate, {
                 users:base.collection.models,
                 filter:base.filter
+            });
+
+            this.AppEvents.bind("user_updated", function () {
+                base.load_page();
             });
 
             base.$el.html(template);
