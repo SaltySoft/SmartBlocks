@@ -43,3 +43,23 @@
 .k_um_user_list_controls {
     text-align: center;
 }
+
+.job_list_container {
+}
+
+.k_um_job_list {
+    list-style: none;
+}
+.owned_job {
+    background-color: green !important;
+}
+
+.k_um_job_list li {
+    float: left;
+    background-color: #ce141c;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+}
+

@@ -5,7 +5,8 @@ requirejs.config({
         underscore:"/javascript/underscore",
         backbone:"/javascript/backbone",
         text:"/javascript/text",
-        default: "/javascript/default"
+        default: "/javascript/default",
+        jqueryui:"/javascript/jquery-ui-1.10.1.min"
 
     },
     shim:{

@@ -5,18 +5,22 @@
     <input type="text" class="k_um_username_input" value="<%= username %>"/>
     <fieldset>
         <legend>Jobs</legend>
-        <div class="k_um_user_job_container">
-            <% _.each(user.get("jobs"), function(job){ %>
-            <li><%= job.get("name") %> <a href="javascript:void(0);" class="k_um_remove_job_button" data-job_id="<%= job.get('id') %>"><img src="/images/icons/cross.png"/></a></li>
-            <% }); %>
+        <div>
+            <ul class="available_jobs"></ul>
         </div>
-        Add job: <input type="text" placeholder="Enter a job name" /><button class="k_um_user_job_add_button">Add</button>
+        <div style="clear:both"></div>
+        <div class="k_um_user_job_container" >
+            <ul class="job_list_container k_um_job_list">
+                <% _.each(jobs, function(job){ %>
+                <li class="job_item" data-job_id="<%= job.get('id') %>"><%= job.get("name") %></li>
+                <% }); %>
+            </ul>
+        </div>
     </fieldset>
     <fieldset>
         <legend>Groups</legend>
         <div class="k_um_user_job_container">
 
         </div>
-        Remove job: <input type="text" placeholder="Enter a group name" /><button class="k_um_user_job_add_button">Add</button>
     </fieldset>
 </div>
