@@ -46,6 +46,11 @@ class Group extends Model
      */
     private $token;
 
+    /**
+     * @ManyToMany(targetEntity="User", mappedBy="groups")
+     */
+    private $users;
+
     public function getId()
     {
         return $this->id;
@@ -80,5 +85,22 @@ class Group extends Model
     {
         return $this->token;
     }
+
+    public function addUser($user)
+    {
+        $this->users[] = $user;
+    }
+
+    public function removeUser($user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+
 }
 

@@ -43,9 +43,14 @@ class User extends UserBase
     private $firstname;
 
     /**
-     * @OneToMany(targetEntity="Role", mappedBy="user")
+     * @ManyToMany(targetEntity="Group", inversedBy="users")
      */
-    private $roles;
+    private $groups;
+
+    /**
+     * @ManyToMany(targetEntity="Job", inversedBy="users")
+     */
+    private $jobs;
 
     public function __construct()
     {
@@ -92,6 +97,38 @@ class User extends UserBase
     {
         return $this->roles;
     }
+
+    public function addGroup($group)
+    {
+        $this->groups[] = $group;
+    }
+
+    public function removeGroup($group)
+    {
+        $this->groups->removeElement($group);
+    }
+
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+
+    public function addJob($job)
+    {
+        $this->jobs[] = $job;
+    }
+
+    public function removeJob($job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    public function getJobs()
+    {
+        return $this->jobs;
+    }
+
+
 
     public function toArray()
     {

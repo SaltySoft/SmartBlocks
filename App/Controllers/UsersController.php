@@ -32,6 +32,14 @@ class UsersController extends Controller
         }
     }
 
+    private function interface_security_check($user = null)
+    {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
+            $this->redirect("/");
+        }
+    }
+
 
     public function user_error($params = array())
     {
@@ -207,7 +215,7 @@ class UsersController extends Controller
      */
     public function user_management($params = array())
     {
-
+        $this->interface_security_check();
     }
 
 

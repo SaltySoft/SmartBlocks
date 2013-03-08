@@ -41,6 +41,11 @@ class Right extends Model
      */
     private $token;
 
+    /**
+     * @ManyToMany(targetEntity="Job", inversedBy="rights")
+     */
+    private $jobs;
+
     public function getId()
     {
         return $this->id;
@@ -64,6 +69,21 @@ class Right extends Model
     public function getToken()
     {
         return $this->token;
+    }
+
+    public function addJob($job)
+    {
+        $this->jobs[] = $job;
+    }
+
+    public function removeJob($job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    public function getJobs()
+    {
+        return $this->jobs;
     }
 
 

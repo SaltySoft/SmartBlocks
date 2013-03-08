@@ -41,6 +41,16 @@ class Job extends Model
      */
     private $token;
 
+    /**
+     * @ManyToMany(targetEntity="Right", mappedBy="jobs")
+     */
+    private $rights;
+
+    /**
+     * @ManyToMany(targetEntity="User", mappedBy="jobs")
+     */
+    private $users;
+
     public function getId()
     {
         return $this->id;
@@ -65,6 +75,38 @@ class Job extends Model
     {
         return $this->token;
     }
+
+    public function addRight($right)
+    {
+        $this->rights[] = $right;
+    }
+
+    public function removeRight($right)
+    {
+        $this->rights->removeElement($right);
+    }
+
+    public function getRights()
+    {
+        return $this->rights;
+    }
+
+    public function addUser($user)
+    {
+        $this->users[] = $user;
+    }
+
+    public function removeUser($user)
+    {
+        $this->users->removeElement($user);
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+
 
 
     
