@@ -1,8 +1,8 @@
 define([
     'underscore',
     'backbone',
-    'Models/User',
-    'Collections/Users',
+    'UserModel',
+    'UsersCollection',
     'text!Templates/user_list.html',
     'text!Templates/user_list_inner.html'
 ], function (_, Backbone, User, UsersCollection, UsersListTemplate, UsersListInnerTemplate) {

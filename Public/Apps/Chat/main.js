@@ -1,5 +1,5 @@
 requirejs.config({
-    baseUrl:'/Apps/UserManagement',
+    baseUrl:'/Apps/Chat',
     paths:sb_paths,
     shim:sb_shims
 });

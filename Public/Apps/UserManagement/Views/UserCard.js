@@ -4,10 +4,10 @@ define([
     'backbone',
     'SmartBlocks',
     'text!Templates/user_card.html',
-    'Models/Job',
-    'Collections/Jobs',
-    'Models/Group',
-    'Collections/Groups',
+    'JobModel',
+    'JobsCollection',
+    'GroupModel',
+    'GroupsCollection',
     'jqueryui'
 ], function ($, _, Backbone, SmartBlocks, testTemplate, Job, Jobs, Group, Groups) {
     var UserCard = Backbone.View.extend({

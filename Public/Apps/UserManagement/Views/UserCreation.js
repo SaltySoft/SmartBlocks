@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'Models/User',
+    'UserModel',
     'text!Templates/user_add.html'
 ], function ($, _, Backbone, SmartBlocks, User, UserAddTemplate) {
     var UserCreationView = Backbone.View.extend({

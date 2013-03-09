@@ -1,8 +1,8 @@
 define([
     'underscore',
     'backbone',
-    'Models/Job',
-    'Collections/Jobs',
+    'JobModel',
+    'JobsCollection',
     'text!Templates/job_list.html',
     'jqueryui'
 ], function (_, Backbone, Job, JobsCollection, JobsListTemplate) {

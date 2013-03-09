@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'GroupModel'
+    'Models/Group'
 ], function (_, Backbone, Group) {
     var GroupsCollection = Backbone.Collection.extend({
         model: Group,

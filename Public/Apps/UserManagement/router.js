@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Views/AppView',
+    'TabView',
     'Views/UserCard',
     'Models/User',
     'Views/UsersList',
