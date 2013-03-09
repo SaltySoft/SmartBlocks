@@ -1,0 +1,112 @@
+.k_um_card {
+    width: 500px;
+
+    background: white;
+    padding: 10px;
+    float: left;
+
+}
+
+.k_um_card_title {
+    font-size:  20px;
+}
+
+.k_um_card_field {
+    clear: both;
+}
+
+.k_um_card_field input[type="text"] {
+    float: right
+}
+
+.k_um_card_field label {
+    line-height: 20px;
+}
+
+.k_um_user_list {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+
+}
+
+.k_um_user_list li {
+    padding: 0px;
+    margin: 0px;
+}
+
+.k_users_list {
+    width: 200px;
+    background-color: #c4e7e2;
+    padding: 10px;
+    float: left;
+}
+
+.k_um_user_list_controls {
+    text-align: center;
+}
+
+.job_list_container {
+}
+
+.k_um_job_list {
+    list-style: none;
+}
+.owned_job {
+    background-color: green !important;
+}
+
+.k_um_job_list li {
+    float: left;
+    background-color: #ce141c;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.owned_group {
+    background-color: green !important;
+}
+
+.k_um_group_list {
+    list-style: none;
+}
+
+.k_um_group_list li {
+    float: left;
+    background-color: #ce141c;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.field input[type="text"], .field input[type="password"]{
+    float: right
+}
+
+.field {
+    clear: right;
+}
+
+.k_um_direct_data {
+    width: 293px;
+}
+
+.tab {
+    display: none;
+}
+
+.tab_controller li {
+    float: left;
+}
+/*User Creation*/
+.k_um_creation_form {
+    width: 400px;
+    margin: auto;
+}

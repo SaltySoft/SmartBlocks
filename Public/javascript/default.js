@@ -63,3 +63,23 @@ function server_handshake(websocket, identification) {
 function parseWs(message) {
     return JSON.parse(JSON.parse(message.data));
 }
+
+SmartBlocks = $.extend({}, {
+    user_id:0,
+
+    setUserId:function (user_id) {
+        base = this;
+        base.user_id = user_id;
+    },
+
+    load_user:function (callback) {
+        base = this;
+        base.user = new User({ id:base.user_id });
+        base.user.fetch({
+            success:function () {
+                callback(base.user);
+            }
+        });
+    }
+});
+

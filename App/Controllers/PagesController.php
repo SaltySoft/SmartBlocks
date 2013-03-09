@@ -25,9 +25,17 @@ require_once (ROOT.DS."Config".DS."database.php");
 require_once(ROOT.DS."App".DS."BusinessManagement".DS."SmartBlocks.php");
 class PagesController extends Controller
 {
+    public function security_check()
+    {
+        if (!User::logged_in())
+        {
+            $this->redirect("/Users/login_form");
+        }
+    }
+
     function home($params = array())
     {
-        SmartBlocks::getApplicationBlocks();
+        $this->security_check();
     }
 
     /**
@@ -35,6 +43,7 @@ class PagesController extends Controller
      */
     function configuration($params = array())
     {
+        $this->security_check();
 
         $db_config = new DbConfig;
         $dsn='mysql:host='.$db_config->dev["host"].';port=3306;dbname='.$db_config->dev["database"].'';
