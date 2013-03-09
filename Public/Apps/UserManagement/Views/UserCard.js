@@ -2,14 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-
+    'SmartBlocks',
     'text!Templates/user_card.html',
     'Models/Job',
     'Collections/Jobs',
     'Models/Group',
     'Collections/Groups',
     'jqueryui'
-], function ($, _, Backbone, testTemplate, Job, Jobs, Group, Groups) {
+], function ($, _, Backbone, SmartBlocks, testTemplate, Job, Jobs, Group, Groups) {
     var UserCard = Backbone.View.extend({
         tagName:"div",
         className:"k_um_card",
@@ -38,15 +38,10 @@ define([
                                 base.render();
                                 base.$el.fadeIn(200);
                             }
-
                         }
                     });
-
-
                 }
             });
-
-
         },
         render:function () {
             var base = this;
@@ -104,8 +99,6 @@ define([
 
                 base.updateGroups();
             });
-
-
             this.initializeEvents();
             return this;
         },
@@ -117,7 +110,6 @@ define([
                 elt.addClass("not_owned_job");
                 elt.removeClass("owned_job");
                 for (var k in base.model.get('jobs')) {
-
                     if (model_jobs[k].get('id') == elt.attr('data-job_id')) {
                         elt.addClass("owned_job");
                         elt.removeClass("not_owned_job");
@@ -133,7 +125,6 @@ define([
                 elt.addClass("not_owned_group");
                 elt.removeClass("owned_group");
                 for (var k in base.model.get('groups')) {
-
                     if (model_groups[k].get('id') == elt.attr('data-group_id')) {
                         elt.addClass("owned_group");
                         elt.removeClass("not_owned_group");
@@ -143,7 +134,6 @@ define([
         },
         initializeEvents:function () {
             var base = this;
-
             this.$el.find(".k_um_username_input").keyup(function () {
                 var elt = $(this);
                 base.model.set({ username:elt.val() });
@@ -178,7 +168,7 @@ define([
             var base = this;
             this.model.save({}, {
                 success:function () {
-//                    show_message("The user was saved");
+                    SmartBlocks.show_message("The user was saved");
                     base.render();
                     base.AppEvents.trigger("user_updated");
                 }

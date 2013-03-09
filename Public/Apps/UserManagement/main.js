@@ -6,7 +6,8 @@ requirejs.config({
         backbone:"/javascript/backbone",
         text:"/javascript/text",
         default: "/javascript/default",
-        jqueryui:"/javascript/jquery-ui-1.10.1.min"
+        jqueryui:"/javascript/jquery-ui-1.10.1.min",
+        SmartBlocks:"/javascript/SmartBlocks"
 
     },
     shim:{
