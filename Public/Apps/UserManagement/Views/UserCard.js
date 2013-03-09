@@ -33,8 +33,12 @@ define([
                     base.group_list = new Groups();
                     base.group_list.fetch({
                         success: function () {
-                            base.render();
-                            base.$el.fadeIn(200);
+                            if (!base.model.isNew())
+                            {
+                                base.render();
+                                base.$el.fadeIn(200);
+                            }
+
                         }
                     });
 
@@ -46,7 +50,6 @@ define([
         },
         render:function () {
             var base = this;
-            console.log(base.model);
             var compiledTemplate = _.template(testTemplate, {username:this.model.get("username"), user:this.model, jobs:this.job_list.models, groups: this.group_list.models});
 
             this.$el.html(compiledTemplate);
@@ -66,7 +69,6 @@ define([
                         }
                     }
                     base.model.set({jobs:new_jobs});
-                    console.log(base.model);
                 } else {
                     var job = new Job({id:elt.attr("data-job_id")});
                     var jobs = base.model.get("jobs");

@@ -24,11 +24,51 @@ define([
             var template = _.template(TabsTemplate, {
             });
             base.$el.html(template);
-            $("#tabs").tabs();
-            $("#tabs").click(function(){
-                alert('hey');
+
+        },
+        addTab:function(name, element, link) {
+            var base = this;
+
+            //Tab controller button creation
+            var control_button_li = $(document.createElement("li"));
+            control_button_li.addClass("tab_controller");
+            var control_button = $(document.createElement("a"));
+            if (link == undefined)
+                control_button.attr("href", "javascript:void(0);");
+            else
+                control_button.attr("href", "#" + link);
+            control_button.html(name);
+            control_button_li.append(control_button);
+
+            base.$el.find(".tabs_controller").append(control_button_li);
+
+            //Tab creation and content insertion
+            var tab = $(document.createElement("div"));
+            tab.addClass("tab");
+            tab.append(element);
+            base.$el.find(".tabs_container").append(tab);
+
+            control_button.click(function () {
+                base.$el.find(".tab").hide();
+                tab.show();
+                console.log(tab.html());
+            });
+        },
+        show:function(index) {
+            var base = this;
+            base.$el.find(".tab").hide();
+            var i = 0;
+            base.$el.find(".tab").each(function (){
+                console.log(i);
+                i++;
+                var elt = $(this);
+                console.log(i);
+                if (i == index) {
+                    elt.show();
+                }
             });
         }
+
     });
 
     return AppView;

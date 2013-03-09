@@ -6,11 +6,12 @@ define([
     'Views/UserCard',
     'Models/User',
     'Views/UsersList',
-    'Views/JobsList'
-], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, JobsListView) {
+    'Views/UmHome'
+], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, UmHomeView) {
 
     var AppRouter = Backbone.Router.extend({
         routes:{
+            'edit_user':'editUser',
             'edit_user/:id':'editUser',
             '':"home"
         }
@@ -19,18 +20,25 @@ define([
     var initialize = function () {
         var AppEvents = _.extend({}, Backbone.Events);
 
-        var user_list_container = $(document.createElement("div"));
-        $("#app_container").append(user_list_container);
+        var app_view = new AppView();
+        app_view.init(AppEvents);
+        $("#app_container").html(app_view.$el);
+        //Home view: 1
+        var home_view = new UmHomeView();
+        home_view.init(AppEvents);
+        app_view.addTab("User Management", home_view.$el, "");
 
+        //User edition: 2
+        var user_mod_tab = $(document.createElement("div"));
+        var user_list_container = $(document.createElement("div"));
+        user_mod_tab.append(user_list_container);
         var user_list = new UsersListView();
         user_list.init(AppEvents);
-
         user_list_container.html(user_list.$el);
-
-
         var user_edition_container = $(document.createElement("div"));
-        $("#app_container").append(user_edition_container);
+        user_mod_tab.append(user_edition_container);
 
+        app_view.addTab("User edition", user_mod_tab, "edit_user");
 
 
 
@@ -43,6 +51,7 @@ define([
                     var user_card = new UserCardView({ model: user });
                     user_card.init(AppEvents);
                     user_edition_container.html(user_card.$el);
+                    app_view.show(2);
                 }
             });
 
@@ -51,7 +60,7 @@ define([
         });
 
         app_router.on("route:home", function () {
-
+            app_view.show(1);
         });
         Backbone.history.start();
     };

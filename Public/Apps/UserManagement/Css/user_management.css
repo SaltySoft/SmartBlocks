@@ -98,4 +98,10 @@
     width: 293px;
 }
 
+.tab {
+    display: none;
+}
 
+.tab_controller li {
+    float: left;
+}
