@@ -191,9 +191,11 @@ class UsersController extends Controller
         {
             $this->security_check();
             $data = $this->getRequestData();
+            //Direct data update
             $user->setName(isset($data["username"]) ? $data["username"] : $user->getName());
             $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : $user->getFirstname());
             $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : $user->getLastname());
+            //Jobs update
             $user->getJobs()->clear();
             foreach ($data["jobs"] as $job_array)
             {
@@ -204,6 +206,18 @@ class UsersController extends Controller
                     $user->addJob($job);
                 }
             }
+            //Groups update
+            $user->getGroups()->clear();
+            foreach ($data["groups"] as $group_array)
+            {
+                $group = Group::find($group_array["id"]);
+
+                if (is_object($group) && !$user->getGroups()->contains($group))
+                {
+                    $user->addGroup($group);
+                }
+            }
+            //Saving data to db
             $user->save();
             $response = $user->toArray();
             echo json_encode($response);

@@ -1,15 +1,27 @@
-<h1>User card</h1>
+<h3>Carte de l'utilisateur <%= user.get('username') %></h3>
 <div class="form_field">
     <button class="k_um_user_save_button">Save this user</button>
-    <label>Name: </label>
-    <input type="text" class="k_um_username_input" value="<%= username %>"/>
+    <div style="float: right" class="k_um_direct_data">
+        <div class="field">
+            <label>Username (token): </label>
+            <input type="text" class="k_um_username_input" value="<%= username %>"/>
+            <div style="clear: both"></div>
+        </div>
+        <div class="field">
+            <label>Firstname: </label>
+            <input type="text" class="k_um_firstname_input" value="<%= user.get('firstname') %>"/>
+            <div style="clear: both"></div>
+        </div>
+        <div class="field">
+            <label>Lastname: </label>
+            <input type="text" class="k_um_lastname_input" value="<%= user.get('lastname') %>"/>
+            <div style="clear: both"></div>
+        </div>
+    </div>
     <fieldset>
         <legend>Jobs</legend>
-        <div>
-            <ul class="available_jobs"></ul>
-        </div>
         <div style="clear:both"></div>
-        <div class="k_um_user_job_container" >
+        <div class="k_um_user_job_container">
             <ul class="job_list_container k_um_job_list">
                 <% _.each(jobs, function(job){ %>
                 <li class="job_item" data-job_id="<%= job.get('id') %>"><%= job.get("name") %></li>
@@ -19,8 +31,12 @@
     </fieldset>
     <fieldset>
         <legend>Groups</legend>
-        <div class="k_um_user_job_container">
-
+        <div class="k_um_user_group_container">
+            <ul class="group_list_container k_um_group_list">
+                <% _.each(groups, function(group){ %>
+                <li class="group_item" data-group_id="<%= group.get('id') %>"><%= group.get("name") %></li>
+                <% }); %>
+            </ul>
         </div>
     </fieldset>
 </div>

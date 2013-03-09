@@ -141,7 +141,7 @@ class User extends UserBase
         $groups = array();
         foreach ($this->groups as $group)
         {
-            $groups[] = array("id" => $group->getId());
+            $groups[] = $group->toArray();
         }
 
         return array(

@@ -6,26 +6,39 @@ define([
     'text!Templates/user_card.html',
     'Models/Job',
     'Collections/Jobs',
+    'Models/Group',
+    'Collections/Groups',
     'jqueryui'
-], function ($, _, Backbone, testTemplate, Job, Jobs) {
+], function ($, _, Backbone, testTemplate, Job, Jobs, Group, Groups) {
     var UserCard = Backbone.View.extend({
         tagName:"div",
-        className:"user_card",
+        className:"k_um_card",
         events:{
             "click .k_um_remove_job_button":"removeJob",
             "click .k_um_user_save_button":"saveModel"
         },
         initialize:function () {
-
+            var base = this;
+            base.$el.hide();
         },
         init:function (AppEvents) {
             var base = this;
             this.AppEvents = AppEvents;
 
             this.job_list = new Jobs();
+
             this.job_list.fetch({
                 success:function () {
-                    base.render();
+
+                    base.group_list = new Groups();
+                    base.group_list.fetch({
+                        success: function () {
+                            base.render();
+                            base.$el.fadeIn(200);
+                        }
+                    });
+
+
                 }
             });
 
@@ -33,18 +46,12 @@ define([
         },
         render:function () {
             var base = this;
-            var compiledTemplate = _.template(testTemplate, {username:this.model.get("username"), user:this.model, jobs:this.job_list.models});
+            console.log(base.model);
+            var compiledTemplate = _.template(testTemplate, {username:this.model.get("username"), user:this.model, jobs:this.job_list.models, groups: this.group_list.models});
 
             this.$el.html(compiledTemplate);
             base.updateJobs();
-
-
-//            this.$el.find(".not_owned_job").click(function () {
-//                elt = $(this);
-//
-//
-//                base.updateJobs();
-//            });
+            base.updateGroups();
             this.$el.find(".job_item").disableSelection();
             this.$el.find(".job_item").click(function () {
                 elt = $(this);
@@ -71,6 +78,31 @@ define([
                 base.updateJobs();
             });
 
+            this.$el.find(".group_item").disableSelection();
+            this.$el.find(".group_item").click(function () {
+                elt = $(this);
+                var group = new Group({id:elt.attr("data-group_id")});
+                var groups = base.model.get("groups");
+                if (elt.hasClass("owned_group")) {
+
+                    var new_groups = new Array();
+                    for (var k in groups) {
+                        if (groups[k].get('id') != elt.attr('data-group_id')) {
+                            new_groups.push(groups[k]);
+                        }
+                    }
+                    base.model.set({groups:new_groups});
+                } else {
+                    var group = new Group({id:elt.attr("data-group_id")});
+                    var groups = base.model.get("groups");
+                    groups.push(group);
+                    base.model.set({groups:groups});
+                }
+
+
+                base.updateGroups();
+            });
+
 
             this.initializeEvents();
             return this;
@@ -91,6 +123,22 @@ define([
                 }
             });
         },
+        updateGroups:function () {
+            var base = this;
+            this.$el.find(".group_item").each(function () {
+                elt = $(this);
+                var model_groups =  base.model.get('groups');
+                elt.addClass("not_owned_group");
+                elt.removeClass("owned_group");
+                for (var k in base.model.get('groups')) {
+
+                    if (model_groups[k].get('id') == elt.attr('data-group_id')) {
+                        elt.addClass("owned_group");
+                        elt.removeClass("not_owned_group");
+                    }
+                }
+            });
+        },
         initializeEvents:function () {
             var base = this;
 
@@ -98,21 +146,15 @@ define([
                 var elt = $(this);
                 base.model.set({ username:elt.val() });
             });
-            this.$el.find("ul.job_list_container").each(function () {
-                elt = $(this);
-                console.log(elt);
-//                elt.sortable({
-//                    connectWith: ".job_list_container",
-//                    receive: function(event, ui) {
-//
-//                        var job = new Job({id: $(ui.item).attr("data-job_id")});
-//                        var jobs = base.model.get("jobs");
-//                        jobs.push(job);
-//                        base.model.set({jobs: jobs});
-//                        console.log(base.model);
-//                    }
-//                });
+            this.$el.find(".k_um_firstname_input").keyup(function () {
+                var elt = $(this);
+                base.model.set({ firstname:elt.val() });
             });
+            this.$el.find(".k_um_lastname_input").keyup(function () {
+                var elt = $(this);
+                base.model.set({ lastname:elt.val() });
+            });
+
         },
         removeJob:function (ev) {
             var base = this;

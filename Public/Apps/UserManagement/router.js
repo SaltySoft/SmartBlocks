@@ -2,11 +2,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'Views/AppView',
     'Views/UserCard',
     'Models/User',
     'Views/UsersList',
     'Views/JobsList'
-], function ($, _, Backbone, UserCardView, User, UsersListView, JobsListView) {
+], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, JobsListView) {
 
     var AppRouter = Backbone.Router.extend({
         routes:{
@@ -17,6 +18,7 @@ define([
 
     var initialize = function () {
         var AppEvents = _.extend({}, Backbone.Events);
+
         var user_list_container = $(document.createElement("div"));
         $("#app_container").append(user_list_container);
 

@@ -19,7 +19,7 @@ define([
             var base = this;
             base.collection = new UsersCollection();
             base.timer = 0;
-            base.page_size = 5;
+            base.page_size = 8;
         },
         init:function (AppEvents) {
             this.AppEvents = AppEvents;

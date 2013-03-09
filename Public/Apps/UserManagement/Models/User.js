@@ -1,8 +1,9 @@
 define([
     'underscore',
     'backbone',
-    './Job'
-], function (_, Backbone, Job) {
+    './Job',
+    './Group'
+], function (_, Backbone, Job, Group) {
     var User = Backbone.Model.extend({
         urlRoot: "/Users",
         defaults: {
@@ -12,14 +13,21 @@ define([
 
             var jobs = response.jobs;
             var job_array = new Array();
-            for (key in jobs)
+            for (var key in jobs)
             {
                 var job = new Job(jobs[key]);
                 job_array.push(job);
             }
             response.jobs = job_array;
 
-
+            var groups = response.groups;
+            var group_array = new Array();
+            for (var key in groups)
+            {
+                var group = new Group(groups[key]);
+                group_array.push(group);
+            }
+            response.groups = group_array;
 
             return response;
         }

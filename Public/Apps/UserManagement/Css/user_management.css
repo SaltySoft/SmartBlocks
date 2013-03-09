@@ -1,8 +1,10 @@
 .k_um_card {
-    width: 300px;
-    height: 400px;
+    width: 500px;
+
     background: white;
     padding: 10px;
+    float: left;
+
 }
 
 .k_um_card_title {
@@ -61,5 +63,39 @@
     color: white;
     margin: 1px;
     cursor: pointer;
+    width: 150px;
+    text-align: center;
 }
+
+.owned_group {
+    background-color: green !important;
+}
+
+.k_um_group_list {
+    list-style: none;
+}
+
+.k_um_group_list li {
+    float: left;
+    background-color: #ce141c;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.field input[type="text"]{
+    float: right
+}
+
+.field {
+    clear: right;
+}
+
+.k_um_direct_data {
+    width: 293px;
+}
+
 

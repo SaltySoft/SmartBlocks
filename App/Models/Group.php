@@ -37,11 +37,6 @@ class Group extends Model
     private $name;
 
     /**
-     * @Column(type="integer")
-     */
-    private $parent;
-
-    /**
      * @Column(type="string")
      */
     private $token;
@@ -54,16 +49,6 @@ class Group extends Model
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    public function getParent()
-    {
-        return $this->parent;
     }
 
     public function setName($name)
@@ -99,6 +84,15 @@ class Group extends Model
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function toArray()
+    {
+        return array(
+            "id" => $this->id,
+            "token" => $this->token,
+            "name" => $this->name
+        );
     }
 
 
