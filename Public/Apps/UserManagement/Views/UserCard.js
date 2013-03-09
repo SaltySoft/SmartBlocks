@@ -15,7 +15,8 @@ define([
         className:"k_um_card",
         events:{
             "click .k_um_remove_job_button":"removeJob",
-            "click .k_um_user_save_button":"saveModel"
+            "click .k_um_user_save_button":"saveModel",
+            "click .k_um_user_delete_button":"deleteModel"
         },
         initialize:function () {
             var base = this;
@@ -32,9 +33,8 @@ define([
 
                     base.group_list = new Groups();
                     base.group_list.fetch({
-                        success: function () {
-                            if (!base.model.isNew())
-                            {
+                        success:function () {
+                            if (!base.model.isNew()) {
                                 base.render();
                                 base.$el.fadeIn(200);
                             }
@@ -45,7 +45,7 @@ define([
         },
         render:function () {
             var base = this;
-            var compiledTemplate = _.template(testTemplate, {username:this.model.get("username"), user:this.model, jobs:this.job_list.models, groups: this.group_list.models});
+            var compiledTemplate = _.template(testTemplate, {username:this.model.get("username"), user:this.model, jobs:this.job_list.models, groups:this.group_list.models});
 
             this.$el.html(compiledTemplate);
             base.updateJobs();
@@ -106,7 +106,7 @@ define([
             var base = this;
             this.$el.find(".job_item").each(function () {
                 elt = $(this);
-                var model_jobs =  base.model.get('jobs');
+                var model_jobs = base.model.get('jobs');
                 elt.addClass("not_owned_job");
                 elt.removeClass("owned_job");
                 for (var k in base.model.get('jobs')) {
@@ -121,7 +121,7 @@ define([
             var base = this;
             this.$el.find(".group_item").each(function () {
                 elt = $(this);
-                var model_groups =  base.model.get('groups');
+                var model_groups = base.model.get('groups');
                 elt.addClass("not_owned_group");
                 elt.removeClass("owned_group");
                 for (var k in base.model.get('groups')) {
@@ -173,6 +173,27 @@ define([
                     base.AppEvents.trigger("user_updated");
                 }
             });
+        },
+        deleteModel:function () {
+            var base = this;
+            if (confirm("Are you sure you want to delete this user ?"))
+            {
+                this.model.destroy({
+                    success:function (model, response) {
+                        if (response.message && response.message == "success")
+                        {
+                            SmartBlocks.show_message("The user was successfully deleted");
+                            base.AppEvents.trigger("user_updated");
+                            window.location.hash = "edit_user";
+
+                        }
+                        else
+                        {
+                            SmartBlocks.show_message("The user couldn't be deleted");
+                        }
+                    }
+                });
+            }
         }
     });
     return UserCard;

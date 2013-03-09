@@ -6,13 +6,15 @@ define([
     'Views/UserCard',
     'Models/User',
     'Views/UsersList',
-    'Views/UmHome'
-], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, UmHomeView) {
+    'Views/UmHome',
+    'Views/UserCreation'
+], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, UmHomeView, UserCreationView) {
 
     var AppRouter = Backbone.Router.extend({
         routes:{
             'edit_user':'editUser',
             'edit_user/:id':'editUser',
+            'user_creation':'user_creation',
             '':"home"
         }
     });
@@ -28,7 +30,12 @@ define([
         home_view.init(AppEvents);
         app_view.addTab("User Management", home_view.$el, "");
 
-        //User edition: 2
+        //User creation: 2
+        var u_creation = new UserCreationView();
+        u_creation.init(AppEvents);
+        app_view.addTab("User creation", u_creation.$el, "user_creation");
+
+        //User edition: 3
         var user_mod_tab = $(document.createElement("div"));
         var user_list_container = $(document.createElement("div"));
         user_mod_tab.append(user_list_container);
@@ -44,19 +51,19 @@ define([
 
         var app_router = new AppRouter();
         app_router.on('route:editUser', function (id) {
-
             var user = new User({ id: id });
             user.fetch({
                 success: function () {
                     var user_card = new UserCardView({ model: user });
                     user_card.init(AppEvents);
                     user_edition_container.html(user_card.$el);
-                    app_view.show(2);
+                    app_view.show(3);
                 }
             });
+        });
 
-
-
+        app_router.on("route:user_creation", function () {
+            app_view.show(2);
         });
 
         app_router.on("route:home", function () {

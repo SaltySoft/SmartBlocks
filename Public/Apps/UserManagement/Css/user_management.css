@@ -86,7 +86,7 @@
     text-align: center;
 }
 
-.field input[type="text"]{
+.field input[type="text"], .field input[type="password"]{
     float: right
 }
 
@@ -104,4 +104,9 @@
 
 .tab_controller li {
     float: left;
+}
+/*User Creation*/
+.k_um_creation_form {
+    width: 400px;
+    margin: auto;
 }

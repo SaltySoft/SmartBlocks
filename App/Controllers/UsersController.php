@@ -136,18 +136,30 @@ class UsersController extends Controller
 
     function create($params = array())
     {
+        $this->render = false;
+        header("Content-Type: application/json");
         $users = User::where(array("admin" => 1));
         if (count($users) > 0)
         {
             $this->security_check();
         }
         $user = new User();
-        $usernames = User::where(array("name" => $_POST["name"]));
-        $usermail = User::where(array("email" => $_POST["mail"]));
-        if (count($usernames) == 0 && count($usermail) == 0)
+        $data = $this->getRequestData();
+        $em = Model::getEntityManager();
+
+        $qb = $em->createQueryBuilder();
+        $qb->select("COUNT(u)")
+            ->from("User", "u")
+            ->where("u.name = :username")
+            ->setParameter("username", $data["name"]);
+        $count = $qb->getQuery()->getSingleScalarResult();
+
+        if ($count == 0)
         {
-            $user->setName($_POST["name"]);
-            $user->setMail($_POST["mail"]);
+            $user->setName($data["name"]);
+            $user->setMail(isset($data["mail"]) ? $data["mail"] : "none");
+            $user->setFirstname($data["firstname"]);
+            $user->setLastname($data["lastname"]);
             $users = User::where(array("admin" => 1));
             if (count($users) == 0)
             {
@@ -158,15 +170,13 @@ class UsersController extends Controller
                 $user->setNormal();
             }
 
-            $user->setHash($_POST["password"]);
+            $user->setHash($data["password"]);
             $user->save();
-            $user->login();
-            $this->redirect("/");
+            echo json_encode($user->toArray());
         }
         else
         {
-            $this->flash("This user already exists");
-            $this->redirect("/Users/login_form");
+            echo json_encode(array("message" => "failure"));
         }
     }
 
@@ -225,6 +235,23 @@ class UsersController extends Controller
         else
         {
             $this->redirect("/Users/user_error");
+        }
+    }
+
+    public function destroy($params = array())
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+        $this->security_check();
+        $user = User::find($params["id"]);
+        if (is_object($user))
+        {
+            $user->delete();
+            echo json_encode(array("message" => "success"));
+        }
+        else
+        {
+            echo json_encode(array("message" => "failure"));
         }
     }
 

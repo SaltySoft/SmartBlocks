@@ -56,6 +56,8 @@ class User extends UserBase
     {
         $this->firstname = "";
         $this->lastname = "";
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
