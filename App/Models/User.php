@@ -131,7 +131,7 @@ class User extends UserBase
     }
 
 
-    public function toArray()
+    public function toArray($load_sub = 1)
     {
 
         $jobs = array();
@@ -146,14 +146,20 @@ class User extends UserBase
             $groups[] = $group->toArray();
         }
 
-        return array(
+        $array = array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname(),
-            "username" => $this->getName(),
-            "jobs" => $jobs,
-            "groups" => $groups
+            "username" => $this->getName()
         );
+
+        if ($load_sub == 1)
+        {
+            $array["jobs"] = $jobs;
+            $array["groups"] = $groups;
+        }
+
+        return $array;
     }
 
     /**

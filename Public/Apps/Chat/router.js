@@ -28,6 +28,8 @@ define([
         app_router.on("route:home", function () {
             app_view.show(1);
         });
+
+
         Backbone.history.start();
     };
 

@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'SmartBlocks'
-], function ($, _, Backbone, SmartBlock) {
+    'SmartBlocks',
+    'text!Templates/chat_home.html'
+], function ($, _, Backbone, SmartBlock, HomeTemplate) {
     var HomeView = Backbone.View.extend({
         tagName: "div",
         className: "k_chat_home",
@@ -15,7 +16,9 @@ define([
             this.render();
         },
         render: function () {
-            this.$el.html("Chat Home View");
+            var template = _.template(HomeTemplate, {});
+
+            this.$el.html(template);
         }
     });
 
