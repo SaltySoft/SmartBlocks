@@ -1,5 +1,5 @@
 var sb_paths  = {
-    jquery:"/javascript/jquery-1.9.1",
+    jquery:"/javascript/jquery",
     underscore:"/javascript/underscore",
     backbone:"/javascript/backbone",
     text:"/javascript/text",
