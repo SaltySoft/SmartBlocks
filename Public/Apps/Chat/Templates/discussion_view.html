@@ -1,0 +1,15 @@
+<div><%= discussion.get('name') %></div>
+<div class="k_chat_discussion_description">
+
+</div>
+<div class="k_chat_messages_list">
+<ul class="k_chat_participants_list">
+    <% _.each(discussion.get('participants'),function (participant) { %>
+        <li><%= participant.get('username') %></li>
+    <% }); %>
+</ul>
+</div>
+<div>
+    <textarea class="k_chat_send_message_input"></textarea><br/>
+    <button class="k_chat_send_message_button">Send message</button>
+</div>

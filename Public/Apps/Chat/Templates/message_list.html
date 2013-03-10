@@ -1,0 +1,12 @@
+<% _.each(discussion.get('messages'), function (message) { %>
+<div class="k_chat_message">
+    <div>
+        From : <%= message.get('sender').username %> <%= message.get('date').day %>/<%= message.get('date').month %>/<%=
+        message.get('date').year %> at  <%= message.get('date').hour %>:<%= message.get('date').minute %>
+
+    </div>
+    <div class="k_chat_message_content">
+        <%= message.get('content') %>
+    </div>
+</div>
+<% }); %>

@@ -91,11 +91,19 @@ class Message extends Model
 
     public function toArray()
     {
+        $time = getdate($this->date);
         return array(
             "id" => $this->id,
             "sender" => $this->sender->toArray(0),
             "content" => $this->content,
-            "date" => $this->date,
+            "date" => array(
+                "day" =>$time["mday"],
+                "month" =>$time["mon"],
+                "year" => $time["year"],
+                "hour" => $time["hours"],
+                "minute" => $time["minutes"],
+                "second" =>  $time["seconds"]
+            ),
             "discussion_id" => $this->discussion->getId()
         );
     }

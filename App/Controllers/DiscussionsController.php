@@ -95,6 +95,7 @@ class DiscussionsController extends Controller
         $discussion = new Discussion();
         $data = $this->getRequestData();
         $discussion->setCreator(User::current_user());
+        $discussion->addParticipant(User::current_user());
         $discussion->setName($data["name"]);
 
         $discussion->save();

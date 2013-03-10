@@ -108,9 +108,14 @@ class Discussion extends Model
         return $this->name;
     }
 
-    public function setParticipants($participants)
+    public function addParticipant($participant)
     {
-        $this->participants = $participants;
+        $this->participants[] = $participant;
+    }
+
+    public function removeParticipant($participant)
+    {
+        $this->participants->removeElement($participant);
     }
 
     public function getParticipants()
@@ -138,6 +143,7 @@ class Discussion extends Model
 
         $array = array(
             "id" => $this->id,
+            "name" => $this->name,
             "participants" => $participants,
             "messages_count" => count($messages),
             "creator" => ($this->creator != null) ? $this->creator->toArray(0) : null

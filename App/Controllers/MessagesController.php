@@ -102,12 +102,21 @@ class MessagesController extends Controller
             $discussion = Discussion::find($data["discussion_id"]);
             if (is_object($discussion))
             {
+
+                foreach ($discussion->getParticipants() as $user)
+                {
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat"));
+                }
+
                 $message->setDiscussion($discussion);
 
 
                 $message->save();
             }
         }
+
+
+
 
         echo json_encode($message->toArray());
 
