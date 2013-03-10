@@ -10,14 +10,12 @@ class JobsController extends Controller
     public function security_check()
     {
 
-
     }
 
     public function interface_security_check()
     {
 
     }
-
 
     private function tokenize($string)
     {
@@ -40,8 +38,7 @@ class JobsController extends Controller
         $qb->select("j")
             ->from("Job", "j");
 
-        if (isset($_GET["page"]))
-        {
+        if (isset($_GET["page"])) {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
             $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
             $qb->setFirstResult(($page - 1) * $page_size)
@@ -49,8 +46,7 @@ class JobsController extends Controller
         }
 
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "")
-        {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
             $qb->andWhere("j.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -59,8 +55,7 @@ class JobsController extends Controller
 
         $response = array();
 
-        foreach ($jobs as $job)
-        {
+        foreach ($jobs as $job) {
             $response[] = $job->toArray();
         }
         $this->render = false;
@@ -76,12 +71,9 @@ class JobsController extends Controller
 
         $job = Job::find($params["id"]);
 
-        if (is_object($job))
-        {
+        if (is_object($job)) {
             echo json_encode($job->toArray());
-        }
-        else
-        {
+        } else {
             echo json_encode(array("error"));
         }
     }
@@ -114,12 +106,9 @@ class JobsController extends Controller
         $job->setName($data["name"]);
         $job->save();
 
-        if (is_object($job))
-        {
+        if (is_object($job)) {
             echo json_encode($job->toArray());
-        }
-        else
-        {
+        } else {
             echo json_encode(array("error"));
         }
     }
@@ -133,9 +122,6 @@ class JobsController extends Controller
         $job = Job::find($params["id"]);
         $job->delete();
 
-
         echo json_encode(array("message" => "Job successfully deleted"));
-
     }
 }
-

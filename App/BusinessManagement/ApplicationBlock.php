@@ -41,6 +41,4 @@ class ApplicationBlock
     {
         return $this->name;
     }
-
-
 }

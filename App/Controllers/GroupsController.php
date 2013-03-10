@@ -10,14 +10,12 @@ class GroupsController extends Controller
     public function security_check()
     {
 
-
     }
 
     public function interface_security_check()
     {
 
     }
-
 
     private function tokenize($string)
     {
@@ -40,8 +38,7 @@ class GroupsController extends Controller
         $qb->select("g")
             ->from("Group", "g");
 
-        if (isset($_GET["page"]))
-        {
+        if (isset($_GET["page"])) {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
             $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
             $qb->setFirstResult(($page - 1) * $page_size)
@@ -49,8 +46,7 @@ class GroupsController extends Controller
         }
 
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "")
-        {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
             $qb->andWhere("g.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -59,8 +55,7 @@ class GroupsController extends Controller
 
         $response = array();
 
-        foreach ($groups as $group)
-        {
+        foreach ($groups as $group) {
             $response[] = $group->toArray();
         }
         $this->render = false;
@@ -76,12 +71,9 @@ class GroupsController extends Controller
 
         $group = Group::find($params["id"]);
 
-        if (is_object($group))
-        {
+        if (is_object($group)) {
             echo json_encode($group->toArray());
-        }
-        else
-        {
+        } else {
             echo json_encode(array("error"));
         }
     }
@@ -99,7 +91,6 @@ class GroupsController extends Controller
 
         $group->save();
         echo json_encode($group->toArray());
-
     }
 
     public function update($params = array())
@@ -110,17 +101,13 @@ class GroupsController extends Controller
 
         $group = Group::find($params["id"]);
 
-
-        if (is_object($group))
-        {
+        if (is_object($group)) {
             $data = $this->getRequestData();
             $group->setToken($this->tokenize($data["name"]));
             $group->setName($data["name"]);
             $group->save();
             echo json_encode($group->toArray());
-        }
-        else
-        {
+        } else {
             echo json_encode(array("error"));
         }
     }
@@ -134,9 +121,7 @@ class GroupsController extends Controller
         $group = Group::find($params["id"]);
         $group->delete();
 
-
         echo json_encode(array("message" => "Group successfully deleted"));
-
     }
 }
 
