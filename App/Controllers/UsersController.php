@@ -136,8 +136,7 @@ class UsersController extends Controller
 
     function create($params = array())
     {
-        $this->render = false;
-        header("Content-Type: application/json");
+
         $users = User::where(array("admin" => 1));
         if (count($users) > 0)
         {
@@ -158,8 +157,8 @@ class UsersController extends Controller
         {
             $user->setName($data["name"]);
             $user->setMail(isset($data["mail"]) ? $data["mail"] : "none");
-            $user->setFirstname($data["firstname"]);
-            $user->setLastname($data["lastname"]);
+            $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : "");
+            $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : "");
             $users = User::where(array("admin" => 1));
             if (count($users) == 0)
             {
@@ -172,11 +171,20 @@ class UsersController extends Controller
 
             $user->setHash($data["password"]);
             $user->save();
-            echo json_encode($user->toArray());
+            $response = $user->toArray();
         }
         else
         {
-            echo json_encode(array("message" => "failure"));
+            $response = array("message" => "failure");
+        }
+
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            $this->render = false;
+            header("Content-Type: application/json");
+            echo json_encode($response);
+        } else {
+            $this->flash("User created");
+            $this->redirect("/");
         }
     }
 
