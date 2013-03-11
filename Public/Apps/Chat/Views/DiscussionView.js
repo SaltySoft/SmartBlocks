@@ -17,8 +17,9 @@ define([
         initialize:function () {
 
         },
-        init:function (AppEvents, websocket) {
+        init:function (AppEvents, current_user, websocket) {
             var base = this;
+            this.current_user = current_user;
             this.AppEvents = AppEvents;
             this.websocket = websocket;
             this.websocket.onopen = function () {
@@ -40,7 +41,7 @@ define([
             this.$el.html("Discussion");
             base.model.fetch({
                 success:function () {
-                    var template = _.template(DiscussionTemplate, { discussion:base.model });
+                    var template = _.template(DiscussionTemplate, { discussion:base.model, current_user:base.current_user });
                     base.$el.html(template);
                     base.getMessage();
                 }
@@ -54,7 +55,7 @@ define([
             base.model.fetch({
                 success:function () {
                     console.log(base.model);
-                    var template = _.template(MessageListTemplate, { discussion:base.model });
+                    var template = _.template(MessageListTemplate, { discussion:base.model, current_user:base.current_user });
                     base.$el.find(".k_chat_messages_list").html(template);
                     base.$el.find(".k_chat_messages_list").scrollTop( base.$el.find(".k_chat_messages_list")[0].scrollHeight);
                 }

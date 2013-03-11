@@ -1,7 +1,6 @@
 .k_chat_messages_list {
-    padding: 20px;
     background-color: #d3d3d3;
-    height: 400px;
+    height: 440px;
     overflow: auto;
 }
 
@@ -11,6 +10,20 @@
     background-color: white;
     padding: 10px;
     border: 2px red solid;
+}
+
+.k_chat_message_cu {
+    margin-right: 0px;
+    margin-left: 30px;
+    border-radius: 5px 0px 0px 5px;
+    border-right: none;
+}
+
+.k_chat_message_ou {
+    margin-left: 0px;
+    margin-right: 30px;
+    border-radius: 0px 5px 5px 0px;
+    border-left: none;
 }
 
 .k_chat_discussion_description {

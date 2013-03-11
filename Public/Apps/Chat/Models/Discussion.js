@@ -24,8 +24,8 @@ define([
             for (var key in participants)
             {
                 var participant = new User(participants[key]);
-                console.log(participant);
-                messages_array.push(participant);
+
+                participants_array.push(participant);
             }
             response.participants = participants_array;
 

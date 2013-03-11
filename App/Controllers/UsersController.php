@@ -294,6 +294,18 @@ class UsersController extends Controller
         }
     }
 
+    public function current_user()
+    {
+        $this->render = false;
+        header('Content-Type: application/json');
+        $user = User::current_user();
+        if (is_object($user)) {
+            echo json_encode($user->toArray());
+        } else {
+            echo json_encode(array("status" => "error", "message" => "Not logged on"));
+        }
+    }
+
     /**
      * This action is an admin page to access user management javascript apps.
      * @param array $params
@@ -302,6 +314,7 @@ class UsersController extends Controller
     {
         $this->interface_security_check();
     }
+
 
 
 }
