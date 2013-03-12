@@ -20,8 +20,14 @@ define([
         var initialize = function (websocket) {
             var base = this;
             User.getCurrent(function (current_user) {
+
+                    var ChatApplication = {
+                        current_user:current_user
+                    };
+
                     var container = $(document.createElement("div"));
                     container.addClass("k_chat_main_container");
+                    ChatApplication.$el = $("#chat_container");
                     $("#chat_container").append(container);
                     $("#chat_button").click(function () {
                         $("#chat_container").toggle();
@@ -44,6 +50,7 @@ define([
 
 
 
+
                     $(document).keydown(function (e) {
 
                         pressed_keys[e.keyCode] = true;
@@ -55,9 +62,7 @@ define([
                             $(container).css("left", $(window).width() / 2 - container.width() / 2);
                     });
 
-                    var ChatApplication = {
-                        current_user:current_user
-                    };
+
 
                     var AppEvents = _.extend({}, Backbone.Events);
                     ChatApplication.AppEvents = AppEvents;

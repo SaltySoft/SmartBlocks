@@ -97,6 +97,9 @@ define([
                     base.$el.find(".k_chat_send_message_input").val("");
                 }
             });
+            base.$el.find(".close_window_link").click(function () {
+                base.app.$el.hide();
+            });
         },
         getMessage:function () {
             var base = this;
