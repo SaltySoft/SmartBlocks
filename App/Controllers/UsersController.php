@@ -23,7 +23,6 @@
 
 class UsersController extends Controller
 {
-
     private function security_check($user = null)
     {
         if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
@@ -108,7 +107,6 @@ class UsersController extends Controller
         $this->redirect("/");
     }
 
-
     function login_form()
     {
 
@@ -130,8 +128,6 @@ class UsersController extends Controller
         }
 
         echo json_encode($response);
-
-
     }
 
     function create($params = array())
@@ -313,8 +309,6 @@ class UsersController extends Controller
     public function user_management($params = array())
     {
         $this->interface_security_check();
+        $this->set("app", "UserManagement/app");
     }
-
-
-
 }

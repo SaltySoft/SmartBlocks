@@ -1,8 +1,8 @@
 define([
     'underscore',
     'backbone',
-    './Job',
-    './Group'
+    'UserManagement/Job',
+    'UserManagement/Group'
 ], function (_, Backbone, Job, Group) {
     var User = Backbone.Model.extend({
         urlRoot: "/Users",

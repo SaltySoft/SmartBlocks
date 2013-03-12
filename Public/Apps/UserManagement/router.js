@@ -3,11 +3,11 @@ define([
     'underscore',
     'backbone',
     'TabView',
-    'Views/UserCard',
-    'Models/User',
-    'Views/UsersList',
-    'Views/UmHome',
-    'Views/UserCreation'
+    'UserManagement/Views/UserCard',
+    'UserModel',
+    'UserManagement/Views/UsersList',
+    'UserManagement/Views/UmHome',
+    'UserManagement/Views/UserCreation'
 ], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, UmHomeView, UserCreationView) {
 
     var AppRouter = Backbone.Router.extend({
@@ -47,8 +47,6 @@ define([
 
         app_view.addTab("User edition", user_mod_tab, "edit_user");
 
-
-
         var app_router = new AppRouter();
         app_router.on('route:editUser', function (id) {
             var user = new User({ id: id });
@@ -75,5 +73,4 @@ define([
     return {
         initialize:initialize
     };
-
 });

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Templates/home.html'
+    'text!UserManagement/Templates/home.html'
 ], function ($, _, Backbone, HomeTemplate) {
     var UmHome = Backbone.View.extend({
         tagName: "div",

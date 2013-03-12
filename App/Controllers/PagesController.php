@@ -49,7 +49,6 @@ class PagesController extends Controller
         $dsn='mysql:host='.$db_config->dev["host"].';port=3306;dbname='.$db_config->dev["database"].'';
         $this->set("database_status", true);
         try {
-
             $dbh = new PDO($dsn, $db_config->dev["user"], $db_config->dev["password"]);
         } catch (PDOException $exception) {
             $this->set("database_status", false);
@@ -77,7 +76,6 @@ class PagesController extends Controller
     function contact($params = array())
     {
     }
-
 
     function list_texts($params = array())
     {

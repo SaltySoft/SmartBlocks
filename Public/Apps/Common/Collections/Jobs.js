@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'Models/Job'
+    'JobModel'
 ], function (_, Backbone, Job) {
     var JobsCollection = Backbone.Collection.extend({
         model: Job,
