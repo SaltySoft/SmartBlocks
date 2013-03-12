@@ -26,7 +26,6 @@
  */
 class User extends UserBase
 {
-
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
@@ -130,19 +129,15 @@ class User extends UserBase
         return $this->jobs;
     }
 
-
     public function toArray()
     {
-
         $jobs = array();
-        foreach ($this->jobs as $job)
-        {
+        foreach ($this->jobs as $job) {
             $jobs[] = $job->toArray();
         }
 
         $groups = array();
-        foreach ($this->groups as $group)
-        {
+        foreach ($this->groups as $group) {
             $groups[] = $group->toArray();
         }
 
@@ -167,17 +162,12 @@ class User extends UserBase
     public function hasRight($right_token, $group_token = null)
     {
         $hasright = false;
-        foreach ($this->roles as $role)
-        {
+        foreach ($this->roles as $role) {
 
-            foreach ($role->getJob()->getRights() as $right)
-            {
-                if ($group_token == null)
-                {
+            foreach ($role->getJob()->getRights() as $right) {
+                if ($group_token == null) {
                     $hasright = $right->getToken() == $right_token;
-                }
-                else
-                {
+                } else {
                     $hasright = $right->getToken() == $token && $role->getGroup()->getToken() == $group_token;
                 }
             }

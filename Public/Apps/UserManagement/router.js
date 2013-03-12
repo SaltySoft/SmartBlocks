@@ -47,8 +47,6 @@ define([
 
         app_view.addTab("User edition", user_mod_tab, "edit_user");
 
-
-
         var app_router = new AppRouter();
         app_router.on('route:editUser', function (id) {
             var user = new User({ id: id });
@@ -75,5 +73,4 @@ define([
     return {
         initialize:initialize
     };
-
 });
