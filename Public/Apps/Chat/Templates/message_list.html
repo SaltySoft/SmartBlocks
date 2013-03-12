@@ -12,7 +12,7 @@
 </div>
 <% } %>
 <div class="k_chat_message <% if (message.get('sender').id == current_user.get('id')) { %>k_chat_message_cu<% } else { %>k_chat_message_ou<% } %>">
-    <div>
+    <div class="k_chat_message_header">
         <span style="font-weight: bold; color: grey">
         <% opened++; %>
         <% if ((message.get('date').raw - (new Date().getTime()) / 1000) >= 24*60*60) { %>
