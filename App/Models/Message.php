@@ -97,12 +97,13 @@ class Message extends Model
             "sender" => $this->sender->toArray(0),
             "content" => $this->content,
             "date" => array(
+                "raw" =>$this->date,
                 "day" =>$time["mday"],
                 "month" =>$time["mon"],
                 "year" => $time["year"],
-                "hour" => $time["hours"],
-                "minute" => $time["minutes"],
-                "second" =>  $time["seconds"]
+                "hour" => $time["hours"] < 10 ? "0".$time["hours"] : $time["hours"],
+                "minute" => $time["minutes"] < 10 ? "0".$time["minutes"] : $time["minutes"],
+                "second" =>  $time["seconds"] < 10 ? "0".$time["seconds"] : $time["seconds"],
             ),
             "discussion_id" => $this->discussion->getId()
         );
