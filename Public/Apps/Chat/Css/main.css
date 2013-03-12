@@ -12,6 +12,7 @@
     box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
     position: relative;
     z-index: 101;
+    text-align: justify;
 }
 
 .k_chat_message_cu {
