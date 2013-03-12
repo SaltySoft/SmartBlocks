@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'Models/User'
+    'UserModel'
 ], function (_, Backbone, User) {
     var UsersCollection = Backbone.Collection.extend({
         model: User,

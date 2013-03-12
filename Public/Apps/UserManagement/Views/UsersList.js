@@ -3,8 +3,8 @@ define([
     'backbone',
     'UserModel',
     'UsersCollection',
-    'text!Templates/user_list.html',
-    'text!Templates/user_list_inner.html'
+    'text!UserManagement/Templates/user_list.html',
+    'text!UserManagement/Templates/user_list_inner.html'
 ], function (_, Backbone, User, UsersCollection, UsersListTemplate, UsersListInnerTemplate) {
     var UsersListView = Backbone.View.extend({
         tagName:"div",
