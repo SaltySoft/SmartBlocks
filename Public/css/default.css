@@ -132,3 +132,16 @@ h1, h2, h3, h4, h5, h6
     height: 40px;
 
 }
+
+#chat_container {
+    position: absolute;
+    background-color: white;
+    top:100px;
+    left: 100px;
+    display: none;
+    width: 800px;
+    z-index: 100;
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.5);
+    border: 1px grey solid;
+    padding: 20px;
+}

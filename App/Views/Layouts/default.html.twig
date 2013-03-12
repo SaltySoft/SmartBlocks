@@ -37,7 +37,18 @@
         </div>
     </div>
     <div id="file_sharing_button">File Sharing</div>
+    <div id="chat_container"></div>
+    {#<script type="text/javascript" src="/javascript/require.js"></script>#}
+    {#<link rel="stylesheet" href="/Apps/Chat/Css/main.css" type="text/css">#}
+    {#<script type="text/javascript" src="/Apps/Common/requireConfig.js"></script>#}
+    <script type="text/javascript">
+        var socket_server = "{{ _socket_serv }}";
+        var user_session = "{{ _session_id }}";
+    </script>
+    <script type="text/javascript" src="/Apps/Chat/main.js"></script>
+
     <div id="chat_button">Chat</div>
 </div>
+
 </body>
 </html>
