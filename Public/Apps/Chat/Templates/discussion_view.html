@@ -1,15 +1,22 @@
-<div><%= discussion.get('name') %></div>
+<div><%= (discussion.get('name') != undefined) ? discussion.get('name') : "Discussion Panel" %></div>
 <div class="k_chat_discussion_description">
-
+    <% _.each(available_discussions, function (discussion) { %>
+    <div class="k_chat_discussion_selector">
+        <a href="javascript:void(0);" class="k_chat_discussion_selector_link" data-id="<%= discussion.get('id') %>"><%= discussion.get('name') %></a>
+        <% if (discussion.get('creator') && current_user.get('id') == discussion.get('creator').id) { %>
+            <a href="javascript:void(0);" class="k_chat_discussion_action_button"><img src="/images/icons/cross.png"></a>
+        <% } else { %>
+        <div class="k_chat_discussion_action_button"></div>
+        <% } %>
+        <a href="javascript:void(0);" class="k_chat_discussion_action_button"><img src="/images/icons/door_out.png"></a>
+        <div style="clear: both"></div>
+    </div>
+    <% }); %>
 </div>
 <div class="k_chat_messages_list">
-<ul class="k_chat_participants_list">
-    <% _.each(discussion.get('participants'),function (participant) { %>
-        <li><%= participant.get('username') %></li>
-    <% }); %>
-</ul>
+
 </div>
 <div>
-    <textarea class="k_chat_send_message_input"></textarea><br/>
+    <textarea class="k_chat_send_message_input"></textarea>
     <button class="k_chat_send_message_button">Send message</button>
 </div>

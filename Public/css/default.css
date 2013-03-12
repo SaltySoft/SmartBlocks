@@ -63,6 +63,8 @@ body
     float: left;
     color: white;
     text-align: center;
+    position: relative;
+    z-index: 101;
 
 }
 
@@ -95,6 +97,11 @@ h1, h2, h3, h4, h5, h6
     color: #ffffff;
     text-align: center;
     cursor: pointer;
+    z-index: 101;
+}
+
+#chat_button:hover {
+    background-color: #d3d3d3;
 }
 
 #file_sharing_button {
@@ -107,6 +114,7 @@ h1, h2, h3, h4, h5, h6
     color: white;
     text-align: center;
     cursor: pointer;
+    z-index: 101;
 }
 
 /*Pushing footer down*/
@@ -134,14 +142,11 @@ h1, h2, h3, h4, h5, h6
 }
 
 #chat_container {
-    position: absolute;
-    background-color: white;
-    top:100px;
-    left: 100px;
-    display: none;
-    width: 800px;
+    position: fixed;
+    height: 100%;
+    width: 100%;
     z-index: 100;
-    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.5);
-    border: 1px grey solid;
-    padding: 20px;
+    background-color: rgba(50, 50, 50, 0.5);
+    display: none;
+    top: 0px;
 }

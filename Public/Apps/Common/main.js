@@ -7,7 +7,7 @@ requirejs.config({
 /*Fill with default apps (file sharing and chat)*/
 var apps = ["Chat/app"];
 
-if (app) {
+if (app !== undefined) {
     apps.push(app);
 }
 

@@ -18,9 +18,15 @@
 <div id="loader"></div>
 <div id="container">
     <div id="left_menu">
-        <a class="menu_button" href="javascript:void(0);">
-            <img src="/images/icons/house.png" title="Home"/>
+        <a class="menu_button" href="/" title="Home">
+            <img src="/images/icons/house.png" />
+
         </a>
+        {% if user.is_admin() %}
+            <a class="menu_button" href="/Users/user_management" title="User management">
+                <img src="/images/icons/user_edit.png" >
+            </a>
+        {% endif %}
     </div>
     <div id="inner_container">
         <div id="content">
@@ -37,7 +43,7 @@
         </div>
     </div>
     <div id="file_sharing_button">File Sharing</div>
-    <div id="chat_container"></div>
+
     <div id="chat_button">Chat</div>
 </div>
 <script type="text/javascript">
@@ -47,8 +53,12 @@
 
     {% if app  %}
     var app = "{{ app }}";
+    {% else %}
+    var app = undefined;
+
     {% endif %}
 </script>
+<div id="chat_container"></div>
 <link rel="stylesheet" href="/Apps/Chat/Css/main.css" type="text/css">
 <script type="text/javascript" src="/Apps/Common/requireConfig.js"></script>
 <script type="text/javascript" src="/Apps/Common/main.js"></script>

@@ -9,80 +9,90 @@ define([
     'UserModel'
 ], function ($, _, Backbone, TabView, Discussion, HomeView, DiscussionView, User) {
 
-    var AppRouter = Backbone.Router.extend({
-        routes:{
-            '':"home",
-            "show_discussion/:id":"show_discussion"
-        }
-    });
-
-
-    var initialize = function (websocket) {
-        User.getCurrent(function (current_user) {
-
-                $("#chat_button").click(function () {
-                    $("#chat_container").toggle();
-                });
-
-                var ChatApplication = {
-                    current_user:current_user
-                };
-
-                var AppEvents = _.extend({}, Backbone.Events);
-                ChatApplication.AppEvents = AppEvents;
-                var app_view = new TabView();
-                app_view.init(AppEvents, current_user);
-                $("#chat_container").html(app_view.$el);
-                console.log($("#chat_container"));
-
-                var home_container = $(document.createElement("div"));
-                app_view.addTab("Chat home", home_container);
-
-
-                //Discussion view : 2
-                var discussion_container = $(document.createElement("div"));
-                app_view.addTab("Discussions", discussion_container);
-
-                ChatApplication.show_discussion = function (id) {
-                    var discussion = new Discussion({ id:id });
-                    var discussionView = new DiscussionView({ model:discussion });
-                    discussionView.init(AppEvents, current_user, websocket);
-                    discussion_container.html(discussionView.$el);
-                    app_view.show(2);
-                };
-
-                //Home view: 1
-                var home_view = new HomeView();
-                home_view.init(ChatApplication);
-                home_container.append(home_view.$el);
-
-                var app_router = new AppRouter();
-                app_router.on("route:home", function () {
-                    app_view.show(1);
-                });
-                app_router.on("route:show_discussion", function (id) {
-                    app_view.show(2);
-                    var discussion = new Discussion({ id:id });
-                    var discussionView = new DiscussionView({ model:discussion });
-                    discussionView.init(AppEvents, current_user, websocket);
-                    discussion_container.html(discussionView.$el);
-                });
-
-
-                try {
-                    Backbone.history.start()
-                } catch(err) {
-                    Backbone.history.loadUrl()
-                }
-
+        var AppRouter = Backbone.Router.extend({
+            routes:{
+                '':"home",
+                "show_discussion/:id":"show_discussion"
             }
-        )
-        ;
-    };
+        });
 
 
-    return {
-        initialize:initialize
-    };
+        var initialize = function (websocket) {
+            var base = this;
+            User.getCurrent(function (current_user) {
+                    var container = $(document.createElement("div"));
+                    container.addClass("k_chat_main_container");
+                    $("#chat_container").append(container);
+                    $("#chat_button").click(function () {
+                        $("#chat_container").toggle();
+                        if ($("#chat_container").css("display") == "block")
+                            $(container).css("left", $(window).width() / 2 - container.width() / 2);
+                    });
+                    var pressed_keys = [];
+                    $(document).keyup(function (e) {
+                        if ($("#chat_container").css("display") == "block")
+                            if (e.keyCode == 27) {
+                                $("#chat_container").hide();
+                            }
+                        if (pressed_keys[39] && pressed_keys[17] && pressed_keys[16]) {
+                            $("#chat_container").show();
+                            $(container).css("left", $(window).width() / 2 - container.width() / 2);
+                        }
+                        pressed_keys = [];
 
-});
+                    });
+
+
+
+                    $(document).keydown(function (e) {
+
+                        pressed_keys[e.keyCode] = true;
+
+                    });
+
+                    $(window).resize(function () {
+                        if ($("#chat_container").css("display") == "block")
+                            $(container).css("left", $(window).width() / 2 - container.width() / 2);
+                    });
+
+                    var ChatApplication = {
+                        current_user:current_user
+                    };
+
+                    var AppEvents = _.extend({}, Backbone.Events);
+                    ChatApplication.AppEvents = AppEvents;
+
+                    var discussion_container = $(document.createElement("div"));
+                    $(container).html(discussion_container);
+                    ChatApplication.show_discussion = function (id) {
+                        console.log("showing");
+                        var discussion = new Discussion({ id:id });
+                        console.log("name", discussion.get('name'));
+                        var discussionView = new DiscussionView({ model:discussion });
+                        discussionView.init(ChatApplication, AppEvents, current_user, websocket, function () {
+                            discussion_container.html(discussionView.$el);
+                        });
+                    };
+                    ChatApplication.show_discussion(0);
+
+
+                    try {
+                        Backbone.history.start()
+                    } catch (err) {
+                        Backbone.history.loadUrl()
+                    }
+
+
+                }
+            )
+            ;
+        };
+
+
+        return {
+            initialize:initialize
+        };
+
+    }
+)
+;

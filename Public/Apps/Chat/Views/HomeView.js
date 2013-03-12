@@ -30,12 +30,10 @@ define([
 
         },
         initializeEvents:function () {
-            console.log("init events for home view");
             var base = this;
             $(".k_chat_discussion_selector").click(function () {
                 var elt = $(this);
                 var id = elt.attr("data-id");
-                alert(id);
                 base.app.show_discussion(id);
             });
         },

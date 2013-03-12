@@ -1,6 +1,6 @@
 .k_chat_messages_list {
-    background-color: #d3d3d3;
-    height: 440px;
+    background-color: #3b3b3b;
+    height: 400px;
     overflow: auto;
 }
 
@@ -9,27 +9,93 @@
     border-radius: 5px;
     background-color: white;
     padding: 10px;
-    border: 2px red solid;
 }
 
 .k_chat_message_cu {
-    margin-right: 0px;
-    margin-left: 30px;
-    border-radius: 5px 0px 0px 5px;
-    border-right: none;
-}
-
-.k_chat_message_ou {
     margin-left: 0px;
     margin-right: 30px;
-    border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 3px 3px 0px;
     border-left: none;
 }
 
+.k_chat_message_ou {
+    margin-right: 0px;
+    margin-left: 30px;
+    border-radius: 3px 0px 0px 3px;
+    border-right: none;
+}
+
 .k_chat_discussion_description {
-    width: 260px;
+    width: 300px;
     height: 400px;
     float: left;
-    background-color: #b0c4de;
+    background-color: #ffffff;
+}
+
+.k_chat_send_message_input {
+    width: 350px;
+    margin-left: 300px;
+    height: 100px;
+    resize: none;
+    display: block;
+    float: left;
+
+}
+
+.k_chat_send_message_button {
+    width: 140px;
+    margin:0px;
+    display: block;
+    float: right;
+    height: 100px;
+}
+
+.k_chat_discussion_selector {
+    background-color: grey;
+    float: left;
+}
+
+.k_chat_discussion_selector_link {
+    width: 150px;
+    padding-left: 20px !important;
+}
+
+.k_chat_discussion_selector a,.k_chat_discussion_selector .k_chat_discussion_action_button {
+    height: 50px;
+    padding: 5px;
+    display: block;
+    line-height: 50px;
+    color: #dbdbdb;
+    float: left;
+
+}
+
+
+
+.k_chat_discussion_selector a {
+    color: white;
+    text-decoration: none;
+}
+
+.k_chat_discussion_selector a:hover {
+    background-color: #d3d3d3;
+    color: #737373;
+}
+
+.k_chat_discussion_selector .k_chat_discussion_action_button {
+    width: 50px;
+    text-align: center;
+}
+
+
+
+.k_chat_main_container {
+    position: absolute;
+    background-color: white;
+    top:100px;
+    left: 100px;
+    width: 800px;
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.5);
+    border: 1px grey solid;
     padding: 20px;
 }
