@@ -3,8 +3,8 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'Collections/Discussions',
-    'text!Templates/chat_home.html'
+    'Chat/Collections/Discussions',
+    'text!Chat/Templates/chat_home.html'
 ], function ($, _, Backbone, SmartBlock, DiscussionsCollection, HomeTemplate) {
     var HomeView = Backbone.View.extend({
         tagName:"div",
@@ -19,6 +19,9 @@ define([
             base.discussions = new DiscussionsCollection();
 
             base.discussions.fetch({
+                data: {
+                    user_id: base.app.current_user.get('id')
+                },
                 success:function () {
                     base.render();
                     base.initializeEvents();

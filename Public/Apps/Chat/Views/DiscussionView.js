@@ -3,10 +3,10 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'Models/Discussion',
-    'Models/Message',
-    'text!Templates/discussion_view.html',
-    'text!Templates/message_list.html'
+    'Chat/Models/Discussion',
+    'Chat/Models/Message',
+    'text!Chat/Templates/discussion_view.html',
+    'text!Chat/Templates/message_list.html'
 ], function ($, _, Backbone, SmartBlocks, Discussion, Message, DiscussionTemplate, MessageListTemplate) {
     var DiscussionView = Backbone.View.extend({
         tagName:"div",

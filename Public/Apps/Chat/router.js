@@ -3,9 +3,9 @@ define([
     'underscore',
     'backbone',
     'TabView',
-    'Models/Discussion',
-    'Views/HomeView',
-    'Views/DiscussionView',
+    'Chat/Models/Discussion',
+    'Chat/Views/HomeView',
+    'Chat/Views/DiscussionView',
     'UserModel'
 ], function ($, _, Backbone, TabView, Discussion, HomeView, DiscussionView, User) {
 
@@ -20,6 +20,10 @@ define([
     var initialize = function (websocket) {
         User.getCurrent(function (current_user) {
 
+                $("#chat_button").click(function () {
+                    $("#chat_container").toggle();
+                });
+
                 var ChatApplication = {
                     current_user:current_user
                 };
@@ -29,6 +33,7 @@ define([
                 var app_view = new TabView();
                 app_view.init(AppEvents, current_user);
                 $("#chat_container").html(app_view.$el);
+                console.log($("#chat_container"));
 
                 var home_container = $(document.createElement("div"));
                 app_view.addTab("Chat home", home_container);
@@ -69,6 +74,7 @@ define([
                 } catch(err) {
                     Backbone.history.loadUrl()
                 }
+
             }
         )
         ;
