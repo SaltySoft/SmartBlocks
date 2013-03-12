@@ -9,8 +9,18 @@ class DiscussionsController extends Controller
 {
     public function security_check()
     {
+        if (!User::logged_in() || (!(isset($_GET["user_id"]) && $_GET["user_id"] == User::current_user()->getId()) && !User::current_user()->isAdmin()))
+        {
+            $this->redirect("error");
+        }
 
+    }
 
+    public function error()
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+        echo json_encode(array("status" => "error"));
     }
 
     public function interface_security_check()
@@ -35,6 +45,7 @@ class DiscussionsController extends Controller
      */
     public function index()
     {
+        $this->security_check();
         $em = Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("d")
@@ -53,6 +64,14 @@ class DiscussionsController extends Controller
         {
             $qb->andWhere("d.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
+        }
+
+        if (isset($_GET["user_id"]))
+        {
+
+            $qb->join("d.participants", "p")
+                ->andWhere("p.id = :user_id")
+                ->setParameter("user_id", $_GET["user_id"]);
         }
 
         $discussions = $qb->getQuery()->getResult();
