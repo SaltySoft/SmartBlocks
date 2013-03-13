@@ -76,8 +76,18 @@ define([
                     success: function () {
                         console.log("saved discussion", discussion);
                         base.$el.remove();
+                        var discussion_creation_view = new DiscussionCreationView();
+                        discussion_creation_view.init(base.app);
+                        base.app.discussion_creation_view = discussion_creation_view;
                     }
                 });
+            });
+
+            base.$el.find(".k_chat_dc_close_window").click(function () {
+                base.$el.remove();
+                var discussion_creation_view = new DiscussionCreationView();
+                discussion_creation_view.init(base.app);
+                base.app.discussion_creation_view = discussion_creation_view;
             });
         },
         updateSelectedUsers: function () {

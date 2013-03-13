@@ -9,6 +9,7 @@ class DiscussionsController extends Controller
 {
     public function security_check()
     {
+
         if (!User::logged_in() || (!(isset($_GET["user_id"]) && $_GET["user_id"] == User::current_user()->getId()) && !User::current_user()->isAdmin()))
         {
             $this->redirect("error");
@@ -168,18 +169,23 @@ class DiscussionsController extends Controller
 
         $discussion = Discussion::find($params["id"]);
         $participants = $discussion->getParticipants();
+        $session_ids = array();
+        foreach ($participants as $user)
+        {
+            $session_ids[] =  $user->getSessionId();
 
+        }
         foreach ($discussion->getMessages() as $message)
         {
             $message->delete();
         }
 
         $discussion->delete();
-        foreach ($participants as $user)
-        {
-            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat", "status" => "deleted_discussion"));
-        }
 
+        foreach ($session_ids as $session_id)
+        {
+            NodeDiplomat::sendMessage($session_id, array("app" => "k_chat", "status" => "deleted_discussion"));
+        }
 
         echo json_encode(array("message" => "Discussion successfully deleted"));
 

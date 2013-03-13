@@ -31,8 +31,8 @@ define([
             }
 
             base.websocket.onmessage = function (data) {
-
                 var message = SmartBlocks.parseWs(data);
+                console.log("NOTIFICATION", message);
                 if (message.app == "k_chat") {
                     if (message.status == "new_message")
                         base.getMessage();
@@ -40,9 +40,7 @@ define([
                         base.getDiscussions()
                     if (message.status == "deleted_discussion")
                     {
-                        alert("discussion");
                         base.getDiscussions();
-
                     }
 
                 }
@@ -134,7 +132,6 @@ define([
                 var discussion = new Discussion({ id: elt.attr("data-discussion_id") });
                 if (confirm("Are you sure you want to delete this conversation ?")){
                     discussion.destroy();
-                    base.getDiscussions();
                 }
             });
 
