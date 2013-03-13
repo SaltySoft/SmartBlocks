@@ -118,17 +118,20 @@ class Folder extends Model
     public function toArray()
     {
         $files = array();
-        foreach ($this->files as $file) {
+        foreach ($this->files as $file)
+        {
             $files[] = $file->toArray();
         }
 
         $users = array();
-        foreach ($this->users_allowed as $user) {
+        foreach ($this->users_allowed as $user)
+        {
             $users[] = $user->toArray();
         }
 
         $groups = array();
-        foreach ($this->groups_allowed as $group) {
+        foreach ($this->groups_allowed as $group)
+        {
             $groups[] = $group->toArray();
         }
 
@@ -141,6 +144,21 @@ class Folder extends Model
             "groups_allowed" => $groups,
             "files" => $files
         );
+    }
+
+    public function addUser($user)
+    {
+        $this->users_allowed[] = $user;
+    }
+
+    public function addGroup($group)
+    {
+        $this->groups_allowed[] = $group;
+    }
+
+    public function addFile($file)
+    {
+        $this->files[] = $file;
     }
 }
 

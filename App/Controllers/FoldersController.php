@@ -83,9 +83,25 @@ class FoldersController extends Controller
         $folder->setName($data["name"]);
         $folder->setCreator($data["creator"]);
         $folder->setParentFolder($data["parent_folder"]);
-        $folder->setFiles($data["files"]);
+
+        foreach($data["files"] as $file)
+        {
+            $folder->addFile($file);
+        }
+
+        foreach($data["groups_allowed"] as $group)
+        {
+            $folder->addGroup($group);
+        }
+
+        foreach($data["users_allowed"] as $user)
+        {
+            $folder->addUser($user);
+        }
+
+        /*$folder->setFiles($data["files"]);
         $folder->setGroupsAllowed($data["groups_allowed"]);
-        $folder->setUsersAllowed($data["users_allowed"]);
+        $folder->setUsersAllowed($data["users_allowed"]);*/
 
         $folder->save();
         echo json_encode($folder->toArray());
@@ -105,9 +121,9 @@ class FoldersController extends Controller
             $folder->setName($data["name"]);
             $folder->setCreator($data["creator"]);
             $folder->setParentFolder($data["parent_folder"]);
-            $folder->setFiles($data["files"]);
+            /*$folder->setFiles($data["files"]);
             $folder->setGroupsAllowed($data["groups_allowed"]);
-            $folder->setUsersAllowed($data["users_allowed"]);
+            $folder->setUsersAllowed($data["users_allowed"]);*/
         }
         else
             echo json_encode(array("error"));
