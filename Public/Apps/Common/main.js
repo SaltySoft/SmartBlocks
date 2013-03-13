@@ -5,15 +5,16 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = [];
+var apps = ["Chat/app"];
 
-if (app) {
+if (app !== undefined) {
     apps.push(app);
 }
 
 
 requirejs(apps,
-    function (/*defaults, */App) {
+    function (/*defaults, */ChatApp, App) {
+        ChatApp.initialize();
         if (App)
             App.initialize();
     });

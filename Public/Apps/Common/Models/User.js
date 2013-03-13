@@ -1,9 +1,10 @@
 define([
+    'jquery',
     'underscore',
     'backbone',
     'JobModel',
     'GroupModel'
-], function (_, Backbone, Job, Group) {
+], function ($, _, Backbone, Job, Group) {
     var User = Backbone.Model.extend({
         urlRoot: "/Users",
         defaults: {
@@ -32,6 +33,18 @@ define([
             return response;
         }
     });
+    User.getCurrent = function(callback) {
+        console.log("trying to get current user");
+        $.ajax({
+            url: "/Users/current_user",
+            success: function (data, status) {
+                if (!data.status || data.status != "error") {
+                    var user = new User(data);
+                    callback(user);
+                }
+            }
+        });
+    }
 
     return User;
 });
