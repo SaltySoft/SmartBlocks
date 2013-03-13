@@ -105,7 +105,7 @@ class MessagesController extends Controller
 
                 foreach ($discussion->getParticipants() as $user)
                 {
-                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat"));
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat", "status" => "new_message"));
                 }
 
                 $message->setDiscussion($discussion);

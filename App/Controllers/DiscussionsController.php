@@ -115,9 +115,26 @@ class DiscussionsController extends Controller
         $data = $this->getRequestData();
         $discussion->setCreator(User::current_user());
         $discussion->addParticipant(User::current_user());
+
+        foreach ($data["participants"] as $part_array)
+        {
+            $user = User::find($part_array["id"]);
+            if (is_object($user))
+            {
+                $discussion->addParticipant($user);
+            }
+        }
+
         $discussion->setName($data["name"]);
 
         $discussion->save();
+
+        foreach ($discussion->getParticipants() as $user)
+        {
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat", "status" => "new_discussion"));
+        }
+
+
         echo json_encode($discussion->toArray());
 
     }
@@ -150,7 +167,18 @@ class DiscussionsController extends Controller
         $this->render = false;
 
         $discussion = Discussion::find($params["id"]);
+        $participants = $discussion->getParticipants();
+
+        foreach ($discussion->getMessages() as $message)
+        {
+            $message->delete();
+        }
+
         $discussion->delete();
+        foreach ($participants as $user)
+        {
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_chat", "status" => "deleted_discussion"));
+        }
 
 
         echo json_encode(array("message" => "Discussion successfully deleted"));

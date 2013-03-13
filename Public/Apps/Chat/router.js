@@ -6,8 +6,9 @@ define([
     'Chat/Models/Discussion',
     'Chat/Views/HomeView',
     'Chat/Views/DiscussionView',
+    'Chat/Views/DiscussionCreationView',
     'UserModel'
-], function ($, _, Backbone, TabView, Discussion, HomeView, DiscussionView, User) {
+], function ($, _, Backbone, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
 
         var AppRouter = Backbone.Router.extend({
             routes:{
@@ -24,6 +25,12 @@ define([
                     var ChatApplication = {
                         current_user:current_user
                     };
+
+                    var discussion_creation_view = new DiscussionCreationView();
+                    discussion_creation_view.init(ChatApplication);
+
+
+                    ChatApplication.discussion_creation_view = discussion_creation_view;
 
                     var container = $(document.createElement("div"));
                     container.addClass("k_chat_main_container");
