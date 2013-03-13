@@ -14,6 +14,7 @@ var sb_paths  = {
     JobsCollection:"/Apps/Common/Collections/Jobs",
     GroupsCollection:"/Apps/Common/Collections/Groups",
 
+
     TabView:"/Apps/Common/Views/TabView",
     TabsTemplate:"/Apps/Common/Templates/tabs.html"
 

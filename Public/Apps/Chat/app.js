@@ -2,11 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'SmartBlocks',
     'Chat/router'
-], function ($, _, Backbone, Router) {
+], function ($, _, Backbone, SmartBlocks, Router) {
     var initialize = function () {
+        var websocket = new WebSocket(socket_server, "muffin-protocol");
+        SmartBlocks.server_handshake(websocket, user_session);
+        Router.initialize(websocket);
 
-        Router.initialize();
     };
     return {
         initialize:initialize

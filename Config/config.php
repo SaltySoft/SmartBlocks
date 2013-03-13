@@ -48,4 +48,4 @@ define("DEFAULT_TITLE", "My website");
 define("DEFAULT_LOCALE", "fr-FR");
 
 define("CACHE_PREFIX", "smartblocks");
-define("NODE_PORT", "8899");
+define("NODE_PORT", "10001");

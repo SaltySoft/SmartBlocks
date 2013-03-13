@@ -25,17 +25,20 @@ class UsersController extends Controller
 {
     private function security_check($user = null)
     {
-        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user)) {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
             $this->redirect("/Users/user_error");
         }
     }
 
     private function interface_security_check($user = null)
     {
-        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user)) {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
             $this->redirect("/");
         }
     }
+
 
     public function user_error($params = array())
     {
@@ -59,7 +62,8 @@ class UsersController extends Controller
             ->setFirstResult(($page - 1) * $page_size)
             ->setMaxResults($page_size);
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        {
             $qb->andWhere("u.name LIKE :username")
                 ->setParameter("username", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -68,7 +72,8 @@ class UsersController extends Controller
 
         $response = array();
 
-        foreach ($users as $user) {
+        foreach ($users as $user)
+        {
             $response[] = $user->toArray();
         }
         $this->render = false;
@@ -79,9 +84,11 @@ class UsersController extends Controller
 
     function login($params = array())
     {
-        if (isset($_POST["name"]) && isset($_POST["password"])) {
+        if (isset($_POST["name"]) && isset($_POST["password"]))
+        {
             $users = User::where(array("name" => $_POST["name"], "hash" => sha1($_POST["password"])));
-            if (count($users) > 0) {
+            if (count($users) > 0)
+            {
                 $user = $users[0];
                 $user->login();
             }
@@ -93,7 +100,8 @@ class UsersController extends Controller
     function logout($params = array())
     {
         $user = User::current_user();
-        if ($user != null) {
+        if ($user != null)
+        {
             $user->logout();
         }
         $this->redirect("/");
@@ -110,9 +118,12 @@ class UsersController extends Controller
         header("Content-Type: application/json");
 
         $user = User::find($params["id"]);
-        if (is_object($user)) {
+        if (is_object($user))
+        {
             $response = $user->toArray();
-        } else {
+        }
+        else
+        {
             $response = array();
         }
 
@@ -121,8 +132,10 @@ class UsersController extends Controller
 
     function create($params = array())
     {
+
         $users = User::where(array("admin" => 1));
-        if (count($users) > 0) {
+        if (count($users) > 0)
+        {
             $this->security_check();
         }
         $user = new User();
@@ -136,26 +149,32 @@ class UsersController extends Controller
             ->setParameter("username", $data["name"]);
         $count = $qb->getQuery()->getSingleScalarResult();
 
-        if ($count == 0) {
+        if ($count == 0)
+        {
             $user->setName($data["name"]);
             $user->setMail(isset($data["mail"]) ? $data["mail"] : "none");
             $user->setFirstname(isset($data["firstname"]) ? $data["firstname"] : "");
             $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : "");
             $users = User::where(array("admin" => 1));
-            if (count($users) == 0) {
+            if (count($users) == 0)
+            {
                 $user->setAdmin();
-            } else {
+            }
+            else
+            {
                 $user->setNormal();
             }
 
             $user->setHash($data["password"]);
             $user->save();
             $response = $user->toArray();
-        } else {
+        }
+        else
+        {
             $response = array("message" => "failure");
         }
 
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             $this->render = false;
             header("Content-Type: application/json");
             echo json_encode($response);
@@ -182,7 +201,8 @@ class UsersController extends Controller
         $this->render = false;
         header("Content-Type: application/json");
         $user = User::find($params["id"]);
-        if (is_object($user)) {
+        if (is_object($user))
+        {
             $this->security_check();
             $data = $this->getRequestData();
             //Direct data update
@@ -191,19 +211,23 @@ class UsersController extends Controller
             $user->setLastname(isset($data["lastname"]) ? $data["lastname"] : $user->getLastname());
             //Jobs update
             $user->getJobs()->clear();
-            foreach ($data["jobs"] as $job_array) {
+            foreach ($data["jobs"] as $job_array)
+            {
                 $job = Job::find($job_array["id"]);
 
-                if (is_object($job) && !$user->getJobs()->contains($job)) {
+                if (is_object($job) && !$user->getJobs()->contains($job))
+                {
                     $user->addJob($job);
                 }
             }
             //Groups update
             $user->getGroups()->clear();
-            foreach ($data["groups"] as $group_array) {
+            foreach ($data["groups"] as $group_array)
+            {
                 $group = Group::find($group_array["id"]);
 
-                if (is_object($group) && !$user->getGroups()->contains($group)) {
+                if (is_object($group) && !$user->getGroups()->contains($group))
+                {
                     $user->addGroup($group);
                 }
             }
@@ -211,7 +235,9 @@ class UsersController extends Controller
             $user->save();
             $response = $user->toArray();
             echo json_encode($response);
-        } else {
+        }
+        else
+        {
             $this->redirect("/Users/user_error");
         }
     }
@@ -222,10 +248,13 @@ class UsersController extends Controller
         header("Content-Type: application/json");
         $this->security_check();
         $user = User::find($params["id"]);
-        if (is_object($user)) {
+        if (is_object($user))
+        {
             $user->delete();
             echo json_encode(array("message" => "success"));
-        } else {
+        }
+        else
+        {
             echo json_encode(array("message" => "failure"));
         }
     }
@@ -245,16 +274,31 @@ class UsersController extends Controller
         $user = User::find($data["user_id"]);
         $job = Job::find($data["job_id"]);
 
-        if (is_object($user) && is_object($job)) {
+        if (is_object($user) && is_object($job))
+        {
             $user->addJob($job);
             $user->save();
             echo json_encode(array(
                 "status" => "success"
             ));
-        } else {
+        }
+        else
+        {
             echo json_encode(array(
                 "status" => "error"
             ));
+        }
+    }
+
+    public function current_user()
+    {
+        $this->render = false;
+        header('Content-Type: application/json');
+        $user = User::current_user();
+        if (is_object($user)) {
+            echo json_encode($user->toArray());
+        } else {
+            echo json_encode(array("status" => "error", "message" => "Not logged on"));
         }
     }
 

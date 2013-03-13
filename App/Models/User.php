@@ -26,6 +26,7 @@
  */
 class User extends UserBase
 {
+
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
@@ -129,19 +130,22 @@ class User extends UserBase
         return $this->jobs;
     }
 
-    public function toArray()
+
+    public function toArray($load_sub = 1)
     {
         $jobs = array();
-        foreach ($this->jobs as $job) {
+        foreach ($this->jobs as $job)
+        {
             $jobs[] = $job->toArray();
         }
 
         $groups = array();
-        foreach ($this->groups as $group) {
+        foreach ($this->groups as $group)
+        {
             $groups[] = $group->toArray();
         }
 
-        return array(
+        $array = array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname(),
@@ -149,6 +153,14 @@ class User extends UserBase
             "jobs" => $jobs,
             "groups" => $groups
         );
+
+        if ($load_sub == 1)
+        {
+            $array["jobs"] = $jobs;
+            $array["groups"] = $groups;
+        }
+
+        return $array;
     }
 
     /**
@@ -162,12 +174,17 @@ class User extends UserBase
     public function hasRight($right_token, $group_token = null)
     {
         $hasright = false;
-        foreach ($this->roles as $role) {
+        foreach ($this->roles as $role)
+        {
 
-            foreach ($role->getJob()->getRights() as $right) {
-                if ($group_token == null) {
+            foreach ($role->getJob()->getRights() as $right)
+            {
+                if ($group_token == null)
+                {
                     $hasright = $right->getToken() == $right_token;
-                } else {
+                }
+                else
+                {
                     $hasright = $right->getToken() == $token && $role->getGroup()->getToken() == $group_token;
                 }
             }

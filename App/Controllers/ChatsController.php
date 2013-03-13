@@ -8,7 +8,7 @@
 class ChatsController extends Controller
 {
     public function chat() {
-
+        $this->render_layout = false;
     }
 }
 
