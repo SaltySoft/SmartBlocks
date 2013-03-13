@@ -18,9 +18,9 @@ class SmartBlocks
 
         foreach ($blocknames as $blockname)
         {
-            if (file_exists(ROOT.DS."Plugins".DS.$blockname.DS."Config".DS."block.json"))
+            if (file_exists(ROOT . DS . "Plugins" . DS . $blockname . DS . "Config" . DS . "block.json"))
             {
-                $data = file_get_contents(ROOT.DS."Plugins".DS.$blockname.DS."Config".DS."block.json");
+                $data = file_get_contents(ROOT . DS . "Plugins" . DS . $blockname . DS . "Config" . DS . "block.json");
                 try
                 {
                     $data = json_decode($data, true);
@@ -38,12 +38,10 @@ class SmartBlocks
                         $appblock->addApp($app);
                     }
                     self::$application_blocks[] = $appblock;
-                }
-                catch (Exception $e)
+                } catch (Exception $e)
                 {
                     MuffinApplication::addError($e->getMessage());
                 }
-
             }
         }
     }
@@ -51,5 +49,6 @@ class SmartBlocks
     public static function  getApplicationBlocks()
     {
         self::retrieveAppBlocksInfo();
+        return self::$application_blocks;
     }
 }

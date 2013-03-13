@@ -41,4 +41,20 @@ class ApplicationBlock
     {
         return $this->name;
     }
+
+    public function toArray()
+    {
+        $appBlockArray = array();
+        $appBlockArray["name"] = $this->name;
+        $appBlockArray["description"] = $this->description;
+        $appsArray = array();
+
+        foreach ($this->apps as $app)
+        {
+            $appsArray[] = $app->toArray();
+        }
+        $appBlockArray["apps"] = $appsArray;
+
+        return $appBlockArray;
+    }
 }
