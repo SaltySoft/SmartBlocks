@@ -52,17 +52,7 @@ function show_message(msg) {
 }
 
 
-function server_handshake(websocket, identification) {
-    websocket.addEventListener("open", function (event) {
-        data_array = {};
-        data_array.identification = identification;
-        websocket.send(JSON.stringify(data_array));
-    });
-}
 
-function parseWs(message) {
-    return JSON.parse(JSON.parse(message.data));
-}
 
 SmartBlocks = $.extend({}, {
     user_id:0,

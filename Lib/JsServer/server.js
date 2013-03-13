@@ -13,8 +13,8 @@ function start(route, handle) {
     port = process.argv[2];
     console.log(port);
 
-    httpServer.listen(port != undefined ? port : 8899, function () {
-        console.log((new Date()) + ' Websocket is listening on port 8899');
+    httpServer.listen(port != undefined ? port : 10001, function () {
+        console.log((new Date()) + ' Websocket is listening on port 10001');
     });
 
 
@@ -52,6 +52,7 @@ function start(route, handle) {
             for (k in connections) {
                 // console.log(k + " : " + connections[k]);
             }
+            console.log(message);
         });
 
         connection.on('close', function (message) {
