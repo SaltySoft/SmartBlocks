@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'TabView',
-    'Views/HomeView'
+    'Chat/Views/HomeView'
 ], function ($, _, Backbone, TabView, HomeView) {
 
     var AppRouter = Backbone.Router.extend({

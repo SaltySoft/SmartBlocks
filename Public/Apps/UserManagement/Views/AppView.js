@@ -3,7 +3,7 @@ define([
 
     'underscore',
     'backbone',
-    'text!Templates/tabs.html',
+    'text!UserManagement/Templates/tabs.html',
     'jqueryui'
 ], function ($, _, Backbone, TabsTemplate) {
     var AppView = Backbone.View.extend({

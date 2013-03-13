@@ -4,7 +4,7 @@ define([
     'backbone',
     'SmartBlocks',
     'UserModel',
-    'text!Templates/user_add.html'
+    'text!UserManagement/Templates/user_add.html'
 ], function ($, _, Backbone, SmartBlocks, User, UserAddTemplate) {
     var UserCreationView = Backbone.View.extend({
         tagName:"div",
