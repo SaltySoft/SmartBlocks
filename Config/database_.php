@@ -27,7 +27,7 @@ class DbConfig
         'host' => 'your_host',
         'user' => 'your_user',
         'password' => 'your_password',
-        'database' => 'your_dev_db',
+        'database' => 'your_prod_db',
     );
 
     public $prod = array(
