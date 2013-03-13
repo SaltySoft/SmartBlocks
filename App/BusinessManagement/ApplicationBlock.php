@@ -14,7 +14,7 @@ class ApplicationBlock
 
     public function addApp($app)
     {
-        $this->app[] = $app;
+        $this->apps[] = $app;
     }
 
     public function getApps()
@@ -49,7 +49,7 @@ class ApplicationBlock
         $appBlockArray["description"] = $this->description;
         $appsArray = array();
 
-        foreach ($this->apps as $app)
+        foreach ($this->getApps() as $app)
         {
             $appsArray[] = $app->toArray();
         }
