@@ -35,9 +35,20 @@ define([
             app_view.show(1);
         });
 
-        //Apps dashboard: 2
+        //Dashboard view: 2
         var dashboard = new DashboardView();
         dashboard.init(AppEvents);
+
+        $.ajax({
+            type:"GET",
+            dataType:"json",
+            url:"/Blocks/index",
+            success:function (data, status) {
+                $(data).each(function () {
+                    dashboard.addAppBlock(this.name, this.description, undefined);
+                });
+            }
+        });
         app_view.addTab("Dashboard", dashboard.$el, "dashboard");
 
         app_router.on('route:dashboard', function () {
