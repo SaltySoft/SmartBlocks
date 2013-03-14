@@ -93,8 +93,6 @@ define([
                     } catch (err) {
                         Backbone.history.loadUrl()
                     }
-
-
                 }
             )
             ;
