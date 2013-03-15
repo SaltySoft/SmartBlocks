@@ -45,7 +45,10 @@ define([
             url:"/Blocks/index",
             success:function (data, status) {
                 $(data).each(function () {
-                    dashboard.addAppBlock(this.name, this.description, undefined);
+//                    $(this.apps).each(function () {
+//                        alert(this.name);
+//                    });
+                    dashboard.addAppBlock(this.name, this.description, this.apps);
                 });
             }
         });

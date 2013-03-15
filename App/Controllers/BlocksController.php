@@ -23,14 +23,8 @@ class BlocksController extends Controller
     public function index()
     {
         $blocks = SmartBlocks::getAllApplicationBlocks();
-//        $blocks = SmartBlocks::getApplicationBlocks();
         $response = array();
-//        $coreAppNames = SmartBlocks::getCoreAppsName();
-//        foreach ($coreAppNames as $appname)
-//        {
-//            $response[] = $appname;
-//        }
-            foreach ($blocks as $block)
+        foreach ($blocks as $block)
         {
             $response[] = $block->toArray();
         }

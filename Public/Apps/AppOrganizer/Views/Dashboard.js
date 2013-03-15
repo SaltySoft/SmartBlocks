@@ -25,6 +25,7 @@ define([
         addAppBlock:function (name, description, apps) {
             var base = this;
 
+            //AppBlock
             var appBlock = $(document.createElement("div"));
             appBlock.addClass("appBlock_container");
             var block_name = $(document.createElement("div"));
@@ -36,6 +37,24 @@ define([
             block_description.html(description);
             appBlock.append(block_description);
 
+            //Apps
+            $(apps).each(function () {
+                var app = $(document.createElement("div"));
+                app.addClass("app_container");
+                var app_name = $(document.createElement("div"));
+                app_name.addClass("app_name");
+                app_name.html(this.name);
+                app.append(app_name);
+                var app_description = $(document.createElement("div"));
+                app_description.addClass("app_description");
+                app_description.html(this.description);
+                app.append(app_description);
+                var app_link = $(document.createElement("div"));
+                app_link.addClass("app_link");
+                app_link.html(this.link);
+                app.append(app_link);
+                appBlock.append(app);
+            });
             base.$el.find(".blocks_container").append(appBlock);
         }
     });

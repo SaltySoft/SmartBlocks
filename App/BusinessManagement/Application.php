@@ -9,6 +9,7 @@
  */
 class Application
 {
+    private $id = 0;
     private $name = "";
     private $description = "";
     private $link = "";

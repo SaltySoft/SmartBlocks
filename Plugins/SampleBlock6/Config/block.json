@@ -1,0 +1,11 @@
+{
+    "name": "SampleBlock6",
+    "description":"This is a sample app block 6",
+    "applications": [
+        {
+            "name": "SampleApplication 6",
+            "description": "this is a sample application 6",
+            "link":"/SampleBlock6/sample_app"
+        }
+    ]
+}
