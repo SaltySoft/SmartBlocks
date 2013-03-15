@@ -1,5 +1,6 @@
 {
     "name": "UserManagement",
+    "id": "user_management",
     "description":"This is the user management application.",
     "link":"/Apps/UserManagement"
 }

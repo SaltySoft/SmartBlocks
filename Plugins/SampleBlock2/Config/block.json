@@ -1,9 +1,11 @@
 {
     "name": "SampleBlock2",
+    "id": "sample_block_2",
     "description":"This is a sample app block 2",
     "applications": [
         {
             "name": "SampleApplication 2",
+            "id": "sample_application_2",
             "description": "this is a sample application 2",
             "link":"/SampleBlock2/sample_app"
         }
