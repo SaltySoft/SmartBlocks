@@ -6,7 +6,7 @@ define([
     var Block = Backbone.Model.extend({
         baseUrl: "/Blocks",
         defaults: {
-            
+
         }
     });
 });

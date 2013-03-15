@@ -16,15 +16,19 @@ class BlocksController extends Controller
     {
     }
 
+    public function configure()
+    {
+        \BusinessManagement\SmartBlocks::getAllApplicationBlocks();
+    }
+
     /**
      * Web Service :
      * Get all the Applications Blocks and their respective Applications in an array.
      */
     public function index()
     {
-        $blocks = SmartBlocks::getAllApplicationBlocks();
         $response = array();
-        foreach ($blocks as $block)
+        foreach (ApplicationBlock::all() as $block)
         {
             $response[] = $block->toArray();
         }
