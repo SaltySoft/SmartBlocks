@@ -190,19 +190,22 @@ define([
             base.$el.find(".k_chat_send_message_input").focus(function () {
                 $(document).attr('title', base.old_title);
             });
-            base.$el.find(".k_chat_send_message_input").keyup(function () {
+            base.$el.find(".k_chat_send_message_input").keydown(function () {
                 $(document).attr('title', base.old_title);
             });
             base.$el.find(".k_chat_send_message_input").click(function () {
                 $(document).attr('title', base.old_title);
             });
 
-            base.$el.find(".k_chat_send_message_input").keyup(function (e) {
+            base.$el.find(".k_chat_send_message_input").keydown(function (e) {
+
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 13) { //Enter keycode
                     base.sendMessage();
                     base.$el.find(".k_chat_send_message_input").val("");
+                    return false;
                 }
+
             });
             base.$el.find(".close_window_link").click(function () {
                 base.app.$el.hide();
