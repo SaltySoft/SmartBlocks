@@ -1,5 +1,7 @@
 <div class="blocks_container" >
     <% _.each(blocks, function (block) { %>
-<%=  %>
-    <% } %>
+    <div class="dashboard_block" >
+        <%= block.get('name') %>
+    </div >
+    <% }); %>
 </div >

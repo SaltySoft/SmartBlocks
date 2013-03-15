@@ -1,14 +1,11 @@
 define([
     'underscore',
     'backbone'
-
 ], function (_, Backbone) {
-    var Block = Backbone.Model.extend({
-        baseUrl: "/Blocks",
+    var Application = Backbone.Model.extend({
         defaults: {
         }
     });
 
-
-    return Block;
+    return Application;
 });

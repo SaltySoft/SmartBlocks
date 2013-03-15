@@ -39,19 +39,19 @@ define([
         var dashboard = new DashboardView();
         dashboard.init(AppEvents);
 
-        $.ajax({
-            type:"GET",
-            dataType:"json",
-            url:"/Blocks/index",
-            success:function (data, status) {
-                $(data).each(function () {
-//                    $(this.apps).each(function () {
-//                        alert(this.name);
-//                    });
-                    dashboard.addAppBlock(this.name, this.description, this.apps);
-                });
-            }
-        });
+//        $.ajax({
+//            type:"GET",
+//            dataType:"json",
+//            url:"/Blocks/index",
+//            success:function (data, status) {
+//                $(data).each(function () {
+////                    $(this.apps).each(function () {
+////                        alert(this.name);
+////                    });
+//                    dashboard.addAppBlock(this.name, this.description, this.apps);
+//                });
+//            }
+//        });
         app_view.addTab("Dashboard", dashboard.$el, "dashboard");
 
         app_router.on('route:dashboard', function () {
