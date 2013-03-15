@@ -16,15 +16,19 @@ class BlocksController extends Controller
     {
     }
 
+    public function configure()
+    {
+        \BusinessManagement\SmartBlocks::getAllApplicationBlocks();
+    }
+
     /**
      * Web Service :
      * Get all the Applications Blocks and their respective Applications in an array.
      */
     public function index()
     {
-        $blocks = SmartBlocks::getAllApplicationBlocks();
         $response = array();
-        foreach ($blocks as $block)
+        foreach (ApplicationBlock::all() as $block)
         {
             $response[] = $block->toArray();
         }
@@ -35,6 +39,10 @@ class BlocksController extends Controller
 
     public function show($params = array())
     {
+        $block = ApplicationBlock::find($params['id']);
+        $this->render = false;
+        header("Content-Type: application/json");
+        echo json_encode($block->toArray());
     }
 
     public function create()
