@@ -35,6 +35,7 @@ class BlocksController extends Controller
 
     public function show($params = array())
     {
+
     }
 
     public function create()
