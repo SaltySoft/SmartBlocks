@@ -1,3 +1,11 @@
+.k_chat_discussion_creation {
+    position: absolute;
+    padding: 20px;
+    background-color: white;
+    top: 60px;
+    width: 241px;
+}
+
 .k_chat_dc_user_search_result {
     float: left;
 }
@@ -5,4 +13,3 @@
 .k_chat_dc_user_selection {
     float: left;
 }
-

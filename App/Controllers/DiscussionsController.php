@@ -161,6 +161,34 @@ class DiscussionsController extends Controller
         }
     }
 
+    public function unsubscribe($params = array())
+    {
+        $data = $this->getRequestData();
+        $discussion = Discussion::find($data["discussion_id"]);
+        $user = User::find($data["user_id"]);
+        header("Content-Type: application/json");
+        $this->render = false;
+        if ($user == User::current_user())
+        {
+            $discussion->removeParticipant($user);
+            $discussion->save();
+            echo json_encode(array(
+                "status" => "success",
+                "message" => "Successfully unsubscribed"
+            ));
+
+        }
+        else
+        {
+            echo json_encode(array(
+                "status" => "error",
+                "message" => "You are not this user"
+            ));
+        }
+
+
+    }
+
     public function destroy($params = array())
     {
         $this->security_check();
@@ -172,7 +200,7 @@ class DiscussionsController extends Controller
         $session_ids = array();
         foreach ($participants as $user)
         {
-            $session_ids[] =  $user->getSessionId();
+            $session_ids[] = $user->getSessionId();
 
         }
         foreach ($discussion->getMessages() as $message)

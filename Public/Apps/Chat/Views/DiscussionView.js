@@ -7,9 +7,11 @@ define([
     'Chat/Models/Message',
     'text!Chat/Templates/discussion_view.html',
     'text!Chat/Templates/message_list.html',
+    'text!Chat/Templates/discussions_list.html',
     'Chat/Collections/Discussions',
-    'Chat/Views/DiscussionCreationView'
-], function ($, _, Backbone, SmartBlocks, Discussion, Message, DiscussionTemplate, MessageListTemplate, DiscussionsCollection, DiscussionCreationView) {
+    'text!Chat/Templates/discussion_properties.html',
+    'ContextMenuView'
+], function ($, _, Backbone, SmartBlocks, Discussion, Message, DiscussionTemplate, MessageListTemplate, DiscussionsListTemplate, DiscussionsCollection, DiscussionPropertiesTemplate, ContextMenuView) {
     var DiscussionView = Backbone.View.extend({
         tagName:"div",
         className:"k_discussion_view",
@@ -51,7 +53,8 @@ define([
 
             base.discussions = new DiscussionsCollection();
 
-            base.getDiscussions(callback);
+
+            base.render(callback);
         },
         getDiscussions:function (callback) {
             var base = this;
@@ -60,8 +63,88 @@ define([
                     user_id:base.app.current_user.get('id')
                 },
                 success:function () {
-                    base.render(callback);
+                    base.renderDiscussionList();
+                }
+            });
+        },
+        renderDiscussionList: function () {
+            var base = this;
+            var template = _.template(DiscussionsListTemplate, {
+                current_user:base.current_user,
+                available_discussions: base.discussions.models
+            });
+            console.log(template);
 
+            base.$el.find(".k_chat_discussion_description").html(template);
+            base.$el.find(".k_chat_discussion_deletion_button").click(function () {
+                var elt = $(this);
+                var discussion = new Discussion({ id: elt.attr("data-discussion_id") });
+                if (confirm("Are you sure you want to delete this conversation ?")){
+                    discussion.destroy();
+                }
+            });
+
+            base.$el.find(".k_chat_discussion_description").attr("oncontextmenu", "return false;");
+            var context_menu = new ContextMenuView();
+            context_menu.addButton("Discussion properties", function (){
+                alert("Show discussion properties");
+            }, '/images/icons/door.png');
+
+            base.$el.find(".k_chat_discussion_selector_link").mousedown(function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                switch (event.which) {
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+                        context_menu.show(event);
+                        return false;
+                        break;
+                    default:
+                        alert('You have a strange mouse');
+                }
+            });
+            base.$el.find(".k_chat_discussion_selector_link").click(function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                switch (event.which) {
+                    case 1:
+                        $(".k_chat_messages_list").html('<div style="text-align: center; margin-top: 200px; color: white"><img src="/images/loader.gif" /><br/>Loading...</div>');
+                        var elt = $(this);
+                        var id = elt.attr("data-id");
+                        base.app.show_discussion(id);
+                        break;
+                    case 2:
+                        alert('Middle mouse button pressed');
+                        break;
+                    case 3:
+                        alert('Right mouse button pressed');
+                        return false;
+                        break;
+                    default:
+                        alert('You have a strange mouse');
+                }
+            });
+
+
+            base.$el.find(".k_chat_discussion_unsubscribe").click(function () {
+                var elt = $(this);
+                if (confirm("Are you sure you want to leave this conversation ?")) {
+                    $.ajax({
+                        url: "/Discussions/unsubscribe",
+                        type: "post",
+                        data: {
+                            "discussion_id":elt.attr("data-discussion_id"),
+                            "user_id": base.app.current_user.get('id')
+                        },
+                        success: function () {
+                            base.getDiscussions();
+                        }
+                    });
                 }
             });
         },
@@ -91,6 +174,7 @@ define([
                     else {
                         base.getMessage();
                     }
+                    base.getDiscussions(callback);
                 }
             });
 
@@ -108,12 +192,7 @@ define([
             base.$el.find(".k_chat_send_message_input").click(function () {
                 $(document).attr('title', base.old_title);
             });
-            base.$el.find(".k_chat_discussion_selector_link").click(function () {
-                $(".k_chat_messages_list").html('<div style="text-align: center; margin-top: 200px; color: white"><img src="/images/loader.gif" /><br/>Loading...</div>');
-                var elt = $(this);
-                var id = elt.attr("data-id");
-                base.app.show_discussion(id);
-            });
+
             base.$el.find(".k_chat_send_message_input").keyup(function (e) {
                 var code = (e.keyCode ? e.keyCode : e.which);
                 if (code == 13) { //Enter keycode
@@ -125,15 +204,9 @@ define([
                 base.app.$el.hide();
             });
             base.$el.find(".k_chat_discussion_creation_button").click(function () {
-                base.$el.append(base.app.discussion_creation_view.$el);
+                base.app.discussion_creation_view.show();
             });
-            base.$el.find(".k_chat_discussion_deletion_button").click(function () {
-                var elt = $(this);
-                var discussion = new Discussion({ id: elt.attr("data-discussion_id") });
-                if (confirm("Are you sure you want to delete this conversation ?")){
-                    discussion.destroy();
-                }
-            });
+
 
         },
         getMessage:function () {

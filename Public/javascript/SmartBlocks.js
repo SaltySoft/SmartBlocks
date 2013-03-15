@@ -6,6 +6,7 @@ define([
 ], function ($, _, Backbone) {
 
     var func_set = {
+        loadings: [],
         timer:0,
         show_message:function (message) {
             clearTimeout(this.timer);
@@ -24,6 +25,28 @@ define([
         },
         parseWs:function (message) {
             return JSON.parse(JSON.parse(message.data));
+        },
+        startLoading: function (message) {
+            var base = this;
+            $("#loader").html('<img src="/images/loader.gif" />');
+
+            if (message) {
+                $("#loader").append(" <span>" + message + "</span>");
+                base.loadings.push({
+                    message: message
+                });
+                return base.loadings.length - 1;
+            } else {
+                $("#loader").append("<span>Loading</span>");
+                base.loadings.push({
+                    message: "Loading"
+                });
+                return base.loadings.length - 1;
+            }
+            $("#loader").show();
+        },
+        stopLoading: function (index) {
+            $("#loader").hide();
         }
     };
 
