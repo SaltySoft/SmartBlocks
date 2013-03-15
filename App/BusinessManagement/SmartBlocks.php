@@ -83,9 +83,9 @@ class SmartBlocks
 
         foreach ($appnames as $appname)
         {
-            if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "block.json"))
+            if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "app.json"))
             {
-                $data = file_get_contents(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "block.json");
+                $data = file_get_contents(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "app.json");
                 try
                 {
                     $data = json_decode($data, true);
