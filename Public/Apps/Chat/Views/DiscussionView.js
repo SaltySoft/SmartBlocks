@@ -90,6 +90,10 @@ define([
                 alert("Show discussion properties");
             }, '/images/icons/door.png');
 
+            context_menu.addButton("Add people", function (){
+                alert("Add people to discussion");
+            }, '/images/icons/add.png');
+
             base.$el.find(".k_chat_discussion_selector_link").mousedown(function (event) {
                 event.preventDefault();
                 event.stopPropagation();
