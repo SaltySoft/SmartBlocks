@@ -35,7 +35,10 @@ class BlocksController extends Controller
 
     public function show($params = array())
     {
-
+        $block = ApplicationBlock::find($params['id']);
+        $this->render = false;
+        header("Content-Type: application/json");
+        echo json_encode($block->toArray());
     }
 
     public function create()

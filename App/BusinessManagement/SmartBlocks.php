@@ -1,7 +1,9 @@
 <?php
 
-require_once("ApplicationBlock.php");
-require_once("Application.php");
+//require_once("ApplicationBlock.php");
+//require_once("Application.php");
+namespace BusinessManagement;
+
 /**
  * Writer: Antoine Jackson
  * Date: 3/1/13
@@ -17,7 +19,7 @@ class SmartBlocks
 
     private static function retrievePluginsAppBlocksInfo()
     {
-        $blocknames = MuffinApplication::getPlugins();
+        $blocknames = \MuffinApplication::getPlugins();
 
         foreach ($blocknames as $blockname)
         {
@@ -29,22 +31,17 @@ class SmartBlocks
                 {
                     $data = json_decode($data, true);
 
-                    $appblock = new ApplicationBlock();
+                    $appblock = new \ApplicationBlock();
                     $appblock->setName($data["name"]);
                     $appblock->setDescription($data["description"]);
 
-                    foreach ($data["applications"] as $app_array)
-                    {
-                        $app = new Application();
-                        $app->setName($app_array["name"]);
-                        $app->setDescription($app_array["description"]);
-                        $app->setLink($app_array["link"]);
-                        $appblock->addApp($app);
-                    }
+                    $appblock->save();
+
+
                     self::$plugins_application_blocks[] = $appblock;
-                } catch (Exception $e)
+                } catch (\Exception $e)
                 {
-                    MuffinApplication::addError($e->getMessage());
+                    echo $e->getMessage();
                 }
             }
         }
@@ -77,9 +74,10 @@ class SmartBlocks
     private static function retrieveCoreAppBlocksInfo()
     {
         $appnames = self::getCore();
-        $appblock = new ApplicationBlock();
+        $appblock = new \ApplicationBlock();
         $appblock->setName("CoreAppBlock");
         $appblock->setDescription("This contain the core applications of SmartBlocks.");
+        $appblock->save();
 
         foreach ($appnames as $appname)
         {
@@ -90,17 +88,20 @@ class SmartBlocks
                 {
                     $data = json_decode($data, true);
 
-                    $app = new Application();
+                    $app = new \Application();
                     $app->setName($data["name"]);
                     $app->setDescription($data["description"]);
                     $app->setLink($data["link"]);
-                    $appblock->addApp($app);
-                } catch (Exception $e)
+                    $app->setBlock($appblock);
+                    $app->save();
+
+                } catch (\Exception $e)
                 {
-                    MuffinApplication::addError($e->getMessage());
+                    \MuffinApplication::addError($e->getMessage());
                 }
             }
         }
+
         self::$core_application_block = $appblock;
     }
 

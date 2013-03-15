@@ -5,7 +5,7 @@
     "applications": [
         {
             "name": "SampleApplication 3",
-            "id"
+            "id": "sample_application_3",
             "description": "this is a sample application 3",
             "link":"/SampleBlock3/sample_app"
         }

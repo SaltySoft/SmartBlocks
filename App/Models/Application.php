@@ -80,5 +80,15 @@ class Application extends Model
     {
         return $this->block;
     }
+
+    public function toArray()
+    {
+        $appArray = array();
+        $appArray["name"] = $this->name;
+        $appArray["description"] = $this->description;
+        $appArray["link"] = $this->link;
+
+        return $appArray;
+    }
 }
 

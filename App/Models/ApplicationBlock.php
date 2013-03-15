@@ -30,7 +30,7 @@ class ApplicationBlock extends Model
      */
     private $applications;
 
-    public function addApplications($application)
+    public function addApplication($application)
     {
         $this->applications[] = $application;
     }
@@ -70,7 +70,21 @@ class ApplicationBlock extends Model
         return $this->name;
     }
 
+    public function toArray()
+    {
+        $appBlockArray = array();
+        $appBlockArray["name"] = $this->name;
+        $appBlockArray["description"] = $this->description;
+        $appsArray = array();
 
+        foreach ($this->getApplications() as $app)
+        {
+            $appsArray[] = $app->toArray();
+        }
+        $appBlockArray["apps"] = $appsArray;
+
+        return $appBlockArray;
+    }
 
 }
 
