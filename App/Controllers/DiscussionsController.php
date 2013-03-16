@@ -10,9 +10,9 @@ class DiscussionsController extends Controller
     public function security_check()
     {
 
-        if (!User::logged_in() || (!(isset($_GET["user_id"]) && $_GET["user_id"] == User::current_user()->getId()) && !User::current_user()->isAdmin()))
+        if (!User::logged_in())
         {
-            $this->redirect("error");
+            $this->redirect("/Discussions/error");
         }
 
     }
@@ -74,8 +74,12 @@ class DiscussionsController extends Controller
                 ->andWhere("p.id = :user_id")
                 ->setParameter("user_id", $_GET["user_id"]);
         }
+        $discussion = array();
+        if (isset($_GET["user_id"]) || User::current_user()->is_admin())
+        {
+            $discussions = $qb->getQuery()->getResult();
+        }
 
-        $discussions = $qb->getQuery()->getResult();
 
         $response = array();
 
@@ -149,7 +153,8 @@ class DiscussionsController extends Controller
         $discussion = Discussion::find($params["id"]);
         $data = $this->getRequestData();
         $discussion->setName($data["name"]);
-        $discussion->save();
+        if (User::current_user() == $discussion->getCreator() || User::is_admin())
+            $discussion->save();
 
         if (is_object($discussion))
         {
@@ -185,7 +190,28 @@ class DiscussionsController extends Controller
                 "message" => "You are not this user"
             ));
         }
+    }
 
+    public function unnotify($params = array())
+    {
+        $this->render = false;
+        header("Content-Type: application/json");
+
+        if (User::logged_in())
+        {
+            $data = $this->getRequestData();
+            $discussion = Discussion::find($data["discussion_id"]);
+            if (is_object($discussion))
+            {
+                $discussion->removeNotification(User::current_user());
+                $discussion->save();
+            }
+            echo json_encode(array("status" => "success", "message" => "Successfully removed notification"));
+        }
+        else
+        {
+            echo json_encode(array("status" => "error", "message" => "Couldn't remove notification"));
+        }
 
     }
 
@@ -196,27 +222,35 @@ class DiscussionsController extends Controller
         $this->render = false;
 
         $discussion = Discussion::find($params["id"]);
-        $participants = $discussion->getParticipants();
-        $session_ids = array();
-        foreach ($participants as $user)
+        if (User::current_user() == $discussion->getCreator() || User::is_admin())
         {
-            $session_ids[] = $user->getSessionId();
 
+
+            $participants = $discussion->getParticipants();
+            $session_ids = array();
+            foreach ($participants as $user)
+            {
+                $session_ids[] = $user->getSessionId();
+
+            }
+            foreach ($discussion->getMessages() as $message)
+            {
+                $message->delete();
+            }
+
+            $discussion->delete();
+
+            foreach ($session_ids as $session_id)
+            {
+                NodeDiplomat::sendMessage($session_id, array("app" => "k_chat", "status" => "deleted_discussion"));
+            }
+
+            echo json_encode(array("status" => "success", "message" => "Discussion successfully deleted"));
         }
-        foreach ($discussion->getMessages() as $message)
+        else
         {
-            $message->delete();
+            echo json_encode(array("status" => "error", "message" => "The discusssion could not be deleted"));
         }
-
-        $discussion->delete();
-
-        foreach ($session_ids as $session_id)
-        {
-            NodeDiplomat::sendMessage($session_id, array("app" => "k_chat", "status" => "deleted_discussion"));
-        }
-
-        echo json_encode(array("message" => "Discussion successfully deleted"));
-
     }
 }
 

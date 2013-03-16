@@ -16,6 +16,7 @@
         <span style="font-weight: bold; color: grey">
         <% opened++; %>
         <% if ((message.get('date').raw - (new Date().getTime()) / 1000) >= 24*60*60) { %>
+
         <%= message.get('date').day %>/<%= message.get('date').month %>/<%= message.get('date').year %>
         <% } %>
         <%= message.get('date').hour %>:<%= message.get('date').minute %>
@@ -25,13 +26,15 @@
     </div>
 
     <div class="k_chat_message_content">
+        <% date = Math.round(message.get('date').raw / 60) %>
         <%= message.get('content') %>
     </div>
 
 
     <% } else { %>
     <div class="k_chat_message_content">
-        <% if (Math.abs(date - Math.round(message.get('date').raw / 60)) > 5) { %>
+        <% if (Math.abs(date - Math.round(message.get('date').raw / 60)) > 5.5) { %>
+
         <div style="font-weight: bold; color: grey">
             <% date = Math.round(message.get('date').raw / 60) %>
 
@@ -42,6 +45,7 @@
         </div>
         <% } %>
         <% console.log(date); %>
+        <% date = Math.round(message.get('date').raw / 60) %>
         <%= message.get('content') %>
     </div>
     <% } %>

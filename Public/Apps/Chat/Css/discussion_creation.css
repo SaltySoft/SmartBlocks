@@ -3,13 +3,65 @@
     padding: 20px;
     background-color: white;
     top: 60px;
-    width: 241px;
+    width: 400px;
+}
+
+.k_chat_discussion_creation .form_field {
+    clear: both;
+}
+
+.k_chat_discussion_creation .form_field input {
+    float: right;
 }
 
 .k_chat_dc_user_search_result {
-    float: left;
+    height: 200px;
+    overflow: auto;
 }
 
 .k_chat_dc_user_selection {
+    height: 200px;
+    overflow: auto;
+}
+
+.k_chat_dc_user_selection ul {
+    padding: 0px;
+    margin: 0px;
+}
+
+.k_chat_dc_user_selection li {
+    list-style: none;
+}
+
+.k_chat_dc_user_search_result ul, .k_chat_dc_user_search_result li {
+    padding: 0px;
+    margin: 0px;
+}
+
+.k_chat_dc_user_search_result a {
+    line-height: 25px;
+    height: 25px;
+    background-color: grey;
+    display: block;
+    color: white;
+    padding: 5px;
     float: left;
+    width: 123px;
+    text-align: center;
+}
+
+.k_chat_dc_user_search_result a:hover {
+    background-color: #d3d3d3;
+    color: black;
+}
+
+.k_chat_dc_users_choice li {
+    float: left;
+    width: 123px;
+    background-color: grey;
+    line-height: 25px;
+    height: 25px;
+    padding: 5px;
+    color: white;
+    text-align: center;
 }

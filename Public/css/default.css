@@ -103,6 +103,31 @@ h1, h2, h3, h4, h5, h6
     background-color: #d3d3d3;
 }
 
+.chat_notif {
+    border-radius: 20px;
+    height: 20px;
+    float:left;
+    margin-left: -25px;
+    margin-top: -23px;
+    min-width: 20px;
+    background-color: #be3d38;
+    border: 1px darkred solid;
+    color: white;
+    display: none;
+}
+
+.chat_discussion_notif {
+    border-radius: 20px;
+    height: 20px;
+    position: absolute;
+    min-width: 20px;
+    background-color: #be3d38;
+    border: 1px darkred solid;
+    color: white;
+    float: left;
+    display: none;
+}
+
 #file_sharing_button {
     position: fixed;
     background-color: gray;
