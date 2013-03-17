@@ -32,7 +32,8 @@ class FoldersController extends Controller
         $qb->select("f")
             ->from("Folder", "f");
 
-        if (isset($_GET["page"])) {
+        if (isset($_GET["page"]))
+        {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
             $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
             $qb->setFirstResult(($page - 1) * $page_size)
@@ -40,7 +41,8 @@ class FoldersController extends Controller
         }
 
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        {
             $qb->andWhere("f.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -49,7 +51,8 @@ class FoldersController extends Controller
 
         $response = array();
 
-        foreach ($folders as $folder) {
+        foreach ($folders as $folder)
+        {
             $response[] = $folder->toArray(0);
         }
         $this->render = false;
@@ -65,9 +68,12 @@ class FoldersController extends Controller
 
         $folder = Folder::find($params["id"]);
 
-        if (is_object($folder)) {
+        if (is_object($folder))
+        {
             echo json_encode($folder->toArray(0));
-        } else {
+        }
+        else
+        {
             echo json_encode(array("error"));
         }
     }
@@ -81,30 +87,37 @@ class FoldersController extends Controller
         $data = $this->getRequestData();
 
         $folder->setName($data["name"]);
-        $folder->setCreator($data["creator"]);
-        $folder->setParentFolder($data["parent_folder"]);
 
-        foreach($data["files"] as $file)
+        $creator = User::find($data["creator"]["id"]);
+        if (is_object($creator))
         {
-            $folder->addFile($file);
+
+
+            $folder->setCreator($data["creator"]);
+            $folder->setParentFolder($data["parent_folder"]);
+
+            foreach ($data["files"] as $file)
+            {
+                $folder->addFile($file);
+            }
+
+            foreach ($data["groups_allowed"] as $group)
+            {
+                $folder->addGroup($group);
+            }
+
+            foreach ($data["users_allowed"] as $user)
+            {
+                $folder->addUser($user);
+            }
+
+            /*$folder->setFiles($data["files"]);
+            $folder->setGroupsAllowed($data["groups_allowed"]);
+            $folder->setUsersAllowed($data["users_allowed"]);*/
+
+            $folder->save();
+            echo json_encode($folder->toArray(0));
         }
-
-        foreach($data["groups_allowed"] as $group)
-        {
-            $folder->addGroup($group);
-        }
-
-        foreach($data["users_allowed"] as $user)
-        {
-            $folder->addUser($user);
-        }
-
-        /*$folder->setFiles($data["files"]);
-        $folder->setGroupsAllowed($data["groups_allowed"]);
-        $folder->setUsersAllowed($data["users_allowed"]);*/
-
-        $folder->save();
-        echo json_encode($folder->toArray(0));
     }
 
     public function update($params = array())
@@ -143,7 +156,7 @@ class FoldersController extends Controller
 
             if (is_array($files))
             {
-                foreach($files as $file)
+                foreach ($files as $file)
                 {
                     $file->delete();
                 }
