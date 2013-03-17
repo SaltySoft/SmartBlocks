@@ -139,7 +139,7 @@ h1, h2, h3, h4, h5, h6
 
 }
 
-#chat_container {
+#chat_container, #file_sharing_container {
     position: fixed;
     height: 100%;
     width: 100%;

@@ -18,7 +18,7 @@ class FoldersController extends Controller
     }
 
     /**
-     * Lists all jobs
+     * Lists all Folders
      * Parameters :
      * - page : if set, paged response
      * - page_size : if set, fixes number of elements per page (if page is set)
@@ -50,7 +50,7 @@ class FoldersController extends Controller
         $response = array();
 
         foreach ($folders as $folder) {
-            $response[] = $folder->toArray();
+            $response[] = $folder->toArray(0);
         }
         $this->render = false;
         header("Content-Type: application/json");
@@ -66,7 +66,7 @@ class FoldersController extends Controller
         $folder = Folder::find($params["id"]);
 
         if (is_object($folder)) {
-            echo json_encode($folder->toArray());
+            echo json_encode($folder->toArray(0));
         } else {
             echo json_encode(array("error"));
         }
@@ -104,7 +104,7 @@ class FoldersController extends Controller
         $folder->setUsersAllowed($data["users_allowed"]);*/
 
         $folder->save();
-        echo json_encode($folder->toArray());
+        echo json_encode($folder->toArray(0));
     }
 
     public function update($params = array())

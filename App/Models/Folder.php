@@ -115,7 +115,7 @@ class Folder extends Model
         return $this->users_allowed;
     }
 
-    public function toArray()
+    public function toArray($depth)
     {
         $files = array();
         foreach ($this->files as $file)
@@ -135,6 +135,23 @@ class Folder extends Model
             $groups[] = $group->toArray();
         }
 
+        $folders = array();
+        if ($depth >= 0)
+        {
+            $em = Model::getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select("f")
+                ->from("Folder", "f")
+                ->Where("f.parent_folder = p")
+                ->setParameter("p", $this->id);
+
+            $folders_result = $qb->getQuery()->getResult();
+
+            foreach($folders_result as $folder)
+                $folders[] = $folder->toArray($depth - 1);
+
+        }
+
         return array(
             "id" => $this->id,
             "name" => $this->name,
@@ -142,6 +159,7 @@ class Folder extends Model
             "creator" => $this->creator,
             "users_allowed" => $users,
             "groups_allowed" => $groups,
+            "folders" => $folders,
             "files" => $files
         );
     }
