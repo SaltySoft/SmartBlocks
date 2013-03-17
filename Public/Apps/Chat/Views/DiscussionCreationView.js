@@ -2,14 +2,15 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'SmartBlocks',
     'UsersCollection',
     'Chat/Models/Discussion',
     'text!Chat/Templates/discussion_creation_form.html',
     'text!Chat/Templates/simple_user_list.html'
-], function ($, _, Backbone, UsersCollection, Discussion, DiscussionCrationTemplate, SimpleUserListTemplate) {
+], function ($, _, Backbone, SmartBlocks, UsersCollection, Discussion, DiscussionCrationTemplate, SimpleUserListTemplate) {
     var DiscussionCreationView = Backbone.View.extend({
         tagName:"div",
-        className:"k_chat_discussion_creation",
+        className:"cache",
         initialize:function () {
 
         },
@@ -67,6 +68,8 @@ define([
             });
 
             base.$el.find(".k_chat_dc_validation_button").click(function () {
+                base.hide();
+                SmartBlocks.startLoading("Creating discussion...");
                 var discussion = new Discussion();
                 discussion.set({
                     name: base.$el.find(".k_chat_dc_name_input").val(),
@@ -75,9 +78,13 @@ define([
                 discussion.save({}, {
                     success: function () {
                         console.log("saved discussion", discussion);
-                        base.$el.remove();
+                        SmartBlocks.stopLoading();
                     }
                 });
+            });
+
+            base.$el.find(".k_chat_dc_close_window").click(function () {
+                base.hide();
             });
         },
         updateSelectedUsers: function () {
@@ -96,6 +103,20 @@ define([
             var template = _.template(DiscussionCrationTemplate, {});
 
             base.$el.html(template);
+
+        },
+        show: function () {
+            var base = this;
+            $("body").append(base.$el);
+            var elt = base.$el.find(".k_chat_discussion_creation");
+            elt.css("left", base.$el.width() / 2 - elt.width() / 2);
+        },
+        hide: function () {
+            var base = this;
+            base.$el.remove();
+            var discussion_creation_view = new DiscussionCreationView();
+            discussion_creation_view.init(base.app);
+            base.app.discussion_creation_view = discussion_creation_view;
         }
     });
 

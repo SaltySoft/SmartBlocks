@@ -2,6 +2,11 @@
     background-color: #3b3b3b;
     height: 400px;
     overflow: auto;
+    margin-bottom: 10px;
+}
+
+.k_chat_inputs {
+    float:right;
 }
 
 .k_chat_message {
@@ -52,49 +57,60 @@
 
 .k_chat_message_ou::before {
     background-color: #F2F2F2;
+    /*background-color: red;*/
+    /*box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );*/
     content: "\00a0";
     display: block;
     height: 20px;
-    right: -432px;
+    right: -403px;
     position: relative;
     top: 0px;
-    transform: skew(40deg,-0deg);
-    -ms-transform: skew(40deg,-0deg); /* IE 9 */
-    -webkit-transform:skew(40deg,-0deg); /* Safari and Chrome */
-    -o-transform:skew(40deg,-0deg); /* Opera */
-    -moz-transform:skew(40deg,-0deg); /* Firefox */
+    transform: rotate(135deg);
+    -ms-transform: rotate(135deg); /* IE 9 */
+    -webkit-transform: rotate(135deg); /* Safari and Chrome */
+    -o-transform: rotate(135deg); /* Opera */
+    -moz-transform: rotate(135deg); /* Firefox */
     width:  20px;
     z-index: 10;
+    transform: skew(40deg,-0deg);
+    -ms-transform: skew(40deg,-0deg); /* IE 9 */
+    -webkit-transform: skew(40deg,-0deg); /* Safari and Chrome */
+    -o-transform: skew(40deg,-0deg); /* Opera */
+    -moz-transform: skew(40deg,-0deg); /* Firefox */
 }
 
 .k_chat_discussion_description {
-    width: 300px;
+
     height: 400px;
     float: left;
     background-color: #ffffff;
+    width: 312px;
+    overflow: auto;
 }
 
 .k_chat_send_message_input {
-    width: 350px;
-    margin-left: 300px;
-    height: 100px;
+    width: 336px;
+    margin-left: 178px;
+    height: 93px;
     resize: none;
     display: block;
     float: left;
-
+    margin: 3px;
+    font-family: Arial;
 }
 
 .k_chat_send_message_button {
     width: 140px;
-    margin:0px;
     display: block;
     float: right;
     height: 100px;
+    margin-right: 0px;
 }
 
 .k_chat_discussion_selector {
     background-color: grey;
     float: left;
+
 }
 
 .k_chat_discussion_selector_link {
@@ -153,10 +169,7 @@
     z-index: 103;
 }
 
-.k_chat_discussion_creation {
-    position: absolute;
-    padding: 10px;
-    background-color: white;
-    border: 1px;
-    top: 60px;
+.k_chat_discussion_creation_button {
+    float: left;
+    margin-top: 77px;
 }
