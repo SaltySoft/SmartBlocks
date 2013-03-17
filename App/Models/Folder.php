@@ -47,6 +47,7 @@ class Folder extends Model
 
     public function __construct()
     {
+
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users_allowed = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups_allowed = new \Doctrine\Common\Collections\ArrayCollection();
@@ -122,12 +123,15 @@ class Folder extends Model
         return $this->users_allowed;
     }
 
-    public function toArray($depth = 1)
+    public function toArray($depth = -1)
     {
         $files = array();
-        foreach ($this->files as $file)
+        if ($depth > 0)
         {
-            $files[] = $file->toArray();
+            foreach ($this->files as $file)
+            {
+                $files[] = $file->toArray();
+            }
         }
 
         $users = array();
@@ -163,7 +167,7 @@ class Folder extends Model
             "id" => $this->id,
             "name" => $this->name,
             "parent_folder" => $this->parent_folder,
-            "creator" => $this->creator,
+            "creator" => $this->creator != null ? $this->creator->toArray() : null,
             "users_allowed" => $users,
             "groups_allowed" => $groups,
             "folders" => $folders,

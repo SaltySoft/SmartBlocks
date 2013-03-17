@@ -14,16 +14,21 @@ class File extends Model
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
     public $id;
-    
+
     /**
      * @Column(type="string")
      */
     private $name;
-    
+
     /**
      * @Column(type="string")
      */
     private $path;
+
+    /**
+     * @ManyToOne(targetEntity="User")
+     */
+    private $owner;
 
     /**
      * @ManyToOne(targetEntity="Folder", inversedBy="files")
@@ -32,7 +37,7 @@ class File extends Model
 
     public function __construct()
     {
-        
+
     }
 
     public function setId($id)
@@ -75,12 +80,23 @@ class File extends Model
         return $this->path;
     }
 
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
     public function toArray()
     {
         return array(
             "id" => $this->id,
             "name" => $this->name,
-            "path" => $this->path,
+            "parent_folder" => $this->parent_folder != null ? $this->parent_folder->toArray() : null,
+            "owner" => $this->getOwner() != null ? $this->getOwner()->toArray() : null,
         );
     }
 }

@@ -32,7 +32,8 @@ class FilesController extends Controller
         $qb->select("f")
             ->from("File", "f");
 
-        if (isset($_GET["page"])) {
+        if (isset($_GET["page"]))
+        {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
             $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
             $qb->setFirstResult(($page - 1) * $page_size)
@@ -40,7 +41,8 @@ class FilesController extends Controller
         }
 
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        {
             $qb->andWhere("f.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -66,9 +68,12 @@ class FilesController extends Controller
 
         $file = File::find($params["id"]);
 
-        if (is_object($file)) {
+        if (is_object($file))
+        {
             echo json_encode($file->toArray());
-        } else {
+        }
+        else
+        {
             echo json_encode(array("error"));
         }
     }
@@ -83,11 +88,24 @@ class FilesController extends Controller
         $data = $this->getRequestData();
         $file->setName($data["name"]);
         $file->setPath(md5(microtime()));
-        $file->setParentFolder($data["parent_folder"]);
+
+        $folder = Folder::find($data["parent_folder"]["id"]);
+        if (is_object($folder))
+        {
+            $file->setParentFolder($folder);
+        }
+
+        $owner = User::find($data["owner"]["id"]);
+
+        if (is_object($owner))
+        {
+            $file->setOwner($owner);
+        }
+
 
         if (isset($_FILES["file"]))
         {
-            $path = ROOT.DS . "App" . DS . "Data" . DS . "User_files" . DS;
+            $path = ROOT . DS . "App" . DS . "Data" . DS . "User_files" . DS;
             $file->setPath($file->getPath() . PATHINFO_EXTENSION);
             move_uploaded_file($_FILES["file"]["tmp_name"], $path, $file->getPath());
         }
@@ -105,10 +123,21 @@ class FilesController extends Controller
         $file = File::find(($params["id"]));
         $data = $this->getRequestData();
 
-        if (is_object($file))
+        if (is_object($file) && ($file->getOwner() == User::current_user() || User::is_admin()))
         {
             $file->setName($data["name"]);
-            $file->setParentFolder($data["parent_folder"]);
+            $folder = Folder::find($data["parent_folder"]["id"]);
+            if (is_object($folder))
+            {
+                $file->setParentFolder($folder);
+            }
+
+            $owner = User::find($data["owner"]["id"]);
+            if (is_object($owner))
+            {
+                $file->setOwner($owner);
+            }
+
             $file->save();
             echo json_encode($file->toArray());
         }
@@ -131,6 +160,11 @@ class FilesController extends Controller
         }
         else
             echo json_encode(array("message" => "An error occured"));
+    }
+
+    public function get_file($params = array())
+    {
+        //This action streams the file
     }
 }
 

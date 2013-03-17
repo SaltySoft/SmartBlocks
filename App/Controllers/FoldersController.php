@@ -139,11 +139,51 @@ class FoldersController extends Controller
         if (is_object($folder))
         {
             $folder->setName($data["name"]);
-            $folder->setCreator($data["creator"]);
+            $creator = User::find($data["creator"]["id"]);
+            if (is_object($creator))
+            {
+                $folder->setCreator($creator);
+            }
             $folder->setParentFolder($data["parent_folder"]);
-            /*$folder->setFiles($data["files"]);
-            $folder->setGroupsAllowed($data["groups_allowed"]);
-            $folder->setUsersAllowed($data["users_allowed"]);*/
+
+            foreach ($data["users_allowed"] as $user_array)
+            {
+                $user = User::find($user_array["id"]);
+                if (is_object($user))
+                {
+                    $folder->addUser($user);
+                }
+            }
+
+            foreach ($data["groups_allowed"] as $group_array)
+            {
+                $group = Group::find($group_array["id"]);
+                if (is_object($group))
+                {
+                    $folder->addGroup($group);
+                }
+            }
+
+            foreach ($data["files"] as $file_array)
+            {
+                $file = File::find($file_array["id"]);
+                if (is_object($file))
+                {
+                    $folder->addFile($file);
+                }
+            }
+
+            foreach ($data["folders"] as $folder_array)
+            {
+                $f = Folder::find($folder_array["id"]);
+                if (is_object($f))
+                {
+                    $f->setParentFolder($folder->getId());
+                }
+                $f->save();
+            }
+
+            $folder->save();
         }
         else
             echo json_encode(array("error"));
