@@ -45,6 +45,13 @@ class Folder extends Model
      */
     private $files;
 
+    public function __construct()
+    {
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->users_allowed = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->groups_allowed = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function setCreator($creator)
     {
         $this->creator = $creator;
@@ -115,7 +122,7 @@ class Folder extends Model
         return $this->users_allowed;
     }
 
-    public function toArray($depth)
+    public function toArray($depth = 1)
     {
         $files = array();
         foreach ($this->files as $file)
@@ -142,7 +149,7 @@ class Folder extends Model
             $qb = $em->createQueryBuilder();
             $qb->select("f")
                 ->from("Folder", "f")
-                ->Where("f.parent_folder = p")
+                ->Where("f.parent_folder = :p")
                 ->setParameter("p", $this->id);
 
             $folders_result = $qb->getQuery()->getResult();

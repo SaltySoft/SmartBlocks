@@ -93,22 +93,29 @@ class FoldersController extends Controller
         {
 
 
-            $folder->setCreator($data["creator"]);
+            $folder->setCreator($creator);
             $folder->setParentFolder($data["parent_folder"]);
 
-            foreach ($data["files"] as $file)
+            if (isset($data["files"]))
             {
-                $folder->addFile($file);
+                foreach ($data["files"] as $file)
+                {
+                    $folder->addFile($file);
+                }
             }
-
-            foreach ($data["groups_allowed"] as $group)
+            if (isset($data["groups_allowed"]))
             {
-                $folder->addGroup($group);
+                foreach ($data["groups_allowed"] as $group)
+                {
+                    $folder->addGroup($group);
+                }
             }
-
-            foreach ($data["users_allowed"] as $user)
+            if (isset($data["users_allowed"]))
             {
-                $folder->addUser($user);
+                foreach ($data["users_allowed"] as $user)
+                {
+                    $folder->addUser($user);
+                }
             }
 
             /*$folder->setFiles($data["files"]);

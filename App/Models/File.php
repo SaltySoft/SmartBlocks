@@ -30,6 +30,11 @@ class File extends Model
      */
     private $parent_folder;
 
+    public function __construct()
+    {
+        
+    }
+
     public function setId($id)
     {
         $this->id = $id;
