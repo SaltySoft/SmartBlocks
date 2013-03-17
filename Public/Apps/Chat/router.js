@@ -2,18 +2,19 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'SmartBlocks',
     'TabView',
     'Chat/Models/Discussion',
     'Chat/Views/HomeView',
     'Chat/Views/DiscussionView',
     'Chat/Views/DiscussionCreationView',
     'UserModel'
-], function ($, _, Backbone, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
+], function ($, _, Backbone, SmartBlocks, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
 
         var AppRouter = Backbone.Router.extend({
-            routes:{
-                '':"home",
-                "show_discussion/:id":"show_discussion"
+            routes: {
+                '': "home",
+                "show_discussion/:id": "show_discussion"
             }
         });
 
@@ -23,12 +24,12 @@ define([
             User.getCurrent(function (current_user) {
 
                     var ChatApplication = {
-                        current_user:current_user
+                        current_user: current_user,
+                        shown: false
                     };
-
+                    ChatApplication.discussions_notifs = {};
                     var discussion_creation_view = new DiscussionCreationView();
                     discussion_creation_view.init(ChatApplication);
-
 
                     ChatApplication.discussion_creation_view = discussion_creation_view;
 
@@ -46,6 +47,7 @@ define([
                         if ($("#chat_container").css("display") == "block")
                             if (e.keyCode == 27) {
                                 $("#chat_container").hide();
+                                ChatApplication.shown = false;
                             }
                         if (pressed_keys[39] && pressed_keys[17] && pressed_keys[16]) {
                             $("#chat_container").show();
@@ -55,8 +57,18 @@ define([
 
                     });
 
-
-
+                    SmartBlocks.original_title = $(document).attr("title");
+                    SmartBlocks.events.on("ws_notification", function (message) {
+                        if (message.app = "k_chat") {
+                            if (message.status == "new_message") {
+                                if (message.sender.id != current_user.get('id')) {
+                                    SmartBlocks.notifySound();
+                                    SmartBlocks.animateTitle('New message from ' + message.sender.username + ' in ' + message.discussion.name);
+                                    SmartBlocks.chatNotif(current_user.get('id'));
+                                }
+                            }
+                        }
+                    });
 
                     $(document).keydown(function (e) {
 
@@ -70,17 +82,15 @@ define([
                     });
 
 
-
                     var AppEvents = _.extend({}, Backbone.Events);
                     ChatApplication.AppEvents = AppEvents;
 
                     var discussion_container = $(document.createElement("div"));
                     $(container).html(discussion_container);
                     ChatApplication.show_discussion = function (id) {
-                        console.log("showing");
-                        var discussion = new Discussion({ id:id });
-                        console.log("name", discussion.get('name'));
-                        var discussionView = new DiscussionView({ model:discussion });
+                        ChatApplication.shown = true;
+                        var discussion = new Discussion({ id: id });
+                        var discussionView = new DiscussionView({ model: discussion });
                         discussionView.init(ChatApplication, AppEvents, current_user, websocket, function () {
                             discussion_container.html(discussionView.$el);
                         });
@@ -93,7 +103,7 @@ define([
                     } catch (err) {
                         Backbone.history.loadUrl()
                     }
-
+                    SmartBlocks.chatNotif(current_user.get('id'));
 
                 }
             )
@@ -102,7 +112,7 @@ define([
 
 
         return {
-            initialize:initialize
+            initialize: initialize
         };
 
     }
