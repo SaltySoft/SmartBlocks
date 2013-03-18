@@ -1,6 +1,6 @@
 {
     "name": "AppOrganizer",
-    "id": "app_organizer",
+    "token": "app_organizer",
     "description":"This is the app organizer application.",
     "link":"/Apps/AppOrganizer"
 }

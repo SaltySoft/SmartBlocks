@@ -21,6 +21,11 @@ class ApplicationBlock extends Model
     private $name;
 
     /**
+     * @Column(type="string")
+     */
+    private $token;
+
+    /**
      * @Column(type="text")
      */
     private $description;
@@ -70,10 +75,21 @@ class ApplicationBlock extends Model
         return $this->name;
     }
 
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
     public function toArray()
     {
         $appBlockArray = array();
         $appBlockArray["name"] = $this->name;
+        $appBlockArray["token"] = $this->token;
         $appBlockArray["description"] = $this->description;
         $appsArray = array();
 

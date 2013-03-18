@@ -1,6 +1,6 @@
 {
     "name": "Chat",
-    "id": "chat",
+    "token": "chat",
     "description":"This is the chat application.",
     "link":"/Apps/Chat"
 }

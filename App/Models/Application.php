@@ -15,11 +15,15 @@ class Application extends Model
      */
     public $id;
 
-
     /**
      * @Column(type="string")
      */
     private $name;
+
+    /**
+     * @Column(type="string")
+     */
+    private $token;
 
     /**
      * @Column(type="text")
@@ -71,6 +75,16 @@ class Application extends Model
         return $this->name;
     }
 
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
+
     public function setBlock($block)
     {
         $this->block = $block;
@@ -85,6 +99,7 @@ class Application extends Model
     {
         $appArray = array();
         $appArray["name"] = $this->name;
+        $appArray["token"] = $this->token;
         $appArray["description"] = $this->description;
         $appArray["link"] = $this->link;
 

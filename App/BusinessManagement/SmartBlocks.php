@@ -1,136 +1,312 @@
 <?php
 
-//require_once("ApplicationBlock.php");
-//require_once("Application.php");
 namespace BusinessManagement;
 
 /**
- * Writer: Antoine Jackson
- * Date: 3/1/13
- * Time: 2:16 AM
  * This is the main logic class of the server app.
  */
 class SmartBlocks
 {
-    private static $plugins_application_blocks = array();
-    private static $core_application_block;
-    private static $core_blocks_name = array();
-    private static $core_loaded = false;
+    private static $core_block;
+    private static $core_apps_directory_name = array();
+    private static $plugins_blocks = array();
 
-    private static function retrievePluginsAppBlocksInfo()
+    /***************************************************************************/
+    /***************************** public functions ****************************/
+    /***************************************************************************/
+
+    public static function loadAllBlocks()
     {
-        $blocknames = \MuffinApplication::getPlugins();
+        self::loadPlugins();
+        self::getCoreBlock();
+    }
 
-        foreach ($blocknames as $blockname)
+    public static function getAllBlocks()
+    {
+        $blocks = array();
+        $blocks[] = self::getCoreBlock();
+        foreach (self::getPluginsBlocks() as $pluginBlock)
         {
-            if (file_exists(ROOT . DS . "Plugins" . DS . $blockname . DS . "Config" . DS . "block.json"))
+            $blocks[] = $pluginBlock;
+        }
+
+        return $blocks;
+    }
+
+    public static function getCoreBlock()
+    {
+        self::getCoreBlockInfo();
+        self::getCoreAppsDirectoriesName();
+        self::retrieveCoreAppsInfo();
+    }
+
+    public static function getPluginsBlocks()
+    {
+        self::getPluginsDirectoriesName();
+        self::getPluginsBlocksInfo();
+        self::retrievePluginsAppsInfo();
+    }
+
+    /***************************** public functions ****************************/
+    /********************************** END ************************************/
+
+    /***************************************************************************/
+    /***************************** CORE STUFF **********************************/
+    /********************************BEGIN**************************************/
+
+    private static function getCoreBlockInfo()
+    {
+        if (file_exists(ROOT . DS . "Config" . DS . "block.json"))
+        {
+            $data = file_get_contents(ROOT . DS . "Config" . DS . "block.json");
+            try
             {
-                $data = file_get_contents(ROOT . DS . "Plugins" . DS . $blockname . DS . "Config" . DS . "block.json");
+                $data = json_decode($data, true);
 
-                try
-                {
-                    $data = json_decode($data, true);
-
-                    $appblock = new \ApplicationBlock();
-                    $appblock->setName($data["name"]);
-                    $appblock->setDescription($data["description"]);
-
-                    $appblock->save();
-
-
-                    self::$plugins_application_blocks[] = $appblock;
-                } catch (\Exception $e)
-                {
-                    echo $e->getMessage();
-                }
+                $coreBlock = new \ApplicationBlock();
+                $coreBlock->setName($data["name"]);
+                $coreBlock->setToken($data["token"]);
+                $coreBlock->setDescription($data["description"]);
+                $coreBlock->save();
+                self::$core_block = $coreBlock;
+            } catch (\Exception $e)
+            {
+                \MuffinApplication::addError($e->getMessage());
             }
         }
     }
 
-    private static function getCore()
+    /**
+     * Loop through Public/Apps directory.
+     * Get each directory name other that '.' and '..'.
+     * Into $core_apps_directory_name.
+     **/
+    private static function getCoreAppsDirectoriesName()
     {
-//        if (!self::$core_loaded)
-        self::loadCore();
-        return self::$core_blocks_name;
-    }
-
-    private static function loadCore()
-    {
-        self::$core_loaded = true;
         if ($handle = opendir(ROOT . DS . 'Public' . DS . 'Apps'))
         {
-            /* loop through directory. */
             while (false !== ($dir = readdir($handle)))
             {
                 if (is_dir(ROOT . DS . 'Public' . DS . 'Apps' . DS . $dir) && $dir != "." && $dir != "..")
                 {
-                    self::$core_blocks_name[] = $dir;
+                    self::$core_apps_directory_name[] = $dir;
                 }
             }
             closedir($handle);
         }
     }
 
-    private static function retrieveCoreAppBlocksInfo()
+    private static function retrieveCoreAppsInfo()
     {
-        $appnames = self::getCore();
-        $appblock = new \ApplicationBlock();
-        $appblock->setName("CoreAppBlock");
-        $appblock->setDescription("This contain the core applications of SmartBlocks.");
-        $appblock->save();
+        $appsDirectoryName = self::$core_apps_directory_name;
 
-        foreach ($appnames as $appname)
+        foreach ($appsDirectoryName as $appDirectoryName)
         {
-            if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "app.json"))
+            if ($handle = opendir(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config"))
             {
-                $data = file_get_contents(ROOT . DS . "Public" . DS . 'Apps' . DS . $appname . DS . "Config" . DS . "app.json");
+                if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config" . DS . "app.json"))
+                {
+                    $data = file_get_contents(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config" . DS . "app.json");
+                    try
+                    {
+                        $data = json_decode($data, true);
+
+                        $app = new \Application();
+                        $app->setName($data["name"]);
+                        $app->setToken($data["token"]);
+                        $app->setDescription($data["description"]);
+                        $app->setLink($data["link"]);
+                        $app->setBlock(self::$core_block);
+                        $app->save();
+                    } catch (\Exception $e)
+                    {
+                        \MuffinApplication::addError($e->getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    /***************************** CORE STUFF **********************************/
+    /*********************************END***************************************/
+
+
+    /***************************************************************************/
+    /**************************** PLUGINS STUFF ********************************/
+    /*********************************BEGIN*************************************/
+
+    private static function getPluginsDirectoriesName()
+    {
+        $plugins_directories_name = array();
+        if ($handle = opendir(ROOT . DS . 'Plugins'))
+        {
+            while (false !== ($dir = readdir($handle)))
+            {
+                if (is_dir(ROOT . DS . 'Plugins' . DS . $dir) && $dir != "." && $dir != "..")
+                {
+                    $plugins_directories_name[] = $dir;
+                }
+            }
+            closedir($handle);
+        }
+
+        return $plugins_directories_name;
+    }
+
+    private static function loadPlugins()
+    {
+        $plugins_directories_name = array();
+        if ($handle = opendir(ROOT . DS . 'Plugins'))
+        {
+            while (false !== ($dir = readdir($handle)))
+            {
+                if (is_dir(ROOT . DS . 'Plugins' . DS . $dir) && $dir != "." && $dir != "..")
+                {
+                    $plugins_directories_name[] = $dir;
+                }
+            }
+            closedir($handle);
+        }
+
+        foreach ($plugins_directories_name as $directoryName)
+        {
+            if ($handle = opendir(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config"))
+            {
+                if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config" . DS . "block.json"))
+                {
+                    $data = file_get_contents(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config" . DS . "block.json");
+
+                    try
+                    {
+                        $data = json_decode($data, true);
+
+                        $pluginBlock = new \ApplicationBlock();
+                        $pluginBlock->setName($data["name"]);
+                        $pluginBlock->setToken($data["token"]);
+                        $pluginBlock->setDescription($data["description"]);
+                        $pluginBlock->save();
+                        $pluginsAppsDirectoriesName = array();
+
+                        if ($handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
+                        {
+                            while (false !== ($dir = readdir($handle)))
+                            {
+                                if (is_dir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $dir) && $dir != "." && $dir != "..")
+                                {
+                                    $pluginsAppsDirectoriesName[] = $dir;
+                                }
+                            }
+                            closedir($handle);
+                        }
+
+                        foreach ($pluginsAppsDirectoriesName as $pluginsAppDirectoryName)
+                        {
+                            if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $pluginsAppDirectoryName . DS . "Config" . DS . "app.json"))
+                            {
+                                $data = file_get_contents(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $pluginsAppDirectoryName . DS . "Config" . DS . "app.json");
+
+                                try
+                                {
+                                    $data = json_decode($data, true);
+
+                                    $app = new \Application();
+                                    $app->setName($data["name"]);
+                                    $app->setToken($data["token"]);
+                                    $app->setDescription($data["description"]);
+                                    $app->setLink($data["link"]);
+                                    $app->setBlock($pluginBlock);
+                                    $app->save();
+                                } catch (\Exception $e)
+                                {
+                                    \MuffinApplication::addError($e->getMessage());
+                                }
+                            }
+                        }
+                    } catch (\Exception $e)
+                    {
+                        \MuffinApplication::addError($e->getMessage());
+                    }
+                }
+            }
+        }
+    }
+
+    private static function getPluginsBlocksInfo()
+    {
+        $directoriesNames = self::getPluginsDirectoriesName();
+
+        foreach ($directoriesNames as $directoryName)
+        {
+            if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config" . DS . "block.json"))
+            {
+                $data = file_get_contents(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config" . DS . "block.json");
+
                 try
                 {
                     $data = json_decode($data, true);
 
-                    $app = new \Application();
-                    $app->setName($data["name"]);
-                    $app->setDescription($data["description"]);
-                    $app->setLink($data["link"]);
-                    $app->setBlock($appblock);
-                    $app->save();
-
+                    $pluginBlock = new \ApplicationBlock();
+                    $pluginBlock->setName($data["name"]);
+                    $pluginBlock->setToken($data["token"]);
+                    $pluginBlock->setDescription($data["description"]);
+                    $pluginBlock->save();
+                    self::$plugins_blocks[] = $pluginBlock;
                 } catch (\Exception $e)
                 {
                     \MuffinApplication::addError($e->getMessage());
                 }
             }
         }
-
-        self::$core_application_block = $appblock;
     }
 
-    public static function getPluginsApplicationBlocks()
+    private static function retrievePluginsAppsInfo()
     {
-        self::retrievePluginsAppBlocksInfo();
-        return self::$plugins_application_blocks;
-    }
+        $directoriesName = self::getPluginsDirectoriesName();
+        $counter = 0;
 
-    public static function getCoreAppsName()
-    {
-        return self::getCore();
-    }
-
-    public static function getCoreApplicationBlocks()
-    {
-        self::retrieveCoreAppBlocksInfo();
-        return self::$core_application_block;
-    }
-
-    public static function getAllApplicationBlocks()
-    {
-        $allAppBlocks = array();
-        $allAppBlocks[] = self::getCoreApplicationBlocks();
-        foreach (self::getPluginsApplicationBlocks() as $pluginsAppBlock)
+        foreach ($directoriesName as $directoryName)
         {
-            $allAppBlocks[] = $pluginsAppBlock;
-        }
+            $pluginsAppsDirectoriesName = array();
 
-        return $allAppBlocks;
+            if ($handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
+            {
+                while (false !== ($dir = readdir($handle)))
+                {
+                    if (is_dir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $dir) && $dir != "." && $dir != "..")
+                    {
+                        $pluginsAppsDirectoriesName[] = $dir;
+                    }
+                }
+                closedir($handle);
+            }
+
+            foreach ($pluginsAppsDirectoriesName as $pluginsAppDirectoryName)
+            {
+                if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $pluginsAppDirectoryName . DS . "Config" . DS . "app.json"))
+                {
+                    $data = file_get_contents(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Public" . DS . "Apps" . DS . $pluginsAppDirectoryName . DS . "Config" . DS . "app.json");
+
+                    try
+                    {
+                        $data = json_decode($data, true);
+
+                        $app = new \Application();
+                        $app->setName($data["name"]);
+                        $app->setToken($data["token"]);
+                        $app->setDescription($data["description"]);
+                        $app->setLink($data["link"]);
+                        $app->setBlock(self::$plugins_blocks[$counter]);
+                        $app->save();
+                    } catch (\Exception $e)
+                    {
+                        \MuffinApplication::addError($e->getMessage());
+                    }
+                }
+            }
+            $counter++;
+        }
     }
+
+    /**************************** PLUGINS STUFF ********************************/
+    /*********************************END***************************************/
 }

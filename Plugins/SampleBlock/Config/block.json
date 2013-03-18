@@ -1,13 +1,5 @@
 {
     "name": "SampleBlock",
-    "id":"sample_block",
-    "description":"This is a sample app block",
-    "applications": [
-        {
-            "name": "SampleApplication",
-            "id":"sample_application",
-            "description": "this is a sample application",
-            "link":"/SampleBlock/sample_app"
-        }
-    ]
+    "token":"sample_block",
+    "description":"This is a sample app block"
 }

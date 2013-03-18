@@ -8,17 +8,57 @@
 require_once(ROOT . DS . "App" . DS . "BusinessManagement" . DS . "SmartBlocks.php");
 class BlocksController extends Controller
 {
-    public function security_check()
+    private function security_check($user = null)
     {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
+            $this->redirect("/Users/user_error");
+        }
     }
 
-    public function interface_security_check()
+    private function interface_security_check($user = null)
     {
+        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        {
+            $this->redirect("/");
+        }
     }
 
     public function configure()
     {
-        \BusinessManagement\SmartBlocks::getAllApplicationBlocks();
+        //security_check(User::current_user());
+
+        \BusinessManagement\SmartBlocks::loadAllBlocks();
+
+//        $blocks  = \BusinessManagement\SmartBlocks::getCoreBlock();
+//        $first = true;
+//        $blocksNumber = 0;
+//        $pluginsBlocksNumber = 0;
+//        $appsCoreNumber = 0;
+//        $appsPluginsNumber = 0;
+//
+//        foreach ($blocks as $block)
+//        {
+//            if ($first)
+//            {
+//                $first = false;
+//                $appsCoreNumber += count($block->getApplications());
+//                $blocksNumber++;
+//            }
+//            else
+//            {
+//                $blocksNumber++;
+//                $pluginsBlocksNumber++;
+//                $appsPluginsNumber += count($block->getApplications());
+//            }
+//        }
+//
+        $this->set("blocksNumber", $blocksNumber);
+//        $this->set("pluginsBlocksNumber", $pluginsBlocksNumber);
+//        $this->set("appsCoreNumber", $appsCoreNumber);
+//        $this->set("appsPluginsNumber", $appsPluginsNumber);
+        $this->set("appsNumber", $appsCoreNumber + $appsPluginsNumber);
+        $this->render = false;
     }
 
     /**
@@ -28,6 +68,7 @@ class BlocksController extends Controller
     public function index()
     {
         $response = array();
+
         foreach (ApplicationBlock::all() as $block)
         {
             $response[] = $block->toArray();
