@@ -8,11 +8,12 @@ define([
     '/Apps/FileSharing/Collections/Folders.js',
     '/Apps/FileSharing/Collections/Files.js',
     'FileSharing/Views/FileUpload',
+    'FileSharing/Views/FolderCreation',
     'ContextMenuView'
-], function ($, _, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, ContextMenuView) {
+], function ($, _, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, FolderCreationView, ContextMenuView) {
     var FolderBrowser = Backbone.View.extend({
         tagName: "div",
-        className: "k_file_sharing_choose_file",
+        className: "k_fs_folder_browser",
         initialize: function () {
 
         },
@@ -45,7 +46,7 @@ define([
                         }, '/images/icons/folder_go.png');
                         context_menu.addButton("Delete", function () {
                             if (confirm("Are you sure you want to delete that folder and all the files in it ?")) {
-                                var folder = new Folder({id:elt.attr("data-folder_id")});
+                                var folder = new Folder({id: elt.attr("data-folder_id")});
                                 folder.destroy({
                                     success: function () {
                                         base.fetchAll(base.current_folder);
@@ -69,8 +70,7 @@ define([
                     case 3:
                         var context_menu = new ContextMenuView();
                         context_menu.addButton("Download", function () {
-                            if (elt.attr("data-file_id") != undefined)
-                            {
+                            if (elt.attr("data-file_id") != undefined) {
 //                                window.open(
 //                                    "/Files/get_file/" + elt.attr("data-file_id")
 //                                );
@@ -96,10 +96,12 @@ define([
                 }
             });
 
-            base.$el.find(".k_fs_parent_folder_button").click(function () {
+            $(".k_fs_parent_folder").click(function () {
                 var elt = $(this);
                 base.fetchAll(base.parent_folder);
             });
+
+
 
 
         },
@@ -109,6 +111,10 @@ define([
 
             base.$el.html(template);
             base.initializeEvents();
+        },
+        reload: function () {
+            var base = this;
+            base.fetchAll(base.current_folder);
         },
         fetchAll: function (folder_id, callback) {
             var base = this;
@@ -155,24 +161,19 @@ define([
         },
         createFolder: function () {
             var base = this;
-            var folder = new Folder({
-                name: "sample",
-                creator: base.SmartBlocks.current_user,
-                parent_folder: base.current_folder
-            });
-            base.SmartBlocks.startLoading("Creating folder");
-            folder.save({}, {
-                success: function () {
-                    base.SmartBlocks.stopLoading();
-                    console.log(folder);
-                    base.fetchAll(base.current_folder);
-                }
-            });
+
+            var fc_view = new FolderCreationView();
+            fc_view.init(base.SmartBlocks, base);
+            $("body").prepend(fc_view.$el);
+
+
+
         },
+
         uploadFile: function () {
             var base = this;
             var file_upload_view = new FileUploadView();
-            file_upload_view.init(base.SmartBlocks, base.current_folder);
+            file_upload_view.init(base.SmartBlocks, base);
             $("body").prepend(file_upload_view.$el);
         }
 

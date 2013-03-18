@@ -103,46 +103,50 @@ class FilesController extends Controller
         $file = new File();
         $data = $this->getRequestData();
         $file->setName($data["name"]);
-        $file->setPath(md5(microtime()));
-
-        if (isset($data["parent_folder"]["id"]))
+        if ($file->getName() != "")
         {
-            $folder = Folder::find($data["parent_folder"]["id"]);
-        }
-        else
-        {
-            $folder = Folder::find($data["parent_folder"]);
-        }
+            $file->setPath(md5(microtime()));
 
-
-        if (is_object($folder))
-        {
-            $file->setParentFolder($folder);
-        }
-        if (isset($data["owner"]))
-        {
-            $owner = User::find($data["owner"]["id"]);
-
-            if (is_object($owner))
+            if (isset($data["parent_folder"]["id"]))
             {
-                $file->setOwner($owner);
+                $folder = Folder::find($data["parent_folder"]["id"]);
             }
-        }
-        else
-        {
-            $file->setOwner(User::current_user());
-        }
+            else
+            {
+                $folder = Folder::find($data["parent_folder"]);
+            }
 
 
-        if (isset($_FILES["file"]))
-        {
-            $path = ROOT . DS . "Data" . DS . "User_files" . DS;
-            $file->setPath($file->getPath() . PATHINFO_EXTENSION);
-            move_uploaded_file($_FILES["file"]["tmp_name"], $path.$file->getPath());
+            if (is_object($folder))
+            {
+                $file->setParentFolder($folder);
+            }
+            if (isset($data["owner"]))
+            {
+                $owner = User::find($data["owner"]["id"]);
+
+                if (is_object($owner))
+                {
+                    $file->setOwner($owner);
+                }
+            }
+            else
+            {
+                $file->setOwner(User::current_user());
+            }
+
+
+            if (isset($_FILES["file"]))
+            {
+                $path = ROOT . DS . "Data" . DS . "User_files" . DS;
+                $file->setPath($file->getPath() . PATHINFO_EXTENSION);
+                move_uploaded_file($_FILES["file"]["tmp_name"], $path.$file->getPath());
+            }
+
+            $file->save();
+            echo json_encode($file->toArray());
         }
 
-        $file->save();
-        echo json_encode($file->toArray());
     }
 
     public function update($params = array())

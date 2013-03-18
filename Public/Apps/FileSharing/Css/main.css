@@ -14,45 +14,101 @@
 }
 
 .k_fs_left_panel_container {
+    background-color: #939393;
     float: left;
     width: 300px;
     height: 600px;
-    background-color: darkred;
 }
 
 .k_fs_folder_browser_container {
-    background-color: #19628b;
-    height: 350px;
-    overflow: auto;
+    background-color: #3b3b3b;
+    height: 310px;
+
     margin-left: 300px;
+    padding-top: 40px;
+}
+
+.k_fs_folder_browser {
+    background-color: rgba(132, 132, 132, 0.52);
+    overflow-y: scroll;
+    height: 310px;
+}
+
+.k_fs_parent_folder {
+    margin-bottom: -40px;
+    position: relative;
+    display: block;
+    padding: 10px;
+    float: left;
+    background-color: rgba(211, 211, 211, 0.33);
+}
+
+.k_fs_parent_folder:hover {
+    background-color: rgba(211, 211, 211, 0.5);
 }
 
 .k_fs_dragdrop_container {
-    background-color: #598b47;
+    background-color: #939393;
     height: 250px;
     margin-left: 300px;
 }
 
 .k_fs_thumbnail {
+    border-radius: 10px;
     width: 90px;
     height: 90px;
     float: left;
     margin: 10px;
-    background-color: red;
+    border: 2px  rgba(209, 212, 212, 0.5) solid;
+    background-color: rgba(209, 212, 212, 0.37);
     text-align: center;
     padding:5px;
     cursor:pointer;
+    font-weight: bold;
+    color: white;
+}
+.k_fs_thumbnail:hover {
+    border: 2px  rgba(209, 212, 212, 0.9    ) solid;
+    background-color: rgba(209, 212, 212, 0.5);
 }
 
 .k_fs_fb_controls {
     position: relative;
     height: 50px;
-    background-color: red;
+
+}
+
+.k_fs_controls a {
+    display: block;
+    height: 130px;
+    float: left;
+    background-color: #d3d3d3;
+    color: #888888;
+    width: 145px;
+    margin: 10px;
+    margin-top:20px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    text-align: center;
+    padding: 50px;
+    font-size: large;
+    text-decoration: none;
+}
+
+.k_fs_controls a:hover {
+    background-color: #f0f0f0;
+    color: #686868;
 }
 
 .file_upload_form {
     margin: auto;
+    margin-top: 200px;
     width: 400px;
-    height: 400px;
     background-color: white;
+    padding: 20px;
+}
+
+
+.file_upload_form iframe {
+    display: none;
 }

@@ -30,6 +30,15 @@ define([
             var controls_view = new ControlsView();
             controls_view.init(base.SmartBlocks, folder_browser);
             base.$el.find(".k_fs_dragdrop_container").html(controls_view.$el);
+
+            base.initializeEvents();
+        },
+        initializeEvents: function () {
+            var base = this;
+
+            base.$el.find(".k_ds_close_button").click(function () {
+                base.$el.parent().parent().hide();
+            });
         }
     });
 

@@ -283,3 +283,11 @@ button:hover {
 .context_menu .context_menu_icon {
     float: left;
 }
+
+.popup {
+    margin: auto;
+    margin-top: 200px;
+    width: 400px;
+    background-color: white;
+    padding: 20px;
+}

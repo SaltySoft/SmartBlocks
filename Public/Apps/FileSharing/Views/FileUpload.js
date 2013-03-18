@@ -10,10 +10,10 @@ define([
         initialize: function () {
 
         },
-        init: function (SmartBlocks, parent_folder_id) {
+        init: function (SmartBlocks, folder_browser) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.parent_folder_id = parent_folder_id;
+            base.folder_browser = folder_browser;
             base.render();
         },
         render: function () {
@@ -23,11 +23,23 @@ define([
             container.addClass("file_upload_form");
             base.$el.append(container);
 
-            var template = _.template(FileUploadTemplate, { parent_folder_id:base.parent_folder_id  });
+            var template = _.template(FileUploadTemplate, { parent_folder_id: base.folder_browser.current_folder  });
             container.html(template);
+
+            base.initializeEvents();
         },
         initializeEvents: function () {
             var base = this;
+            base.$el.find(".k_fs_upload_button").click(function () {
+                base.$el.find("iframe").load(function () {
+                    base.$el.remove();
+                    base.folder_browser.reload();
+                });
+            });
+
+            base.$el.find(".k_fs_upload_cancel_button").click(function () {
+                base.$el.remove();
+            });
         }
     });
 

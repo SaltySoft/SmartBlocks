@@ -102,37 +102,48 @@ class FoldersController extends Controller
         $data = $this->getRequestData();
 
         $folder->setName($data["name"]);
-
-        $creator = User::find($data["creator"]["id"]);
-        if (is_object($creator))
+        if (isset($data["creator"]["id"]))
         {
-            $folder->setCreator($creator);
-            $folder->setParentFolder($data["parent_folder"]);
-
-            if (isset($data["files"]))
+            $creator = User::find($data["creator"]["id"]);
+            if (is_object($creator))
             {
-                foreach ($data["files"] as $file)
-                {
-                    $folder->addFile($file);
-                }
+                $folder->setCreator($creator);
             }
-            if (isset($data["groups_allowed"]))
+            else
             {
-                foreach ($data["groups_allowed"] as $group)
-                {
-                    $folder->addGroup($group);
-                }
+                $folder->setCreator(User::current_user());
             }
-            if (isset($data["users_allowed"]))
-            {
-                foreach ($data["users_allowed"] as $user)
-                {
-                    $folder->addUser($user);
-                }
-            }
-            $folder->save();
-            echo json_encode($folder->toArray(0));
         }
+        else
+        {
+            $folder->setCreator(User::current_user());
+        }
+        $folder->setParentFolder($data["parent_folder"]);
+
+        if (isset($data["files"]))
+        {
+            foreach ($data["files"] as $file)
+            {
+                $folder->addFile($file);
+            }
+        }
+        if (isset($data["groups_allowed"]))
+        {
+            foreach ($data["groups_allowed"] as $group)
+            {
+                $folder->addGroup($group);
+            }
+        }
+        if (isset($data["users_allowed"]))
+        {
+            foreach ($data["users_allowed"] as $user)
+            {
+                $folder->addUser($user);
+            }
+        }
+        $folder->save();
+        echo json_encode($folder->toArray(0));
+
     }
 
     public function update($params = array())
@@ -209,16 +220,19 @@ class FoldersController extends Controller
         {
             $files = $folder->getFiles();
 
-            if (is_array($files))
+
+            foreach ($files as $file)
             {
-                foreach ($files as $file)
+                if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath()))
                 {
-                    $file->delete();
+                    unlink(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
                 }
+
+                $file->delete();
             }
 
             $folder->delete();
-            echo json_encode(array("message" => "Job successfully deleted"));
+            echo json_encode(array("message" => "Folder successfully deleted"));
         }
         else
             echo json_encode(array("error"));
