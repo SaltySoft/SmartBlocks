@@ -1,0 +1,58 @@
+#file_sharing_container {
+
+}
+
+.k_file_sharing_main_container {
+    position: absolute;
+    background-color: white;
+    top: 60px;
+    left: 100px;
+    width: 800px;
+    box-shadow: 20px 20px 10px rgba(0, 0, 0, 0.5);
+    border: 1px grey solid;
+    padding: 20px;
+}
+
+.k_fs_left_panel_container {
+    float: left;
+    width: 300px;
+    height: 600px;
+    background-color: darkred;
+}
+
+.k_fs_folder_browser_container {
+    background-color: #19628b;
+    height: 350px;
+    overflow: auto;
+    margin-left: 300px;
+}
+
+.k_fs_dragdrop_container {
+    background-color: #598b47;
+    height: 250px;
+    margin-left: 300px;
+}
+
+.k_fs_thumbnail {
+    width: 90px;
+    height: 90px;
+    float: left;
+    margin: 10px;
+    background-color: red;
+    text-align: center;
+    padding:5px;
+    cursor:pointer;
+}
+
+.k_fs_fb_controls {
+    position: relative;
+    height: 50px;
+    background-color: red;
+}
+
+.file_upload_form {
+    margin: auto;
+    width: 400px;
+    height: 400px;
+    background-color: white;
+}

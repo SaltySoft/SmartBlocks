@@ -47,6 +47,21 @@ class FoldersController extends Controller
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
 
+        if (isset($_GET["folder_id"]))
+        {
+            $parent_folder = Folder::find($_GET["folder_id"]);
+            if (is_object($parent_folder))
+            {
+                $qb->andWhere("f.parent_folder = :parent_folder")
+                    ->setParameter("parent_folder", $parent_folder->getId());
+            }
+            else
+            {
+                $qb->andWhere("f.parent_folder = :parent_folder")
+                    ->setParameter("parent_folder", 0);
+            }
+        }
+
         $folders = $qb->getQuery()->getResult();
 
         $response = array();
@@ -91,8 +106,6 @@ class FoldersController extends Controller
         $creator = User::find($data["creator"]["id"]);
         if (is_object($creator))
         {
-
-
             $folder->setCreator($creator);
             $folder->setParentFolder($data["parent_folder"]);
 
@@ -117,11 +130,6 @@ class FoldersController extends Controller
                     $folder->addUser($user);
                 }
             }
-
-            /*$folder->setFiles($data["files"]);
-            $folder->setGroupsAllowed($data["groups_allowed"]);
-            $folder->setUsersAllowed($data["users_allowed"]);*/
-
             $folder->save();
             echo json_encode($folder->toArray(0));
         }

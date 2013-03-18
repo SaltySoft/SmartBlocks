@@ -40,6 +40,22 @@ class FilesController extends Controller
                 ->setMaxResults($page_size);
         }
 
+        if (!(isset($_GET["all"]) && User::is_admin()))
+        {
+            $qb->andWhere("f.owner = :owner")
+                ->setParameter("owner", User::current_user());
+        }
+
+        if (isset($_GET["folder_id"]))
+        {
+            $parent_folder = Folder::find($_GET["folder_id"]);
+            if (is_object($parent_folder))
+            {
+                $qb->andWhere("f.parent_folder = :parent_folder")
+                    ->setParameter("parent_folder", $parent_folder->getId());
+            }
+        }
+
 
         if (isset($_GET["filter"]) && $_GET["filter"] != "")
         {
@@ -89,25 +105,40 @@ class FilesController extends Controller
         $file->setName($data["name"]);
         $file->setPath(md5(microtime()));
 
-        $folder = Folder::find($data["parent_folder"]["id"]);
+        if (isset($data["parent_folder"]["id"]))
+        {
+            $folder = Folder::find($data["parent_folder"]["id"]);
+        }
+        else
+        {
+            $folder = Folder::find($data["parent_folder"]);
+        }
+
+
         if (is_object($folder))
         {
             $file->setParentFolder($folder);
         }
-
-        $owner = User::find($data["owner"]["id"]);
-
-        if (is_object($owner))
+        if (isset($data["owner"]))
         {
-            $file->setOwner($owner);
+            $owner = User::find($data["owner"]["id"]);
+
+            if (is_object($owner))
+            {
+                $file->setOwner($owner);
+            }
+        }
+        else
+        {
+            $file->setOwner(User::current_user());
         }
 
 
         if (isset($_FILES["file"]))
         {
-            $path = ROOT . DS . "App" . DS . "Data" . DS . "User_files" . DS;
+            $path = ROOT . DS . "Data" . DS . "User_files" . DS;
             $file->setPath($file->getPath() . PATHINFO_EXTENSION);
-            move_uploaded_file($_FILES["file"]["tmp_name"], $path, $file->getPath());
+            move_uploaded_file($_FILES["file"]["tmp_name"], $path.$file->getPath());
         }
 
         $file->save();
@@ -155,6 +186,11 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
+            if (file_exists(ROOT.DS."Data".DS."User_files".DS.$file->getPath()))
+            {
+                unlink(ROOT.DS."Data".DS."User_files".DS.$file->getPath());
+            }
+
             $file->delete();
             echo json_encode(array("message" => "File successfully deleted"));
         }
@@ -162,9 +198,57 @@ class FilesController extends Controller
             echo json_encode(array("message" => "An error occured"));
     }
 
+    public function file_creation_form($params = array())
+    {
+
+    }
+
+
+    // Read a file and display its content chunk by chunk
+    function readfile_chunked($filename, $retbytes = TRUE)
+    {
+        $buffer = "";
+        $cnt = 0;
+        // $handle = fopen($filename, "rb");
+        $handle = fopen($filename, "rb");
+        if ($handle === false)
+        {
+            return false;
+        }
+        while (!feof($handle))
+        {
+            $buffer = fread($handle, CHUNK_SIZE);
+            echo $buffer;
+            ob_flush();
+            flush();
+            if ($retbytes)
+            {
+                $cnt += strlen($buffer);
+            }
+        }
+        $status = fclose($handle);
+        if ($retbytes && $status)
+        {
+            return $cnt; // return num. bytes delivered like readfile() does.
+        }
+        return $status;
+    }
+
     public function get_file($params = array())
     {
-        //This action streams the file
+        $data = $this->getRequestData();
+
+        $file = File::find($data["id"]);
+        $this->render = false;
+        header("Content-Type: application/force-download");
+
+        if (is_object($file))
+        {
+            header('Content-Disposition: attachment; filename="'.$file->getName().'.png"');
+            echo $this->readfile_chunked(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
+        }
+
+
     }
 }
 

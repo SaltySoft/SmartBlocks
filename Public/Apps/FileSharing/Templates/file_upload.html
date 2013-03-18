@@ -1,0 +1,15 @@
+<form action="/Files" method="post" target="iframe" enctype="multipart/form-data">
+    <div class="form_field">
+        <label>File name : </label>
+        <input type="text" name="name"/>
+    </div>
+    <div class="form_field">
+        <label>File name : </label>
+        <input type="file" name="file" />
+    </div>
+    <input type="hidden" name="parent_folder" value="<%= parent_folder_id %>" />
+    <input type="submit" value="Send file"/>
+</form>
+<iframe name="iframe">
+
+</iframe>

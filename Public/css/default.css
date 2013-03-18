@@ -206,6 +206,8 @@ h1, h2, h3, h4, h5, h6
     text-decoration: none;
 }
 
+
+
 .cache {
     width: 100%;
     height: 100%;
@@ -214,6 +216,7 @@ h1, h2, h3, h4, h5, h6
     left: 0px;
     z-index: 105;
     background-color: rgba(0, 0, 0, 0.5);
+    /*display: none;*/
 }
 
 .cache div {

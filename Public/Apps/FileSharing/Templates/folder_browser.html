@@ -1,0 +1,13 @@
+<div>
+    <a href="javascript:void(0);" class="k_fs_parent_folder_button">Parent folder</a>
+</div>
+<% _.each(folders, function (folder) { %>
+<div class="k_fs_thumbnail k_fs_folder_tb" data-folder_id="<%= folder.get('id') %>">
+    <%= folder.get('name') %>
+</div>
+<% }); %>
+<% _.each(files, function (file) { %>
+<div class="k_fs_thumbnail k_fs_file_tb" data-file_id="<%= file.get('id') %>">
+    <%= file.get('name') %>
+</div>
+<% }); %>

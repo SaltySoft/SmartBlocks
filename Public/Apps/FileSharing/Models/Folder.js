@@ -45,7 +45,6 @@ define([
                 folders_array.push(folder);
             }
             response.folders = folders_array;
-
             return response;
         }
     });

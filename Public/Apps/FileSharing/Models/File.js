@@ -5,11 +5,6 @@ define([
    var File = Backbone.Model.extend({
        urlRoot: "/Files",
        defaults: {
-       },
-       parse: function (response, options) {
-           console.log(response);
-
-           return response;
        }
    });
 
