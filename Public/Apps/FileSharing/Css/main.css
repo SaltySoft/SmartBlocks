@@ -80,13 +80,13 @@
 
 .k_fs_controls a {
     display: block;
-    height: 130px;
+    height: 150px;
     float: left;
     background-color: #d3d3d3;
     color: #888888;
     width: 145px;
     margin: 10px;
-    margin-top:20px;
+    margin-top:0px;
     margin-bottom: 0px;
     margin-left: 0px;
     text-align: center;
@@ -114,4 +114,26 @@
 
 .file_upload_form iframe {
     display: none;
+}
+
+.k_fs_foldp_user_selection, .k_fs_foldp_user_search_results {
+    height: 200px;
+    overflow: auto;
+}
+
+.k_fs_shared_folders_item {
+
+    height: 30px;
+    background-color: #d3d3d3;
+    display: block;
+    line-height: 30px;
+    padding: 5px;
+    text-decoration: none;
+    color: #888888;
+    font-weight: bold;
+}
+
+.k_fs_shared_folders_item:hover {
+    background-color: #f0f0f0;
+    color: #686868;
 }

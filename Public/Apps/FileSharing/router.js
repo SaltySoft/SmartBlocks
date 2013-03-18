@@ -30,6 +30,10 @@ define([
                 if ($("#file_sharing_container").css("display") == "block")
                     $(container).css("left", $(window).width() / 2 - container.width() / 2);
             });
+            $(window).resize(function () {
+                if (container.is(":visible"))
+                    $(container).css("left", $(window).width() / 2 - container.width() / 2);
+            });
 
             var main_view = new MainView();
             main_view.init(SmartBlocks);

@@ -41,7 +41,7 @@ define([
             var folders_array = new Array();
             for (var key in folders)
             {
-                var folder = new Folder(folder[key]);
+                var folder = new Folder(folders[key]);
                 folders_array.push(folder);
             }
             response.folders = folders_array;

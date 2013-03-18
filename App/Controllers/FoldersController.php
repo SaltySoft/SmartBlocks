@@ -62,6 +62,18 @@ class FoldersController extends Controller
             }
         }
 
+        if (isset($_GET["shared"]))
+        {
+            $qb->join("f.users_allowed", "u")
+                ->andWhere("u = :user")
+                ->setParameter("user", User::current_user());
+        }
+        else
+        {
+            $qb->andWhere("f.creator = :user")
+                ->setParameter("user", User::current_user());
+        }
+
         $folders = $qb->getQuery()->getResult();
 
         $response = array();
@@ -165,12 +177,23 @@ class FoldersController extends Controller
             }
             $folder->setParentFolder($data["parent_folder"]);
 
+            $old_users = $folder->getUsersAllowed()->toArray();
+            $folder->getUsersAllowed()->clear();
             foreach ($data["users_allowed"] as $user_array)
             {
+
                 $user = User::find($user_array["id"]);
                 if (is_object($user))
                 {
                     $folder->addUser($user);
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+                }
+            }
+            NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+            foreach ($old_users as $user) {
+                if (!$folder->getUsersAllowed()->contains($user))
+                {
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
                 }
             }
 
@@ -203,6 +226,7 @@ class FoldersController extends Controller
             }
 
             $folder->save();
+            echo json_encode($folder->toArray());
         }
         else
             echo json_encode(array("error"));

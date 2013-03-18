@@ -1,6 +1,7 @@
 define([
     'jquery',
     'underscore',
+    'underscore_string',
     'backbone',
     'FileSharing/Models/Folder',
     'FileSharing/Models/File',
@@ -9,8 +10,10 @@ define([
     '/Apps/FileSharing/Collections/Files.js',
     'FileSharing/Views/FileUpload',
     'FileSharing/Views/FolderCreation',
+    'FileSharing/Views/FolderProperties',
     'ContextMenuView'
-], function ($, _, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, FolderCreationView, ContextMenuView) {
+], function ($, _, _s, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, FolderCreationView, FolderPropertiesView, ContextMenuView) {
+    console.log(_s);
     var FolderBrowser = Backbone.View.extend({
         tagName: "div",
         className: "k_fs_folder_browser",
@@ -24,6 +27,20 @@ define([
             base.files_list = new FilesCollection();
             base.parent_folder = 0;
             base.current_folder = 0;
+            SmartBlocks.events.on("ws_notification", function (message) {
+                console.log(message);
+                if (message.app == "k_fs") {
+
+                    if (message.status == "changed_directory")
+                    {
+                        if (message.folder_id == base.current_folder) {
+                            base.reload();
+                        }
+                    }
+                }
+
+            });
+
             base.fetchAll(0);
         },
         initializeEvents: function () {
@@ -55,12 +72,22 @@ define([
                             }
                         }, '/images/icons/cross.png');
                         context_menu.addButton("Properties", function () {
-
+                            var folder_properties = new FolderPropertiesView({ model: new Folder({id: elt.attr('data-folder_id')}) });
+                            folder_properties.init(base.SmartBlocks, base);
+                            $("body").prepend(folder_properties.$el);
                         }, '/images/icons/folder_wrench.png');
                         context_menu.show(e);
                         break;
                     default:
                         break;
+                }
+            });
+
+            base.$el.find(".k_fs_file_tb").dblclick(function (e) {
+                var elt = $(this);
+                if (elt.attr("data-file_id") != undefined) {
+                    window.location = "/Files/get_file/" + elt.attr("data-file_id");
+                    window.focus();
                 }
             });
 
@@ -102,12 +129,10 @@ define([
             });
 
 
-
-
         },
         render: function () {
             var base = this;
-            var template = _.template(FolderBrowserTemplate, {files: base.files_list.models, folders: base.folder_list.models});
+            var template = _.template(FolderBrowserTemplate, {_s: _s, files: base.files_list.models, folders: base.folder_list.models});
 
             base.$el.html(template);
             base.initializeEvents();
@@ -126,7 +151,6 @@ define([
                         base.parent_folder = base.current_folder;
                         base.current_folder = folder_id;
                     }
-
                     base.render();
                     base.SmartBlocks.stopLoading();
                 });
@@ -165,7 +189,6 @@ define([
             var fc_view = new FolderCreationView();
             fc_view.init(base.SmartBlocks, base);
             $("body").prepend(fc_view.$el);
-
 
 
         },

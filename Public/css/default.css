@@ -2,16 +2,14 @@ html {
     height: 100%;
 }
 
-body
-{
-	font-family: segoe, arial;
-	margin: 0px;
-	background-color: rgb(255, 255, 252);
+body {
+    font-family: segoe, arial;
+    margin: 0px;
+    background-color: rgb(255, 255, 252);
     height: 100%;
 }
 
-#flash_shower
-{
+#flash_shower {
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -25,29 +23,25 @@ body
     background-position: 20px 50%;
 }
 
-#container
-{
+#container {
     /*width: 1000px;*/
-	margin: auto;
+    margin: auto;
 }
 
-#content
-{
+#content {
     min-height: 500px;
     margin-bottom: 50px;
     border-radius: 2px;
     border-radius: 2px 2px 2px 2px;
 }
 
-#footer
-{
-	padding-top: 10px;
-	background-color: rgba(255, 255, 255, 0.7);
-	text-align: center;
+#footer {
+    padding-top: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+    text-align: center;
 }
 
-#footer a
-{
+#footer a {
     text-decoration: none;
     font-weight: bold;
     color: #405ca6;
@@ -81,9 +75,8 @@ body
     background-color: #d3d3d3;
 }
 
-h1, h2, h3, h4, h5, h6
-{
-	margin: 0px;
+h1, h2, h3, h4, h5, h6 {
+    margin: 0px;
 }
 
 #chat_button {
@@ -106,7 +99,7 @@ h1, h2, h3, h4, h5, h6
 .chat_notif {
     border-radius: 20px;
     height: 20px;
-    float:left;
+    float: left;
     margin-left: -25px;
     margin-top: -23px;
     min-width: 20px;
@@ -145,12 +138,12 @@ h1, h2, h3, h4, h5, h6
 #container {
     height: 100%;
 }
+
 #inner_container {
     margin-left: 50px;
     min-height: 100%;
     position: relative;
 }
-
 
 #content {
     padding-bottom: 50px;
@@ -187,6 +180,7 @@ h1, h2, h3, h4, h5, h6
 .tabs_controller li {
     list-style: none;
 }
+
 .tabs_controller li a {
     padding: 15px;
     float: left;
@@ -201,12 +195,10 @@ h1, h2, h3, h4, h5, h6
     background-color: #d3d3d3;
 }
 
-.tabs_controller li a{
+.tabs_controller li a {
     color: white;
     text-decoration: none;
 }
-
-
 
 .cache {
     width: 100%;
@@ -221,7 +213,7 @@ h1, h2, h3, h4, h5, h6
 
 .cache div {
 
-    box-shadow:0px 0px 10px white;
+    box-shadow: 0px 0px 10px white;
 }
 
 #loader {
@@ -232,6 +224,7 @@ h1, h2, h3, h4, h5, h6
     z-index: 1000;
 
 }
+
 #loader img {
     float: left;
 }
@@ -286,8 +279,41 @@ button:hover {
 
 .popup {
     margin: auto;
-    margin-top: 200px;
+    margin-top: 100px;
     width: 400px;
     background-color: white;
     padding: 20px;
+}
+
+.search_results {
+    padding: 0px;
+    margin: 0px;
+    width: 300px;
+    margin: auto;
+}
+
+.search_result {
+    list-style: none;
+
+    background-color: #868686;
+    padding: 5px;
+    float: left;
+    width: 140px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.search_result a {
+
+    color: #d6d6d6;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.search_result:hover a {
+    color: #5b5b5b;
+}
+
+.search_result:hover {
+    background-color: #d3d3d3;
 }

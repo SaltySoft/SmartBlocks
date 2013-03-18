@@ -42,7 +42,9 @@ class FilesController extends Controller
 
         if (!(isset($_GET["all"]) && User::is_admin()))
         {
-            $qb->andWhere("f.owner = :owner")
+            $qb->leftJoin("f.parent_folder", "pf")
+                ->leftJoin("pf.users_allowed", "user")
+                ->andWhere("(f.owner = :owner OR user = :owner OR pf.creator = :owner)")
                 ->setParameter("owner", User::current_user());
         }
 
@@ -124,6 +126,12 @@ class FilesController extends Controller
             if (is_object($folder))
             {
                 $file->setParentFolder($folder);
+                echo $folder->getCreator()->getSessionId();
+                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                foreach ($folder->getUsersAllowed() as $user)
+                {
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                }
             }
             if (isset($data["owner"]))
             {
@@ -144,7 +152,7 @@ class FilesController extends Controller
             {
                 $path = ROOT . DS . "Data" . DS . "User_files" . DS;
                 $file->setPath($file->getPath() . PATHINFO_EXTENSION);
-                move_uploaded_file($_FILES["file"]["tmp_name"], $path.$file->getPath());
+                move_uploaded_file($_FILES["file"]["tmp_name"], $path . $file->getPath());
             }
 
             $file->save();
@@ -169,6 +177,11 @@ class FilesController extends Controller
             if (is_object($folder))
             {
                 $file->setParentFolder($folder);
+                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                foreach ($folder->getUsersAllowed() as $user)
+                {
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                }
             }
 
             $owner = User::find($data["owner"]["id"]);
@@ -194,9 +207,19 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
-            if (file_exists(ROOT.DS."Data".DS."User_files".DS.$file->getPath()))
+            $folder = $file->getParentFolder();
+            if (is_object($folder))
             {
-                unlink(ROOT.DS."Data".DS."User_files".DS.$file->getPath());
+                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                foreach ($folder->getUsersAllowed() as $user)
+                {
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+                }
+            }
+
+            if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath()))
+            {
+                unlink(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
             }
 
             $file->delete();
@@ -252,7 +275,7 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
-            header('Content-Disposition: attachment; filename="'.$file->getName().'.png"');
+            header('Content-Disposition: attachment; filename="' . $file->getName() . '.png"');
             echo $this->readfile_chunked(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
         }
 

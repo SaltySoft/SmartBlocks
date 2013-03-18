@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!/Apps/FileSharing/Templates/main_view.html',
     '/Apps/FileSharing/Views/FolderBrowser.js',
-    '/Apps/FileSharing/Views/Controls.js'
-], function ($, _, Backbone, MainViewTemplate, FolderBrowserView, ControlsView) {
+    '/Apps/FileSharing/Views/Controls.js',
+    'FileSharing/Views/LeftPanel'
+], function ($, _, Backbone, MainViewTemplate, FolderBrowserView, ControlsView, LeftPanelView) {
     var MainView = Backbone.View.extend({
         tagName: "div",
         className:"k_fs_main_view",
@@ -27,9 +28,15 @@ define([
             folder_browser.init(base.SmartBlocks);
             base.$el.find(".k_fs_folder_browser_container").html(folder_browser.$el);
 
+            var left_panel = new LeftPanelView();
+            left_panel.init(base.SmartBlocks, folder_browser);
+            base.$el.find(".k_fs_left_panel_container").html(left_panel.$el);
+
             var controls_view = new ControlsView();
             controls_view.init(base.SmartBlocks, folder_browser);
             base.$el.find(".k_fs_dragdrop_container").html(controls_view.$el);
+
+
 
             base.initializeEvents();
         },
