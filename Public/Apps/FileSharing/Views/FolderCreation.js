@@ -49,7 +49,7 @@ define([
                         base.$el.remove();
                         base.SmartBlocks.stopLoading();
                         console.log(folder);
-                        base.folder_browser.fetchAll(base.current_folder);
+                        base.folder_browser.reload();
                     }
                 });
             });

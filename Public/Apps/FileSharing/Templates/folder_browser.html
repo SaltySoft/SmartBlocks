@@ -1,11 +1,13 @@
 
 <% _.each(folders, function (folder) { %>
 <div class="k_fs_thumbnail k_fs_folder_tb" data-folder_id="<%= folder.get('id') %>">
+    <div><img src="/images/folder.png" /></div>
     <%= folder.get('name') %>
 </div>
 <% }); %>
 <% _.each(files, function (file) { %>
 <div class="k_fs_thumbnail k_fs_file_tb" data-file_id="<%= file.get('id') %>">
+    <div><img src="/images/file.png" /></div>
     <%= file.get('name') %>
 </div>
 <% }); %>

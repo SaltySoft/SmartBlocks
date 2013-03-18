@@ -108,6 +108,9 @@
     padding: 20px;
 }
 
+.k_fs_thumbnail img {
+    width: 50px;
+}
 
 .file_upload_form iframe {
     display: none;

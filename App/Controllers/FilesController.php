@@ -54,6 +54,10 @@ class FilesController extends Controller
                 $qb->andWhere("f.parent_folder = :parent_folder")
                     ->setParameter("parent_folder", $parent_folder->getId());
             }
+            else
+            {
+                $qb->andWhere("f.parent_folder is NULL");
+            }
         }
 
 
