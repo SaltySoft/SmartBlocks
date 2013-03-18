@@ -70,7 +70,8 @@ class FoldersController extends Controller
         }
         else
         {
-            $qb->andWhere("f.creator = :user")
+            $qb->leftJoin("f.users_allowed", "u")
+                ->andWhere("(f.creator = :user OR (f.parent_folder > 0 AND u = :user))")
                 ->setParameter("user", User::current_user());
         }
 
@@ -80,7 +81,16 @@ class FoldersController extends Controller
 
         foreach ($folders as $folder)
         {
-            $response[] = $folder->toArray(0);
+            if (isset($_GET["shared"]))
+            {
+                $parent = Folder::find($folder->getParentFolder());
+                if (!is_object($parent) || !$parent->getUsersAllowed()->contains(User::current_user()))
+                    $response[] = $folder->toArray(0);
+            }
+            else
+            {
+                $response[] = $folder->toArray(0);
+            }
         }
         $this->render = false;
         header("Content-Type: application/json");
@@ -158,6 +168,23 @@ class FoldersController extends Controller
 
     }
 
+    private function allow_recursive($user, $folder)
+    {
+        if (is_object($user))
+        {
+            $folder->addUser($user);
+            $em = Model::getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select("f")->from("Folder", "f")->where("f.parent_folder = :id")->setParameter("id", $folder->getId());
+            $result = $qb->getQuery()->getResult();
+            foreach ($result as $f)
+            {
+                $this->allow_recursive($user, $f);
+            }
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+        }
+    }
+
     public function update($params = array())
     {
         $this->security_check();
@@ -183,14 +210,11 @@ class FoldersController extends Controller
             {
 
                 $user = User::find($user_array["id"]);
-                if (is_object($user))
-                {
-                    $folder->addUser($user);
-                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
-                }
+                $this->allow_recursive($user, $folder);
             }
             NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
-            foreach ($old_users as $user) {
+            foreach ($old_users as $user)
+            {
                 if (!$folder->getUsersAllowed()->contains($user))
                 {
                     NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));

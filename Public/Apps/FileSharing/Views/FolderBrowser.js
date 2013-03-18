@@ -31,8 +31,7 @@ define([
                 console.log(message);
                 if (message.app == "k_fs") {
 
-                    if (message.status == "changed_directory")
-                    {
+                    if (message.status == "changed_directory") {
                         if (message.folder_id == base.current_folder) {
                             base.reload();
                         }
@@ -125,7 +124,8 @@ define([
 
             $(".k_fs_parent_folder").click(function () {
                 var elt = $(this);
-                base.fetchAll(base.parent_folder);
+                console.log(base.folder.get('parent_folder'));
+                base.fetchAll(base.folder.get('parent_folder'));
             });
 
 
@@ -150,9 +150,16 @@ define([
                     if (base.current_folder != folder_id) {
                         base.parent_folder = base.current_folder;
                         base.current_folder = folder_id;
+
                     }
-                    base.render();
-                    base.SmartBlocks.stopLoading();
+                    base.folder = new Folder({id: folder_id});
+                    base.folder.fetch({
+                        success: function () {
+                            base.render();
+                            base.SmartBlocks.stopLoading();
+                        }
+                    });
+
                 });
             });
         },
