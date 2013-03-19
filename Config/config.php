@@ -49,3 +49,4 @@ define("DEFAULT_LOCALE", "fr-FR");
 
 define("CACHE_PREFIX", "smartblocks");
 define("NODE_PORT", "10001");
+define("CHUNK_SIZE", 1024*1024);

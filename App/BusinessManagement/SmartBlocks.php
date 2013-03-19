@@ -119,6 +119,7 @@ class SmartBlocks
                         $app->setToken($data["token"]);
                         $app->setDescription($data["description"]);
                         $app->setLink($data["link"]);
+                        $app->setAdminApp(isset($data["admin"]) && $data["admin"]);
                         if (isset($data["logoUrl"]))
                             $app->setLogoUrl($data["logoUrl"]);
                         $app->setBlock(self::$core_block);
@@ -223,6 +224,7 @@ class SmartBlocks
                                     $app->setToken($data["token"]);
                                     $app->setDescription($data["description"]);
                                     $app->setLink($data["link"]);
+                                    $app->setAdminApp(isset($data["admin"]) && $data["admin"]);
                                     if (isset($data["logoUrl"]))
                                         $app->setLogoUrl($data["logoUrl"]);
                                     $app->setBlock($pluginBlock);
@@ -310,6 +312,7 @@ class SmartBlocks
                         $app->setToken($data["token"]);
                         $app->setDescription($data["description"]);
                         $app->setLink($data["link"]);
+                        $app->setAdminApp(isset($data["admin"]) && $data["admin"]);
                         if (isset($data["logoUrl"]))
                             $app->setLogoUrl($data["logoUrl"]);
                         $app->setBlock(self::$plugins_blocks[$counter]);

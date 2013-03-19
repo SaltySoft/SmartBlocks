@@ -27,6 +27,8 @@ class BlocksController extends Controller
     public function configure()
     {
         //security_check(User::current_user());
+        if (!User::logged_in() || !User::is_admin())
+            $this->redirect("/");
         \BusinessManagement\SmartBlocks::loadAllBlocks();
         $this->render = false;
     }

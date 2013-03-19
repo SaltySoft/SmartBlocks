@@ -40,7 +40,10 @@ define([
                     $("#chat_button").click(function () {
                         $("#chat_container").toggle();
                         if ($("#chat_container").css("display") == "block")
+                        {
+                            $("#file_sharing_container").hide();
                             $(container).css("left", $(window).width() / 2 - container.width() / 2);
+                        }
                     });
                     var pressed_keys = [];
                     $(document).keyup(function (e) {

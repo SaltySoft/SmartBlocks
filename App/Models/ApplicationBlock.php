@@ -134,7 +134,8 @@ class ApplicationBlock extends Model
 
         foreach ($this->getApplications() as $app)
         {
-            $appsArray[] = $app->toArray();
+            if (!$app->getAdminApp() || User::is_admin())
+                $appsArray[] = $app->toArray();
         }
         $appBlockArray["apps"] = $appsArray;
 

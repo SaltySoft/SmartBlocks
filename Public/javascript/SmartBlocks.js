@@ -31,7 +31,7 @@ define([
         startLoading: function (message) {
             var base = this;
             $("#loader").html('<img src="/images/loader.gif" />');
-
+            $("#loader").show();
             if (message) {
                 $("#loader").append(" <span>" + message + "</span>");
                 base.loadings.push({
@@ -45,7 +45,7 @@ define([
                 });
                 return base.loadings.length - 1;
             }
-            $("#loader").show();
+
         },
         stopLoading: function (index) {
             $("#loader").hide();
