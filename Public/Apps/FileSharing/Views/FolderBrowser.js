@@ -122,10 +122,11 @@ define([
                 }
             });
 
+            $(".k_fs_parent_folder").unbind("click");
             $(".k_fs_parent_folder").click(function () {
                 var elt = $(this);
                 console.log(base.folder.get('parent_folder'));
-                base.fetchAll(base.folder.get('parent_folder'));
+                base.fetchAll(base.folder.get('parent_folder') != undefined ? base.folder.get('parent_folder') : 0);
             });
 
 
