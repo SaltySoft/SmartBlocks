@@ -1,7 +1,0 @@
-{
-    "name": "Chat",
-    "token": "chat",
-    "description":"This is the chat application.",
-    "link":"/Apps/Chat",
-    "logoUrl":"/Apps/Chat/Resources/logo_chat1.jpg"
-}

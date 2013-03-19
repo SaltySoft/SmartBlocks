@@ -17,9 +17,9 @@ class SmartBlocks
 
     public static function loadAllBlocks()
     {
-        self::loadPlugins();
         self::getCoreBlock();
-    }
+        self::loadPlugins();
+     }
 
     public static function getAllBlocks()
     {
@@ -86,7 +86,7 @@ class SmartBlocks
      **/
     private static function getCoreAppsDirectoriesName()
     {
-        if ($handle = opendir(ROOT . DS . 'Public' . DS . 'Apps'))
+        if (file_exists(ROOT . DS . 'Public' . DS . 'Apps') &&  $handle = opendir(ROOT . DS . 'Public' . DS . 'Apps'))
         {
             while (false !== ($dir = readdir($handle)))
             {
@@ -105,7 +105,7 @@ class SmartBlocks
 
         foreach ($appsDirectoryName as $appDirectoryName)
         {
-            if ($handle = opendir(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config"))
+            if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config") &&  $handle = opendir(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config"))
             {
                 if (file_exists(ROOT . DS . "Public" . DS . 'Apps' . DS . $appDirectoryName . DS . "Config" . DS . "app.json"))
                 {
@@ -143,7 +143,7 @@ class SmartBlocks
     private static function getPluginsDirectoriesName()
     {
         $plugins_directories_name = array();
-        if ($handle = opendir(ROOT . DS . 'Plugins'))
+        if (file_exists(ROOT . DS . 'Plugins') &&  $handle = opendir(ROOT . DS . 'Plugins'))
         {
             while (false !== ($dir = readdir($handle)))
             {
@@ -161,7 +161,7 @@ class SmartBlocks
     private static function loadPlugins()
     {
         $plugins_directories_name = array();
-        if ($handle = opendir(ROOT . DS . 'Plugins'))
+        if (file_exists(ROOT . DS . 'Plugins') &&  $handle = opendir(ROOT . DS . 'Plugins'))
         {
             while (false !== ($dir = readdir($handle)))
             {
@@ -175,7 +175,7 @@ class SmartBlocks
 
         foreach ($plugins_directories_name as $directoryName)
         {
-            if ($handle = opendir(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config"))
+            if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config") &&  $handle = opendir(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config"))
             {
                 if (file_exists(ROOT . DS . "Plugins" . DS . $directoryName . DS . "Config" . DS . "block.json"))
                 {
@@ -196,7 +196,7 @@ class SmartBlocks
                         $pluginBlock->save();
                         $pluginsAppsDirectoriesName = array();
 
-                        if ($handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
+                        if (file_exists(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps") &&  $handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
                         {
                             while (false !== ($dir = readdir($handle)))
                             {
@@ -283,7 +283,7 @@ class SmartBlocks
         {
             $pluginsAppsDirectoriesName = array();
 
-            if ($handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
+            if (file_exists(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps") &&  $handle = opendir(ROOT . DS . 'Plugins' . DS . $directoryName . DS . "Public" . DS . "Apps"))
             {
                 while (false !== ($dir = readdir($handle)))
                 {
