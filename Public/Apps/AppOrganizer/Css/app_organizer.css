@@ -1,6 +1,7 @@
 .blocks_container {
-    display: inline-block;
     padding: 15px;
+    width: 900px;
+    margin: auto;
 }
 
 .dashboard_block {
@@ -26,25 +27,35 @@
     padding: 10px;
     display: block;
     float: left;
-    height: 100px;
-    width: 250px;
+    height: 172px;
+    width: 172px;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_app_content {
+
 }
 
 .dashboard_app a {
     text-decoration: none;
-    color: #000000;
+    color: #ffffff;
+    font-size: 18px;
 }
 
 .dashboard_app a:active {
-    color: #000000;
+    color: #ffffff;
+    font-size: 18px;
 }
 
 .dashboard_app a:visited {
-    color: #000000;
+    color: #ffffff;
+    font-size: 18px;
 }
 
 .dashboard_app a:hover {
-    color: #000000;
+    color: #ffffff;
+    font-size: 18px;
 }
 
 .app_description {
@@ -52,10 +63,28 @@
 }
 
 .backgroundThem1 {
-    background-image: url('/images/background2.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position-x: -24px;
+    /*background-image: url('/images/background2.png');*/
+    /*background-image: url('/images/background2subtil.png');*/
+    /*background-image: url('/images/background2new1.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-attachment: fixed;*/
+    /*background-position-x: -24px;*/
+    /*background-size: 70%;*/
+
+    background-image: url('/images/dashboard_top_bg.png'), url('/images/dashboard_bottom_bg.png');
+    background-position: center top, center bottom;
+    background-size: 70%, 70%;
+    background-repeat: repeat-x;
+    background-position-x: 25px;
+}
+
+.appLogo {
+    margin: auto;
+    /*max-width: 50px;*/
+    /*max-height: 50px;*/
+    width: 90%;
+    height: 90%;
+    display: block;
 }
 
 .bg1 {

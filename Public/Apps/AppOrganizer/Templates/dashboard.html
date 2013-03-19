@@ -12,13 +12,22 @@
         <% if (!_.isNull(app.get('logoUrl'))) { %>
         <!--<% if (!_.isUndefined(app.get('logoUrl'))) { %>-->
         <% if (block.get('token') != kernel) { %>
-        <img style="float: right; max-width: 80px; max-height: 80px;"
-             src="/Plugins/<%= block.get('name') %>/Public<%= app.get('logoUrl') %>" />
+        <div >
+            <img class="appLogo" src="/Plugins/<%= block.get('name') %>/Public<%= app.get('logoUrl') %>" />
+        </div >
         <% }
         else { %>
-        <img style="float: right; max-width: 80px; max-height: 80px;" src=" <%= app.get('logoUrl') %>" />
+        <div >
+            <img class="appLogo" src=" <%= app.get('logoUrl') %>" />
+        </div >
         <%}%>
         <!--<%}%>-->
+        <% }
+        else { %>
+        <div >
+            <img class="appLogo" src="/Public/images/logo.png" />
+        </div >
+
         <%}%>
     </div >
     <% }); %>

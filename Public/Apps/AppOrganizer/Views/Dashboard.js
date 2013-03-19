@@ -47,16 +47,17 @@ define([
                             flipDir = 'lr';
                         if (randomNumber == 4)
                             flipDir = 'rl';
+
                         $(this).flip({
                             direction:flipDir,
                             color:$(this).css("background-color"),
                             content:$(this).attr("data-description")
-                        })
-                        $(this).attr("data-flip", 1)
+                        });
+                        $(this).attr("data-flip", 1);
                     }
                     else {
-                        $(this).revertFlip()
-                        $(this).attr("data-flip", 0)
+                        $(this).revertFlip();
+                        $(this).attr("data-flip", 0);
                     }
                 });
             }
