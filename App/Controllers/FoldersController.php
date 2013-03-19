@@ -52,13 +52,12 @@ class FoldersController extends Controller
             $parent_folder = Folder::find($_GET["folder_id"]);
             if (is_object($parent_folder))
             {
-                $qb->andWhere("f.parent_folder = :parent_folder")
-                    ->setParameter("parent_folder", $parent_folder->getId());
+                $qb->andWhere("f.parent = :parent_folder")
+                    ->setParameter("parent_folder", $parent_folder);
             }
             else
             {
-                $qb->andWhere("f.parent_folder = :parent_folder")
-                    ->setParameter("parent_folder", 0);
+                $qb->andWhere("f.parent is NULL");
             }
         }
 
@@ -70,8 +69,9 @@ class FoldersController extends Controller
         }
         else
         {
-            $qb->leftJoin("f.users_allowed", "u")
-                ->andWhere("(f.creator = :user OR (f.parent_folder > 0 AND u = :user))")
+            $qb->leftJoin("f.parent", "pf")
+                ->leftJoin("pf.users_allowed", "ua")
+                ->andWhere("(f.creator = :user OR ua = :user OR pf.creator = :user)")
                 ->setParameter("user", User::current_user());
         }
 
@@ -81,16 +81,7 @@ class FoldersController extends Controller
 
         foreach ($folders as $folder)
         {
-            if (isset($_GET["shared"]))
-            {
-                $parent = Folder::find($folder->getParentFolder());
-                if (!is_object($parent) || !$parent->getUsersAllowed()->contains(User::current_user()))
-                    $response[] = $folder->toArray(0);
-            }
-            else
-            {
-                $response[] = $folder->toArray(0);
-            }
+            $response[] = $folder->toArray(0);
         }
         $this->render = false;
         header("Content-Type: application/json");
@@ -140,7 +131,10 @@ class FoldersController extends Controller
         {
             $folder->setCreator(User::current_user());
         }
-        $folder->setParentFolder($data["parent_folder"]);
+
+        $parent = Folder::find(isset($data["parent_folder"]) ? $data["parent_folder"] : 0);
+        if (is_object($parent))
+            $folder->setParent($parent);
 
         if (isset($data["files"]))
         {
@@ -168,23 +162,6 @@ class FoldersController extends Controller
 
     }
 
-    private function allow_recursive($user, $folder)
-    {
-        if (is_object($user))
-        {
-            $folder->addUser($user);
-            $em = Model::getEntityManager();
-            $qb = $em->createQueryBuilder();
-            $qb->select("f")->from("Folder", "f")->where("f.parent_folder = :id")->setParameter("id", $folder->getId());
-            $result = $qb->getQuery()->getResult();
-            foreach ($result as $f)
-            {
-                $this->allow_recursive($user, $f);
-            }
-            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
-        }
-    }
-
     public function update($params = array())
     {
         $this->security_check();
@@ -202,7 +179,9 @@ class FoldersController extends Controller
             {
                 $folder->setCreator($creator);
             }
-            $folder->setParentFolder($data["parent_folder"]);
+            $parent = Folder::find(isset($data["parent_folder"]) ? $data["parent_folder"] : 0);
+            if (is_object($parent))
+                $folder->setParent($parent);
 
             $old_users = $folder->getUsersAllowed()->toArray();
             $folder->getUsersAllowed()->clear();
@@ -210,7 +189,11 @@ class FoldersController extends Controller
             {
 
                 $user = User::find($user_array["id"]);
-                $this->allow_recursive($user, $folder);
+                if (is_object($user))
+                {
+                    $folder->addUser($user);
+                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+                }
             }
             NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
             foreach ($old_users as $user)
@@ -256,6 +239,26 @@ class FoldersController extends Controller
             echo json_encode(array("error"));
     }
 
+    private function recursive_destroy($folder)
+    {
+        foreach ($folder->getChildren() as $child)
+        {
+            $this->recursive_destroy($child);
+        }
+        $files = $folder->getFiles();
+        foreach ($files as $file)
+        {
+            if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath()))
+            {
+                unlink(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
+            }
+
+            $file->delete();
+        }
+
+        $folder->delete();
+    }
+
     public function destroy($params = array())
     {
         $this->security_check();
@@ -264,22 +267,10 @@ class FoldersController extends Controller
 
         $folder = Folder::find($params["id"]);
 
+
         if (is_object($folder))
         {
-            $files = $folder->getFiles();
-
-
-            foreach ($files as $file)
-            {
-                if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath()))
-                {
-                    unlink(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
-                }
-
-                $file->delete();
-            }
-
-            $folder->delete();
+            $this->recursive_destroy($folder);
             echo json_encode(array("message" => "Folder successfully deleted"));
         }
         else

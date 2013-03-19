@@ -21,9 +21,19 @@ class Folder extends Model
     private $name;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", nullable=true)
      */
     private $parent_folder;
+
+    /**
+     * @OneToMany(targetEntity="Folder", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ManyToOne(targetEntity="Folder")
+     */
+    private $parent;
 
     /**
      * @ManyToOne(targetEntity="User")
@@ -51,6 +61,7 @@ class Folder extends Model
         $this->files = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users_allowed = new \Doctrine\Common\Collections\ArrayCollection();
         $this->groups_allowed = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setCreator($creator)
@@ -123,6 +134,21 @@ class Folder extends Model
         return $this->users_allowed;
     }
 
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
     public function toArray($depth = -1)
     {
         $files = array();
@@ -166,7 +192,7 @@ class Folder extends Model
         return array(
             "id" => $this->id,
             "name" => $this->name,
-            "parent_folder" => $this->parent_folder,
+            "parent_folder" => $this->parent != null ? $this->parent->getId() : 0,
             "creator" => $this->creator != null ? $this->creator->toArray() : null,
             "users_allowed" => $users,
             "groups_allowed" => $groups,

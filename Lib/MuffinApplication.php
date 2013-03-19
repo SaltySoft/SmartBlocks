@@ -156,8 +156,8 @@ class MuffinApplication
             self::loadPlugins();
             ini_set("log_errors", 1);
             ini_set("error_log", ROOT . DS . "App" . DS . "Logs" . DS . "errors.log");
-            register_shutdown_function(array("MuffinApplication", 'handleShutDown'));
-            set_error_handler(array('MuffinApplication', 'captureNormal'));
+          //  register_shutdown_function(array("MuffinApplication", 'handleShutDown'));
+          //  set_error_handler(array('MuffinApplication', 'captureNormal'));
 
             self::$started = true;
             require_once (ROOT . DS . "Lib" . DS . "shared.php");

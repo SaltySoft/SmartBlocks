@@ -150,8 +150,11 @@ class FilesController extends Controller
 
             if (isset($_FILES["file"]))
             {
+                $ext = explode(".", $_FILES["file"]["name"]);
+                $ext = isset($ext[0]) ?"." . $ext[count($ext) - 1] : "";
+
                 $path = ROOT . DS . "Data" . DS . "User_files" . DS;
-                $file->setPath($file->getPath() . PATHINFO_EXTENSION);
+                $file->setPath($file->getPath() . PATHINFO_EXTENSION . $ext);
                 move_uploaded_file($_FILES["file"]["tmp_name"], $path . $file->getPath());
             }
 
@@ -267,19 +270,19 @@ class FilesController extends Controller
 
     public function get_file($params = array())
     {
-        $data = $this->getRequestData();
-
-        $file = File::find($data["id"]);
+        $file = File::find($params["id"]);
         $this->render = false;
         header("Content-Type: application/force-download");
 
         if (is_object($file))
         {
-            header('Content-Disposition: attachment; filename="' . $file->getName() . '.png"');
-            echo $this->readfile_chunked(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
+
+            $ext = explode(".", $file->getPath());
+            $ext = isset($ext[0]) ?"." . $ext[count($ext) - 1] : "";
+
+            header('Content-Disposition: attachment; filename="' . $file->getName() . $ext.'"');
+            echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
         }
-
-
     }
 }
 
