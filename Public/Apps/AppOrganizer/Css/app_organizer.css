@@ -30,8 +30,21 @@
     width: 250px;
 }
 
-.app_name {
+.dashboard_app a {
+    text-decoration: none;
+    color: #000000;
+}
 
+.dashboard_app a:active {
+    color: #000000;
+}
+
+.dashboard_app a:visited {
+    color: #000000;
+}
+
+.dashboard_app a:hover {
+    color: #000000;
 }
 
 .app_description {

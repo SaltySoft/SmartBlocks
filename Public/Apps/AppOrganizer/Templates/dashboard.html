@@ -7,7 +7,7 @@
     <% _.each(block.get('apps'), function (app) { %>
     <div class="dashboard_app" style="background-color: <%= block.get('color')%>" data-flip="0"
          data-description="<%= app.get('description') %>" data-link="<%= app.get('link') %>" >
-        <%= app.get('name') %>
+        <a class="nameLink" href="<%= app.get('link') %>" ><%= app.get('name') %></a >
 
         <% if (!_.isNull(app.get('logoUrl'))) { %>
         <!--<% if (!_.isUndefined(app.get('logoUrl'))) { %>-->
