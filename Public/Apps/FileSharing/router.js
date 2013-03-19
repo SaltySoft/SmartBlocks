@@ -28,7 +28,11 @@ define([
             $("#file_sharing_button").click(function () {
                 $("#file_sharing_container").toggle();
                 if ($("#file_sharing_container").css("display") == "block")
+                {
+                    $("#chat_container").hide();
+                    
                     $(container).css("left", $(window).width() / 2 - container.width() / 2);
+                }
             });
             $(window).resize(function () {
                 if (container.is(":visible"))
