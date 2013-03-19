@@ -31,9 +31,26 @@ class ApplicationBlock extends Model
     private $description;
 
     /**
+     * @Column(type="string", nullable = true)
+     */
+    private $logoUrl;
+
+    /**
+     * @Column(type="string", nullable = true)
+     */
+    private $color;
+
+    /**
      * @OneToMany(targetEntity="Application", mappedBy="block")
      */
     private $applications;
+
+    public function __construct()
+    {
+        $this->name = "";
+        $this->token = "";
+        $this->description = "";
+    }
 
     public function addApplication($application)
     {
@@ -85,12 +102,34 @@ class ApplicationBlock extends Model
         return $this->token;
     }
 
+    public function setColor($color)
+    {
+        $this->color = $color;
+    }
+
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    public function setLogoUrl($logoUrl)
+    {
+        $this->logoUrl = $logoUrl;
+    }
+
+    public function getLogoUrl()
+    {
+        return $this->logoUrl;
+    }
+
     public function toArray()
     {
         $appBlockArray = array();
         $appBlockArray["name"] = $this->name;
         $appBlockArray["token"] = $this->token;
         $appBlockArray["description"] = $this->description;
+        $appBlockArray["logoUrl"] = $this->logoUrl;
+        $appBlockArray["color"] = $this->color;
         $appsArray = array();
 
         foreach ($this->getApplications() as $app)
@@ -101,6 +140,5 @@ class ApplicationBlock extends Model
 
         return $appBlockArray;
     }
-
 }
 

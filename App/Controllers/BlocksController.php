@@ -27,37 +27,7 @@ class BlocksController extends Controller
     public function configure()
     {
         //security_check(User::current_user());
-
         \BusinessManagement\SmartBlocks::loadAllBlocks();
-
-//        $blocks  = \BusinessManagement\SmartBlocks::getCoreBlock();
-//        $first = true;
-//        $blocksNumber = 0;
-//        $pluginsBlocksNumber = 0;
-//        $appsCoreNumber = 0;
-//        $appsPluginsNumber = 0;
-//
-//        foreach ($blocks as $block)
-//        {
-//            if ($first)
-//            {
-//                $first = false;
-//                $appsCoreNumber += count($block->getApplications());
-//                $blocksNumber++;
-//            }
-//            else
-//            {
-//                $blocksNumber++;
-//                $pluginsBlocksNumber++;
-//                $appsPluginsNumber += count($block->getApplications());
-//            }
-//        }
-//
-        $this->set("blocksNumber", $blocksNumber);
-//        $this->set("pluginsBlocksNumber", $pluginsBlocksNumber);
-//        $this->set("appsCoreNumber", $appsCoreNumber);
-//        $this->set("appsPluginsNumber", $appsPluginsNumber);
-        $this->set("appsNumber", $appsCoreNumber + $appsPluginsNumber);
         $this->render = false;
     }
 
@@ -68,8 +38,15 @@ class BlocksController extends Controller
     public function index()
     {
         $response = array();
+        $kernel = ApplicationBlock::where(array("token" => "kernel"));
+        $blocks[] = $kernel[0];
 
         foreach (ApplicationBlock::all() as $block)
+        {
+            if ($block->getToken() != "kernel")
+                $blocks[] = $block;
+        }
+        foreach ($blocks as $block)
         {
             $response[] = $block->toArray();
         }

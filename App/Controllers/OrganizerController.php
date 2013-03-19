@@ -25,11 +25,6 @@ class OrganizerController extends Controller
         echo json_encode($response);
     }
 
-    public function index()
-    {
-
-    }
-
     /**
      * This action is an admin page to access app organizer javascript apps.
      * @param array $params

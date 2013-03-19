@@ -4,11 +4,11 @@ define([
 
 ], function (_, Backbone) {
     var Block = Backbone.Model.extend({
-        baseUrl: "/Blocks",
-        defaults: {
+        baseUrl:"/Blocks",
+        defaults:{
+            "color":"#024053"
         }
     });
-
 
     return Block;
 });

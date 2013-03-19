@@ -16,8 +16,8 @@ define([
         },
         init:function (AppEvents) {
             var base = this;
-
             this.AppEvents = AppEvents;
+
             base.blocks_collection = new BlocksCollection();
             base.blocks_collection.fetch({
                 data:{

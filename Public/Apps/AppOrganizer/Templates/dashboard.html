@@ -1,7 +1,14 @@
 <div class="blocks_container" >
     <% _.each(blocks, function (block) { %>
-    <div class="dashboard_block" >
-        <%= block.get('name') %>
+    <!--<div class="dashboard_block" >-->
+    <!--<%= block.get('name') %>-->
+    <!--</br>-->
+    <!--<%= block.get('description') %>-->
+    <% _.each(block.get('apps'), function (app) { %>
+    <div class="dashboard_app" style="background-color: <%= block.get('color')%>" >
+        <%= app.get('name') %>
     </div >
+    <% }); %>
+    <!--</div >-->
     <% }); %>
 </div >

@@ -1,13 +1,15 @@
 .blocks_container {
     display: inline-block;
+    padding: 15px;
 }
 
-.appBlock_container {
+.dashboard_block {
     border: solid 1px #666;
-    margin: 10px;
+    margin: 4px;
     padding: 8px;
     display: block;
     float: left;
+    /*box-shadow: 1px 1px 4px 0px #c7c7c7;*/
 }
 
 .appBlock_name {
@@ -18,10 +20,14 @@
 
 }
 
-.app_container {
-    border: solid 1px #666;
-    margin: 5px;
-    padding: 4px;
+.dashboard_app {
+    border: none;
+    margin: 6px;
+    padding: 10px;
+    display: block;
+    float: left;
+    height: 100px;
+    width: 200px;
 }
 
 .app_name {
@@ -30,4 +36,39 @@
 
 .app_description {
 
+}
+
+.backgroundThem1 {
+    background-image: url('/images/background2.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position-x: -24px;
+}
+
+.bg1 {
+    background-color: #2a83ec;
+}
+
+.bg2 {
+    background-color: #d34926;
+}
+
+.bg3 {
+    background-color: #603cba;
+}
+
+.bg4 {
+    background-color: #02991a;
+}
+
+.bg5 {
+    background-color: #b51d44;
+}
+
+.bg6 {
+    background-color: #024053;
+}
+
+.bg7 {
+    background-color: #1c7783;
 }

@@ -62,11 +62,14 @@ class SmartBlocks
             try
             {
                 $data = json_decode($data, true);
-
                 $coreBlock = new \ApplicationBlock();
                 $coreBlock->setName($data["name"]);
                 $coreBlock->setToken($data["token"]);
                 $coreBlock->setDescription($data["description"]);
+                if (isset($data["logoUrl"]))
+                    $coreBlock->setLogoUrl($data["logoUrl"]);
+                if (isset($data["color"]))
+                    $coreBlock->setColor($data["color"]);
                 $coreBlock->save();
                 self::$core_block = $coreBlock;
             } catch (\Exception $e)
@@ -116,6 +119,8 @@ class SmartBlocks
                         $app->setToken($data["token"]);
                         $app->setDescription($data["description"]);
                         $app->setLink($data["link"]);
+                        if (isset($data["logoUrl"]))
+                            $app->setLogoUrl($data["logoUrl"]);
                         $app->setBlock(self::$core_block);
                         $app->save();
                     } catch (\Exception $e)
@@ -184,6 +189,10 @@ class SmartBlocks
                         $pluginBlock->setName($data["name"]);
                         $pluginBlock->setToken($data["token"]);
                         $pluginBlock->setDescription($data["description"]);
+                        if (isset($data["logoUrl"]))
+                            $pluginBlock->setLogoUrl($data["logoUrl"]);
+                        if (isset($data["color"]))
+                            $pluginBlock->setColor($data["color"]);
                         $pluginBlock->save();
                         $pluginsAppsDirectoriesName = array();
 
@@ -214,6 +223,8 @@ class SmartBlocks
                                     $app->setToken($data["token"]);
                                     $app->setDescription($data["description"]);
                                     $app->setLink($data["link"]);
+                                    if (isset($data["logoUrl"]))
+                                        $app->setLogoUrl($data["logoUrl"]);
                                     $app->setBlock($pluginBlock);
                                     $app->save();
                                 } catch (\Exception $e)
@@ -249,6 +260,10 @@ class SmartBlocks
                     $pluginBlock->setName($data["name"]);
                     $pluginBlock->setToken($data["token"]);
                     $pluginBlock->setDescription($data["description"]);
+                    if (isset($data["logoUrl"]))
+                        $pluginBlock->setLogoUrl($data["logoUrl"]);
+                    if (isset($data["color"]))
+                        $pluginBlock->setColor($data["color"]);
                     $pluginBlock->save();
                     self::$plugins_blocks[] = $pluginBlock;
                 } catch (\Exception $e)
@@ -295,6 +310,8 @@ class SmartBlocks
                         $app->setToken($data["token"]);
                         $app->setDescription($data["description"]);
                         $app->setLink($data["link"]);
+                        if (isset($data["logoUrl"]))
+                            $app->setLogoUrl($data["logoUrl"]);
                         $app->setBlock(self::$plugins_blocks[$counter]);
                         $app->save();
                     } catch (\Exception $e)

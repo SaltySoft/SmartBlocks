@@ -36,6 +36,7 @@ class PagesController extends Controller
     function home($params = array())
     {
         $this->security_check();
+        $this->redirect("/Organizer/app_organizer");
     }
 
     /**

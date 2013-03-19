@@ -31,14 +31,26 @@ class Application extends Model
     private $description;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable = true)
      */
     private $link;
+
+    /**
+     * @Column(type="string", nullable = true)
+     */
+    private $logoUrl;
 
     /**
      * @ManyToOne(targetEntity="ApplicationBlock", inversedBy="applications")
      */
     private $block;
+
+    public function __construct()
+    {
+        $this->name = "";
+        $this->token = "";
+        $this->description = "";
+    }
 
     public function getId()
     {
@@ -102,8 +114,19 @@ class Application extends Model
         $appArray["token"] = $this->token;
         $appArray["description"] = $this->description;
         $appArray["link"] = $this->link;
+        $appArray["logoUrl"] = $this->logoUrl;
 
         return $appArray;
+    }
+
+    public function setLogoUrl($logoUrl)
+    {
+        $this->logoUrl = $logoUrl;
+    }
+
+    public function getLogoUrl()
+    {
+        return $this->logoUrl;
     }
 }
 

@@ -1,5 +1,6 @@
 {
     "name": "SampleBlock",
     "token":"sample_block",
-    "description":"This is a sample app block"
+    "description":"This is a sample app block",
+    "color":"#02991a"
 }
