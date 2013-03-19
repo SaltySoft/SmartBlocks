@@ -1,0 +1,31 @@
+<div class="blocks_container" >
+    <% _.each(blocks, function (block) { %>
+    <% _.each(block.get('apps'), function (app) { %>
+    <div class="dashboard_app" style="background-color: <%= block.get('color')%>" data-flip="0"
+         data-description="<%= app.get('description') %>" data-link="<%= app.get('link') %>" >
+        <a class="nameLink" href="<%= app.get('link') %>" ><%= app.get('name') %></a >
+
+        <% if (!_.isNull(app.get('logoUrl'))) { %>
+        <!--<% if (!_.isUndefined(app.get('logoUrl'))) { %>-->
+        <% if (block.get('token') != kernel) { %>
+        <div >
+            <img class="appLogo" src="/Plugins/<%= block.get('name') %>/Public<%= app.get('logoUrl') %>" />
+        </div >
+        <% }
+        else { %>
+        <div >
+            <img class="appLogo" src=" <%= app.get('logoUrl') %>" />
+        </div >
+        <%}%>
+        <!--<%}%>-->
+        <% }
+        else { %>
+        <div >
+            <img class="appLogo" src="/Public/images/logo.png" />
+        </div >
+
+        <%}%>
+    </div >
+    <% }); %>
+    <% }); %>
+</div >

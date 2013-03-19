@@ -1,0 +1,116 @@
+.blocks_container {
+    padding: 15px;
+    width: 900px;
+    margin: auto;
+}
+
+.dashboard_block {
+    border: solid 1px #666;
+    margin: 4px;
+    padding: 8px;
+    display: block;
+    float: left;
+    /*box-shadow: 1px 1px 4px 0px #c7c7c7;*/
+}
+
+.appBlock_name {
+
+}
+
+.appBlock_description {
+
+}
+
+.dashboard_app {
+    border: none;
+    margin: 6px;
+    padding: 10px;
+    display: block;
+    float: left;
+    height: 172px;
+    width: 172px;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_app_content {
+
+}
+
+.dashboard_app a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_app a:active {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_app a:visited {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_app a:hover {
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.app_description {
+
+}
+
+.backgroundThem1 {
+    /*background-image: url('/images/background2.png');*/
+    /*background-image: url('/images/background2subtil.png');*/
+    /*background-image: url('/images/background2new1.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-attachment: fixed;*/
+    /*background-position-x: -24px;*/
+    /*background-size: 70%;*/
+
+    background-image: url('/images/dashboard_top_bg.png'), url('/images/dashboard_bottom_bg.png');
+    background-position: center top, center bottom;
+    background-size: 70%, 70%;
+    background-repeat: repeat-x;
+    background-position-x: 25px;
+}
+
+.appLogo {
+    margin: auto;
+    max-height: 75px;
+    max-width: 75px;
+    display: block;
+    float: right;
+    margin-top: 76px;
+}
+
+.bg1 {
+    background-color: #2a83ec;
+}
+
+.bg2 {
+    background-color: #d34926;
+}
+
+.bg3 {
+    background-color: #603cba;
+}
+
+.bg4 {
+    background-color: #02991a;
+}
+
+.bg5 {
+    background-color: #b51d44;
+}
+
+.bg6 {
+    background-color: #024053;
+}
+
+.bg7 {
+    background-color: #1c7783;
+}
