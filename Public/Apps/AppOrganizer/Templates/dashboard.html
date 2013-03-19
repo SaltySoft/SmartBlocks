@@ -1,14 +1,26 @@
+<div style="display: none;" >
+    {{ HtmlHelper.importJs("jquery.flip") }}
+    {{ HtmlHelper.importJs("jquery.flip.min") }}
+</div >
 <div class="blocks_container" >
     <% _.each(blocks, function (block) { %>
-    <!--<div class="dashboard_block" >-->
-    <!--<%= block.get('name') %>-->
-    <!--</br>-->
-    <!--<%= block.get('description') %>-->
     <% _.each(block.get('apps'), function (app) { %>
-    <div class="dashboard_app" style="background-color: <%= block.get('color')%>" >
+    <div class="dashboard_app" style="background-color: <%= block.get('color')%>" data-flip="0"
+         data-description="<%= app.get('description') %>" data-link="<%= app.get('link') %>" >
         <%= app.get('name') %>
+
+        <% if (!_.isNull(app.get('logoUrl'))) { %>
+        <!--<% if (!_.isUndefined(app.get('logoUrl'))) { %>-->
+        <% if (block.get('token') != kernel) { %>
+        <img style="float: right; max-width: 80px; max-height: 80px;"
+             src="/Plugins/<%= block.get('name') %>/Public<%= app.get('logoUrl') %>" />
+        <% }
+        else { %>
+        <img style="float: right; max-width: 80px; max-height: 80px;" src=" <%= app.get('logoUrl') %>" />
+        <%}%>
+        <!--<%}%>-->
+        <%}%>
     </div >
     <% }); %>
-    <!--</div >-->
     <% }); %>
 </div >

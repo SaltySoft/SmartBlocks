@@ -1,10 +1,11 @@
-var sb_paths  = {
+var sb_paths = {
     jquery:"/javascript/jquery",
     underscore:"/javascript/underscore",
     backbone:"/javascript/backbone",
     text:"/javascript/text",
-    default: "/javascript/default",
+    default:"/javascript/default",
     jqueryui:"/javascript/jquery-ui-1.10.1.min",
+    jqueryflip:"/javascript/jquery.flip.min",
     SmartBlocks:"/javascript/SmartBlocks",
 
     UserModel:"/Apps/Common/Models/User",
@@ -22,10 +23,10 @@ var sb_paths  = {
 
 var sb_shims = {
     'underscore':{
-    exports:'_'
-},
+        exports:'_'
+    },
     'backbone':{
-    deps:['underscore', 'jquery'],
+        deps:['underscore', 'jquery'],
         exports:'Backbone'
-}
+    }
 };
