@@ -45,6 +45,15 @@ class Discussion extends Model
      */
     private $participants;
 
+    /**
+     * @ManyToMany(targetEntity="User")
+     * @JoinTable(name="discussion_notifications",
+     *      joinColumns={@JoinColumn(name="discussion_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="user_id", referencedColumnName="id")}
+     *      )
+     */
+    private $notifications;
+
     public function __construct()
     {
         $this->messages = new \Doctrine\Common\Collections\ArrayCollection();
@@ -123,6 +132,24 @@ class Discussion extends Model
         return $this->participants;
     }
 
+    public function addNotification($user)
+    {
+        if (!$this->notifications->contains($user))
+            $this->notifications[] = $user;
+    }
+
+    public function removeNotification($user)
+    {
+        if ($this->notifications->contains($user))
+            $this->notifications->removeElement($user);
+    }
+
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+
     public function toArray($load_sub = 0)
     {
         $messages = array();
@@ -139,6 +166,12 @@ class Discussion extends Model
             $participants[] = $participant->toArray(0);
         }
 
+        $notify = false;
+
+        if ($this->notifications->contains(User::current_user()))
+        {
+            $notify = true;
+        }
 
 
         $array = array(
@@ -146,7 +179,8 @@ class Discussion extends Model
             "name" => $this->name,
             "participants" => $participants,
             "messages_count" => count($messages),
-            "creator" => ($this->creator != null) ? $this->creator->toArray(0) : null
+            "creator" => ($this->creator != null) ? $this->creator->toArray(0) : null,
+            "notify" => $notify
         );
 
         if ($load_sub == 1)

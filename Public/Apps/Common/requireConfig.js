@@ -17,7 +17,9 @@ var sb_paths = {
 
 
     TabView:"/Apps/Common/Views/TabView",
-    TabsTemplate:"/Apps/Common/Templates/tabs.html"
+    TabsTemplate:"/Apps/Common/Templates/tabs.html",
+
+    ContextMenuView:"/Apps/Common/Views/ContextMenu"
 
 };
 

@@ -5,7 +5,7 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["Chat/app"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Chat/app"];
 
 if (app !== undefined) {
     apps.push(app);
@@ -13,8 +13,15 @@ if (app !== undefined) {
 
 
 requirejs(apps,
-    function (/*defaults, */ChatApp, App) {
-        ChatApp.initialize();
+    function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, App) {
+        var websocket = new WebSocket(socket_server, "muffin-protocol");
+        SmartBlocks.events = _.extend({}, Backbone.Events);
+        SmartBlocks.server_handshake(websocket, user_session);
+        websocket.onmessage = function(data) {
+            var message = SmartBlocks.parseWs(data);
+            SmartBlocks.events.trigger("ws_notification", message);
+        };
+        ChatApp.initialize(websocket);
         if (App)
             App.initialize();
     });
