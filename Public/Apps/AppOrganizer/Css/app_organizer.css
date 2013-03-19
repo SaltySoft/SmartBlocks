@@ -80,11 +80,11 @@
 
 .appLogo {
     margin: auto;
-    /*max-width: 50px;*/
-    /*max-height: 50px;*/
-    width: 90%;
-    height: 90%;
+    max-height: 75px;
+    max-width: 75px;
     display: block;
+    float: right;
+    margin-top: 76px;
 }
 
 .bg1 {
