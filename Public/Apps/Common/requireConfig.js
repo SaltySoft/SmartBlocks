@@ -6,6 +6,7 @@ var sb_paths = {
     text: "/javascript/text",
     default: "/javascript/default",
     jqueryui: "/javascript/jquery-ui-1.10.1.min",
+    jqueryflip:"/javascript/jquery.flip.min",
     SmartBlocks: "/javascript/SmartBlocks",
 
     UserModel: "/Apps/Common/Models/User",
@@ -36,5 +37,8 @@ var sb_shims = {
     'backbone': {
         deps: ['underscore', 'jquery'],
         exports: 'Backbone'
+    },
+    'jqueryflip': {
+        deps: ['jquery']
     }
 };

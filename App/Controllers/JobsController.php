@@ -63,7 +63,6 @@ class JobsController extends Controller
         echo json_encode($response);
     }
 
-
     public function show($params = array())
     {
         header("Content-Type: application/json");

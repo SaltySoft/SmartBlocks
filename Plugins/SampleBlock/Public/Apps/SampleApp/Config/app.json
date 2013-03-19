@@ -1,0 +1,7 @@
+{
+    "name":"SampleApplication",
+    "token":"sample_application",
+    "description":"this is a sample application",
+    "link":"SampleBlock/Public/Apps/SampleApp",
+    "logoUrl":"/Apps/SampleApp/Resources/logo_annee90.png"
+}
