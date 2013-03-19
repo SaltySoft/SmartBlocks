@@ -30,7 +30,7 @@ define([
                 if ($("#file_sharing_container").css("display") == "block")
                 {
                     $("#chat_container").hide();
-                    
+
                     $(container).css("left", $(window).width() / 2 - container.width() / 2);
                 }
             });

@@ -45,6 +45,11 @@ class Application extends Model
      */
     private $block;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $admin_app;
+
     public function __construct()
     {
         $this->name = "";
@@ -115,6 +120,7 @@ class Application extends Model
         $appArray["description"] = $this->description;
         $appArray["link"] = $this->link;
         $appArray["logoUrl"] = $this->logoUrl;
+        $appArray["admin"] = $this->getAdminApp();
 
         return $appArray;
     }
@@ -128,5 +134,17 @@ class Application extends Model
     {
         return $this->logoUrl;
     }
+
+    public function setAdminApp($admin_app)
+    {
+        $this->admin_app = $admin_app;
+    }
+
+    public function getAdminApp()
+    {
+        return $this->admin_app;
+    }
+
+
 }
 
