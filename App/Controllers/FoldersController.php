@@ -134,7 +134,14 @@ class FoldersController extends Controller
 
         $parent = Folder::find(isset($data["parent_folder"]) ? $data["parent_folder"] : 0);
         if (is_object($parent))
+        {
             $folder->setParent($parent);
+            NodeDiplomat::sendMessage($parent->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
+            foreach ($parent->getUsersAllowed() as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
+            }
+        }
 
         if (isset($data["files"]))
         {
@@ -233,6 +240,11 @@ class FoldersController extends Controller
             }
 
             $folder->save();
+            NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+            foreach ($folder->getUsersAllowed() as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+            }
             echo json_encode($folder->toArray());
         }
         else
@@ -254,6 +266,15 @@ class FoldersController extends Controller
             }
 
             $file->delete();
+        }
+        $parent = $folder->getParent();
+        if (is_object($parent))
+        {
+            NodeDiplomat::sendMessage($parent->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
+            foreach ($parent->getUsersAllowed() as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
+            }
         }
 
         $folder->delete();
