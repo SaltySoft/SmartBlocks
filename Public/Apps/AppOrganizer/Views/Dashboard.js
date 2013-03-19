@@ -37,6 +37,10 @@ define([
                 });
 
                 base.$el.html(template);
+                base.initializeEvents();
+            },
+            initializeEvents: function () {
+                var base = this;
                 base.$el.find(".dashboard_app").click(function () {
                     if ($(this).attr("data-flip") == 0) {
                         var randomNumber = Math.floor((Math.random() * 4) + 1);
@@ -51,7 +55,8 @@ define([
                         $(this).flip({
                             direction:flipDir,
                             color:$(this).css("background-color"),
-                            content:$(this).attr("data-description")
+                            content:$(this).attr("data-description"),
+                            speed: 150
                         });
                         $(this).attr("data-flip", 1);
                     }
@@ -60,10 +65,13 @@ define([
                         $(this).attr("data-flip", 0);
                     }
                 });
+                base.$el.find(".nameLink").click(function (e) {
+                    e.stopPropagation();
+                });
+
             }
         })
         ;
 
     return Dashboard;
-})
-;
+});

@@ -28,5 +28,8 @@ var sb_shims = {
     'backbone':{
         deps:['underscore', 'jquery'],
         exports:'Backbone'
+    },
+    'jqueryflip': {
+        deps: ['jquery']
     }
 };

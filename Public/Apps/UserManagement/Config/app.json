@@ -3,5 +3,5 @@
     "token": "user_management",
     "id": "user_management",
     "description":"This is the user management application.",
-    "link":"/Apps/UserManagement"
+    "link":"/Users/user_management"
 }
