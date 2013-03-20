@@ -56,7 +56,7 @@ define([
                             direction:flipDir,
                             color:$(this).css("background-color"),
                             content:$(this).attr("data-description"),
-                            speed: 150
+                            speed: 100
                         });
                         $(this).attr("data-flip", 1);
                     }
