@@ -28,9 +28,8 @@ define([
             base.parent_folder = 0;
             base.current_folder = 0;
             SmartBlocks.events.on("ws_notification", function (message) {
-                console.log(message);
+                console.log("HA", message, base.current_folder);
                 if (message.app == "k_fs") {
-
                     if (message.status == "changed_directory") {
                         if (message.folder_id == base.current_folder) {
                             base.reload();

@@ -62,7 +62,7 @@ define([
 
                     SmartBlocks.original_title = $(document).attr("title");
                     SmartBlocks.events.on("ws_notification", function (message) {
-                        if (message.app = "k_chat") {
+                        if (message.app == "k_chat") {
                             if (message.status == "new_message") {
                                 if (message.sender.id != current_user.get('id')) {
                                     SmartBlocks.notifySound();

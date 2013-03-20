@@ -17,6 +17,21 @@ class FoldersController extends Controller
 
     }
 
+    private function send_notifs($folder, $update_folder = 0)
+    {
+        if ($update_folder == 0)
+            $update_folder = $folder->getId();
+
+        if ($folder->getParent() != null)
+            $this->send_notifs($folder->getParent(), $update_folder);
+
+        NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
+        foreach ($folder->getUsersAllowed() as $user)
+        {
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
+        }
+    }
+
     /**
      * Lists all Folders
      * Parameters :
@@ -64,15 +79,21 @@ class FoldersController extends Controller
         if (isset($_GET["shared"]))
         {
             $qb->join("f.users_allowed", "u")
+                ->leftJoin("f.parent", "pf")
+                ->leftJoin("pf.users_allowed", "pf_u")
                 ->andWhere("u = :user")
                 ->setParameter("user", User::current_user());
         }
         else
         {
-            $qb->leftJoin("f.parent", "pf")
-                ->leftJoin("pf.users_allowed", "ua")
-                ->andWhere("(f.creator = :user OR ua = :user OR pf.creator = :user)")
+//            $qb->leftJoin("f.parent", "pf")
+//                ->leftJoin("pf.users_allowed", "ua")
+//                ->andWhere("(f.creator = :user OR ua = :user OR pf.creator = :user)")
+//                ->setParameter("user", User::current_user());
+            $qb->leftJoin("f.users_allowed", "u")
+                ->andWhere("(f.creator = :user OR (u = :user AND f.parent is not NULL))")
                 ->setParameter("user", User::current_user());
+
         }
 
         $folders = $qb->getQuery()->getResult();
@@ -136,11 +157,21 @@ class FoldersController extends Controller
         if (is_object($parent))
         {
             $folder->setParent($parent);
-            NodeDiplomat::sendMessage($parent->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
-            foreach ($parent->getUsersAllowed() as $user)
-            {
-                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
-            }
+//            $p = $parent;
+//            while ($p != null)
+//            {
+//
+//                foreach ($p->getUsersAllowed() as $user)
+//                {
+//                    if (!$folder->getUsersAllowed()->contains($user))
+//                        $folder->addUser($user);
+//                }
+//                if (!$folder->getUsersAllowed()->contains($p->getCreator()))
+//                    $folder->addUser($p->getCreator());
+//                $p = $p->getParent();
+//            }
+
+            $this->send_notifs($parent);
         }
 
         if (isset($data["files"]))
@@ -167,6 +198,18 @@ class FoldersController extends Controller
         $folder->save();
         echo json_encode($folder->toArray(0));
 
+    }
+
+
+    public function delete_all()
+    {
+        if (User::is_admin())
+        {
+            foreach (Folder::all() as $f)
+            {
+                $this->recursive_destroy($f);
+            }
+        }
     }
 
     public function update($params = array())
@@ -199,9 +242,12 @@ class FoldersController extends Controller
                 if (is_object($user))
                 {
                     $folder->addUser($user);
+
+
                     NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
                 }
             }
+
             NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
             foreach ($old_users as $user)
             {
@@ -253,6 +299,11 @@ class FoldersController extends Controller
 
     private function recursive_destroy($folder)
     {
+        NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "sharing_update", "folder_id" => $folder->getId()));
+        foreach ($folder->getUsersAllowed() as $user)
+        {
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update", "folder_id" => $folder->getId()));
+        }
         foreach ($folder->getChildren() as $child)
         {
             $this->recursive_destroy($child);
@@ -270,6 +321,7 @@ class FoldersController extends Controller
         $parent = $folder->getParent();
         if (is_object($parent))
         {
+
             NodeDiplomat::sendMessage($parent->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $parent->getId()));
             foreach ($parent->getUsersAllowed() as $user)
             {
@@ -289,8 +341,10 @@ class FoldersController extends Controller
         $folder = Folder::find($params["id"]);
 
 
+
         if (is_object($folder))
         {
+
             $this->recursive_destroy($folder);
             echo json_encode(array("message" => "Folder successfully deleted"));
         }

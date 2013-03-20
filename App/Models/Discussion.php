@@ -60,6 +60,7 @@ class Discussion extends Model
         $this->name = "Conversation";
         $this->creation_date = time();
         $this->last_updated = time();
+        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()

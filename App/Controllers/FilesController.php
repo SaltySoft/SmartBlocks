@@ -17,6 +17,21 @@ class FilesController extends Controller
 
     }
 
+    private function send_notifs($folder, $update_folder = 0)
+    {
+        if ($update_folder == 0)
+            $update_folder = $folder->getId();
+
+        if ($folder->getParent() != null)
+            $this->send_notifs($folder->getParent(), $update_folder);
+
+        NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
+        foreach ($folder->getUsersAllowed() as $user)
+        {
+            NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
+        }
+    }
+
     /**
      * Lists all jobs
      * Parameters :
@@ -127,11 +142,12 @@ class FilesController extends Controller
             {
                 $file->setParentFolder($folder);
                 echo $folder->getCreator()->getSessionId();
-                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                foreach ($folder->getUsersAllowed() as $user)
-                {
-                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                }
+//                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+//                foreach ($folder->getUsersAllowed() as $user)
+//                {
+//                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
+//                }
+                $this->send_notifs($folder);
             }
             if (isset($data["owner"]))
             {
@@ -151,7 +167,7 @@ class FilesController extends Controller
             if (isset($_FILES["file"]))
             {
                 $ext = explode(".", $_FILES["file"]["name"]);
-                $ext = isset($ext[0]) ?"." . $ext[count($ext) - 1] : "";
+                $ext = isset($ext[0]) ? "." . $ext[count($ext) - 1] : "";
 
                 $path = ROOT . DS . "Data" . DS . "User_files" . DS;
                 $file->setPath($file->getPath() . PATHINFO_EXTENSION . $ext);
@@ -180,11 +196,7 @@ class FilesController extends Controller
             if (is_object($folder))
             {
                 $file->setParentFolder($folder);
-                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                foreach ($folder->getUsersAllowed() as $user)
-                {
-                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                }
+                $this->send_notifs($folder);
             }
 
             $owner = User::find($data["owner"]["id"]);
@@ -213,11 +225,7 @@ class FilesController extends Controller
             $folder = $file->getParentFolder();
             if (is_object($folder))
             {
-                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                foreach ($folder->getUsersAllowed() as $user)
-                {
-                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-                }
+                $this->send_notifs($folder);
             }
 
             if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath()))
@@ -278,9 +286,9 @@ class FilesController extends Controller
         {
 
             $ext = explode(".", $file->getPath());
-            $ext = isset($ext[0]) ?"." . $ext[count($ext) - 1] : "";
+            $ext = isset($ext[0]) ? "." . $ext[count($ext) - 1] : "";
 
-            header('Content-Disposition: attachment; filename="' . $file->getName() . $ext.'"');
+            header('Content-Disposition: attachment; filename="' . $file->getName() . $ext . '"');
             echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
         }
     }

@@ -49,7 +49,7 @@ define([
                         }
                     }
                     if (message.status == "new_discussion")
-                        base.getDiscussions()
+                        base.getDiscussions();
                     if (message.status == "deleted_discussion") {
                         base.getDiscussions();
                         SmartBlocks.stopLoading();
@@ -74,7 +74,22 @@ define([
                     user_id: base.app.current_user.get('id')
                 },
                 success: function () {
+                    console.log(base.discussions.models);
+                    console.log(unload_disc);
+                    var unload_disc = true;
+                    for (var d in base.discussions.models) {
+                        if (base.discussions.models[d].get('id') == base.model.get('id')) {
+                            unload_disc = false;
+                        }
+
+                    }
+                    if (unload_disc) {
+                        base.$el.find(".k_chat_messages_list").html("");
+                    }
                     base.renderDiscussionList();
+
+
+
                 }
             });
         },
