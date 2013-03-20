@@ -37,7 +37,7 @@ body {
 
 #footer {
     padding-top: 10px;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.8);
     text-align: center;
 }
 
@@ -93,6 +93,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #chat_button:hover {
+    background-color: #d3d3d3;
+}
+
+#file_sharing_button:hover {
     background-color: #d3d3d3;
 }
 
