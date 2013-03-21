@@ -33,7 +33,7 @@ class ApplicationBlock extends Model
     /**
      * @Column(type="string", nullable = true)
      */
-    private $logoUrl;
+    private $logo_url;
 
     /**
      * @Column(type="string", nullable = true)
@@ -112,15 +112,6 @@ class ApplicationBlock extends Model
         return $this->color;
     }
 
-    public function setLogoUrl($logoUrl)
-    {
-        $this->logoUrl = $logoUrl;
-    }
-
-    public function getLogoUrl()
-    {
-        return $this->logoUrl;
-    }
 
     public function toArray()
     {
@@ -128,7 +119,7 @@ class ApplicationBlock extends Model
         $appBlockArray["name"] = $this->name;
         $appBlockArray["token"] = $this->token;
         $appBlockArray["description"] = $this->description;
-        $appBlockArray["logoUrl"] = $this->logoUrl;
+        $appBlockArray["logo_url"] = $this->logo_url;
         $appBlockArray["color"] = $this->color;
         $appsArray = array();
 
@@ -140,6 +131,16 @@ class ApplicationBlock extends Model
         $appBlockArray["apps"] = $appsArray;
 
         return $appBlockArray;
+    }
+
+    public function setLogoUrl($logo_url)
+    {
+        $this->logo_url = $logo_url;
+    }
+
+    public function getLogoUrl()
+    {
+        return $this->logo_url;
     }
 }
 

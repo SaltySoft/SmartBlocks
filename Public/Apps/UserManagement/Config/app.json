@@ -5,5 +5,6 @@
     "id": "user_management",
     "description":"This is the user management application.",
     "link":"/Users/user_management",
-    "logoUrl":"/Apps/UserManagement/Resources/logo.png"
+    "logo_url":"/Apps/UserManagement/Resources/logo.png",
+    "block_token":"kernel"
 }

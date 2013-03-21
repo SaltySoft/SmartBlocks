@@ -38,7 +38,7 @@ class Application extends Model
     /**
      * @Column(type="string", nullable = true)
      */
-    private $logoUrl;
+    private $logo_url;
 
     /**
      * @ManyToOne(targetEntity="ApplicationBlock", inversedBy="applications")
@@ -119,21 +119,13 @@ class Application extends Model
         $appArray["token"] = $this->token;
         $appArray["description"] = $this->description;
         $appArray["link"] = $this->link;
-        $appArray["logoUrl"] = $this->logoUrl;
+        $appArray["logo_url"] = $this->logo_url;
         $appArray["admin"] = $this->getAdminApp();
 
         return $appArray;
     }
 
-    public function setLogoUrl($logoUrl)
-    {
-        $this->logoUrl = $logoUrl;
-    }
 
-    public function getLogoUrl()
-    {
-        return $this->logoUrl;
-    }
 
     public function setAdminApp($admin_app)
     {
@@ -143,6 +135,16 @@ class Application extends Model
     public function getAdminApp()
     {
         return $this->admin_app;
+    }
+
+    public function setLogoUrl($logo_url)
+    {
+        $this->logo_url = $logo_url;
+    }
+
+    public function getLogoUrl()
+    {
+        return $this->logo_url;
     }
 
 
