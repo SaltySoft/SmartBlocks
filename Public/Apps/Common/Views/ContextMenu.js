@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Common/Templates/context_menu.html'
+    'text!Apps/Common/Templates/context_menu.html'
 ], function ($, _, Backbone, ContextMenuTemplate) {
     var ContextMenu = Backbone.View.extend({
         tagName: "div",

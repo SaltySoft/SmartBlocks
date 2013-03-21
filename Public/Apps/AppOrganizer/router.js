@@ -4,8 +4,8 @@ define([
     'backbone',
     'TabView',
     'UserModel',
-    'AppOrganizer/Views/AoHome',
-    'AppOrganizer/Views/Dashboard'
+    'Apps/AppOrganizer/Views/AoHome',
+    'Apps/AppOrganizer/Views/Dashboard'
 ], function ($, _, Backbone, TabView, User, AoHomeView, DashboardView) {
 
     var AppRouter = Backbone.Router.extend({

@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'FileSharing/Models/File',
+    'Apps/FileSharing/Models/File',
     'UserModel',
     'GroupModel'
 ], function(_, Backbone, File, User, Group) {

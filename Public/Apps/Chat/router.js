@@ -4,10 +4,10 @@ define([
     'backbone',
     'SmartBlocks',
     'TabView',
-    'Chat/Models/Discussion',
-    'Chat/Views/HomeView',
-    'Chat/Views/DiscussionView',
-    'Chat/Views/DiscussionCreationView',
+    'Apps/Chat/Models/Discussion',
+    'Apps/Chat/Views/HomeView',
+    'Apps/Chat/Views/DiscussionView',
+    'Apps/Chat/Views/DiscussionCreationView',
     'UserModel'
 ], function ($, _, Backbone, SmartBlocks, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
 

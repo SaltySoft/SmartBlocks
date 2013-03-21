@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    '/Apps/FileSharing/Collections/Folders.js',
-    'text!FileSharing/Templates/left_panel.html'
+    'Apps/FileSharing/Collections/Folders',
+    'text!Apps/FileSharing/Templates/left_panel.html'
 ], function ($, _, Backbone, FoldersCollection, LeftPanelTemplate) {
     var LeftPanelView = Backbone.View.extend({
         tagName: "div",

@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'Chat/Models/Message',
+    'Apps/Chat/Models/Message',
     'UserModel'
 ], function (_, Backbone, Message, User) {
     var Discussion = Backbone.Model.extend({

@@ -3,8 +3,8 @@ define([
     'underscore',
     'backbone',
     'jqueryflip',
-    'text!AppOrganizer/Templates/dashboard.html',
-    "AppOrganizer/Collections/Blocks"
+    'text!Apps/AppOrganizer/Templates/dashboard.html',
+    "Apps/AppOrganizer/Collections/Blocks"
 ], function ($, _, Backbone, JqueryFlip, DashboardTemplate, BlocksCollection) {
     var Dashboard = Backbone.View.extend({
             tagName:"div",

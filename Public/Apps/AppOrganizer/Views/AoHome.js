@@ -3,7 +3,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!AppOrganizer/Templates/home.html'
+    'text!Apps/AppOrganizer/Templates/home.html'
 ], function ($, _, Backbone, HomeTemplate) {
     var AoHome = Backbone.View.extend({
         tagName:"div",

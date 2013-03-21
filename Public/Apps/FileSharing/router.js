@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    '/Apps/FileSharing/Views/MainView.js',
+    'Apps/FileSharing/Views/MainView',
 
     'UserModel'
 ], function ($, _, Backbone, MainView, User) {

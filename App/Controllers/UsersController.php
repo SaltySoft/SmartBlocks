@@ -309,6 +309,6 @@ class UsersController extends Controller
     public function user_management($params = array())
     {
         $this->interface_security_check();
-        $this->set("app", "UserManagement/app");
+        $this->set("app", "Apps/UserManagement/app");
     }
 }

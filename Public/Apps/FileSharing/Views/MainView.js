@@ -2,10 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!/Apps/FileSharing/Templates/main_view.html',
-    '/Apps/FileSharing/Views/FolderBrowser.js',
-    '/Apps/FileSharing/Views/Controls.js',
-    'FileSharing/Views/LeftPanel'
+    'text!Apps/FileSharing/Templates/main_view.html',
+    'Apps/FileSharing/Views/FolderBrowser',
+    'Apps/FileSharing/Views/Controls',
+    'Apps/FileSharing/Views/LeftPanel'
 ], function ($, _, Backbone, MainViewTemplate, FolderBrowserView, ControlsView, LeftPanelView) {
     var MainView = Backbone.View.extend({
         tagName: "div",

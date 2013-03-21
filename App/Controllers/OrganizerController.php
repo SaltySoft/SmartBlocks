@@ -32,7 +32,7 @@ class OrganizerController extends Controller
     public function app_organizer($params = array())
     {
 //        $this->interface_security_check();
-        $this->set("app", "AppOrganizer/app");
+        $this->set("app", "Apps/AppOrganizer/app");
     }
 }
 

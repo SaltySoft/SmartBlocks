@@ -3,7 +3,7 @@ define([
     'backbone',
     'JobModel',
     'JobsCollection',
-    'text!UserManagement/Templates/job_list.html',
+    'text!Apps/UserManagement/Templates/job_list.html',
     'jqueryui'
 ], function (_, Backbone, Job, JobsCollection, JobsListTemplate) {
     var JobList = Backbone.View.extend({

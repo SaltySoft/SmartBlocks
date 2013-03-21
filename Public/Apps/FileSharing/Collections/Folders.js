@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'FileSharing/Models/Folder'
+    'Apps/FileSharing/Models/Folder'
 ], function (_, Backbone, Folder) {
     var FoldersCollection = Backbone.Collection.extend({
         model: Folder,

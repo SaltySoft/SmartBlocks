@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'FileSharing/Models/Folder',
-    'text!/Apps/FileSharing/Templates/folder_creation.html'
+    'Apps/FileSharing/Models/Folder',
+    'text!Apps/FileSharing/Templates/folder_creation.html'
 ], function ($, _, Backbone, Folder, FolderCreationTemplate) {
     var FolderCreationView = Backbone.View.extend({
         tagName: "div",

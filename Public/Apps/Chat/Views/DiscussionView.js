@@ -3,13 +3,13 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'Chat/Models/Discussion',
-    'Chat/Models/Message',
-    'text!Chat/Templates/discussion_view.html',
-    'text!Chat/Templates/message_list.html',
-    'text!Chat/Templates/discussions_list.html',
-    'Chat/Collections/Discussions',
-    'text!Chat/Templates/discussion_properties.html',
+    'Apps/Chat/Models/Discussion',
+    'Apps/Chat/Models/Message',
+    'text!Apps/Chat/Templates/discussion_view.html',
+    'text!Apps/Chat/Templates/message_list.html',
+    'text!Apps/Chat/Templates/discussions_list.html',
+    'Apps/Chat/Collections/Discussions',
+    'text!Apps/Chat/Templates/discussion_properties.html',
     'ContextMenuView'
 ], function ($, _, Backbone, SmartBlocks, Discussion, Message, DiscussionTemplate, MessageListTemplate, DiscussionsListTemplate, DiscussionsCollection, DiscussionPropertiesTemplate, ContextMenuView) {
     var DiscussionView = Backbone.View.extend({

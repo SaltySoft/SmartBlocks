@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!/Apps/FileSharing/Templates/controls.html'
+    'text!Apps/FileSharing/Templates/controls.html'
 ], function ($, _, Backbone, ControlsTemplate) {
     var ControlsView = Backbone.View.extend({
         tagName: "div",

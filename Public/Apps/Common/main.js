@@ -1,11 +1,11 @@
 requirejs.config({
-    baseUrl:'/Apps',
+    baseUrl:'/',
     paths:sb_paths,
     shim:sb_shims
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["underscore", "backbone", "SmartBlocks", "Chat/app", "FileSharing/app"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app"];
 
 if (app !== undefined) {
     apps.push(app);

@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'text!UserManagement/Templates/user_card.html',
+    'text!Apps/UserManagement/Templates/user_card.html',
     'JobModel',
     'JobsCollection',
     'GroupModel',

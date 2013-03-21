@@ -3,11 +3,11 @@ define([
     'underscore',
     'backbone',
     'TabView',
-    'UserManagement/Views/UserCard',
+    'Apps/UserManagement/Views/UserCard',
     'UserModel',
-    'UserManagement/Views/UsersList',
-    'UserManagement/Views/UmHome',
-    'UserManagement/Views/UserCreation'
+    'Apps/UserManagement/Views/UsersList',
+    'Apps/UserManagement/Views/UmHome',
+    'Apps/UserManagement/Views/UserCreation'
 ], function ($, _, Backbone, AppView, UserCardView, User, UsersListView, UmHomeView, UserCreationView) {
 
     var AppRouter = Backbone.Router.extend({

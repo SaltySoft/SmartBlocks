@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'UserManagement/router'
+    'Apps/UserManagement/router'
 ], function ($, _, Backbone, Router) {
     var initialize = function () {
 

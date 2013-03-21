@@ -3,14 +3,14 @@ define([
     'underscore',
     'underscore_string',
     'backbone',
-    'FileSharing/Models/Folder',
-    'FileSharing/Models/File',
-    'text!/Apps/FileSharing/Templates/folder_browser.html',
-    '/Apps/FileSharing/Collections/Folders.js',
-    '/Apps/FileSharing/Collections/Files.js',
-    'FileSharing/Views/FileUpload',
-    'FileSharing/Views/FolderCreation',
-    'FileSharing/Views/FolderProperties',
+    'Apps/FileSharing/Models/Folder',
+    'Apps/FileSharing/Models/File',
+    'text!Apps/FileSharing/Templates/folder_browser.html',
+    'Apps/FileSharing/Collections/Folders',
+    'Apps/FileSharing/Collections/Files',
+    'Apps/FileSharing/Views/FileUpload',
+    'Apps/FileSharing/Views/FolderCreation',
+    'Apps/FileSharing/Views/FolderProperties',
     'ContextMenuView'
 ], function ($, _, _s, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, FolderCreationView, FolderPropertiesView, ContextMenuView) {
     console.log(_s);

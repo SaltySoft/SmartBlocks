@@ -1,7 +1,7 @@
 define([
     'underscore',
     'backbone',
-    'FileSharing/Models/File'
+    'Apps/FileSharing/Models/File'
 ], function (_, Backbone, File) {
     var FilesCollection = Backbone.Collection.extend({
         model: File,

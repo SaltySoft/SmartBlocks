@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!FileSharing/Templates/file_properties.html'
+    'text!Apps/FileSharing/Templates/file_properties.html'
 ], function ($, _, Backbone, FolderPropertiesTemplate) {
     var FilePropertiesView = Backbone.View.extend({
         tagName: "div",

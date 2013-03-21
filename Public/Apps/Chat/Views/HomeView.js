@@ -3,8 +3,8 @@ define([
     'underscore',
     'backbone',
     'SmartBlocks',
-    'Chat/Collections/Discussions',
-    'text!Chat/Templates/chat_home.html'
+    'Apps/Chat/Collections/Discussions',
+    'text!Apps/Chat/Templates/chat_home.html'
 ], function ($, _, Backbone, SmartBlock, DiscussionsCollection, HomeTemplate) {
     var HomeView = Backbone.View.extend({
         tagName:"div",

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!/Apps/FileSharing/Templates/file_upload.html'
+    'text!Apps/FileSharing/Templates/file_upload.html'
 ], function ($, _, Backbone, FileUploadTemplate) {
     var FileUploadView = Backbone.View.extend({
         tagName: "div",

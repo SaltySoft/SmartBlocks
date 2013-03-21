@@ -4,9 +4,9 @@ define([
     'backbone',
     'SmartBlocks',
     'UsersCollection',
-    'Chat/Models/Discussion',
-    'text!Chat/Templates/discussion_creation_form.html',
-    'text!Chat/Templates/simple_user_list.html'
+    'Apps/Chat/Models/Discussion',
+    'text!Apps/Chat/Templates/discussion_creation_form.html',
+    'text!Apps/Chat/Templates/simple_user_list.html'
 ], function ($, _, Backbone, SmartBlocks, UsersCollection, Discussion, DiscussionCrationTemplate, SimpleUserListTemplate) {
     var DiscussionCreationView = Backbone.View.extend({
         tagName:"div",

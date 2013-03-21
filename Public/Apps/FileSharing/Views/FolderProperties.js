@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'UsersCollection',
-    'text!FileSharing/Templates/folder_properties.html',
+    'text!Apps/FileSharing/Templates/folder_properties.html',
     'text!SearchResultsTemplate',
     'text!SelectionTemplate'
 ], function ($, _, Backbone, UsersCollection, FolderPropertiesTemplate, SearchResultsTemplate, SelectionTemplate) {
@@ -19,11 +19,6 @@ define([
             base.folder_browser = folder_browser;
             base.user_search_results = new UsersCollection();
             base.user_shared = new UsersCollection();
-
-
-            // + groups sharing
-
-            // + jobs sharing
 
             base.model.fetch({
                 success: function () {
