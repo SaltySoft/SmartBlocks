@@ -11,6 +11,14 @@ class SmartBlocks
     /***************************** public functions ****************************/
     /***************************************************************************/
 
+    public function loadAllBlocksAndApps()
+    {
+        self::loadKernelBlock();
+        self::loadKernelApps();
+        self::loadPluginsBlocks();
+        self::loadPluginsApps();
+    }
+
     public function loadKernelBlock()
     {
         self::loadBlockOf(ROOT);
@@ -61,7 +69,11 @@ class SmartBlocks
     private static function createBlockWith($data)
     {
         $data = json_decode($data, true);
-        $block = new \ApplicationBlock();
+        $blocks = \ApplicationBlock::where(array("token" => $data["token"]));
+        if (count($blocks) < 1)
+            $block = new \ApplicationBlock();
+        else
+            $block = $blocks[0];
         $block->setName($data["name"]);
         $block->setToken($data["token"]);
         $block->setDescription($data["description"]);
@@ -93,8 +105,12 @@ class SmartBlocks
     private static function createAppWith($data)
     {
         $data = json_decode($data, true);
+        $apps = \Application::where(array("token" => $data["token"]));
+        if (count($apps) < 1)
+            $app = new \Application();
+        else
+            $app = $apps[0];
 
-        $app = new \Application();
         $app->setName($data["name"]);
         $app->setToken($data["token"]);
         $app->setDescription($data["description"]);

@@ -29,7 +29,7 @@ class BlocksController extends Controller
         //security_check(User::current_user());
         if (!User::logged_in() || !User::is_admin())
             $this->redirect("/");
-        \BusinessManagement\SmartBlocks::loadPluginsApps();
+        \BusinessManagement\SmartBlocks::loadAllBlocksAndApps();
         $this->render = false;
     }
 
