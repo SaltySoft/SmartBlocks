@@ -11,7 +11,7 @@ class SmartBlocks
     /***************************** public functions ****************************/
     /***************************************************************************/
 
-    public function loadAllBlocksAndApps()
+    public static function loadAllBlocksAndApps()
     {
         self::loadKernelBlock();
         self::loadKernelApps();
@@ -19,17 +19,17 @@ class SmartBlocks
         self::loadPluginsApps();
     }
 
-    public function loadKernelBlock()
+    public static function loadKernelBlock()
     {
         self::loadBlockOf(ROOT);
     }
 
-    public function loadKernelApps()
+    public static function loadKernelApps()
     {
         self::loadAppsOf(ROOT);
     }
 
-    public function loadPluginsBlocks()
+    public static function loadPluginsBlocks()
     {
         foreach (self::getPluginsDirectoriesName() as $pluginDirName)
         {
@@ -37,7 +37,7 @@ class SmartBlocks
         }
     }
 
-    public function loadPluginsApps()
+    public static function loadPluginsApps()
     {
         foreach (self::getPluginsDirectoriesName() as $pluginDirName)
         {
@@ -48,7 +48,7 @@ class SmartBlocks
     /***************************** public functions ****************************/
     /********************************** END ************************************/
 
-    private static function getPluginsDirectoriesName()
+    private  static function getPluginsDirectoriesName()
     {
         $plugins_directories_name = array();
         if (file_exists(ROOT . DS . 'Plugins') && $handle = opendir(ROOT . DS . 'Plugins'))
