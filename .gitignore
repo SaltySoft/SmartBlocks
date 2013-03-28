@@ -2,3 +2,4 @@ Tmp/*
 App/Logs/*
 Config/database.php
 .idea
+Data/User_files/*
