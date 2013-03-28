@@ -19,11 +19,14 @@ define([
             }, 3000)
         },
         server_handshake: function (websocket, identification) {
-            websocket.addEventListener("open", function (event) {
-                data_array = {};
-                data_array.identification = identification;
-                websocket.send(JSON.stringify(data_array));
-            });
+            if (websocket !== undefined) {
+                websocket.addEventListener("open", function (event) {
+                    data_array = {};
+                    data_array.identification = identification;
+                    websocket.send(JSON.stringify(data_array));
+                });
+            }
+
         },
         parseWs: function (message) {
             return JSON.parse(JSON.parse(message.data));

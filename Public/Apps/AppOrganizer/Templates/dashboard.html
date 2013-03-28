@@ -9,12 +9,12 @@
         <!--<% if (!_.isUndefined(app.get('logo_url'))) { %>-->
         <% if (block.get('token') != kernel) { %>
         <div >
-            <img class="appLogo" src="/Plugins/<%= block.get('name') %>/Public<%= app.get('logo_url') %>" />
+            <img class="appLogo" src="<%= app.get('logo_url') %>" />
         </div >
         <% }
         else { %>
         <div >
-            <img class="appLogo" src=" <%= app.get('logo_url') %>" />
+            <img class="appLogo" src="<%= app.get('logo_url') %>" />
         </div >
         <%}%>
         <!--<%}%>-->

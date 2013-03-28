@@ -21,7 +21,10 @@ var sb_paths = {
 
     SearchResultsTemplate: '/Apps/Common/Templates/search_results.html',
     SelectionTemplate: '/Apps/Common/Templates/selection.html',
-    ContextMenuView: "/Apps/Common/Views/ContextMenu"
+    ContextMenuView: "/Apps/Common/Views/ContextMenu",
+
+    Class: '/Apps/Common/Useful/Class',
+    ColorPicker: '/javascript/colorpicker'
 
 };
 
