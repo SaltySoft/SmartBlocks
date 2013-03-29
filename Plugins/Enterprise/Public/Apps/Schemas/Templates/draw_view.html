@@ -1,24 +1,33 @@
 <div onselectstart="return false;">
-<div class="ent_sch_dv_tools">
-    <div class="tool">TL</div>
-    <div class="tool">TL</div>
-    <div class="tool">TL</div>
-    <div class="tool">TL</div>
-    <div class="tool">TL</div>
-</div>
-<div>
-    Tools properties :
+    <div class="ent_sch_dv_tools">
+        <div class="tool" data-id="0"><img style="max-width: 15px" src="/Enterprise/Apps/Schemas/Resources/brush.png"/>
+        </div>
+        <div class="tool" data-id="1">line</div>
+        <div class="tool" data-id="2">rect</div>
+    </div>
     <div>
-        size: <input type="number" class="ent_sch_dv_toolsize"/>
-        color:<div class="color_chooser"></div>
-        <div class="ent_sch_dv_colorpicker">
-            <div class="slider"></div>
-            <div class="picker"></div>
+        Tools properties :
+        <div>
+            size: <input type="number" class="ent_sch_dv_toolsize"/>
+            <div style="float: right">
+            <div class="color_chooser"></div>
+
+                <div class="saved_colors">
+                    <% for (var i =0; i < 20; i++) { %>
+                    <div class="saved_color">
+
+                    </div>
+                    <% } %>
+                </div>
+                <div class="ent_sch_dv_colorpicker">
+                    <div class="slider"></div>
+                    <div class="picker"></div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<canvas id="ent_sch_dv_canvas" width="1000" height="500">
+    <canvas id="ent_sch_dv_canvas" width="1000" height="500">
 
-</canvas>
-<button class="ent_sch_dv_save_button">SAVE</button>
+    </canvas>
+    <button class="ent_sch_dv_save_button">SAVE</button>
 </div>

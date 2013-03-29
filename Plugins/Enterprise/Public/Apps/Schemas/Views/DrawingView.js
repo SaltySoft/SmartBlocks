@@ -45,9 +45,11 @@ define([
                 slider,
                 picker,
                 function (hex, hsv, rgb) {
-                    var color = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b +')';
+                    var color = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
                     base.$el.find(".color_chooser").css("background-color", color);
                     base.context.strokeStyle = color;
+
+
                 });
             base.initializeEvents();
         },
@@ -55,9 +57,26 @@ define([
             var base = this;
             base.drawing = false;
 
+
             var brush = new Tools.Brush(base.canvas, base.context);
-            base.tools.brush = brush;
-            base.current_tool = base.tools.brush;
+            base.tools[0] = brush;
+            base.tools[1] = new Tools.LineTool(base.canvas, base.context);
+            base.tools[2] = new Tools.RectangleTool(base.canvas, base.context);
+            base.current_tool = base.tools[0];
+
+            base.$el.find(".saved_color").click(function () {
+                var elt = $(this);
+                var color = elt.css("background-color");
+                base.$el.find(".color_chooser").css("background-color", color);
+                base.context.strokeStyle = color;
+            });
+
+            base.$el.find(".tool").click(function () {
+                var elt = $(this);
+                base.current_tool = base.tools[elt.attr("data-id")];
+                console.log(elt.attr("data-id"));
+                base.$el.find(".ent_sch_dv_toolsize").val(base.current_tool.size);
+            });
 
             base.$el.find(".ent_sch_dv_toolsize").val(base.current_tool.size);
 
@@ -65,11 +84,22 @@ define([
             base.$el.find(".ent_sch_dv_colorpicker").mouseover(function () {
                 clearTimeout(hide_colors_timer);
             });
-
+            var color_index = 0;
             base.$el.find(".ent_sch_dv_colorpicker").mouseout(function () {
                 clearTimeout(hide_colors_timer);
                 hide_colors_timer = setTimeout(function () {
                     base.$el.find(".ent_sch_dv_colorpicker").hide();
+                    var i = 0;
+
+                    base.$el.find(".saved_color").each(function () {
+                        var elt = $(this);
+                        if (i == color_index) {
+                            elt.css("background-color", base.$el.find(".color_chooser").css("background-color"));
+                        }
+                        i++;
+                    });
+                    color_index++;
+                    color_index = color_index % 20;
                 }, 500);
             });
 
@@ -80,7 +110,10 @@ define([
             base.$el.find(".ent_sch_dv_toolsize").change(function () {
                 var elt = $(this);
                 base.current_tool.setSize(elt.val());
-                alert(base.current_tool.size());
+            })
+            base.$el.find(".ent_sch_dv_toolsize").keyup(function () {
+                var elt = $(this);
+                base.current_tool.setSize(elt.val());
             });
 
             base.canvas.mousedown(function (e) {
@@ -91,7 +124,7 @@ define([
                 base.current_tool.mousemove(e);
             });
 
-            base.canvas.mouseup(function (e) {
+            $(document).mouseup(function (e) {
                 base.current_tool.mouseup(e);
             });
 
@@ -109,7 +142,6 @@ define([
                     }
                 });
             });
-
 
 
         }

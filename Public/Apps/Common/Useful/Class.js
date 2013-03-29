@@ -30,9 +30,6 @@ define([
             }
         };
 
-
-
-
         return klass;
     };
 
