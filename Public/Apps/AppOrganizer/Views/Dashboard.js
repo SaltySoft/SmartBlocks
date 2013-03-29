@@ -70,8 +70,7 @@ define([
                 });
 
             }
-        })
-        ;
+        });
 
     return Dashboard;
 });
