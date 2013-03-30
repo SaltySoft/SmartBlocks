@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Enterprise/Apps/Templates/panel.html'
+    'text!Enterprise/Apps/Notes/Templates/panel.html'
 ], function ($, _, Backbone, PanelTemplate) {
     var PanelView = Backbone.View.extend({
         tagName:"div",
@@ -14,21 +14,22 @@ define([
 
         },
         init:function (AppEvents) {
+            var base = this;
             this.AppEvents = AppEvents;
-            this.render();
         },
         render:function () {
             var base = this;
-            var template = _.template(TabsTemplate, {
+            var template = _.template(PanelTemplate, {
             });
             base.$el.html(template);
 
             var control_button_li = $(document.createElement("li"));
             control_button_li.addClass("panel_button");
             var control_button = $(document.createElement("a"));
-            control_button.attr("href", "javascript:void(0);");
-            control_button.html("toutes");
-
+            control_button.attr("href", "#all");
+            control_button.html("all");
+            control_button_li.append(control_button);
+            base.$el.find(".panel_container").append(control_button_li);
         },
         show:function () {
 

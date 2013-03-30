@@ -1,0 +1,29 @@
+.ent_notes_panel {
+    float: left;
+}
+
+.panel_container {
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+    background-color: grey;
+}
+
+.panel_container li {
+    list-style: none;
+}
+
+.panel_container li a {
+    float: left;
+    height: 20px;
+    width: 100px;
+    padding: 15px;
+    background-color: grey;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+
+.notes_container {
+    float: left;
+}

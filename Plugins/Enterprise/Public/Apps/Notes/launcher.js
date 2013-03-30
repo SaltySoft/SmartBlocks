@@ -8,7 +8,8 @@ define([
 
     var AppRouter = Backbone.Router.extend({
         routes:{
-            '':"home"
+            '':"home",
+            'show_all':'show_all'
         }
     });
 
@@ -23,6 +24,10 @@ define([
         $("#app_container").html(dashboard.$el);
 
         app_router.on('route:home', function () {
+            dashboard.render();
+        });
+
+        app_router.on('route:show_all', function () {
             dashboard.render();
         });
 
