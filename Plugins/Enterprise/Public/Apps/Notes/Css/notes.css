@@ -11,6 +11,7 @@
 
 .panel_container li {
     list-style: none;
+
 }
 
 .panel_container li a {
@@ -24,6 +25,46 @@
     text-decoration: none;
 }
 
+.panel_container li a:hover {
+    background-color: #d3d3d3;
+}
+
+.panel_container li a:active {
+    background-color: #02991a;
+}
+
 .notes_container {
     float: left;
+}
+
+.createNoteCache{
+    position: fixed;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.60);
+    /*filter: alpha(opacity = 20);*/
+    width: 100%;
+    height: 100%;
+    /*display: block;*/
+    display: none;
+}
+
+.createNote{
+    width: 400px;
+    height: 200px;
+    margin: auto;
+    background-color: #024053;
+    float: left;
+    position: absolute;
+}
+
+.closeButtonCreateNote {
+    margin: 3px;
+    z-index: 11;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+}
+
+.createNoteContent{
+    display: inline-block;
 }

@@ -59,4 +59,14 @@ class Note extends Model
     {
         return $this->title;
     }
+
+    public function toArray()
+    {
+        $noteArray = array();
+        $noteArray["title"] = $this->title;
+        $noteArray["archived"] = $this->archived;
+        $noteArray["important"] = $this->importante;
+
+        return $noteArray;
+    }
 }

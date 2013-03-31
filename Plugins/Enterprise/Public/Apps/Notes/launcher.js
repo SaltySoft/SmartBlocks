@@ -9,7 +9,9 @@ define([
     var AppRouter = Backbone.Router.extend({
         routes:{
             '':"home",
-            'show_all':'show_all'
+            'show_all':'show_all',
+            'show_importants':'show_importants',
+            'create_note':'create_note'
         }
     });
 
@@ -23,12 +25,32 @@ define([
 
         $("#app_container").html(dashboard.$el);
 
-        app_router.on('route:home', function () {
-            dashboard.render();
+        // Backbone issue:
+        // https://github.com/documentcloud/backbone/issues/652
+        // because router.navigate doesn't call router unless hash is changed
+        $('.panel_button_link').click(function () {
+            route = Backbone.history.fragment;
+            if ("#" + route == $(this).attr("href"))
+            {
+                app_router.navigate();
+                app_router.navigate(route, true);
+            }
+//            app_router.navigate(route, {trigger: true});
         });
 
+        app_router.on('route:home', function () {
+            dashboard.clear();
+        });
         app_router.on('route:show_all', function () {
+            dashboard.clear();
             dashboard.render();
+        });
+        app_router.on('route:show_importants', function () {
+            dashboard.clear();
+        });
+        app_router.on('route:create_note', function () {
+            dashboard.clear();
+            dashboard.showCreateNote();
         });
 
         Backbone.history.start();
