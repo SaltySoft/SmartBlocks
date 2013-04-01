@@ -13,9 +13,10 @@ define([
     var Brush = new Class();
 
     Brush.include({
-        init: function (canvas, context) {
-            this.canvas = canvas;
-            this.context = context;
+        init: function (DrawingView) {
+            this.canvas = DrawingView.canvas;
+            this.context = DrawingView.context;
+            this.drawing_view = DrawingView;
         },
         size: 1,
         drawing: false,
@@ -42,6 +43,7 @@ define([
             var base = this;
             base.drawing = false;
             base.context.closePath();
+            base.drawing_view.setImage();
         },
         keydown: function (e) {
             var base = this;
@@ -55,9 +57,10 @@ define([
     var LineTool = new Class();
 
     LineTool.include({
-        init: function (canvas, context) {
-            this.canvas = canvas;
-            this.context = context;
+        init: function (DrawingView) {
+            this.canvas = DrawingView.canvas;
+            this.context = DrawingView.context;
+            this.drawing_view = DrawingView;
         },
         size: 1,
         drawing: false,
@@ -75,12 +78,8 @@ define([
             base.context.lineWidth = base.size;
             base.context.lineJoin = "round";
 
-            base.save = base.canvas[0].toDataURL("image/png");
-            base.image = new Image();
-            base.image.src = base.save;
-            base.image.onload = function() {
-                base.drawing = true;
-            };
+            base.drawing = true;
+
             base.orx = e.pageX - base.canvas.offset().left;
             base.ory = e.pageY - base.canvas.offset().top;
         },
@@ -90,8 +89,7 @@ define([
 
 
             if (base.drawing) {
-                base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
-                base.context.drawImage(base.image, 0, 0);
+                base.drawing_view.resetImage();
                 base.context.beginPath();
 
                 base.context.moveTo(base.orx, base.ory);
@@ -103,7 +101,7 @@ define([
         mouseup: function (e) {
             var base = this;
             base.drawing = false;
-
+            base.drawing_view.setImage();
         },
         keydown: function (e) {
             var base = this;
@@ -117,9 +115,10 @@ define([
     var RectangleTool = new Class();
 
     RectangleTool.include({
-        init: function (canvas, context) {
-            this.canvas = canvas;
-            this.context = context;
+        init: function (DrawingView) {
+            this.canvas = DrawingView.canvas;
+            this.context = DrawingView.context;
+            this.drawing_view = DrawingView;
         },
         size: 1,
         drawing: false,
@@ -137,25 +136,19 @@ define([
             base.context.lineWidth = base.size;
             base.context.lineJoin = "round";
 
-            base.save = base.canvas[0].toDataURL("image/png");
-            base.image = new Image();
-            base.image.src = base.save;
-            base.image.onload = function() {
-                base.drawing = true;
-            };
+            base.drawing = true;
+
+
             base.orx = e.pageX - base.canvas.offset().left;
             base.ory = e.pageY - base.canvas.offset().top;
         },
         mousemove: function (e) {
             var base = this;
 
-
-
             if (base.drawing) {
-                base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
-                base.context.drawImage(base.image, 0, 0);
+                console.log("drawing");
+                base.drawing_view.resetImage();
                 base.context.beginPath();
-
                 base.context.moveTo(base.orx, base.ory);
                 base.context.lineTo(e.pageX - base.canvas.offset().left,  base.ory);
                 base.context.lineTo(e.pageX - base.canvas.offset().left, e.pageY - base.canvas.offset().top);
@@ -168,6 +161,7 @@ define([
         mouseup: function (e) {
             var base = this;
             base.drawing = false;
+            base.drawing_view.setImage();
 
         },
         keydown: function (e) {
@@ -182,10 +176,10 @@ define([
     var Eraser = new Class();
 
     Eraser.include({
-        init: function (canvas, context) {
-            this.canvas = canvas;
-            this.context = context;
-
+        init: function (DrawingView) {
+            this.canvas = DrawingView.canvas;
+            this.context = DrawingView.context;
+            this.drawing_view = DrawingView;
         },
         size: 1,
         drawing: false,
@@ -208,6 +202,7 @@ define([
             var base = this;
             base.drawing = false;
             base.context.closePath();
+
         },
         keydown: function (e) {
             var base = this;

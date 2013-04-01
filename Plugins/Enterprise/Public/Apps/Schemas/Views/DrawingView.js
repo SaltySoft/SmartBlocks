@@ -13,6 +13,8 @@ define([
 
         },
         current_tool: undefined,
+        saved_states: [],
+        current_state: 0,
         initialize: function () {
 
         },
@@ -51,17 +53,77 @@ define([
 
 
                 });
+            base.current_image = new Image();
             base.initializeEvents();
+        },
+        current_image: undefined,
+        setImage: function (dataUrl, callback) {
+            var base = this;
+            base.current_image = new Image();
+            if (dataUrl !== undefined) {
+                base.current_image.src = dataUrl;
+                console.log(dataUrl);
+
+            } else {
+                dataUrl = base.canvas[0].toDataURL("image/png");
+                base.current_image.src = dataUrl;
+
+                if (base.current_state <  base.saved_states.length - 1) {
+                    var new_states = [];
+                    for (k in base.saved_states) {
+                        if (k <= base.current_state) {
+                            new_states.push(base.saved_states[k]);
+                        }
+                    }
+                    base.saved_states = new_states;
+                }
+
+                base.saved_states.push(dataUrl);
+                console.log("pushed state");
+                base.current_state = base.saved_states.length - 1;
+            }
+            base.current_image.onload = function () {
+                if (callback !== undefined)
+                    callback();
+            };
+
+
+        },
+        resetImage: function () {
+            var base = this;
+            base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
+            base.context.drawImage(base.current_image, 0, 0);
+        },
+        undo: function () {
+            var base = this;
+
+            if (base.current_state < base.saved_states.length && base.current_state >= 0) {
+
+                base.setImage(base.saved_states[--base.current_state], function () {
+                    base.resetImage();
+                });
+
+            }
+        },
+        redo: function () {
+            var base = this;
+
+            if (base.current_state < base.saved_states.length && base.current_state >= 0) {
+
+                base.setImage(base.saved_states[++base.current_state], function () {
+                    base.resetImage();
+                });
+
+            }
         },
         initializeEvents: function () {
             var base = this;
             base.drawing = false;
 
-
-            var brush = new Tools.Brush(base.canvas, base.context);
+            var brush = new Tools.Brush(base);
             base.tools[0] = brush;
-            base.tools[1] = new Tools.LineTool(base.canvas, base.context);
-            base.tools[2] = new Tools.RectangleTool(base.canvas, base.context);
+            base.tools[1] = new Tools.LineTool(base);
+            base.tools[2] = new Tools.RectangleTool(base);
             base.current_tool = base.tools[0];
 
             base.$el.find(".saved_color").click(function () {
@@ -115,17 +177,24 @@ define([
                 var elt = $(this);
                 base.current_tool.setSize(elt.val());
             });
+            base.drawing = false;
 
             base.canvas.mousedown(function (e) {
+                base.drawing = true;
                 base.current_tool.mousedown(e);
             });
 
             base.canvas.mousemove(function (e) {
-                base.current_tool.mousemove(e);
+                if (base.drawing)
+                    base.current_tool.mousemove(e);
             });
 
             $(document).mouseup(function (e) {
-                base.current_tool.mouseup(e);
+                if (base.drawing) {
+                    base.current_tool.mouseup(e);
+                    console.log("MU");
+                    base.drawing = false;
+                }
             });
 
             base.$el.find(".ent_sch_dv_save_button").click(function () {
@@ -143,7 +212,17 @@ define([
                 });
             });
 
+            base.$el.find('.ent_sch_dv_undo_button').click(function (e) {
 
+                base.undo();
+            });
+
+            base.$el.find('.ent_sch_dv_redo_button').click(function (e) {
+
+                base.redo();
+            });
+
+            base.setImage();
         }
 
     });
