@@ -37,7 +37,7 @@
     float: left;
 }
 
-.createNoteCache{
+.createNoteCache {
     position: fixed;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.60);
@@ -48,13 +48,13 @@
     display: none;
 }
 
-.createNote{
+.createNote {
     width: 400px;
-    height: 200px;
     margin: auto;
     background-color: #024053;
     float: left;
     position: absolute;
+    padding: 10px;
 }
 
 .closeButtonCreateNote {
@@ -65,6 +65,6 @@
     float: right;
 }
 
-.createNoteContent{
+.createNoteContent {
     display: inline-block;
 }

@@ -16,12 +16,12 @@ class Note extends Model
     private $title;
 
     /**
-     * @Colum(type="boolean")
+     * @Column(type="boolean")
      */
     private $archived;
 
     /**
-     * @Colum(type="boolean")
+     * @Column(type="boolean")
      */
     private $important;
 
@@ -65,7 +65,7 @@ class Note extends Model
         $noteArray = array();
         $noteArray["title"] = $this->title;
         $noteArray["archived"] = $this->archived;
-        $noteArray["important"] = $this->importante;
+        $noteArray["important"] = $this->important;
 
         return $noteArray;
     }

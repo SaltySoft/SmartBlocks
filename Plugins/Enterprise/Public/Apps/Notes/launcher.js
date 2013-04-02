@@ -40,16 +40,17 @@ define([
 
         app_router.on('route:home', function () {
             dashboard.clear();
+            dashboard.render();
         });
         app_router.on('route:show_all', function () {
             dashboard.clear();
-            dashboard.render();
+            dashboard.renderAll();
         });
         app_router.on('route:show_importants', function () {
             dashboard.clear();
+            dashboard.renderImportants();
         });
         app_router.on('route:create_note', function () {
-            dashboard.clear();
             dashboard.showCreateNote();
         });
 

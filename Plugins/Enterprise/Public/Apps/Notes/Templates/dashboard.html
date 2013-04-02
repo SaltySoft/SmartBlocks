@@ -1,3 +1,7 @@
 <div class="notes_container" >
-    <%= enterprise %> notes container
+    <%= category %> </br>
+    <% _.each(notes, function (note) {%>
+    <%= note.get('title') %>
+    </br>
+    <% });%>
 </div >

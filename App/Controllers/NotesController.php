@@ -12,10 +12,27 @@ class NotesController extends Controller
     {
         $this->render = false;
         header("Content-Type: application/json");
+        $response = array();
+        $em = Model::getEntityManager();
+        $qb = $em->createQueryBuilder();
 
-        $notes = Note::all();
-
-        echo json_encode($notes);
+        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
+        {
+            $qb->select("n")
+                ->from("Note", "n");
+        }
+        if (isset($_GET["importants"]) && $_GET["importants"] == "true")
+        {
+            $qb->select("n")
+                ->from("Note", "n");
+            $qb->andWhere("n.important = 1");
+        }
+        $notes = $qb->getQuery()->getResult();
+        foreach ($notes as $note)
+        {
+            $response[] = $note->toArray();
+        }
+        echo json_encode($response);
     }
 
     public function show($params = array())
