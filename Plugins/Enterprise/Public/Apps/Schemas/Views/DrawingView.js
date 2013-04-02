@@ -68,7 +68,7 @@ define([
                 dataUrl = base.canvas[0].toDataURL("image/png");
                 base.current_image.src = dataUrl;
 
-                if (base.current_state <  base.saved_states.length - 1) {
+                if (base.current_state < base.saved_states.length - 1) {
                     var new_states = [];
                     for (k in base.saved_states) {
                         if (k <= base.current_state) {
@@ -98,10 +98,11 @@ define([
             var base = this;
 
             if (base.current_state < base.saved_states.length && base.current_state >= 0) {
-
-                base.setImage(base.saved_states[--base.current_state], function () {
-                    base.resetImage();
-                });
+                if (base.saved_states[base.current_state - 1] !== undefined) {
+                    base.setImage(base.saved_states[--base.current_state], function () {
+                        base.resetImage();
+                    });
+                }
 
             }
         },
@@ -109,10 +110,13 @@ define([
             var base = this;
 
             if (base.current_state < base.saved_states.length && base.current_state >= 0) {
+                if (base.saved_states[base.current_state + 1] !== undefined) {
+                    base.setImage(base.saved_states[++base.current_state], function () {
+                        base.resetImage();
+                        console.log(base.current_state);
+                    });
+                }
 
-                base.setImage(base.saved_states[++base.current_state], function () {
-                    base.resetImage();
-                });
 
             }
         },
@@ -192,7 +196,6 @@ define([
             $(document).mouseup(function (e) {
                 if (base.drawing) {
                     base.current_tool.mouseup(e);
-                    console.log("MU");
                     base.drawing = false;
                 }
             });
