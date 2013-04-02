@@ -20,14 +20,14 @@ function send(request, response, connections) {
             for (key in connections[session_id])
             {
                 connections[session_id][key].sendUTF(JSON.stringify(post.data));
-                console.log("Sent data to pages : " + JSON.stringify(post.data) + " to " + session_id);
+               // console.log("Sent data to pages : " + JSON.stringify(post.data) + " to " + session_id);
             }
 
 
         }
         else
         {
-            console.log("Couldn't send data to page for " + session_id);
+           // console.log("Couldn't send data to page for " + session_id);
         }
         response.writeHead(200, { "Content-Type":"text/plain" });
         response.end();

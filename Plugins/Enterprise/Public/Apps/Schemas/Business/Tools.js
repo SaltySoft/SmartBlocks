@@ -25,6 +25,7 @@ define([
             g: 0,
             b: 0
         },
+        live_sharable: true,
         mousedown: function (e) {
             var base = this;
             base.drawing = true;
@@ -43,7 +44,7 @@ define([
             var base = this;
             base.drawing = false;
             base.context.closePath();
-            base.drawing_view.setImage();
+//            base.drawing_view.setImage();
         },
         keydown: function (e) {
             var base = this;
@@ -101,7 +102,7 @@ define([
         mouseup: function (e) {
             var base = this;
             base.drawing = false;
-            base.drawing_view.setImage();
+//            base.drawing_view.setImage();
         },
         keydown: function (e) {
             var base = this;
@@ -161,7 +162,7 @@ define([
         mouseup: function (e) {
             var base = this;
             base.drawing = false;
-            base.drawing_view.setImage();
+//            base.drawing_view.setImage();
 
         },
         keydown: function (e) {

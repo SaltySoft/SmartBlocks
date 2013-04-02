@@ -15,6 +15,7 @@
 }
 
 .ent_sch_drawview canvas:active {
+
     cursor: url('/Enterprise/Apps/Schemas/Resources/brush.png'),url('/Enterprise/Apps/Schemas/Resources/brush.png'),default;
 }
 

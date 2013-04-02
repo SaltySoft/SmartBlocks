@@ -41,17 +41,27 @@ function start(route, handle) {
         connection.on('message', function (message) {
 
             var session_id = JSON.parse(message.utf8Data).identification;
-            if (!(session_id in connections) || !(connection in connections[session_id])) {
-                if (!(session_id in connections)) {
-                    connections[session_id] = new Array();
+            if (session_id) {
+                if (!(session_id in connections) || !(connection in connections[session_id])) {
+                    if (!(session_id in connections)) {
+                        connections[session_id] = new Array();
+                    }
+                    //console.log("New session : " + session_id);
+                    connections[session_id].push(connection);
                 }
-                //console.log("New session : " + session_id);
-                connections[session_id].push(connection);
+            } else {
+                console.log(message);
+                if (message.session_ids) {
+                    for (k in connections) {
+                        // console.log(k + " : " + connections[k]);
+//                        connections[k]
+                    }
+                }
+
             }
 
-            for (k in connections) {
-                // console.log(k + " : " + connections[k]);
-            }
+
+
             console.log(message);
         });
 

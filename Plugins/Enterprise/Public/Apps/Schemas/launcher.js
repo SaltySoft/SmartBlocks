@@ -6,7 +6,7 @@ define([
 ], function ($, _, Backbone, DrawingView) {
     var initialize = function (SmartBlocks) {
         var drawing_view = new DrawingView();
-        drawing_view.init(SmartBlocks);
+        drawing_view.init(SmartBlocks, 22);
         $("#schema_app_container").html(drawing_view.$el);
     };
 

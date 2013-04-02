@@ -52,6 +52,7 @@ class User extends UserBase
      */
     private $jobs;
 
+
     public function __construct()
     {
         $this->firstname = "";

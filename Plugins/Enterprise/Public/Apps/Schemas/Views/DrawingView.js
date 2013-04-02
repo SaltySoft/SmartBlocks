@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!Enterprise/Apps/Schemas/Templates/draw_view.html',
     'Enterprise/Apps/Schemas/Business/Tools',
+    'Enterprise/Apps/Schemas/Models/Schema',
     'ColorPicker'
-], function ($, _, Backbone, DrawTemplate, Tools) {
+], function ($, _, Backbone, DrawTemplate, Tools, Schema) {
     var DrawView = Backbone.View.extend({
         tagName: "div",
         className: "ent_sch_drawview",
@@ -16,12 +17,19 @@ define([
         saved_states: [],
         current_state: 0,
         initialize: function () {
+            var base = this;
+
+
 
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, id) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.schema = new Schema();
             base.render();
+            if (id) {
+                base.load(id);
+            }
         },
         render: function () {
             var base = this;
@@ -57,41 +65,37 @@ define([
             base.initializeEvents();
         },
         current_image: undefined,
-        setImage: function (dataUrl, callback) {
+        setImage: function (dataUrl, callback, above) {
             var base = this;
             base.current_image = new Image();
             if (dataUrl !== undefined) {
-                base.current_image.src = dataUrl;
-                console.log(dataUrl);
+                if (above) {
+                    var image = new Image();
+                    image.src = dataUrl;
+                    image.onload = function () {
+                        base.context.drawImage(image, 0, 0);
+                        base.current_image.src = base.canvas[0].toDataURL("image/png");
+                    };
+
+                } else {
+                    base.current_image.src = dataUrl;
+                }
 
             } else {
                 dataUrl = base.canvas[0].toDataURL("image/png");
                 base.current_image.src = dataUrl;
-
-                if (base.current_state < base.saved_states.length - 1) {
-                    var new_states = [];
-                    for (k in base.saved_states) {
-                        if (k <= base.current_state) {
-                            new_states.push(base.saved_states[k]);
-                        }
-                    }
-                    base.saved_states = new_states;
-                }
-
-                base.saved_states.push(dataUrl);
-                console.log("pushed state");
-                base.current_state = base.saved_states.length - 1;
+                base.share();
+                base.schema.set('data', dataUrl);
             }
             base.current_image.onload = function () {
                 if (callback !== undefined)
                     callback();
             };
-
-
         },
-        resetImage: function () {
+        resetImage: function (above) {
             var base = this;
-            base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
+            if (above === undefined || above == false)
+                base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
             base.context.drawImage(base.current_image, 0, 0);
         },
         undo: function () {
@@ -102,8 +106,8 @@ define([
                     base.setImage(base.saved_states[--base.current_state], function () {
                         base.resetImage();
                     });
-                }
 
+                }
             }
         },
         redo: function () {
@@ -113,12 +117,25 @@ define([
                 if (base.saved_states[base.current_state + 1] !== undefined) {
                     base.setImage(base.saved_states[++base.current_state], function () {
                         base.resetImage();
-                        console.log(base.current_state);
                     });
                 }
 
 
             }
+        },
+        saveState: function () {
+            var base = this;
+            if (base.current_state < base.saved_states.length - 1) {
+                var new_states = [];
+                for (k in base.saved_states) {
+                    if (k <= base.current_state) {
+                        new_states.push(base.saved_states[k]);
+                    }
+                }
+                base.saved_states = new_states;
+            }
+            base.saved_states.push(base.current_image.src);
+            base.current_state = base.saved_states.length - 1;
         },
         initializeEvents: function () {
             var base = this;
@@ -140,7 +157,6 @@ define([
             base.$el.find(".tool").click(function () {
                 var elt = $(this);
                 base.current_tool = base.tools[elt.attr("data-id")];
-                console.log(elt.attr("data-id"));
                 base.$el.find(".ent_sch_dv_toolsize").val(base.current_tool.size);
             });
 
@@ -166,7 +182,7 @@ define([
                     });
                     color_index++;
                     color_index = color_index % 20;
-                }, 500);
+                }, 100);
             });
 
             base.$el.find(".color_chooser").click(function () {
@@ -184,35 +200,30 @@ define([
             base.drawing = false;
 
             base.canvas.mousedown(function (e) {
+                clearTimeout(base.share_timer)
                 base.drawing = true;
                 base.current_tool.mousedown(e);
             });
-
             base.canvas.mousemove(function (e) {
-                if (base.drawing)
+                if (base.drawing) {
+                    clearTimeout(base.share_timer)
                     base.current_tool.mousemove(e);
+                    base.SmartBlocks.websocket.send
+                }
+
             });
 
             $(document).mouseup(function (e) {
                 if (base.drawing) {
                     base.current_tool.mouseup(e);
                     base.drawing = false;
+                    base.setImage();
+                    base.saveState();
                 }
             });
 
             base.$el.find(".ent_sch_dv_save_button").click(function () {
-                var myImage = base.canvas[0].toDataURL("image/png");
-                console.log(myImage);
-                $.ajax({
-                    url: "/Enterprise/Schemas/share",
-                    type: "post",
-                    data: {
-                        image: myImage
-                    },
-                    success: function () {
-                        console.log("sent");
-                    }
-                });
+                base.save();
             });
 
             base.$el.find('.ent_sch_dv_undo_button').click(function (e) {
@@ -226,6 +237,51 @@ define([
             });
 
             base.setImage();
+            base.saveState();
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.app == "schemas") {
+                    base.setImage(message.data, function () {
+                        base.resetImage(true);
+                    }, true);
+                    base.saveState();
+                }
+            });
+           // base.load(19);
+        },
+        share_timer: 0,
+        share: function () {
+            var base = this;
+            clearTimeout(base.share_timer)
+            base.share_timer = setTimeout(function () {
+                var myImage = base.canvas[0].toDataURL("image/png");
+                $.ajax({
+                    url: "/Enterprise/Schemas/share",
+                    type: "post",
+                    data: {
+                        image: myImage,
+                        schema_id: base.schema.get('id')
+                    },
+                    success: function () {
+                    }
+                });
+            }, 250);
+        },
+        load: function (id) {
+            var base = this;
+            base.schema = new Schema({ id: id });
+            base.schema.fetch({
+                success: function (o) {
+                    base.schema = o;
+                    base.setImage(base.schema.get('data'), function () {
+                        base.resetImage();
+                    });
+                }
+            });
+
+        },
+        save: function () {
+            var base = this;
+            base.schema.save();
         }
 
     });
