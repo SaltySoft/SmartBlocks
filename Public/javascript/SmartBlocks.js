@@ -19,17 +19,28 @@ define([
             }, 3000)
         },
         server_handshake: function (websocket, identification) {
+            var base = this;
             if (websocket !== undefined) {
                 websocket.addEventListener("open", function (event) {
                     data_array = {};
                     data_array.identification = identification;
                     websocket.send(JSON.stringify(data_array));
                 });
+//                websocket.addEventListener("close", function () {
+//                    setTimeout(function () {
+//                        if ("WebSocket" in window) {
+//                            var websocket = new WebSocket(socket_server, "muffin-protocol");
+//                            base.websocket = websocket;
+//                        }
+//                        base.server_handshake(base.websocket, identification);
+//                    }, 1000);
+//                });
             }
 
         },
         parseWs: function (message) {
-            return JSON.parse(JSON.parse(message.data));
+            var ob = JSON.parse(JSON.parse(message.data));
+            return ob;
         },
         startLoading: function (message) {
             var base = this;

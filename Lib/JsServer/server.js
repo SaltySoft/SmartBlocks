@@ -19,15 +19,18 @@ function start(route, handle) {
 
 
     var wsServer = new WebSocketServer({
-        httpServer:httpServer,
-        autoAccceptConnections:false
+        httpServer: httpServer,
+        autoAccceptConnections: false
     });
 
     function originIsAllowed(origin) {
         return true;
     }
 
+
+
     var connections = new Array();
+
     wsServer.on('request', function (request) {
         if (!originIsAllowed(request.origin)) {
             request.reject();
@@ -35,38 +38,64 @@ function start(route, handle) {
             return;
         }
 
+
         var connection = request.accept("muffin-protocol", request.origin);
 
 
-        connection.on('message', function (message) {
+        console.log("Opened connection");
 
+
+
+        connection.on('message', function (message) {
+            var base = this;
             var session_id = JSON.parse(message.utf8Data).identification;
             if (session_id) {
                 if (!(session_id in connections) || !(connection in connections[session_id])) {
                     if (!(session_id in connections)) {
                         connections[session_id] = new Array();
+                        base.session = session_id;
                     }
-                    //console.log("New session : " + session_id);
                     connections[session_id].push(connection);
                 }
-            } else {
-                console.log(message);
-                if (message.session_ids) {
-                    for (k in connections) {
-                        // console.log(k + " : " + connections[k]);
-//                        connections[k]
+            }
+            else {
+                var pmessage = JSON.parse(message.utf8Data);
+                if (pmessage.session_ids) {
+                    for (kk in pmessage.session_ids) {
+                        if (connections[pmessage.session_ids[kk]]) {
+                            for (var con in  connections[pmessage.session_ids[kk]]) {
+                                pmessage.data.origin = base.session;
+                                connections[pmessage.session_ids[kk]][con].sendUTF(JSON.stringify(JSON.stringify(pmessage.data)));
+                            }
+                        }
                     }
+                }
+            }
+        });
+
+        connection.on('close', function (message) {
+            console.log("---------------------------------------close");
+            connectionsb = new Array();
+
+            for (key in connections) {
+                con2 = new Array();
+                console.log(key + " : " + connections[key]);
+                for (k in  connections[key]) {
+                    if (connections[key][k] == connection) {
+                        connections[key].splice(k, 1);
+                    }
+                }
+                console.log(key + " : " + connections[key]);
+                if (connections[key].length == 0) {
+                    delete connections[key];
                 }
 
             }
 
-
-
-            console.log(message);
         });
 
-        connection.on('close', function (message) {
-            console.log("---------------------------------------");
+        connection.on('error', function (message) {
+            console.log("---------------------------------------error");
             connectionsb = new Array();
 
             for (key in connections) {

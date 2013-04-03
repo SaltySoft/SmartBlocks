@@ -152,7 +152,8 @@ class User extends UserBase
             "lastname" => $this->getLastname(),
             "username" => $this->getName(),
             "jobs" => $jobs,
-            "groups" => $groups
+            "groups" => $groups,
+            "session_id" => $this->getSessionId()
         );
 
         if ($load_sub == 1)
