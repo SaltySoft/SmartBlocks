@@ -60,6 +60,7 @@ function start(route, handle) {
             }
             else {
                 var pmessage = JSON.parse(message.utf8Data);
+                console.log(pmessage);
                 if (pmessage.session_ids) {
                     for (kk in pmessage.session_ids) {
                         if (connections[pmessage.session_ids[kk]]) {

@@ -106,6 +106,23 @@ define([
                 }
             });
 
+        },
+        sendWs: function (app, data, to) {
+            data.app = app;
+
+            var array = [];
+            var sess = to;
+            for (var k in  sess) {
+                array[k] = sess[k];
+            }
+
+            var ob = {
+                session_ids: array,
+                data: data
+            };
+            if (this.websocket) {
+                this.websocket.send(JSON.stringify(ob));
+            }
         }
     };
 

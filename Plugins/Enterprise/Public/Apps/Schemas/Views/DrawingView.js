@@ -13,6 +13,9 @@ define([
             tools: {
 
             },
+            base_tools: {
+
+            },
             current_tool: undefined,
             saved_states: [],
             current_state: 0,
@@ -141,10 +144,16 @@ define([
                 base.drawing = false;
 
                 var brush = new Tools.Brush(base);
+                base.base_tools[0] = Tools.Brush;
+                base.base_tools[1] = Tools.LineTool;
+                base.base_tools[2] = Tools.RectangleTool;
                 base.tools[0] = brush;
                 base.tools[1] = new Tools.LineTool(base);
                 base.tools[2] = new Tools.RectangleTool(base);
+
+
                 base.current_tool = base.tools[0];
+                base.tool_id = 0;
 
                 base.$el.find(".saved_color").click(function () {
                     var elt = $(this);
@@ -155,7 +164,8 @@ define([
 
                 base.$el.find(".tool").click(function () {
                     var elt = $(this);
-                    base.current_tool = base.tools[elt.attr("data-id")];
+                    base.tool_id = elt.attr("data-id");
+                    base.current_tool = base.tools[base.tool_id];
                     base.$el.find(".ent_sch_dv_toolsize").val(base.current_tool.size);
                 });
 
@@ -202,42 +212,45 @@ define([
                     clearTimeout(base.share_timer)
                     base.drawing = true;
                     base.current_tool.mousedown(e);
+                    var x = e.pageX - base.canvas.offset().left;
+                    var y = e.pageY - base.canvas.offset().top;
+                    base.SmartBlocks.sendWs("schemas", {
+                        action: "mousedown",
+                        user: base.SmartBlocks.current_user.get('session_id'),
+                        x: x,
+                        y: y,
+                        size: base.current_tool.size,
+                        color: base.$el.find(".color_chooser").css("background-color"),
+                        tool_id: base.tool_id
+                    }, base.schema.get('sessions'));
                 });
-                var moving_timer = 0;
-                var sent = true;
+                var lastx = 0;
+                var lasty = 0;
+
+                var lastms = (new Date()).getTime();
                 base.canvas.mousemove(function (e) {
                     if (base.drawing) {
-                        clearTimeout(base.share_timer)
-                        base.current_tool.mousemove(e);
+//                        clearTimeout(base.share_timer)
+                        var ms =  (new Date()).getTime();
                         var x = e.pageX - base.canvas.offset().left;
                         var y = e.pageY - base.canvas.offset().top;
-
-                        if (base.current_tool.live_sharable) {
-                            if (sent) {
-                                moving_timer = setTimeout(function () {
-//                                var imageData = base.canvas[0].toDataURL("image/jpeg");
-                                    var array = [];
-                                    var sess = base.schema.get('sessions');
-                                    for (var k in  sess) {
-                                        array[k] = sess[k];
-                                    }
-                                    var myImage = base.canvas[0].toDataURL("image/png");
-                                    var ob = {
-                                        session_ids: sess,
-                                        data: {
-                                            image: myImage,
-                                            app: "schemas"
-                                        }
-                                    };
-
-                                    base.SmartBlocks.websocket.send(JSON.stringify(ob));
-                                    sent = true;
-                                }, 0);
-                                sent = false;
-                            }
+                        console.log(ms);
+                        console.log(ms > lastms + 50);
+                        if (ms > lastms + 50){
+                            lastx = x;
+                            lasty = y;
+                            lastms = ms;
+                            base.current_tool.mousemove(e);
+                            base.SmartBlocks.sendWs("schemas", {
+                                action: "mousemove",
+                                user: base.SmartBlocks.current_user.get('session_id'),
+                                x: x,
+                                y: y,
+                                size: base.current_tool.size,
+                                color: base.$el.find(".color_chooser").css("background-color"),
+                                tool_id: base.tool_id
+                            }, base.schema.get('sessions'));
                         }
-
-
 
                     }
 
@@ -247,21 +260,17 @@ define([
                     if (base.drawing) {
                         base.current_tool.mouseup(e);
                         base.drawing = false;
-                        var array = [];
-                        var sess = base.schema.get('sessions');
-                        for (var k in  sess) {
-                            array[k] = sess[k];
-                        }
-                        var myImage = base.canvas[0].toDataURL("image/png");
-                        var ob = {
-                            session_ids: sess,
-                            data: {
-                                image: myImage,
-                                app: "schemas"
-                            }
-                        };
-
-                        base.SmartBlocks.websocket.send(JSON.stringify(ob));
+                        var x = e.pageX - base.canvas.offset().left;
+                        var y = e.pageY - base.canvas.offset().top;
+                        base.SmartBlocks.sendWs("schemas", {
+                            action: "mouseup",
+                            user: base.SmartBlocks.current_user.get('session_id'),
+                            x: x,
+                            y: y,
+                            size: base.current_tool.size,
+                            color: base.$el.find(".color_chooser").css("background-color"),
+                            tool_id: base.tool_id
+                        }, base.schema.get('sessions'));
                         base.setImage();
                         base.saveState();
 
@@ -285,42 +294,57 @@ define([
                 base.setImage();
                 base.saveState();
 
+
                 base.SmartBlocks.events.on("ws_notification", function (message) {
-
+                    console.log("recepted");
                     if (message.app == "schemas") {
-                        if (message.origin != base.SmartBlocks.current_user.get('session_id')) {
-                            var image = new Image();
-                            console.log(message);
-                            image.src = message.image;
-                            image.onload = function () {
-                                base.context.drawImage(image, 0, 0);
+                        if (message.user != base.SmartBlocks.current_user.get('session_id')) {
+
+                            if (message.image) {
+                                var image = new Image();
+                                console.log(message);
+                                image.src = message.image;
+                                image.onload = function () {
+                                    base.context.drawImage(image, 0, 0);
+                                }
+                            } else {
+                                if (message.action == "mousedown") {
+
+                                    console.log("user", base.users[message.user]);
+                                    base.users[message.user].tool = new base.base_tools[message.tool_id](base);
+                                    if (!base.context) {
+                                        return;
+                                    }
+                                    var previous_color =  base.context.strokeStyle;
+                                    base.context.strokeStyle = message.color;
+                                    base.users[message.user].tool.size = message.size;
+                                    base.users[message.user].tool.mousedown(null, message.x, message.y);
+                                    base.context.strokeStyle = previous_color;
+                                    base.setImage();
+                                }
+                                if (message.action == "mousemove") {
+                                    var previous_color =  base.context.strokeStyle;
+                                    base.context.strokeStyle = message.color;
+                                    console.log(message.color);
+                                    base.users[message.user].tool.size = message.size;
+                                    base.users[message.user].tool.mousemove(null, message.x, message.y);
+                                    base.context.strokeStyle = previous_color;
+                                }
+                                if (message.action == "mouseup") {
+                                    var previous_color =  base.context.strokeStyle;
+                                    base.context.strokeStyle = message.color;
+                                    base.users[message.user].tool.size = message.size;
+                                    base.users[message.user].tool.mouseup(null, message.x, message.y);
+                                    base.context.strokeStyle = previous_color;
+                                    base.setImage();
+                                    base.saveState();
+                                }
                             }
-
-                            base.setImage();
-                            base.saveState();
                         }
-
                     }
                 });
             },
-            share_timer: 0,
-            share: function () {
-                var base = this;
-                clearTimeout(base.share_timer)
-                base.share_timer = setTimeout(function () {
-                    var myImage = base.canvas[0].toDataURL("image/png");
-                    $.ajax({
-                        url: "/Enterprise/Schemas/share",
-                        type: "post",
-                        data: {
-                            image: myImage,
-                            schema_id: base.schema.get('id')
-                        },
-                        success: function () {
-                        }
-                    });
-                }, 250);
-            },
+            users: {},
             load: function (id) {
                 var base = this;
                 base.schema = new Schema({ id: id });
@@ -330,7 +354,11 @@ define([
                         base.setImage(base.schema.get('data'), function () {
                             base.resetImage();
                         });
-
+                        base.users = {};
+                        var sessions = base.schema.get('sessions')
+                        for (var k in sessions){
+                            base.users[sessions[k]] = {};
+                        }
                     }
                 });
 
