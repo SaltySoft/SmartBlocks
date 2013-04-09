@@ -10,13 +10,35 @@
 
 }
 
+.ent_sch_dv_urb{
+    opacity: 0.7;
+    display: block;
+    float: left;
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+.size_chooser {
+    height: 50px;
+    line-height: 50px;
+}
+
+.ent_sch_dv_urb:hover {
+    opacity: 1;
+}
+
+.ent_sch_dv_toolsize {
+    width: 50px;
+}
+
 .ent_sch_drawview canvas {
-    cursor: url('/Enterprise/Apps/Schemas/Resources/brush.png'),url('/Enterprise/Apps/Schemas/Resources/brush.png'),default;
+    cursor: url('/Enterprise/Apps/Schemas/Resources/brush2.png'),url('/Enterprise/Apps/Schemas/Resources/brush2.png'),default;
 }
 
 .ent_sch_drawview canvas:active {
-
-    cursor: url('/Enterprise/Apps/Schemas/Resources/brush.png'),url('/Enterprise/Apps/Schemas/Resources/brush.png'),default;
+    cursor: url('/Enterprise/Apps/Schemas/Resources/brush2.png'),url('/Enterprise/Apps/Schemas/Resources/brush2.png'),default;
 }
 
 
@@ -80,29 +102,3 @@
 
 }
 
-.ent_sch_mv_shemas_container {
-    width: 500px;
-    margin: auto;
-}
-
-.ent_sch_schema_button_tile {
-    float: left;
-    width: 100px;
-    height: 100px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: #d3d3d3;
-    box-shadow: 0px 0px 10px grey;
-    text-align: center;
-    line-height: 100px;
-    cursor: pointer;
-}
-
-.ent_sch_schema_button_tile:hover {
-    box-shadow: 0px 0px 10px black;
-}
-
-.ent_sch_schema_button_tile a {
-    color: white;
-    text-decoration: none;
-}

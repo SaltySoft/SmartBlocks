@@ -1,0 +1,60 @@
+.ent_sch_mv_shemas_container {
+    height: 500px;
+    overflow: auto;
+    width: 800px;
+    margin: auto;
+    border: 1px gainsboro solid;
+}
+
+.ent_sch_mm {
+    width: 800px;
+    margin: auto;
+}
+
+.user_search_result {
+    height: 150px;
+}
+
+.user_selection {
+    height: 150px;
+}
+
+.ent_sch_mv_createdrawing_button {
+    float: right;
+}
+
+
+.ent_sch_schema_button_tile {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+    margin-top: 10px;
+    background-color: #d3d3d3;
+    box-shadow: 0px 0px 10px grey;
+    text-align: center;
+    line-height: 100px;
+    cursor: pointer;
+    padding: 20px;
+}
+
+.ent_sch_schema_button_tile:hover {
+    box-shadow: 0px 0px 10px black;
+}
+
+.ent_sch_schema_button_tile a {
+    color: white;
+    text-decoration: none;
+}
+
+#informations {
+    padding: 15px;
+    position: absolute;
+    display: none;
+    background-color: #ffffff;
+    border: 1px gainsboro solid;
+    box-shadow: 0px 0px 20px grey;
+    font-weight: bold;
+    color: grey;
+    font-size: 30;
+}

@@ -4,8 +4,7 @@ define([
     'backbone',
     'text!Enterprise/Apps/Schemas/Templates/draw_view.html',
     'Enterprise/Apps/Schemas/Business/Tools',
-    'Enterprise/Apps/Schemas/Models/Schema',
-    'ColorPicker'
+    'Enterprise/Apps/Schemas/Models/Schema'
 ], function ($, _, Backbone, DrawTemplate, Tools, Schema) {
     var DrawView = Backbone.View.extend({
             tagName: "div",
@@ -49,21 +48,26 @@ define([
                 if (!base.context) {
                     return;
                 }
-                var colorpicker = base.$el.find(".ent_sch_dv_colorpicker");
-                var slider = colorpicker.find(".slider")[0];
-                var picker = colorpicker.find(".picker")[0];
-                colorpicker.append(slider, picker);
+//                var colorpicker = base.$el.find(".ent_sch_dv_colorpicker");
+//                var slider = colorpicker.find(".slider")[0];
+//                var picker = colorpicker.find(".picker")[0];
+//                colorpicker.append(slider, picker);
 
-                ColorPicker(
-                    slider,
-                    picker,
-                    function (hex, hsv, rgb) {
-                        var color = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
-                        base.$el.find(".color_chooser").css("background-color", color);
-                        base.context.strokeStyle = color;
+//                ColorPicker(
+//                    slider,
+//                    picker,
+//                    function (hex, hsv, rgb) {
+//                        var color = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
+//                        base.$el.find(".color_chooser").css("background-color", color);
+//                        base.context.strokeStyle = color;
+//
+//
+//                    });
 
-
-                    });
+                base.$el.find(".ent_sch_dv_clrpicker").change(function () {
+                    var elt = $(this);
+                    base.context.strokeStyle = elt.val();
+                });
                 base.current_image = new Image();
                 base.initializeEvents();
             },
@@ -167,7 +171,7 @@ define([
                         x: x,
                         y: y,
                         size: base.current_tool.size,
-                        color: base.$el.find(".color_chooser").css("background-color"),
+                        color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                         tool_id: base.tool_id
                     }, base.schema.get('sessions'));
                 });
@@ -199,7 +203,7 @@ define([
                             x: x,
                             y: y,
                             size: base.current_tool.size,
-                            color: base.$el.find(".color_chooser").css("background-color"),
+                            color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                             tool_id: base.tool_id
                         }, base.schema.get('sessions'));
                     }
@@ -226,7 +230,7 @@ define([
                         x: x,
                         y: y,
                         size: base.current_tool.size,
-                        color: base.$el.find(".color_chooser").css("background-color"),
+                        color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                         tool_id: base.tool_id
                     }, base.schema.get('sessions'));
                     base.setImage();
@@ -256,8 +260,7 @@ define([
 
                 base.$el.find(".saved_color").click(function () {
                     var elt = $(this);
-                    var color = elt.css("background-color");
-                    base.$el.find(".color_chooser").css("background-color", color);
+                    base.$el.find(".ent_sch_dv_clrpicker").val(color);
                     base.context.strokeStyle = color;
                 });
 

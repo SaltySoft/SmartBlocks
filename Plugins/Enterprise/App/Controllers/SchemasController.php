@@ -100,11 +100,19 @@ class SchemasController extends \Controller
         $schema->setName(isset($data["name"]) ? $data["name"] : "new image");
         $filename = md5(microtime()).".png";
         $schema->setFilename($filename);
+
+        foreach ($data["participants"] as $p)
+        {
+            $user = \User::find($p["id"]);
+            if (is_object($user)) {
+                $schema->addParticipant($user);
+            }
+        }
        // echo base64_encode(base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
-
-        file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$filename, base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
-
-
+        if (isset($data["data"]))
+            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$filename, base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
+        else
+            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$filename, "");
         $schema->save();
         echo json_encode($schema->toArray());
 
