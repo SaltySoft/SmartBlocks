@@ -39,13 +39,14 @@ define([
         //Dashboard view: 1
         var dashboard = new DashboardView();
         dashboard.init(AppEvents);
-        app_view.addTab("Dashboard", dashboard.$el, "dashboard");
+        app_view.addTab("Dashboard", dashboard.$el, "show_dashboard");
 
         app_router.on('route:dashboard', function () {
             app_view.show(1);
         });
-
-        app_view.show(1);
+        app_router.on('route:home', function () {
+            app_view.show(1);
+        });
 
         Backbone.history.start();
     };

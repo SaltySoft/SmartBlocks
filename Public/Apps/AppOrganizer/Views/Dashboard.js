@@ -68,10 +68,8 @@ define([
                 base.$el.find(".nameLink").click(function (e) {
                     e.stopPropagation();
                 });
-
             }
-        })
-        ;
+        });
 
     return Dashboard;
 });

@@ -52,6 +52,11 @@ class User extends UserBase
      */
     private $jobs;
 
+    /**
+     * @OneToOne(targetEntity="NotePreference", inversedBy="user")
+     */
+    private $note_preference;
+
 
     public function __construct()
     {
@@ -193,5 +198,15 @@ class User extends UserBase
 
         }
         return $hasright;
+    }
+
+    public function setNotePreference($note_preference)
+    {
+        $this->note_preference = $note_preference;
+    }
+
+    public function getNotePreference()
+    {
+        return $this->note_preference;
     }
 }
