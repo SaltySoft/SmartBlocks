@@ -71,7 +71,7 @@
     /*background-position-x: -24px;*/
     /*background-size: 70%;*/
 
-    background-image: url('/images/dashboard_top_bg.png'), url('/images/dashboard_bottom_bg.png');
+    /*background-image: url('/images/dashboard_top_bg.png'), url('/images/dashboard_bottom_bg.png');*/
     background-position: center top, center bottom;
     background-size: 70%, 70%;
     background-repeat: repeat-x;
