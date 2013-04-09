@@ -16,6 +16,11 @@ class Note extends Model
     private $title;
 
     /**
+     * @Column(type="string", length=80)
+     */
+    private $description;
+
+    /**
      * @Column(type="boolean")
      */
     private $archived;
@@ -63,10 +68,22 @@ class Note extends Model
     public function toArray()
     {
         $noteArray = array();
+        $noteArray["id"] = $this->id;
         $noteArray["title"] = $this->title;
+        $noteArray["description"] = $this->description;
         $noteArray["archived"] = $this->archived;
         $noteArray["important"] = $this->important;
 
         return $noteArray;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
     }
 }

@@ -11,7 +11,6 @@
 
 .panel_container li {
     list-style: none;
-
 }
 
 .panel_container li a {
@@ -37,7 +36,7 @@
     float: left;
 }
 
-.createNoteCache {
+.noteCache {
     position: fixed;
     z-index: 10;
     background-color: rgba(0, 0, 0, 0.60);
@@ -66,5 +65,65 @@
 }
 
 .createNoteContent {
+    display: inline-block;
+}
+
+.dashboard_note {
+    border: none;
+    margin: 6px;
+    padding: 10px;
+    display: block;
+    float: left;
+    height: 172px;
+    width: 172px;
+    /*color: #000000;*/
+    color: #ffffff;
+    font-size: 18px;
+    background-color: #1c7783;
+}
+
+.dashboard_note a {
+    text-decoration: none;
+    /*color: #000000;*/
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_note a:active {
+    /*color: #000000;*/
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_note a:visited {
+    /*color: #000000;*/
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.dashboard_note a:hover {
+    /*color: #000000;*/
+    color: #ffffff;
+    font-size: 18px;
+}
+
+.editNote {
+    width: 400px;
+    margin: auto;
+    background-color: #024053;
+    float: left;
+    position: absolute;
+    padding: 10px;
+}
+
+.closeButtonEditNote {
+    margin: 3px;
+    z-index: 11;
+    cursor: pointer;
+    display: inline-block;
+    float: right;
+}
+
+.editNoteContent {
     display: inline-block;
 }

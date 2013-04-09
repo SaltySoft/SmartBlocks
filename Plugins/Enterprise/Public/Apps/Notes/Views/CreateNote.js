@@ -29,11 +29,11 @@ define([
             var top_gap = ($(window).height() - base.$el.find(".createNote").height()) / 2;
             base.$el.find(".createNote").css("left", left_gap + "px");
             base.$el.find(".createNote").css("top", top_gap + "px");
-            base.$el.find(".createNoteCache").fadeIn(200);
+            base.$el.find(".noteCache").fadeIn(200);
         },
         hide:function () {
             var base = this;
-            base.$el.find(".createNoteCache").fadeOut(100);
+            base.$el.find(".noteCache").fadeOut(100);
         },
         createNote:function (title) {
             var base = this;
