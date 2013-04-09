@@ -29,9 +29,6 @@ define([
         mousedown: function (e, x, y) {
             var base = this;
             base.drawing = true;
-            base.context.lineWidth = base.size;
-            base.context.lineJoin = "round";
-            base.context.lineCap = 'round';
             var posx = 0;
             var posy = 0;
             if (x !== undefined && y !== undefined){
@@ -47,26 +44,31 @@ define([
         mousemove: function (e, x, y) {
 
             var base = this;
-            base.context.beginPath();
-            base.context.moveTo(base.orx, base.ory);
-            var posx = 0;
-            var posy = 0;
-            if (x !== undefined && y !== undefined){
-                posx = x;
-                posy = y;
-            } else {
-                posx = e.pageX - base.canvas.offset().left;
-                posy = e.pageY - base.canvas.offset().top;
-            }
+
 
 
             if (base.drawing) {
+                var posx = 0;
+                var posy = 0;
+                if (x !== undefined && y !== undefined){
+                    posx = x;
+                    posy = y;
+                } else {
+                    posx = e.pageX - base.canvas.offset().left;
+                    posy = e.pageY - base.canvas.offset().top;
+                }
+
+                base.context.beginPath();
+                base.context.moveTo(base.orx, base.ory);
+                base.context.lineWidth = base.size;
+                base.context.lineJoin = "round";
+                base.context.lineCap = 'round';
                 base.context.lineTo(posx, posy);
                 base.context.stroke();
+                base.context.closePath();
+                base.orx = posx;
+                base.ory = posy;
             }
-            base.context.closePath();
-            base.orx = posx;
-            base.ory = posy;
         },
         mouseup: function (e, x, y) {
             var base = this;
@@ -104,9 +106,7 @@ define([
         mousedown: function (e, x, y) {
             var base = this;
 
-            base.context.lineWidth = base.size;
-            base.context.lineJoin = "round";
-            base.context.lineCap = 'round';
+
             base.drawing = true;
             var posx = 0;
             var posy = 0;
@@ -137,7 +137,9 @@ define([
             if (base.drawing) {
                 base.drawing_view.resetImage();
                 base.context.beginPath();
-
+                base.context.lineWidth = base.size;
+                base.context.lineJoin = "round";
+                base.context.lineCap = 'round';
                 base.context.moveTo(base.orx, base.ory);
                 base.context.lineTo(posx, posy);
                 base.context.stroke();
@@ -188,9 +190,7 @@ define([
         mousedown: function (e, x, y) {
             var base = this;
 
-            base.context.lineWidth = base.size;
-            base.context.lineJoin = "round";
-            base.context.lineCap = 'round';
+
 
             base.drawing = true;
 
@@ -209,7 +209,9 @@ define([
         },
         mousemove: function (e, x ,y) {
             var base = this;
-
+            base.context.lineWidth = base.size;
+            base.context.lineJoin = "round";
+            base.context.lineCap = 'round';
             var posx = 0;
             var posy = 0;
             if (x !== undefined && y !== undefined){
@@ -268,6 +270,9 @@ define([
         mousemove: function (e) {
             var base = this;
             if (base.drawing) {
+                base.context.lineWidth = base.size;
+                base.context.lineJoin = "round";
+                base.context.lineCap = 'round';
                 base.context.lineTo(e.pageX - base.canvas.offset().left, e.pageY - base.canvas.offset().top);
 
                 base.context.stroke();

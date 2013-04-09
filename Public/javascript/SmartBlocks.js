@@ -26,15 +26,6 @@ define([
                     data_array.identification = identification;
                     websocket.send(JSON.stringify(data_array));
                 });
-//                websocket.addEventListener("close", function () {
-//                    setTimeout(function () {
-//                        if ("WebSocket" in window) {
-//                            var websocket = new WebSocket(socket_server, "muffin-protocol");
-//                            base.websocket = websocket;
-//                        }
-//                        base.server_handshake(base.websocket, identification);
-//                    }, 1000);
-//                });
             }
 
         },

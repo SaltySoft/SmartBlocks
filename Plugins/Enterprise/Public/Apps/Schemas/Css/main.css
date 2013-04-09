@@ -79,3 +79,30 @@
     margin: 1px;
 
 }
+
+.ent_sch_mv_shemas_container {
+    width: 500px;
+    margin: auto;
+}
+
+.ent_sch_schema_button_tile {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: #d3d3d3;
+    box-shadow: 0px 0px 10px grey;
+    text-align: center;
+    line-height: 100px;
+    cursor: pointer;
+}
+
+.ent_sch_schema_button_tile:hover {
+    box-shadow: 0px 0px 10px black;
+}
+
+.ent_sch_schema_button_tile a {
+    color: white;
+    text-decoration: none;
+}

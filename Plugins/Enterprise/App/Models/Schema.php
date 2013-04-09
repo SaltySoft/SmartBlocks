@@ -118,6 +118,10 @@ class Schema extends \Model
             $participants[] = $p->getSessionId();
         }
 
+        if (!file_exists(ROOT.DS."Data".DS."Schemas".DS.$this->filename)) {
+            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename, "");
+        }
+
         $array = array(
             "id" => $this->id,
             "name" => $this->name,

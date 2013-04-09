@@ -24,10 +24,11 @@ define([
 
 
             },
-            init: function (SmartBlocks, id) {
+            init: function (SmartBlocks, SchemaController, id) {
                 var base = this;
                 base.SmartBlocks = SmartBlocks;
                 base.schema = new Schema();
+                base.controller = SchemaController;
                 base.render();
                 if (id) {
                     base.load(id);
@@ -67,14 +68,17 @@ define([
                 base.initializeEvents();
             },
             current_image: undefined,
+            image_ready: false,
             setImage: function (dataUrl, callback, above) {
                 var base = this;
                 base.current_image = new Image();
+                base.image_ready = false;
                 if (dataUrl !== undefined) {
                     if (above) {
                         var image = new Image();
                         image.src = dataUrl;
                         image.onload = function () {
+                            base.image_ready = true;
                             base.context.drawImage(image, 0, 0);
                             base.current_image.src = base.canvas[0].toDataURL("image/png");
                         };
@@ -84,12 +88,13 @@ define([
                     }
 
                 } else {
-                    dataUrl = base.canvas[0].toDataURL("image/png");
-                    base.current_image.src = dataUrl;
-//                    base.share();
-                    base.schema.set('data', dataUrl);
+                    var dataUrle = base.canvas[0].toDataURL("image/png");
+                    base.current_image.src = dataUrle;
+                    base.schema.set('data', dataUrle);
+                    console.log("SEt image");
                 }
                 base.current_image.onload = function () {
+                    base.image_ready = true;
                     if (callback !== undefined)
                         callback();
                 };
@@ -139,8 +144,102 @@ define([
                 base.saved_states.push(base.current_image.src);
                 base.current_state = base.saved_states.length - 1;
             },
+            drawing: false,
+            mouseDown: function (e, xx, yy) {
+                var base = this;
+                clearTimeout(base.share_timer)
+                base.drawing = true;
+                base.setImage(undefined, function () {
+                    base.current_tool.mousedown(e, xx, yy);
+                    var x = 0;
+                    var y = 0;
+                    if (xx !== undefined && yy !== undefined) {
+                        x = xx;
+                        y = yy;
+                    } else {
+                        x = e.pageX - base.canvas.offset().left;
+                        y = e.pageY - base.canvas.offset().top;
+                    }
+
+                    base.SmartBlocks.sendWs("schemas", {
+                        action: "mousedown",
+                        user: base.SmartBlocks.current_user.get('session_id'),
+                        x: x,
+                        y: y,
+                        size: base.current_tool.size,
+                        color: base.$el.find(".color_chooser").css("background-color"),
+                        tool_id: base.tool_id
+                    }, base.schema.get('sessions'));
+                });
+
+            },
+            mouseMove: function (e, xx, yy) {
+                var base = this;
+                if (base.drawing) {
+                    var ms = (new Date()).getTime();
+                    var x = 0;
+                    var y = 0;
+                    if (xx !== undefined && yy !== undefined) {
+                        x = xx;
+                        y = yy;
+                    } else {
+                        x = e.pageX - base.canvas.offset().left;
+                        y = e.pageY - base.canvas.offset().top;
+                    }
+                    console.log(ms);
+                    console.log(ms > base.lastms + 50);
+                    if (ms > base.lastms + 10) {
+                        lastx = x;
+                        lasty = y;
+                        base.lastms = ms;
+                        base.current_tool.mousemove(e, xx, yy);
+                        base.SmartBlocks.sendWs("schemas", {
+                            action: "mousemove",
+                            user: base.SmartBlocks.current_user.get('session_id'),
+                            x: x,
+                            y: y,
+                            size: base.current_tool.size,
+                            color: base.$el.find(".color_chooser").css("background-color"),
+                            tool_id: base.tool_id
+                        }, base.schema.get('sessions'));
+                    }
+
+                }
+            },
+            mouseUp: function (e, xx, yy) {
+                var base = this;
+                if (base.drawing) {
+                    base.current_tool.mouseup(e, xx, yy);
+                    base.drawing = false;
+                    var x = 0;
+                    var y = 0;
+                    if (xx !== undefined && yy !== undefined) {
+                        x = xx;
+                        y = yy;
+                    } else {
+                        x = e.pageX - base.canvas.offset().left;
+                        y = e.pageY - base.canvas.offset().top;
+                    }
+                    base.SmartBlocks.sendWs("schemas", {
+                        action: "mouseup",
+                        user: base.SmartBlocks.current_user.get('session_id'),
+                        x: x,
+                        y: y,
+                        size: base.current_tool.size,
+                        color: base.$el.find(".color_chooser").css("background-color"),
+                        tool_id: base.tool_id
+                    }, base.schema.get('sessions'));
+                    base.setImage();
+                    base.saveState();
+                }
+            },
             initializeEvents: function () {
                 var base = this;
+
+                base.$el.find(".ent_sch_dv_backtomenu_button").click(function () {
+                    base.controller.Menu();
+                });
+
                 base.drawing = false;
 
                 var brush = new Tools.Brush(base);
@@ -209,72 +308,19 @@ define([
                 base.drawing = false;
 
                 base.canvas.mousedown(function (e) {
-                    clearTimeout(base.share_timer)
-                    base.drawing = true;
-                    base.current_tool.mousedown(e);
-                    var x = e.pageX - base.canvas.offset().left;
-                    var y = e.pageY - base.canvas.offset().top;
-                    base.SmartBlocks.sendWs("schemas", {
-                        action: "mousedown",
-                        user: base.SmartBlocks.current_user.get('session_id'),
-                        x: x,
-                        y: y,
-                        size: base.current_tool.size,
-                        color: base.$el.find(".color_chooser").css("background-color"),
-                        tool_id: base.tool_id
-                    }, base.schema.get('sessions'));
+                    base.mouseDown(e);
                 });
                 var lastx = 0;
                 var lasty = 0;
 
-                var lastms = (new Date()).getTime();
+                base.lastms = (new Date()).getTime();
                 base.canvas.mousemove(function (e) {
-                    if (base.drawing) {
-//                        clearTimeout(base.share_timer)
-                        var ms =  (new Date()).getTime();
-                        var x = e.pageX - base.canvas.offset().left;
-                        var y = e.pageY - base.canvas.offset().top;
-                        console.log(ms);
-                        console.log(ms > lastms + 50);
-                        if (ms > lastms + 50){
-                            lastx = x;
-                            lasty = y;
-                            lastms = ms;
-                            base.current_tool.mousemove(e);
-                            base.SmartBlocks.sendWs("schemas", {
-                                action: "mousemove",
-                                user: base.SmartBlocks.current_user.get('session_id'),
-                                x: x,
-                                y: y,
-                                size: base.current_tool.size,
-                                color: base.$el.find(".color_chooser").css("background-color"),
-                                tool_id: base.tool_id
-                            }, base.schema.get('sessions'));
-                        }
-
-                    }
+                    base.mouseMove(e);
 
                 });
 
                 $(document).mouseup(function (e) {
-                    if (base.drawing) {
-                        base.current_tool.mouseup(e);
-                        base.drawing = false;
-                        var x = e.pageX - base.canvas.offset().left;
-                        var y = e.pageY - base.canvas.offset().top;
-                        base.SmartBlocks.sendWs("schemas", {
-                            action: "mouseup",
-                            user: base.SmartBlocks.current_user.get('session_id'),
-                            x: x,
-                            y: y,
-                            size: base.current_tool.size,
-                            color: base.$el.find(".color_chooser").css("background-color"),
-                            tool_id: base.tool_id
-                        }, base.schema.get('sessions'));
-                        base.setImage();
-                        base.saveState();
-
-                    }
+                    base.mouseUp(e);
                 });
 
                 base.$el.find(".ent_sch_dv_save_button").click(function () {
@@ -315,34 +361,90 @@ define([
                                     if (!base.context) {
                                         return;
                                     }
-                                    var previous_color =  base.context.strokeStyle;
+                                    var previous_color = base.context.strokeStyle;
                                     base.context.strokeStyle = message.color;
+                                    var previous_width = base.context.lineWidth;
                                     base.users[message.user].tool.size = message.size;
+                                    base.context.lineWidth = message.size;
                                     base.users[message.user].tool.mousedown(null, message.x, message.y);
                                     base.context.strokeStyle = previous_color;
+                                    base.context.lineWidth = previous_width;
                                     base.setImage();
                                 }
                                 if (message.action == "mousemove") {
-                                    var previous_color =  base.context.strokeStyle;
-                                    base.context.strokeStyle = message.color;
-                                    console.log(message.color);
-                                    base.users[message.user].tool.size = message.size;
-                                    base.users[message.user].tool.mousemove(null, message.x, message.y);
-                                    base.context.strokeStyle = previous_color;
+                                    if (base.image_ready) {
+                                        var previous_color = base.context.strokeStyle;
+                                        base.context.strokeStyle = message.color;
+                                        var previous_width = base.context.lineWidth;
+                                        console.log(message.color);
+                                        base.users[message.user].tool.size = message.size;
+                                        base.context.lineWidth = message.size;
+                                        base.users[message.user].tool.mousemove(null, message.x, message.y);
+                                        base.context.strokeStyle = previous_color;
+                                        base.context.lineWidth = previous_width;
+                                    }
+
+//                                    base.setImage();
                                 }
                                 if (message.action == "mouseup") {
-                                    var previous_color =  base.context.strokeStyle;
+                                    var previous_color = base.context.strokeStyle;
+                                    var previous_width = base.context.lineWidth;
                                     base.context.strokeStyle = message.color;
                                     base.users[message.user].tool.size = message.size;
+                                    base.context.lineWidth = message.size;
                                     base.users[message.user].tool.mouseup(null, message.x, message.y);
                                     base.context.strokeStyle = previous_color;
-                                    base.setImage();
+                                    base.context.lineWidth = previous_width;
                                     base.saveState();
                                 }
                             }
                         }
                     }
                 });
+                $(document).keyup(function (e) {
+                    if (e.keyCode == 79) {
+                        base.launchSimulation();
+                        base.simulation = true;
+                    }
+                });
+                $(document).keyup(function (e) {
+                    if (e.keyCode == 70) {
+                        base.simulateMouseUp();
+                        base.simulation = false;
+                    }
+                });
+            },
+            simulation: false,
+            simx: 50,
+            simy: 50,
+            launchSimulation: function () {
+                var base = this;
+                base.simulateMouseDown();
+                setInterval(function () {
+                    base.simulateMouseMove();
+                    base.simx++;
+                    if (base.simx > 400) {
+                        base.simx = 50;
+                        base.simy += 20;
+                    }
+                }, 50);
+
+            },
+            simulateMouseDown: function () {
+                var base = this;
+                base.mouseDown(null, base.simx, base.simy);
+            },
+            simulateMouseMove: function () {
+                var base = this;
+                if (base.simulation)
+                    base.mouseMove(null, base.simx, base.simy);
+            },
+            simulateMouseUp: function () {
+                var base = this;
+                if (base.simulation)
+                    base.mouseUp(null, base.simx, base.simy);
+                base.simx = 0;
+                base.simy = 0;
             },
             users: {},
             load: function (id) {
@@ -356,7 +458,7 @@ define([
                         });
                         base.users = {};
                         var sessions = base.schema.get('sessions')
-                        for (var k in sessions){
+                        for (var k in sessions) {
                             base.users[sessions[k]] = {};
                         }
                     }

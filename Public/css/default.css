@@ -53,11 +53,11 @@ body {
     width: 50px;
     background-color: black;
     height: 100%;
-    float: left;
     color: white;
     text-align: center;
-    position: relative;
+    position: absolute;
     z-index: 101;
+    position: fixed;
 
 }
 
@@ -321,3 +321,4 @@ button:hover {
 .search_result:hover {
     background-color: #d3d3d3;
 }
+

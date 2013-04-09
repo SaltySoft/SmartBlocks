@@ -11,7 +11,15 @@ class SchemasController extends \Controller
 {
     public function security_check()
     {
+        if (!\User::logged_in()) {
+            $this->redirect("/Enterprise/Schemas/error");
+        }
+    }
 
+    public function error() {
+        $this->render = false;
+        header("Content-Type: application/json");
+        echo json_encode(array("status" => "error", "message" => "You are not logged in"));
     }
 
     public function interface_security_check()
@@ -33,10 +41,14 @@ class SchemasController extends \Controller
      */
     public function index()
     {
+        $this->security_check();
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("s")
-            ->from("Enterprise\\Schema", "s");
+            ->from("Enterprise\\Schema", "s")
+            ->leftJoin("s.participants", "p")
+            ->where("s.creator = :user OR p = :user")
+            ->setParameter("user", \User::current_user());
 
         if (isset($_GET["page"])) {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);

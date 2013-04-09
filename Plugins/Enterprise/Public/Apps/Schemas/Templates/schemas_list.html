@@ -1,0 +1,6 @@
+<% _.each(schemas, function (schema) {%>
+<a class="ent_sch_schema_button_tile" data-id="<%= schema.get('id') %>">
+    <span href="javascript:void(0);"><%= schema.get('name') %></span>
+</a>
+<% }); %>
+<div style="clear: both"></div>
