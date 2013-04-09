@@ -17,7 +17,6 @@ define([
             base.folder_browser = folder_browser;
             base.shared_folders = new FoldersCollection();
             SmartBlocks.events.on("ws_notification", function (message) {
-                console.log(message);
                 if (message.app == "k_fs") {
                     if (message.status == "sharing_update")
                     {

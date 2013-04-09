@@ -32,9 +32,7 @@ define([
             base.new_messages = 0;
             base.app.discussions_notifs[base.model.get('id')] = 0;
             base.updateDiscussionNotif();
-            this.websocket.onopen = function () {
 
-            }
             base.unnotify();
             SmartBlocks.events.on("ws_notification", function (message) {
 //                var message = SmartBlocks.parseWs(data);
@@ -54,10 +52,7 @@ define([
                         base.getDiscussions();
                         SmartBlocks.stopLoading();
                     }
-
                 }
-
-
             });
 
 

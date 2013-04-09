@@ -3,6 +3,6 @@
     "token":"schemas",
     "description":"This app allows users to share schemas and drawings.",
     "link":"/Enterprise/Schemas/app",
-    "logo_url":"/Enterprise/Public/AppsSampleApp/Resources/logo.png",
+    "logo_url":"/Enterprise/Apps/Schemas/Resources/logo.png",
     "block_token":"sample_block"
 }

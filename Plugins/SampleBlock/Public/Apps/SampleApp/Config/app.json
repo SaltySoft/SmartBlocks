@@ -1,8 +1,0 @@
-{
-    "name":"SampleApplication",
-    "token":"sample_application",
-    "description":"this is a sample application",
-    "link":"SampleBlock/Public/Apps/SampleApp",
-    "logo_url":"/Apps/SampleApp/Resources/logo_annee90.png",
-    "block_token":"sample_block"
-}

@@ -427,7 +427,6 @@ class Router
             $model = "";
         }
         $rendered = false;
-
         if (file_exists(ROOT . DS . "App" . DS . "Controllers" . DS . $controller . ".php"))
         {
 
@@ -453,9 +452,12 @@ class Router
 
                 if (file_exists(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "Controllers" . DS . $controllerArray[count($controllerArray) - 1] . ".php"))
                 {
+
                     $controller_nam = $parameters["namespace"] . "\\" . $controller;
+
                     if ((int)method_exists($controller_nam, $action))
                     {
+
                         $dispatch = new $controller_nam($model, $controllerName, $action, $parameters["responseType"]);
                         $dispatch->setPlugin($plugin);
                         $dispatch->executeAction($action, $parameters);
@@ -463,6 +465,7 @@ class Router
                     }
                     else
                     {
+
                         //self::redirect(array());
                     }
                 }

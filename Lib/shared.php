@@ -179,14 +179,19 @@ function system_autoload($className)
 
         foreach ($plugins as $plugin)
         {
-            $classNameArray = explode(DS, $className);
+
+            $classNameArray = explode("\\", $className);
             $className = $classNameArray[count($classNameArray) - 1];
-            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Models".DS.$className.".php"))
+            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Models".DS.$className.".php")){
                 require_once(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Models".DS.$className.".php");
-            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Controllers".DS.$className.".php"))
+            }
+            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Controllers".DS.$className.".php")){
                 require_once(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Controllers".DS.$className.".php");
+            }
+
         }
     }
+
 }
 spl_autoload_register("system_autoload");
 

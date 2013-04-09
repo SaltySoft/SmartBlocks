@@ -14,16 +14,22 @@ if (app !== undefined) {
 
 requirejs(apps,
     function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, App) {
-        var websocket = new WebSocket(socket_server, "muffin-protocol");
-        SmartBlocks.websocket = websocket;
+        if ("WebSocket" in window) {
+            var websocket = new WebSocket(socket_server, "muffin-protocol");
+            SmartBlocks.websocket = websocket;
+        }
+
         SmartBlocks.events = _.extend({}, Backbone.Events);
         SmartBlocks.server_handshake(websocket, user_session);
-        websocket.onmessage = function(data) {
-            var message = SmartBlocks.parseWs(data);
-            SmartBlocks.events.trigger("ws_notification", message);
-        };
+        if (websocket !== undefined) {
+            websocket.onmessage = function(data) {
+                var message = SmartBlocks.parseWs(data);
+                SmartBlocks.events.trigger("ws_notification", message);
+            };
+        }
+
         ChatApp.initialize(websocket);
         FileSharingApp.initialize(SmartBlocks);
         if (App)
-            App.initialize();
+            App.initialize(SmartBlocks);
     });

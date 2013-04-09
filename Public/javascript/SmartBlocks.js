@@ -19,14 +19,19 @@ define([
             }, 3000)
         },
         server_handshake: function (websocket, identification) {
-            websocket.addEventListener("open", function (event) {
-                data_array = {};
-                data_array.identification = identification;
-                websocket.send(JSON.stringify(data_array));
-            });
+            var base = this;
+            if (websocket !== undefined) {
+                websocket.addEventListener("open", function (event) {
+                    data_array = {};
+                    data_array.identification = identification;
+                    websocket.send(JSON.stringify(data_array));
+                });
+            }
+
         },
         parseWs: function (message) {
-            return JSON.parse(JSON.parse(message.data));
+            var ob = JSON.parse(JSON.parse(message.data));
+            return ob;
         },
         startLoading: function (message) {
             var base = this;
@@ -92,6 +97,23 @@ define([
                 }
             });
 
+        },
+        sendWs: function (app, data, to) {
+            data.app = app;
+
+            var array = [];
+            var sess = to;
+            for (var k in  sess) {
+                array[k] = sess[k];
+            }
+
+            var ob = {
+                session_ids: array,
+                data: data
+            };
+            if (this.websocket) {
+                this.websocket.send(JSON.stringify(ob));
+            }
         }
     };
 
