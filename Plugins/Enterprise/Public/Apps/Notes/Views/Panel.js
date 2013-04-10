@@ -49,6 +49,15 @@ define([
             control_button.html("Importants");
             control_button_li.append(control_button);
             base.$el.find(".panel_container").append(control_button_li);
+
+            var control_button_li = $(document.createElement("li"));
+            control_button_li.addClass("panel_button");
+            var control_button = $(document.createElement("a"));
+            control_button.addClass("panel_button_link");
+            control_button.attr("href", "#show_archived");
+            control_button.html("Archived");
+            control_button_li.append(control_button);
+            base.$el.find(".panel_container").append(control_button_li);
         },
         show:function () {
 

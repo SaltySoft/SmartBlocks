@@ -1,5 +1,4 @@
 <div class="notes_container" >
-    <%= category %> </br>
     <% _.each(notes, function (note) {%>
     <div class="dashboard_note" data-flip="0" data-description="<%= note.get('description') %>" >
         <a class="name_link" href="#note_edition/<%= note.get('id') %>" data-id="<%= note.get('id') %>" ><%= note.get('title') %></a >

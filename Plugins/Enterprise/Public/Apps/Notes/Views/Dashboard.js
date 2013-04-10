@@ -90,7 +90,7 @@ define([
             var base = this;
 
             base.$el.find(".dashboard_note").click(function () {
-                alert("dash click");
+//                alert("dash click");
                 if ($(this).attr("data-flip") == 0) {
                     var randomNumber = Math.floor((Math.random() * 4) + 1);
                     var flipDir = 'tb';
@@ -115,7 +115,7 @@ define([
                 }
             });
             base.$el.find(".name_link").click(function (e) {
-                alert("name click");
+//                alert("name click");
                 e.stopPropagation();
             });
         }
