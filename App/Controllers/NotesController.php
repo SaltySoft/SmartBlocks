@@ -60,8 +60,8 @@ class NotesController extends Controller
         $data = $this->getRequestData();
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
-        $note->setImportant($data["importante"]);
-
+        $note->setImportant($data["important"]);
+        $note->setDescription("");
         $note->save();
 
         if (is_object($note))

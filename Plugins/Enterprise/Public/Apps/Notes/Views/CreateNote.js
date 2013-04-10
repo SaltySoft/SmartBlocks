@@ -51,7 +51,7 @@ define([
                 base.hide();
             });
             base.$el.find("#button_create_note").click(function () {
-                base.createNote(base.$el.find("#input_new_note_title").val());
+               base.createNote(base.$el.find("#input_new_note_title").val());
             });
         }
     });
