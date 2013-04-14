@@ -170,6 +170,7 @@ define([
                         user: base.SmartBlocks.current_user.get('session_id'),
                         x: x,
                         y: y,
+                        schema_id: base.schema.get("id"),
                         size: base.current_tool.size,
                         color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                         tool_id: base.tool_id
@@ -202,6 +203,7 @@ define([
                             user: base.SmartBlocks.current_user.get('session_id'),
                             x: x,
                             y: y,
+                            schema_id: base.schema.get("id"),
                             size: base.current_tool.size,
                             color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                             tool_id: base.tool_id
@@ -229,6 +231,7 @@ define([
                         user: base.SmartBlocks.current_user.get('session_id'),
                         x: x,
                         y: y,
+                        schema_id: base.schema.get("id"),
                         size: base.current_tool.size,
                         color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                         tool_id: base.tool_id
@@ -345,8 +348,9 @@ define([
 
 
                 base.SmartBlocks.events.on("ws_notification", function (message) {
-                    console.log("recepted");
-                    if (message.app == "schemas") {
+                    console.log(message);
+                    console.log(base.schema.get('id'));
+                    if (message.app == "schemas" && message.schema_id == base.schema.get('id')) {
                         if (message.user != base.SmartBlocks.current_user.get('session_id')) {
 
                             if (message.image) {
