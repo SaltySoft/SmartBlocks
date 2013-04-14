@@ -1,31 +1,42 @@
-<div class="blocks_container" >
+<div class="blocks_container">
     <% _.each(blocks, function (block) { %>
-    <% _.each(block.get('apps'), function (app) { %>
-    <div class="dashboard_app" style="background-color: <%= block.get('color')%>" data-flip="0"
-         data-description="<%= app.get('description') %>" data-link="<%= app.get('link') %>" >
-        <a class="nameLink" href="<%= app.get('link') %>" ><%= app.get('name') %></a >
+    <% if(block.get('apps').length > 0) { %>
+    <h3 class="block_name"><%= block.get('name') %></h3>
+    <div class="block_section">
 
-        <% if (!_.isNull(app.get('logoUrl'))) { %>
-        <!--<% if (!_.isUndefined(app.get('logo_url'))) { %>-->
-        <% if (block.get('token') != kernel) { %>
-        <div >
-            <img class="appLogo" src="<%= app.get('logo_url') %>" />
-        </div >
-        <% }
-        else { %>
-        <div >
-            <img class="appLogo" src="<%= app.get('logo_url') %>" />
-        </div >
-        <%}%>
-        <!--<%}%>-->
-        <% }
-        else { %>
-        <div >
-            <img class="appLogo" src="/Public/images/logo.png" />
-        </div >
+        <% _.each(block.get('apps'), function (app) { %>
+        <div class="dashboard_app" data-link="<%= app.get('link') %>" style="background-color: <%= block.get('color')%>" data-flip="0"
+             data-description="<%= app.get('description') %>" data-link="<%= app.get('link') %>">
+            <a class="nameLink" href="<%= app.get('link') %>"><%= app.get('name') %></a>
 
-        <%}%>
-    </div >
+            <% if (!_.isNull(app.get('logoUrl'))) { %>
+            <!--<% if (!_.isUndefined(app.get('logo_url'))) { %>-->
+            <% if (block.get('token') != kernel) { %>
+            <div>
+                <img class="appLogo" src="<%= app.get('logo_url') %>"/>
+            </div>
+            <% }
+            else { %>
+            <div>
+                <img class="appLogo" src="<%= app.get('logo_url') %>"/>
+            </div>
+            <%}%>
+            <!--<%}%>-->
+            <% }
+            else { %>
+            <div>
+                <img class="appLogo" src="/Public/images/logo.png"/>
+            </div>
+
+            <%}%>
+            <a href="javascript:void(0);" class="app_info_button">
+               <img src="/images/icons/information.png" />
+            </a>
+        </div>
+        <% }); %>
+        <div style="clear:both"></div>
+        <div style="clear:both"></div>
+    </div>
+    <% } %>
     <% }); %>
-    <% }); %>
-</div >
+</div>
