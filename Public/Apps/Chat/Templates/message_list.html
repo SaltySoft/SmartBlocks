@@ -13,7 +13,7 @@
 <% } %>
 <div class="k_chat_message <% if (message.get('sender').id == current_user.get('id')) { %>k_chat_message_cu<% } else { %>k_chat_message_ou<% } %>">
     <div class="k_chat_message_header">
-        <span style="font-weight: bold; color: grey">
+        <span style="font-weight: bold; color: white">
         <% opened++; %>
         <% if ((message.get('date').raw - (new Date().getTime()) / 1000) >= 24*60*60) { %>
 
@@ -35,7 +35,7 @@
     <div class="k_chat_message_content">
         <% if (Math.abs(date - Math.round(message.get('date').raw / 60)) > 5.5) { %>
 
-        <div style="font-weight: bold; color: grey">
+        <div style="font-weight: bold; color: white">
             <% date = Math.round(message.get('date').raw / 60) %>
 
             <% if ((message.get('date').raw - (new Date().getTime()) / 1000) >= 24*60*60) { %>

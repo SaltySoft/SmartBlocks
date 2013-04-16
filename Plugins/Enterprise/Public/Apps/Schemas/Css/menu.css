@@ -7,7 +7,7 @@
 }
 
 .ent_sch_mm {
-    width: 800px;
+    width: 100%;
     margin: auto;
 }
 
@@ -30,16 +30,36 @@
     height: 100px;
     margin-left: 10px;
     margin-top: 10px;
-    background-color: #d3d3d3;
-    box-shadow: 0px 0px 10px grey;
+    background-color: #f0f3f7;
     text-align: center;
     line-height: 100px;
     cursor: pointer;
     padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #aaaaaa;
+
+    /* Firefox */
+    -moz-transition: all 100ms ease-in;
+    /* WebKit */
+    -webkit-transition: all 100ms ease-in;
+    /* Opera */
+    -o-transition: all 100ms ease-in;
+    /* Standard */
+    transition: all 100ms ease-in;
 }
 
-.ent_sch_schema_button_tile:hover {
-    box-shadow: 0px 0px 10px black;
+.ent_sch_schema_button_tile:hover
+{
+    color: white;
+    background-color: rgba(110, 144, 254, 0.4);
+    /* Firefox */
+    -moz-transition: all 100ms ease-in;
+    /* WebKit */
+    -webkit-transition: all 100ms ease-in;
+    /* Opera */
+    -o-transition: all 100ms ease-in;
+    /* Standard */
+    transition: all 100ms ease-in;
 }
 
 .ent_sch_schema_button_tile a {
@@ -52,9 +72,9 @@
     position: absolute;
     display: none;
     background-color: #ffffff;
-    border: 1px gainsboro solid;
-    box-shadow: 0px 0px 20px grey;
+    border: 2px solid #cccccc;
     font-weight: bold;
-    color: grey;
+    color: black;
     font-size: 30;
+    border-radius: 30px;
 }

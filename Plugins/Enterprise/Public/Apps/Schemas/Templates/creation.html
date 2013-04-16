@@ -2,16 +2,16 @@
     <a href="javascript:void(0);" class="cancel_button"><img src="/images/icons/cross_close.png"/></a>
 </div>
 <div class="ent_sch_cv_form_container">
-    <h2>Create a new schema</h2>
+    <h2 id="ent_sch_cv_title">Create a new schema</h2>
 
     <form action="javascript:void(0);">
         <div class="form_field">
-            <label>Name</label>
-            <input type="text" name="name" class="ent_sch_cv_name" placeholder="Name of the drawing"/>
+            <label for="schema_creation_field_name">Name</label>
+            <input type="text" id="schema_creation_field_name" name="name" class="ent_sch_cv_name" placeholder="Name of the drawing"/>
         </div>
         <div class="form_field">
-            <label>Add users to this conversation :</label>
-            <input type="text" class="user_search_input" placeholder="Search for usernames"/>
+            <label for="schema_creation_field_user">Add users to this conversation</label>
+            <input type="text" id="schema_creation_field_user" class="user_search_input" placeholder="Search for usernames"/>
         </div>
         <div>
             <div class="users_choice">
@@ -32,5 +32,6 @@
             <button class="ent_sch_cv_validate">Create</button>
             <button class="cancel_button">Cancel</button>
         </div>
+        <div style="clear: both;"></div>
     </form>
 </div>
