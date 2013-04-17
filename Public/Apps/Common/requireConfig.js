@@ -24,7 +24,10 @@ var sb_paths = {
     ContextMenuView: "/Apps/Common/Views/ContextMenu",
 
     Class: '/Apps/Common/Useful/Class',
-    ColorPicker: '/javascript/colorpicker'
+    ColorPicker: '/javascript/colorpicker',
+    jScrollPane: '/javascript/jScrollPane',
+    jMouseWheel: '/javascript/jquery.mousewheel',
+    jEm: '/javascript/jquery.em'
 
 };
 
@@ -43,5 +46,8 @@ var sb_shims = {
     },
     'jqueryflip': {
         deps: ['jquery']
+    },
+    'jScrollPane': {
+        deps: ['jquery', 'jMouseWheel', 'jEm']
     }
 };

@@ -22,10 +22,10 @@ define([
             var base = this;
             base.old_title = $(document).attr('title');
         },
-        init: function (ChatApplication, AppEvents, current_user, websocket, callback) {
+        init: function (SmartBlocks, ChatApplication, AppEvents, current_user, websocket, callback) {
             var base = this;
             base.app = ChatApplication;
-
+            base.SmartBlocks = SmartBlocks;
             this.current_user = current_user;
             this.AppEvents = AppEvents;
             this.websocket = websocket;
@@ -183,6 +183,7 @@ define([
                 else
                     elt.hide();
             });
+            base.SmartBlocks.updateScrollPanes();
         },
         render: function (callback) {
             var base = this;

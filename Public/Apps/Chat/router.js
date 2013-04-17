@@ -19,8 +19,9 @@ define([
         });
 
 
-        var initialize = function (websocket) {
+        var initialize = function (SmartBlocks, websocket) {
             var base = this;
+            base.SmartBlocks = SmartBlocks;
             User.getCurrent(function (current_user) {
 
                     var ChatApplication = {
@@ -94,7 +95,7 @@ define([
                         ChatApplication.shown = true;
                         var discussion = new Discussion({ id: id });
                         var discussionView = new DiscussionView({ model: discussion });
-                        discussionView.init(ChatApplication, AppEvents, current_user, websocket, function () {
+                        discussionView.init(base.SmartBlocks, ChatApplication, AppEvents, current_user, websocket, function () {
                             discussion_container.html(discussionView.$el);
                         });
                     };
