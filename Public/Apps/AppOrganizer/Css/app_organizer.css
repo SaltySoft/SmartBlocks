@@ -31,6 +31,9 @@
     width: 172px;
     color: #ffffff;
     font-size: 18px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .dashboard_app_content {
@@ -83,9 +86,31 @@
     max-height: 75px;
     max-width: 75px;
     display: block;
-    float: right;
+    float: left;
     margin-top: 76px;
 }
+
+.app_info_button {
+    float: right;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+
+    width: 50px;
+    height: 50px;
+    line-height: 25px;
+    border-radius: 50px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    margin-right: -40px;
+    margin-bottom: -40px;
+    cursor: pointer;
+}
+
+.app_info_button:hover {
+    background-color: rgba(255, 255, 255, 1);
+}
+
 
 .bg1 {
     background-color: #2a83ec;
@@ -113,4 +138,10 @@
 
 .bg7 {
     background-color: #1c7783;
+}
+
+.block_section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #d3d3d3;
 }

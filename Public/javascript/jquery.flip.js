@@ -116,7 +116,7 @@ $.extend( $.fx.step, {
 $.fn.revertFlip = function(){
 	return this.each( function(){
 		var $this = $(this);
-		$this.flip($this.data('flipRevertedSettings'));		
+		$this.flip($this.data('flipRevertedSettings'));
 	});
 };
 
