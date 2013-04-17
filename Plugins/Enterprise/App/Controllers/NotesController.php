@@ -20,13 +20,11 @@ class NotesController extends \Controller
 
 //        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
 //        {
-            $qb->select("n")
-                ->from("Enterprise\\Note", "n");
+        $qb->select("n")
+            ->from("Enterprise\\Note", "n");
 //        }
         if (isset($_GET["importants"]) && $_GET["importants"] == "true")
         {
-            $qb->select("n")
-                ->from("Enterprise\\Note", "n");
             $qb->andWhere("n.important = 1");
         }
         $notes = $qb->getQuery()->getResult();
@@ -86,7 +84,7 @@ class NotesController extends \Controller
         $data = $this->getRequestData();
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
-        $note->setImportant($data["importante"]);
+        $note->setImportant(isset($data["importante"]) ? $data["importante"] : $note->getImportant());
 
         $note->save();
 
@@ -102,5 +100,27 @@ class NotesController extends \Controller
 
     public function destroy($params = array())
     {
+        $this->render = false;
+        header("Content-Type: application/json");
+
+        $note = Note::find($params["id"]);
+        if (is_object($note))
+        {
+            $note->delete();
+            $note = Note::find($params["id"]);
+            if (!is_object($note))
+            {
+                echo json_encode(array("success"));
+            }
+            else
+            {
+                echo json_encode(array("error"));
+            }
+        }
+        else
+        {
+            echo json_encode(array("error"));
+        }
+
     }
 }

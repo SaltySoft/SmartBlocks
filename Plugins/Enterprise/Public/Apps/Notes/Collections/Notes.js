@@ -4,7 +4,7 @@ define([
     "Enterprise/Apps/Notes/Models/Note"
 ], function (_, Backbone, Note) {
     var NotesCollection = Backbone.Collection.extend({
-        url:"/Notes",
+        url:"/Enterprise/Notes",
         model:Note
     });
 
