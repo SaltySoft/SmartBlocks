@@ -1,7 +1,7 @@
-<div>
+<div id="k_um_user_list_container">
     <ul class="k_um_user_list">
         <% _.each(users, function(user){ %>
-        <li><a href="#edit_user/<%= user.get('id') %>"><%= user.get("username") %></a></li>
+        <li><a class="k_um_user_card_link" href="#edit_user/<%= user.get('id') %>"><%= user.get("username") %></a></li>
         <% }); %>
     </ul>
     <% if (users.length == 0) { %>

@@ -1,25 +1,27 @@
-<h3>Carte de l'utilisateur <%= user.get('username') %></h3>
+<h3 style="text-align: center;">Carte de l'utilisateur <%= user.get('username') %></h3>
 <div class="form_field">
-    <button class="k_um_user_save_button">Save this user</button>
-    <button class="k_um_user_delete_button">Delete this user</button>
-    <div style="float: right" class="k_um_direct_data">
+    <div style="margin: auto; width: 215px;">
+        <button class="k_um_user_save_button">Save this user</button>
+        <button class="k_um_user_delete_button">Delete this user</button>
+    </div>
+    <div class="k_um_direct_data">
         <div class="field">
-            <label>Username (token): </label>
-            <input type="text" class="k_um_username_input" value="<%= username %>"/>
+            <label for="username_direct">Username</label>
+            <input type="text" id="username_direct" class="k_um_username_input" value="<%= username %>"/>
             <div style="clear: both"></div>
         </div>
         <div class="field">
-            <label>Firstname: </label>
-            <input type="text" class="k_um_firstname_input" value="<%= user.get('firstname') %>"/>
+            <label for="firstname_direct">Firstname</label>
+            <input type="text" id="firstname_direct" class="k_um_firstname_input" value="<%= user.get('firstname') %>"/>
             <div style="clear: both"></div>
         </div>
         <div class="field">
-            <label>Lastname: </label>
-            <input type="text" class="k_um_lastname_input" value="<%= user.get('lastname') %>"/>
+            <label for="lastname_direct">Lastname</label>
+            <input type="text" id="lastname_direct" class="k_um_lastname_input" value="<%= user.get('lastname') %>"/>
             <div style="clear: both"></div>
         </div>
     </div>
-    <fieldset>
+    <fieldset class="k_um_fieldset">
         <legend>Jobs</legend>
         <div style="clear:both"></div>
         <div class="k_um_user_job_container">
@@ -30,7 +32,7 @@
             </ul>
         </div>
     </fieldset>
-    <fieldset>
+    <fieldset class="k_um_fieldset">
         <legend>Groups</legend>
         <div class="k_um_user_group_container">
             <ul class="group_list_container k_um_group_list">

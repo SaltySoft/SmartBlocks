@@ -44,9 +44,11 @@
 
         </div>
     </div>
-    <div id="file_sharing_button">File Sharing</div>
+    {% if user_set %}
+    <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>
 
-    <div id="chat_button"><div id="chat_notif" class="chat_notif"></div>Chat</div>
+    <div id="chat_button"><div id="chat_notif" class="chat_notif"></div><p id="chat_text">Chat</p></div>
+    {% endif %}
 </div>
 <script type="text/javascript">
 

@@ -9,12 +9,103 @@
         margin: auto;
     }
 
-    #form input
+    .block
+    {
+        width: 400px;
+        margin: auto;
+        margin-top: 50px;
+        margin-bottom: 10px;
+        border: 1px solid #cccccc;
+        background-color: #f0f3f7;
+    }
+
+    form
+    {
+        width: 275px;
+        margin: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    form input
     {
         float: right;
     }
+
+    input[type=text], input[type=password]
+    {
+        padding: 0px 0px 0px 5px;
+        height: 18px;
+        border-radius: 4px;
+        border: 1px solid #cccccc;
+    }
+    input[type=submit] {
+        margin-top: 20px;
+        padding: 5px 10px 5px 10px;
+        background-color: #6e90fe;
+        border: 1px solid #dddddd;
+        color: #fff;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .form_line
+    {
+        margin-top: 15px;
+    }
+
+    #page_title
+    {
+        width: 100%;
+        height: 50px;
+        margin: 0px;
+        padding: 0px;
+        background-color: #6e90fe;
+        border-bottom: 1px solid #aaaaaa;
+    }
+    #title
+    {
+        font-style: italic;
+        padding-top: 7px;
+        margin-left: 30px;
+        color: #ffffff;
+    }
 </style>
-<div id="form">
+
+<div id="page_title">
+    <h1 id="title">Register</h1>
+</div>
+
+<div class="block">
+    <form action="/Users/create" method="post">
+        <div class="form_line">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="name"/>
+        </div>
+        <div style="clear: right"></div>
+        <div class="form_line">
+            <label for="mail">E-mail</label>
+            <input type="text" id="mail" name="mail"/>
+        </div>
+        <div style="clear: right"></div>
+        <div class="form_line">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"/>
+        </div>
+        <div style="clear: right"></div>
+        <div class="form_line">
+            <label for="repass">Confirm password</label>
+            <input type="password" id="repass" name="password"/>
+        </div>
+        <div style="clear: right"></div>
+        <div class="form_line">
+            <input type="submit" value="Register"/>
+        </div>
+        <div style="clear: right"></div>
+    </form>
+</div>
+
+<!--<div id="form">
     <h3>Register</h3>
     <form action="/Users/create" method="post" id="form_form">
         <div>
@@ -40,9 +131,9 @@
 
     </form>
     <div style="clear: right"></div>
-    <input type="submit" id="submit_button" value="Subscribe"/>
+    <input type="submit" id="submit_button" value="Register"/>
     <div style="clear: right"></div>
-</div>
+</div>-->
 <script type="text/javascript">
     $(document).ready(function () {
         $("#submit_button").click(function () {
