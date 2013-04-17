@@ -121,6 +121,5 @@ class NotesController extends \Controller
         {
             echo json_encode(array("error"));
         }
-
     }
 }
