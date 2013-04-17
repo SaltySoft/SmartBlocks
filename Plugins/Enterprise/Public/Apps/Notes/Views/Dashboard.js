@@ -33,7 +33,6 @@ define([
             base.notes_list = new NotesCollection();
 
             base.render();
-
         },
         render: function () {
             var base = this;
@@ -53,10 +52,8 @@ define([
                         category: "all"
                     });
                     base.$el.find(".notes_container").html(base.templateAllNotes);
-
                 }
             });
-
         },
         renderImportants: function () {
             var base = this;
@@ -74,7 +71,6 @@ define([
 
                 }
             });
-
         },
         changeNoteName: function (note, note_div) {
             note_div.removeClass("edited");
@@ -83,15 +79,12 @@ define([
             note.save({}, {
                 success: function () {
                     console.log("saved note");
-
                 },
                 error: function () {
                     console.log("error saving note");
                 }
             });
         },
-
-
         initializeEvents: function () {
             var base = this;
 

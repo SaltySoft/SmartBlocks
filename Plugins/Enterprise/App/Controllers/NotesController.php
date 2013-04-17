@@ -11,7 +11,6 @@ class NotesController extends \Controller
 
     public function index()
     {
-
         $this->render = false;
 //        header("Content-Type: application/json");
         $response = array();

@@ -1,13 +1,20 @@
-<ul>
+<ul >
     <% _.each(notes, function (note) {%>
     <li class="dashboard_note normal" data-flip="0" data-id="<%= note.get('id') %>"
-        data-description="<%= note.get('description') %>">
-        <div class="name_link "><span class="display"><a href="#note_edition/<%= note.get('id') %>"
-                                                               data-id="<%= note.get('id') %>"><%=
-            note.get('title') %></a></span><span class="edition"><input type="text"/></span></div>
-        <a href="javascript:void(0);" class="note_div_button delete_note_button"></a>
-        <a href="javascript:void(0);" class="note_div_button edit_note_button"></a>
+        data-description="<%= note.get('description') %>" >
+        <div class="name_link " >
+            <span class="display" >
+                <a href="#note_edition/<%= note.get('id') %>" data-id="<%= note.get('id') %>" >
+                    <%= note.get('title') %>
+                </a >
+            </span >
+            <span class="edition" >
+                <input type="text" />
+            </span >
+        </div >
+        <a href="javascript:void(0);" class="note_div_button delete_note_button" ></a >
+        <a href="javascript:void(0);" class="note_div_button edit_note_button" ></a >
 
-    </li>
+    </li >
     <% });%>
-</ul>
+</ul >
