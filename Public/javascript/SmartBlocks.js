@@ -2,8 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'jqueryui',
-    'jScrollPane'
+    'jqueryui'
 ], function ($, _, Backbone) {
 
     var func_set = {
@@ -115,9 +114,6 @@ define([
             if (this.websocket) {
                 this.websocket.send(JSON.stringify(ob));
             }
-        },
-        updateScrollPanes: function () {
-//            $('.scroll-pane').jScrollPane();
         }
     };
 

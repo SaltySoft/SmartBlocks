@@ -183,7 +183,6 @@ define([
                 else
                     elt.hide();
             });
-            base.SmartBlocks.updateScrollPanes();
         },
         render: function (callback) {
             var base = this;
