@@ -89,10 +89,11 @@
     background-color: #e4e7e7;
     font-weight: 100;
     cursor: pointer;
+    border-bottom: 1px #bebebe solid;
 }
 
 .dashboard_note:hover {
-    background-color: #9b9e9e;
+    background-color: #f3f7f7;
 }
 
 .dashboard_note .name_link {
@@ -101,24 +102,45 @@
     color: #a1a1a1;
     font-size: 18px;
     display: block;
-    width: 130px;
+    width: 110px;
     float: left;
 }
 
-.name_link.normal .display {
+.dashboard_note .note_div_button {
+    display: block;
+    width: 16px;
+    height: 16px;
+    float:right;
+    margin: 6px;
+}
+
+.dashboard_note .delete_note_button {
+    background-image: url("/images/icons/cross.png");
+}
+
+.dashboard_note.normal .edit_note_button {
+    background-image: url("/images/icons/pencil.png");
+}
+
+
+.dashboard_note.edited .edit_note_button {
+    background-image: url("/images/icons/tick.png");
+}
+
+.dashboard_note.normal .display {
     display: inline;
 }
 
-.name_link.edited .display {
+.dashboard_note.edited .display {
     display: none;
 }
 
 
-.name_link.normal .edition {
+.dashboard_note.normal .edition {
     display: none;
 }
 
-.name_link.edited .edition {
+.dashboard_note.edited .edition {
     display: inline;
 }
 

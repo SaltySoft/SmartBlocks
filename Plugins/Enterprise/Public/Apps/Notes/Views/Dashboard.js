@@ -25,26 +25,12 @@ define([
 
             var template = _.template(MainTemplate, {});
             base.$el.html(template);
-//            //Create Views
-//            var notes_panel = new PanelView();
-//            notes_panel.init(this.AppEvents);
-//            notes_panel.render();
+
             var panel_template = _.template(PanelTemplate, {});
             base.$el.find(".panel_container").html(panel_template);
-//            var create_note = new CreateNoteView();
-//            base.create_note = create_note;
-//            base.create_note.init(this.AppEvents);
-//            base.create_note.render();
-//            base.$el.prepend(base.create_note.$el);
-//            var edit_note = new EditNoteView();
-//            base.edit_note = edit_note;
-//            base.edit_note.init(this.AppEvents);
-//            base.$el.append(base.edit_note.$el);
 
             //Init notes collections
-            base.notes_collectionAll = new NotesCollection();
-
-            base.notes_collectionImportants = new NotesCollection();
+            base.notes_list = new NotesCollection();
 
             base.render();
 
@@ -56,14 +42,14 @@ define([
         },
         renderAll: function () {
             var base = this;
-            base.notes_collectionAll.fetch({
+            base.notes_list.fetch({
                 data: {
                     all: "true",
                     importants: "false"
                 },
                 success: function () {
                     base.templateAllNotes = _.template(DashboardTemplate, {
-                        notes: base.notes_collectionAll.models,
+                        notes: base.notes_list.models,
                         category: "all"
                     });
                     base.$el.find(".notes_container").html(base.templateAllNotes);
@@ -74,14 +60,14 @@ define([
         },
         renderImportants: function () {
             var base = this;
-            base.notes_collectionImportants.fetch({
+            base.notes_list.fetch({
                 data: {
                     all: "false",
                     importants: "true"
                 },
                 success: function () {
                     base.templateImportantsNotes = _.template(DashboardTemplate, {
-                        notes: base.notes_collectionImportants.models,
+                        notes: base.notes_list.models,
                         category: "importants"
                     });
                     base.$el.append(base.templateImportantsNotes);
@@ -90,20 +76,22 @@ define([
             });
 
         },
-        showCreateNote: function () {
-            var base = this;
-            base.create_note.show();
+        changeNoteName: function (note, note_div) {
+            note_div.removeClass("edited");
+            note.set("title", note_div.find("input").val());
+            note_div.find(".name_link .display a").html(note.get('title'));
+            note.save({}, {
+                success: function () {
+                    console.log("saved note");
 
+                },
+                error: function () {
+                    console.log("error saving note");
+                }
+            });
         },
-        showEditNote: function (id) {
-            var base = this;
-            base.edit_note.renderNote(id);
-        },
-        clear: function () {
-            var base = this;
-            base.$el.find(".notes_container").html("");
 
-        },
+
         initializeEvents: function () {
             var base = this;
 
@@ -117,27 +105,24 @@ define([
                 base.renderAll();
             });
 
+            base.$el.delegate(".dashboard_note input", "keyup", function (e) {
+                if (e.keyCode == 13) {
+                    var elt = $(this);
+                    var note_div = elt.closest(".dashboard_note");
+                    var note = base.notes_list.get(note_div.attr("data-id"));
+                    base.changeNoteName(note, note_div);
+                }
+            });
+
             base.$el.delegate(".edit_note_button", "click", function () {
                 var elt = $(this);
                 var note_div = elt.parent();
-                var name_container = note_div.find(".name_link");
-                var note = base.notes_collectionAll.get(note_div.attr("data-id"));
-                if (!name_container.hasClass("edited")) {
-                    name_container.addClass("edited");
+                var note = base.notes_list.get(note_div.attr("data-id"));
+                if (!note_div.hasClass("edited")) {
+                    note_div.addClass("edited");
                     note_div.find("input").val(note.get('title'));
                 } else {
-                    name_container.removeClass("edited");
-
-                    note.set("title", note_div.find("input").val());
-                    note.save({}, {
-                        success: function () {
-                            console.log("saved note");
-                            note_div.find(".name_link .display a").html(note.get('title'));
-                        },
-                        error: function () {
-                            console.log("error saving note");
-                        }
-                    });
+                    base.changeNoteName(note, note_div);
                 }
             });
 
@@ -145,7 +130,7 @@ define([
                 var elt = $(this);
                 var note_div = elt.parent();
                 if (confirm("Are you sure you want to delete this note ?")) {
-                    var note = base.notes_collectionAll.get(note_div.attr("data-id"));
+                    var note = base.notes_list.get(note_div.attr("data-id"));
                     note.destroy({
                         success: function () {
                             note_div.remove();
@@ -153,37 +138,6 @@ define([
                     });
                 }
             });
-
-
-//            base.$el.find(".dashboard_note").click(function () {
-////                alert("dash click");
-//                if ($(this).attr("data-flip") == 0) {
-//                    var randomNumber = Math.floor((Math.random() * 4) + 1);
-//                    var flipDir = 'tb';
-//                    if (randomNumber == 2)
-//                        flipDir = 'bt';
-//                    if (randomNumber == 3)
-//                        flipDir = 'lr';
-//                    if (randomNumber == 4)
-//                        flipDir = 'rl';
-//
-//                    $(this).flip({
-//                        direction:flipDir,
-//                        color:$(this).css("background-color"),
-//                        content:$(this).attr("data-description"),
-//                        speed:100
-//                    });
-//                    $(this).attr("data-flip", 1);
-//                }
-//                else {
-//                    $(this).revertFlip();
-//                    $(this).attr("data-flip", 0);
-//                }
-//            });
-//            base.$el.find(".name_link").click(function (e) {
-////                alert("name click");
-//                e.stopPropagation();
-//            });
         }
     });
     return Dashboard;
