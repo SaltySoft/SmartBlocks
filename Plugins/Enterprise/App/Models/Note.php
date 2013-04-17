@@ -1,9 +1,10 @@
 <?php
+namespace Enterprise;
 
-    /**
-     * @Entity @Table(name="notes")
-     */
-class Note extends Model
+/**
+ * @Entity @Table(name="ent_notes")
+ */
+class Note extends \Model
 {
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")

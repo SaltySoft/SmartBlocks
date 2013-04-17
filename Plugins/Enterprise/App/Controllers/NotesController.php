@@ -1,6 +1,8 @@
 <?php
 
-class NotesController extends Controller
+namespace Enterprise;
+
+class NotesController extends \Controller
 {
     public function dashboard($params = array())
     {
@@ -9,21 +11,22 @@ class NotesController extends Controller
 
     public function index()
     {
+
         $this->render = false;
-        header("Content-Type: application/json");
+//        header("Content-Type: application/json");
         $response = array();
-        $em = Model::getEntityManager();
+        $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
 
-        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
-        {
+//        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
+//        {
             $qb->select("n")
-                ->from("Note", "n");
-        }
+                ->from("Enterprise\\Note", "n");
+//        }
         if (isset($_GET["importants"]) && $_GET["importants"] == "true")
         {
             $qb->select("n")
-                ->from("Note", "n");
+                ->from("Enterprise\\Note", "n");
             $qb->andWhere("n.important = 1");
         }
         $notes = $qb->getQuery()->getResult();

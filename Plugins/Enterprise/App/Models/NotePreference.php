@@ -1,9 +1,11 @@
 <?php
 
+namespace Enterprise;
+
 /**
- * @Entity @Table(name="notePreferences")
+ * @Entity @Table(name="ent_note_preferences")
  */
-class NotePreference extends Model
+class NotePreference extends \Model
 {
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
@@ -16,7 +18,7 @@ class NotePreference extends Model
     private $notes;
 
     /**
-     * @OneToOne(targetEntity="User", mappedBy="note_preference")
+     * @OneToOne(targetEntity="\User", mappedBy="note_preference")
      */
     private $user;
 
