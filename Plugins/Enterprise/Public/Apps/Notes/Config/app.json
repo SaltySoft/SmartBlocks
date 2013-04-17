@@ -3,6 +3,6 @@
     "token":"notes",
     "description":"This app allows users to view the list of notes taken and classify them by categories.",
     "link":"/Notes/dashboard",
-    "logo_url":"/Apps/Notes/Resources/logo.png",
+    "logo_url":"/Enterprise/Apps/Notes/Resources/logo.png",
     "block_token":"enterprise"
 }
