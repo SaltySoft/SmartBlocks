@@ -79,6 +79,16 @@ define([
                         }
                     });
                 }
+
+                if (elt.attr("data-action") == "delete") {
+                    if (confirm("Are you sure you want to delete this text overlay ?")) {
+                        base.text.destroy({
+                            success: function () {
+                                base.$el.remove();
+                            }
+                        });
+                    }
+                }
             });
         }
     });
