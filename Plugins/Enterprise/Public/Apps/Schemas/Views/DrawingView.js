@@ -4,8 +4,10 @@ define([
     'backbone',
     'text!Enterprise/Apps/Schemas/Templates/draw_view.html',
     'Enterprise/Apps/Schemas/Business/Tools',
-    'Enterprise/Apps/Schemas/Models/Schema'
-], function ($, _, Backbone, DrawTemplate, Tools, Schema) {
+    'Enterprise/Apps/Schemas/Models/Schema',
+    'text!Enterprise/Apps/Schemas/Templates/text_overlay.html',
+    'Enterprise/Apps/Schemas/Views/TextOverlayView'
+], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlayView) {
     var DrawView = Backbone.View.extend({
             tagName: "div",
             className: "ent_sch_drawview",
@@ -103,11 +105,22 @@ define([
                         callback();
                 };
             },
+            updateTextOverlays: function () {
+                var base = this;
+                base.$el.find(".canvas_container").find(".text_overlay").remove();
+                var texts = base.schema.get("texts").models;
+                for (var k in texts) {
+                    var text = texts[k];
+                    var overlay_view = new TextOverlayView();
+                    base.$el.find(".canvas_container").append(overlay_view.init(text));
+                }
+            },
             resetImage: function (above) {
                 var base = this;
                 if (above === undefined || above == false)
                     base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
                 base.context.drawImage(base.current_image, 0, 0);
+                base.updateTextOverlays();
             },
             undo: function () {
                 var base = this;
@@ -151,6 +164,8 @@ define([
             drawing: false,
             mouseDown: function (e, xx, yy) {
                 var base = this;
+                base.$el.find(".draw_view_container").attr("onselectstart", "return false;");
+
                 clearTimeout(base.share_timer)
                 base.drawing = true;
                 base.setImage(undefined, function () {
@@ -193,11 +208,13 @@ define([
                     }
                     console.log(ms);
                     console.log(ms > base.lastms + 50);
-                    if (ms > base.lastms + 10) {
+                    if (ms > base.lastms + 25) {
                         lastx = x;
                         lasty = y;
                         base.lastms = ms;
+
                         base.current_tool.mousemove(e, xx, yy);
+
                         base.SmartBlocks.sendWs("schemas", {
                             action: "mousemove",
                             user: base.SmartBlocks.current_user.get('session_id'),
@@ -210,10 +227,13 @@ define([
                         }, base.schema.get('sessions'));
                     }
 
+
                 }
             },
             mouseUp: function (e, xx, yy) {
                 var base = this;
+                base.$el.find(".draw_view_container").attr("onselectstart", "");
+
                 if (base.drawing) {
                     base.current_tool.mouseup(e, xx, yy);
                     base.drawing = false;
@@ -352,7 +372,14 @@ define([
                     console.log(base.schema.get('id'));
                     if (message.app == "schemas" && message.schema_id == base.schema.get('id')) {
                         if (message.user != base.SmartBlocks.current_user.get('session_id')) {
-
+                            if (message.action == "update_text")
+                            {
+                                base.schema.fetch({
+                                    success: function() {
+                                        base.updateTextOverlays();
+                                    }
+                                });
+                            }
                             if (message.image) {
                                 var image = new Image();
                                 console.log(message);
@@ -409,10 +436,10 @@ define([
                     }
                 });
                 $(document).keyup(function (e) {
-                    if (e.keyCode == 79) {
-                        base.launchSimulation();
-                        base.simulation = true;
-                    }
+//                    if (e.keyCode == 79) {
+//                        base.launchSimulation();
+//                        base.simulation = true;
+//                    }
                 });
                 $(document).keyup(function (e) {
                     if (e.keyCode == 70) {

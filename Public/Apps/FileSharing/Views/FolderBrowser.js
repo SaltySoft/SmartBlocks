@@ -43,7 +43,7 @@ define([
         initializeEvents: function () {
             var base = this;
             base.$el.attr("oncontextmenu", "return false;");
-            base.$el.find(".k_fs_thumbnail").disableSelection();
+//            base.$el.find(".k_fs_thumbnail").disableSelection();
 
             base.$el.find(".k_fs_folder_tb").dblclick(function () {
                 var elt = $(this);

@@ -11,12 +11,14 @@ class SchemasController extends \Controller
 {
     public function security_check()
     {
-        if (!\User::logged_in()) {
+        if (!\User::logged_in())
+        {
             $this->redirect("/Enterprise/Schemas/error");
         }
     }
 
-    public function error() {
+    public function error()
+    {
         $this->render = false;
         header("Content-Type: application/json");
         echo json_encode(array("status" => "error", "message" => "You are not logged in"));
@@ -27,7 +29,8 @@ class SchemasController extends \Controller
 
     }
 
-    public function app($params = array()) {
+    public function app($params = array())
+    {
         $this->set("app", "Enterprise/Apps/Schemas/app");
     }
 
@@ -50,7 +53,8 @@ class SchemasController extends \Controller
             ->where("s.creator = :user OR p = :user")
             ->setParameter("user", \User::current_user());
 
-        if (isset($_GET["page"])) {
+        if (isset($_GET["page"]))
+        {
             $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
             $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
             $qb->setFirstResult(($page - 1) * $page_size)
@@ -58,7 +62,8 @@ class SchemasController extends \Controller
         }
 
 
-        if (isset($_GET["filter"]) && $_GET["filter"] != "") {
+        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        {
             $qb->andWhere("s.name LIKE :name")
                 ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
         }
@@ -67,7 +72,8 @@ class SchemasController extends \Controller
 
         $response = array();
 
-        foreach ($schemas as $schema) {
+        foreach ($schemas as $schema)
+        {
             $response[] = $schema->toArray();
         }
         $this->render = false;
@@ -82,9 +88,12 @@ class SchemasController extends \Controller
 
         $schema = Schema::find($params["id"]);
 
-        if (is_object($schema)) {
+        if (is_object($schema))
+        {
             echo json_encode($schema->toArray());
-        } else {
+        }
+        else
+        {
             echo json_encode(array("error"));
         }
     }
@@ -98,21 +107,22 @@ class SchemasController extends \Controller
         $schema = new Schema();
         $data = $this->getRequestData();
         $schema->setName(isset($data["name"]) ? $data["name"] : "new image");
-        $filename = md5(microtime()).".png";
+        $filename = md5(microtime()) . ".png";
         $schema->setFilename($filename);
 
         foreach ($data["participants"] as $p)
         {
             $user = \User::find($p["id"]);
-            if (is_object($user)) {
+            if (is_object($user))
+            {
                 $schema->addParticipant($user);
             }
         }
-       // echo base64_encode(base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
+        // echo base64_encode(base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
         if (isset($data["data"]))
-            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$filename, base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
+            file_put_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $filename, base64_decode(str_replace("data:image/png;base64,", "", $data["data"])));
         else
-            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$filename, "");
+            file_put_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $filename, "");
         $schema->save();
         echo json_encode($schema->toArray());
 
@@ -127,12 +137,26 @@ class SchemasController extends \Controller
         $schema = Schema::find($params["id"]);
         $data = $this->getRequestData();
         $schema->setName($data["name"]);
-        file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$schema->getFilename(), base64_decode(str_replace("data:image/png;base64,","",$data["data"])));
+        file_put_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $schema->getFilename(), base64_decode(str_replace("data:image/png;base64,", "", $data["data"])));
+        foreach ($data["texts"] as $text)
+        {
+            $s_text = SchemaText::find($text["id"]);
+            if (is_object($s_text))
+            {
+                $s_text->setPosx($text["x"]);
+                $s_text->setPosy($text["y"]);
+                $s_text->setContent($text["content"]);
+                $s_text->save();
+            }
+        }
         $schema->save();
 
-        if (is_object($schema)) {
+        if (is_object($schema))
+        {
             echo json_encode($schema->toArray());
-        } else {
+        }
+        else
+        {
             echo json_encode(array("error"));
         }
     }
@@ -150,11 +174,14 @@ class SchemasController extends \Controller
     }
 
 
-    public function share() {
+    public function share()
+    {
         $data = $this->getRequestData();
         $schema = Schema::find($_POST["schema_id"]);
-        if (is_object($schema)) {
-            foreach ($schema->getParticipants() as $user) {
+        if (is_object($schema))
+        {
+            foreach ($schema->getParticipants() as $user)
+            {
                 if ($user->getId() != \User::current_user()->getId())
                     \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "data" => urlencode($data["image"])));
             }

@@ -41,7 +41,7 @@ class SchemaTextsController extends \Controller
         {
             $schema = Schema::find($data["schema_id"]);
             $qb->andWhere("st.schema = :schema")
-            ->setParameter("schema", $schema);
+                ->setParameter("schema", $schema);
         }
 
         $schemas = $qb->getQuery()->getResult();
@@ -116,6 +116,18 @@ class SchemaTextsController extends \Controller
         if (is_object($schema))
         {
             $schema_text->setSchema($schema);
+            foreach ($schema->getParticipants() as $user)
+            {
+                if (is_object($user))
+                {
+                    \NodeDiplomat::sendMessage($user->getSessionId(), array(
+                        "app" => "schemas",
+                        "action" => "update_text",
+                        "schema_id" => $schema->getId(),
+                        "user" => \User::current_user()->getSessionId()
+                    ));
+                }
+            }
         }
 
 

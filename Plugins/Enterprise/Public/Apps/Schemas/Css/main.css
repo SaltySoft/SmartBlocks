@@ -134,3 +134,42 @@
     width: 800px;
     margin: auto;
 }
+
+.canvas_container {
+    position: relative;
+    width: 1000px;
+    height: 500px;
+    z-index: 0;
+}
+
+.text_overlay {
+    position: absolute;
+    z-index: 2;
+/*    pointer-events:none;*/
+}
+
+#ent_sch_dv_canvas {
+    position: absolute;
+    z-index: 2;
+}
+
+.text_overlay_edition {
+    display: none;
+}
+
+.text_overlay.normal .text_ov_edition {
+    display: none;
+}
+
+.text_overlay.edited .text_ov_edition {
+    display: inline;
+}
+
+.text_overlay.normal .text_ov_content {
+    display: inline;
+    cursor: move;
+}
+
+.text_overlay.edited .text_ov_content {
+    display: none;
+}
