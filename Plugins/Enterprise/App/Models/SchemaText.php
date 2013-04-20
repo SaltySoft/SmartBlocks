@@ -24,9 +24,9 @@
 namespace Enterprise;
 
 /**
- * @Entity @Table(name="schemas_n")
+ * @Entity @Table(name="schema_texts")
  */
-class Schema extends \Model
+class SchemaText extends \Model
 {
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
@@ -36,28 +36,26 @@ class Schema extends \Model
     /**
      * @Column(type="string")
      */
-    private $name;
+    private $content;
 
     /**
-     * @ManyToOne(targetEntity="\User")
+     * @Column(type="integer")
      */
-    private $creator;
+    private $posx;
 
     /**
-     * @ManyToMany(targetEntity="\User")
+     * @Column(type="integer")
      */
-    private $participants;
+    private $posy;
 
     /**
-     * @Column(type="string")
+     * @ManyToOne(targetEntity="\Enterprise\Schema")
      */
-    private $filename;
+    private $schema;
 
     public function __construct()
     {
-        $this->participants = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->creator = \User::current_user();
-        $this->name = "new schema";
+
     }
 
     public function getId()
@@ -65,73 +63,56 @@ class Schema extends \Model
         return $this->id;
     }
 
-    public function setName($name)
+    public function setContent($content)
     {
-        $this->name = $name;
+        $this->content = $content;
     }
 
-    public function getName()
+    public function getContent()
     {
-        return $this->name;
+        return $this->content;
     }
 
-    public function setCreator($creator)
+    public function setPosx($posx)
     {
-        $this->creator = $creator;
+        $this->posx = $posx;
     }
 
-    public function getCreator()
+    public function getPosx()
     {
-        return $this->creator;
+        return $this->posx;
     }
 
-    public function addParticipant($participant)
+    public function setPosy($posy)
     {
-        $this->participants[] = $participant;
+        $this->posy = $posy;
     }
 
-    public function removeParticipant($participant)
+    public function getPosy()
     {
-        $this->participants->removeElement($participant);
+        return $this->posy;
     }
 
-    public function getParticipants()
+    public function setSchema($schema)
     {
-        return $this->participants;
+        $this->schema = $schema;
     }
 
-    public function setFilename($filename)
+    public function getSchema()
     {
-        $this->filename = $filename;
-    }
-
-    public function getFilename()
-    {
-        return $this->filename;
+        return $this->schema;
     }
 
     public function toArray()
     {
-        $participants = array();
-
-        foreach ($this->participants as $p) {
-            $participants[] = $p->getSessionId();
-        }
-
-        if (!file_exists(ROOT.DS."Data".DS."Schemas".DS.$this->filename)) {
-            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename, "");
-        }
-
         $array = array(
             "id" => $this->id,
-            "name" => $this->name,
-            "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
-            "sessions" => $participants,
-            "data" =>"data:image/png;base64,". urlencode(base64_encode(file_get_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename))),
-            "contents" => file_get_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename)
+            "content" => $this->content,
+            "x" => $this->posx,
+            "y" => $this->posy,
+            "schema_id" => $this->schema->getId()
         );
         return $array;
-
     }
 
 
