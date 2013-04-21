@@ -7,8 +7,9 @@ define([
     'Enterprise/Apps/Schemas/Models/Schema',
     'text!Enterprise/Apps/Schemas/Templates/text_overlay.html',
     'Enterprise/Apps/Schemas/Models/SchemaText',
-    'Enterprise/Apps/Schemas/Views/TextOverlayView'
-], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView) {
+    'Enterprise/Apps/Schemas/Views/TextOverlayView',
+    'Enterprise/Apps/Schemas/Business/State'
+], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView, State) {
     var DrawView = Backbone.View.extend({
         tagName: "div",
         className: "ent_sch_drawview",
@@ -51,22 +52,6 @@ define([
             if (!base.context) {
                 return;
             }
-//                var colorpicker = base.$el.find(".ent_sch_dv_colorpicker");
-//                var slider = colorpicker.find(".slider")[0];
-//                var picker = colorpicker.find(".picker")[0];
-//                colorpicker.append(slider, picker);
-
-//                ColorPicker(
-//                    slider,
-//                    picker,
-//                    function (hex, hsv, rgb) {
-//                        var color = 'rgb(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ')';
-//                        base.$el.find(".color_chooser").css("background-color", color);
-//                        base.context.strokeStyle = color;
-//
-//
-//                    });
-
             base.$el.find(".ent_sch_dv_clrpicker").change(function () {
                 var elt = $(this);
                 base.context.strokeStyle = elt.val();
@@ -98,7 +83,6 @@ define([
                 var dataUrle = base.canvas[0].toDataURL("image/png");
                 base.current_image.src = dataUrle;
                 base.schema.set('data', dataUrle);
-                console.log("SEt image");
             }
             base.current_image.onload = function () {
                 base.image_ready = true;
@@ -111,11 +95,14 @@ define([
             base.$el.find(".canvas_container").find(".text_overlay").remove();
 
             var texts = base.schema.get("texts").models;
-
+            for (var k in base.saved_states) {
+                if (base.saved_states[k].schema.get("texts") !== undefined)
+                    console.log(k, base.saved_states[k].schema.get("texts").models[0]);
+            }
             for (var k in texts) {
                 var text = texts[k];
                 var overlay_view = new TextOverlayView();
-                base.$el.find(".canvas_container").append(overlay_view.init(text));
+                base.$el.find(".canvas_container").append(overlay_view.init(text, base));
             }
         },
         resetImage: function (above) {
@@ -130,9 +117,12 @@ define([
 
             if (base.current_state < base.saved_states.length && base.current_state >= 0) {
                 if (base.saved_states[base.current_state - 1] !== undefined) {
-                    base.setImage(base.saved_states[--base.current_state], function () {
+                    --base.current_state;
+                    base.setImage(base.saved_states[base.current_state].image, function () {
                         base.resetImage();
                     });
+                    base.schema = base.saved_states[base.current_state].schema;
+                    base.updateTextOverlays();
 
                 }
             }
@@ -142,9 +132,12 @@ define([
 
             if (base.current_state < base.saved_states.length && base.current_state >= 0) {
                 if (base.saved_states[base.current_state + 1] !== undefined) {
-                    base.setImage(base.saved_states[++base.current_state], function () {
+                    ++base.current_state
+                    base.setImage(base.saved_states[base.current_state].image, function () {
                         base.resetImage();
                     });
+                    base.schema = base.saved_states[base.current_state].schema;
+                    base.updateTextOverlays();
                 }
 
 
@@ -161,7 +154,22 @@ define([
                 }
                 base.saved_states = new_states;
             }
-            base.saved_states.push(base.current_image.src);
+            base.schema.get("texts").models[0].time = new Date().getTime();
+            var state = new State(base.schema, base.current_image.src);
+            base.saved_states.push(state);
+
+//            console.log("-----------------------------------");
+//            for (var k in base.saved_states) {
+//                console.log("DISPLAYING");
+//                var texts = base.saved_states[k].schema.get("texts").models;
+//                for (var j in texts)
+//                    console.log(texts[j].get("x"));
+//            }
+            base.schema.save({}, {
+                success: function () {
+                    console.log("saved schema");
+                }
+            });
             base.current_state = base.saved_states.length - 1;
         },
         drawing: false,
@@ -209,8 +217,6 @@ define([
                     x = e.pageX - base.canvas.offset().left;
                     y = e.pageY - base.canvas.offset().top;
                 }
-                console.log(ms);
-                console.log(ms > base.lastms + 50);
                 if (ms > base.lastms + 25) {
                     lastx = x;
                     lasty = y;
@@ -301,7 +307,7 @@ define([
             });
 
             base.$el.delegate(".text_tool", "click", function () {
-                var text= new TextOverlay({
+                var text = new TextOverlay({
                     content: "New text",
                     x: base.canvas.width() / 2,
                     y: base.canvas.height() / 2,
@@ -311,6 +317,7 @@ define([
                 base.schema.save({}, {
                     success: function () {
                         base.updateTextOverlays();
+                        base.saveState();
                     }
                 });
 
@@ -385,12 +392,10 @@ define([
             });
 
             base.setImage();
-            base.saveState();
+//            base.saveState();
 
 
             base.SmartBlocks.events.on("ws_notification", function (message) {
-                console.log(message);
-                console.log(base.schema.get('id'));
                 if (message.app == "schemas" && message.schema_id == base.schema.get('id')) {
                     if (message.user != base.SmartBlocks.current_user.get('session_id')) {
                         if (message.action == "update_text") {
@@ -402,15 +407,12 @@ define([
                         }
                         if (message.image) {
                             var image = new Image();
-                            console.log(message);
                             image.src = message.image;
                             image.onload = function () {
                                 base.context.drawImage(image, 0, 0);
                             }
                         } else {
                             if (message.action == "mousedown") {
-
-                                console.log("user", base.users[message.user]);
                                 base.users[message.user].tool = new base.base_tools[message.tool_id](base);
                                 if (!base.context) {
                                     return;
@@ -430,7 +432,6 @@ define([
                                     var previous_color = base.context.strokeStyle;
                                     base.context.strokeStyle = message.color;
                                     var previous_width = base.context.lineWidth;
-                                    console.log(message.color);
                                     base.users[message.user].tool.size = message.size;
                                     base.context.lineWidth = message.size;
                                     base.users[message.user].tool.mousemove(null, message.x, message.y);

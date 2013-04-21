@@ -16,7 +16,6 @@ define([
                 texts_array.add(text);
             }
             response.texts = texts_array;
-            console.log("Schema parsed data : ", response);
             return response;
         }
     });

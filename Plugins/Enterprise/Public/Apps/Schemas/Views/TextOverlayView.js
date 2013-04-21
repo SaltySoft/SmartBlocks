@@ -10,9 +10,10 @@ define([
         initialize: function () {
 
         },
-        init: function (text_overlay) {
+        init: function (text_overlay, drawing_view) {
             var base = this;
             base.text = text_overlay;
+            base.drawing_view = drawing_view;
             return base.render();
         },
         render: function () {
@@ -32,7 +33,7 @@ define([
                     base.text.set("y", base.$el.position().top);
                     base.text.save({}, {
                         success: function () {
-                            console.log("Saved schema text to db");
+                            base.drawing_view.saveState();
                         }
                     });
                 }
@@ -72,10 +73,9 @@ define([
                     text_overlay.find(".text_ov_content").html(value);
                     text_overlay.removeClass("edited");
                     text_overlay.addClass("normal");
-                    console.log(schema_text);
                     schema_text.save({}, {
                         success: function () {
-                            console.log("Saved schema text to db");
+                            base.drawing_view.saveState();
                         }
                     });
                 }

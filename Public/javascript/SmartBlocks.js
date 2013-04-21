@@ -31,7 +31,6 @@ define([
         },
         parseWs: function (message) {
             var ob = JSON.parse(JSON.parse(message.data));
-            console.log(message);
             return ob;
         },
         startLoading: function (message) {
