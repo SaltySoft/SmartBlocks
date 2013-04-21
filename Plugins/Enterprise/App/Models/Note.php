@@ -31,6 +31,11 @@ class Note extends \Model
      */
     private $important;
 
+    /**
+     * @OneToMany(targetEntity="Subnote", mappedBy="note")
+     */
+    private $subnotes;
+
     public function setArchived($archived)
     {
         $this->archived = $archived;
@@ -86,5 +91,20 @@ class Note extends \Model
     public function getDescription()
     {
         return $this->description;
+    }
+
+    public function setSubnotes($subnotes)
+    {
+        $this->subnotes = $subnotes;
+    }
+
+    public function addSubnote($subnote)
+    {
+        $this->subnotes[] = $subnote;
+    }
+
+    public function getSubnotes()
+    {
+        return $this->subnotes;
     }
 }

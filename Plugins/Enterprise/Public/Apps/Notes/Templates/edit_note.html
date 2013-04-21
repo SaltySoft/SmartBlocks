@@ -1,11 +1,23 @@
-<div id="cache_note_creation" class="noteCache" >
-    <div class="editNote" >
-        <img class="closeButtonEditNote" src="/images/myicons/close.png" >
+<div class="editNote" >
+    <img class="closeButtonEditNote" src="/images/myicons/close.png" >
 
-        <div class="editNoteContent" >
-            Edit the note
-            </br>
-            <%= note.get('title') %>
+
+    <div class="editNoteHeader" >
+        Edit the note
+        </br>
+        Titre : <%= note.get('title') %>
+        <a class="editNote_add_subnote_button" href="javascript:void(0);"
+           data-id="<%= note.get('id') %>" data-type="text" >
+            Add text content
+        </a >
+        </br>
+    </div >
+    <div class="editNoteContent" >
+        <% _.each(subnotes, function (subnote) {%>
+        <div class="editNoteSubnote" >
+            <%= subnote.get('content') %>
         </div >
+        <% });%>
+
     </div >
 </div >

@@ -4,9 +4,10 @@
         data-description="<%= note.get('description') %>" >
         <div class="name_link " >
             <span class="display" >
-                <a href="#note_edition/<%= note.get('id') %>" data-id="<%= note.get('id') %>" >
-                    <%= note.get('title') %>
-                </a >
+                <!--<a href="#note_edition/<%= note.get('id') %>" data-id="<%= note.get('id') %>" >-->
+                    <a class="note_edition_button" href="javascript:void(0);" data-id="<%= note.get('id') %>" >
+                        <%= note.get('title') %>
+                    </a >
             </span >
             <span class="edition" >
                 <input type="text" />
