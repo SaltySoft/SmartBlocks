@@ -300,6 +300,22 @@ define([
                 }
             });
 
+            base.$el.delegate(".text_tool", "click", function () {
+                var text= new TextOverlay({
+                    content: "New text",
+                    x: base.canvas.width() / 2,
+                    y: base.canvas.height() / 2,
+                    schema_id: base.schema.get("id")
+                });
+                base.schema.get("texts").add(text);
+                base.schema.save({}, {
+                    success: function () {
+                        base.updateTextOverlays();
+                    }
+                });
+
+            });
+
 
             base.$el.find(".ent_sch_dv_toolsize").val(base.current_tool.size);
 

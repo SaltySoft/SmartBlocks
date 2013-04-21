@@ -1,6 +1,6 @@
 .ent_sch_drawview {
-    width: 1000px;
-    height: 600px;
+    width: 1020px;
+
     padding: 5px;
 
     border-radius: 5px;
@@ -137,8 +137,8 @@
 
 .canvas_container {
     position: relative;
-    width: 1000px;
-    height: 500px;
+    width: 1020px;
+    height: 655px;
     z-index: 0;
 }
 

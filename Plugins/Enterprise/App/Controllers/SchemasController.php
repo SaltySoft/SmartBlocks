@@ -140,12 +140,16 @@ class SchemasController extends \Controller
         file_put_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $schema->getFilename(), base64_decode(str_replace("data:image/png;base64,", "", $data["data"])));
         foreach ($data["texts"] as $text)
         {
-            $s_text = SchemaText::find($text["id"]);
+            if (isset($text["id"]))
+                $s_text = SchemaText::find($text["id"]);
+            else
+                $s_text  = new SchemaText();
             if (is_object($s_text))
             {
                 $s_text->setPosx($text["x"]);
                 $s_text->setPosy($text["y"]);
                 $s_text->setContent($text["content"]);
+                $s_text->setSchema($schema);
                 $s_text->save();
             }
         }
