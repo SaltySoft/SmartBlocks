@@ -14,7 +14,7 @@ define([
     'text!Enterprise/Apps/Notes/Templates/edit_note.html',
     'Enterprise/Apps/Notes/Collections/Notes',
     'Enterprise/Apps/Notes/Collections/Subnotes'
-], function ($, _, Backbone, JqueryFlip, Subnote, Note, PanelView, CreateNoteView, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection, SubnotesCollection) {
+], function ($, _, Backbone, JqueryFlip, Note, Subnote, PanelView, CreateNoteView, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection, SubnotesCollection) {
     var Dashboard = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_dashboard",
