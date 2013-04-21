@@ -145,7 +145,6 @@
 .text_overlay {
     position: absolute;
     z-index: 2;
-/*    pointer-events:none;*/
 }
 
 #ent_sch_dv_canvas {
