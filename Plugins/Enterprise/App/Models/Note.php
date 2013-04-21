@@ -80,6 +80,14 @@ class Note extends \Model
         $noteArray["archived"] = $this->archived;
         $noteArray["important"] = $this->important;
 
+        $subnotes = array();
+
+        foreach ($this->subnotes as $subnote)
+        {
+            $subnotes[] = $subnote->toArray();
+        }
+        $noteArray["subnotes"] = $subnotes;
+
         return $noteArray;
     }
 
