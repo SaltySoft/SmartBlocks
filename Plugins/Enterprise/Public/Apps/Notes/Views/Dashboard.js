@@ -14,7 +14,7 @@ define([
     'text!Enterprise/Apps/Notes/Templates/edit_note.html',
     'Enterprise/Apps/Notes/Collections/Notes',
     'Enterprise/Apps/Notes/Collections/Subnotes'
-], function ($, _, Backbone, JqueryFlip, Subnote, Note, PanelView, CreateNoteView, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection, SubnotesCollection) {
+], function ($, _, Backbone, JqueryFlip, Note, Subnote, PanelView, CreateNoteView, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection, SubnotesCollection) {
     var Dashboard = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_dashboard",
@@ -84,17 +84,9 @@ define([
                 data:{
                 },
                 success:function () {
-                }
-            });
-
-            base.subnotes_list.fetch({
-                data:{
-                    note_id:id
-                },
-                success:function () {
                     base["template" + id] = _.template(EditNoteTemplate, {
                         note:base.note,
-                        subnotes:base.subnotes_list.models
+                        subnotes:base.note.get(subnotes).models
                     });
                     base.$el.find(".note_editor").html(base["template" + id]);
                 }
@@ -123,10 +115,6 @@ define([
                     important:false,
                     description:""
                 });
-                console.log("CREATED NOTE");
-
-                console.log(note);
-                console.log("CREATED NOTE end");
 
                 note.save({}, {
                     success:function () {
@@ -142,34 +130,7 @@ define([
             base.$el.delegate(".note_edition_button", "click", function () {
                 var elt = $(this);
                 var id = elt.attr("data-id");
-                base.note = new Note({
-                    id:id
-                });
-                base.note.fetch({
-                    data:{
-                    },
-                    success:function (data) {
-                        alert("succ1");
-                        base["template" + id] = _.template(EditNoteTemplate, {
-                            note:base.note
-                        });
-                        base.$el.find(".note_editor").html(base["template" + id]);
-                    }
-                });
-
-                base.subnotes_list.fetch({
-                    data:{
-                        note_id:id
-                    },
-                    success:function () {
-                        base["template" + id] = _.template(EditNoteTemplate, {
-                            note:base.note,
-                            subnotes:base.subnotes_list.models
-                        });
-                        alert("succ2");
-                        base.$el.find(".note_editor").html(base["template" + id]);
-                    }
-                });
+                base.renderEditNote(id);
             });
 
             base.$el.delegate(".editNote_add_subnote_button", "click", function () {
