@@ -61,7 +61,7 @@ class NotesController extends \Controller
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
         $note->setImportant($data["important"]);
-        $note->setDescription("");
+        $note->setDescription($data["description"]);
         $note->save();
 
         if (is_object($note))

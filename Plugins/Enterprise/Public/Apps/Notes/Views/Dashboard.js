@@ -72,7 +72,6 @@ define([
                         category:"importants"
                     });
                     base.$el.append(base.templateImportantsNotes);
-
                 }
             });
         },
@@ -84,9 +83,9 @@ define([
             base.note.fetch({
                 data:{
                 },
-                success:function (data) {
+                success:function () {
                 }
-            })
+            });
 
             base.subnotes_list.fetch({
                 data:{
@@ -121,9 +120,22 @@ define([
                 var note = new Note({
                     title:"New note",
                     archived:false,
-                    important:false
+                    important:false,
+                    description:""
                 });
-                note.save();
+                console.log("CREATED NOTE");
+
+                console.log(note);
+                console.log("CREATED NOTE end");
+
+                note.save({}, {
+                    success:function () {
+                        console.log("saved note");
+                    },
+                    error:function () {
+                        console.log("error saving note");
+                    }
+                });
                 base.renderAll();
             });
 
@@ -137,12 +149,13 @@ define([
                     data:{
                     },
                     success:function (data) {
+                        alert("succ1");
                         base["template" + id] = _.template(EditNoteTemplate, {
                             note:base.note
                         });
                         base.$el.find(".note_editor").html(base["template" + id]);
                     }
-                })
+                });
 
                 base.subnotes_list.fetch({
                     data:{
