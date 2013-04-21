@@ -86,7 +86,7 @@ define([
                 success:function () {
                     base["template" + id] = _.template(EditNoteTemplate, {
                         note:base.note,
-                        subnotes:base.note.get(subnotes).models
+                        subnotes:base.note.get("subnotes").models
                     });
                     base.$el.find(".note_editor").html(base["template" + id]);
                 }

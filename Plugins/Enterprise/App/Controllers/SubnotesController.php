@@ -41,10 +41,14 @@ class SubnotesController extends \Controller
 
         $subnote = new Subnote();
         $data = $this->getRequestData();
-        $subnote->setNote($data["note_id"]);
+        $note = Note::find($data["note_id"]);
+        $subnote->setNote($note);
         $subnote->setContent($data["content"]);
         $subnote->setType($data["type"]);
         $subnote->save();
+
+        $note->addSubnote($subnote);
+        $note->save();
 
         if (is_object($subnote))
         {
