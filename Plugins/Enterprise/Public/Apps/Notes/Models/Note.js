@@ -9,7 +9,6 @@ define([
         defaults: {
         },
         parse: function (response) {
-
             var subnotes_array = response.subnotes;
             var subnotes_collection = new SubnotesCollection();
 
