@@ -179,6 +179,7 @@ define([
 
             clearTimeout(base.share_timer)
             base.drawing = true;
+            base.$el.find(".text_overlay").css("pointer-events", "none");
             base.setImage(undefined, function () {
                 base.current_tool.mousedown(e, xx, yy);
                 var x = 0;
@@ -242,7 +243,7 @@ define([
         mouseUp: function (e, xx, yy) {
             var base = this;
             base.$el.find(".draw_view_container").attr("onselectstart", "");
-
+            base.$el.find(".text_overlay").css("pointer-events", "auto");
             if (base.drawing) {
                 base.current_tool.mouseup(e, xx, yy);
                 base.drawing = false;
