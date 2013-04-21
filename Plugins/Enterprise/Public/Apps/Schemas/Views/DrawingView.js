@@ -8,8 +8,9 @@ define([
     'text!Enterprise/Apps/Schemas/Templates/text_overlay.html',
     'Enterprise/Apps/Schemas/Models/SchemaText',
     'Enterprise/Apps/Schemas/Views/TextOverlayView',
-    'Enterprise/Apps/Schemas/Business/State'
-], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView, State) {
+    'Enterprise/Apps/Schemas/Business/State',
+    'Apps/Common/Views/ColorPicker'
+], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView, State, ColorPickerView) {
     var DrawView = Backbone.View.extend({
         tagName: "div",
         className: "ent_sch_drawview",
@@ -56,6 +57,10 @@ define([
                 var elt = $(this);
                 base.context.strokeStyle = elt.val();
             });
+
+            base.color_picker = new ColorPickerView();
+            base.$el.find(".color_picker_holder").html(base.color_picker.$el);
+
             base.current_image = new Image();
             base.initializeEvents();
         },
@@ -143,84 +148,87 @@ define([
 
             }
         },
+        /**
+         * Disabled state saving for now
+         */
         saveState: function () {
             var base = this;
-            if (base.current_state < base.saved_states.length - 1) {
-                var new_states = [];
-                for (k in base.saved_states) {
-                    if (k <= base.current_state) {
-                        new_states.push(base.saved_states[k]);
-                    }
-                }
-                base.saved_states = new_states;
-            }
-            base.schema.get("texts").models[0].time = new Date().getTime();
-            var state = new State(base.schema, base.current_image.src);
-            base.saved_states.push(state);
 
-//            console.log("-----------------------------------");
-//            for (var k in base.saved_states) {
-//                console.log("DISPLAYING");
-//                var texts = base.saved_states[k].schema.get("texts").models;
-//                for (var j in texts)
-//                    console.log(texts[j].get("x"));
+//            if (base.current_state < base.saved_states.length - 1) {
+//                var new_states = [];
+//                for (k in base.saved_states) {
+//                    if (k <= base.current_state) {
+//                        new_states.push(base.saved_states[k]);
+//                    }
+//                }
+//                base.saved_states = new_states;
 //            }
-            base.schema.save({}, {
-                success: function () {
-                    console.log("saved schema");
-                }
-            });
+//            var state = new State(base.schema, base.current_image.src);
+//            base.saved_states.push(state);
+            if (base.schema.get("name").length > 0)
+                base.schema.save({}, {
+                    success: function () {
+                        console.log("saved schema");
+                    }
+                });
             base.current_state = base.saved_states.length - 1;
         },
         drawing: false,
+        counted_speed: 0,
         mouseDown: function (e, xx, yy) {
             var base = this;
-            base.$el.find(".draw_view_container").attr("onselectstart", "return false;");
-
-            clearTimeout(base.share_timer)
+//            base.$el.find(".draw_view_container").attr("onselectstart", "return false;");
             base.drawing = true;
-            base.$el.find(".text_overlay").css("pointer-events", "none");
-            base.setImage(undefined, function () {
-                base.current_tool.mousedown(e, xx, yy);
-                var x = 0;
-                var y = 0;
-                if (xx !== undefined && yy !== undefined) {
-                    x = xx;
-                    y = yy;
-                } else {
-                    x = e.pageX - base.canvas.offset().left;
-                    y = e.pageY - base.canvas.offset().top;
-                }
+//            base.$el.find(".text_overlay").css("pointer-events", "none");
+            base.lastms = (new Date()).getTime();
+            console.log("mousedown start");
 
-                base.SmartBlocks.sendWs("schemas", {
-                    action: "mousedown",
-                    user: base.SmartBlocks.current_user.get('session_id'),
-                    x: x,
-                    y: y,
-                    schema_id: base.schema.get("id"),
-                    size: base.current_tool.size,
-                    color: base.$el.find(".ent_sch_dv_clrpicker").val(),
-                    tool_id: base.tool_id
-                }, base.schema.get('sessions'));
-            });
+            var x = 0;
+            var y = 0;
+            if (xx !== undefined && yy !== undefined) {
+                x = xx;
+                y = yy;
+            } else {
+                x = e.pageX - base.canvas.offset().left;
+                y = e.pageY - base.canvas.offset().top;
+            }
+            base.counted_speed = 0;
+            base.current_tool.mousedown(e, xx, yy);
+            console.log("mousedown stop", (new Date()).getTime() - base.lastms);
+            base.SmartBlocks.sendWs("schemas", {
+                action: "mousedown",
+                user: base.SmartBlocks.current_user.get('session_id'),
+                x: x,
+                y: y,
+                schema_id: base.schema.get("id"),
+                size: base.current_tool.size,
+                color: base.$el.find(".ent_sch_dv_clrpicker").val(),
+                tool_id: base.tool_id
+            }, base.schema.get('sessions'));
+//            base.setImage(undefined, function () {
+//            });
 
         },
         mouseMove: function (e, xx, yy) {
             var base = this;
+            var ms = (new Date()).getTime();
+
             if (base.drawing) {
-                var ms = (new Date()).getTime();
-                var x = 0;
-                var y = 0;
-                if (xx !== undefined && yy !== undefined) {
-                    x = xx;
-                    y = yy;
-                } else {
-                    x = e.pageX - base.canvas.offset().left;
-                    y = e.pageY - base.canvas.offset().top;
-                }
                 if (ms > base.lastms + 25) {
-                    lastx = x;
-                    lasty = y;
+                    var x = 0;
+                    var y = 0;
+                    if (xx !== undefined && yy !== undefined) {
+                        x = xx;
+                        y = yy;
+                    } else {
+                        x = e.pageX - base.canvas.offset().left;
+                        y = e.pageY - base.canvas.offset().top;
+                    }
+                    if (base.counted_speed < 2) {
+                        console.log(ms - base.lastms);
+                        base.counted_speed++;
+                    }
+
                     base.lastms = ms;
 
                     base.current_tool.mousemove(e, xx, yy);
@@ -291,15 +299,15 @@ define([
             base.current_tool = base.tools[0];
             base.tool_id = 0;
 
-            base.$el.find(".saved_color").click(function () {
-                var elt = $(this);
+            base.color_picker.on("color_changed", function (color) {
                 base.$el.find(".ent_sch_dv_clrpicker").val(color);
                 base.context.strokeStyle = color;
             });
 
+            base.context.strokeStyle = base.$el.find(".ent_sch_dv_clrpicker").val();
+
             base.$el.find(".tool").click(function () {
                 var elt = $(this);
-
                 if (elt.attr("data-id") !== undefined) {
                     base.tool_id = elt.attr("data-id");
                     base.current_tool = base.tools[base.tool_id];
@@ -426,7 +434,7 @@ define([
                                 base.users[message.user].tool.mousedown(null, message.x, message.y);
                                 base.context.strokeStyle = previous_color;
                                 base.context.lineWidth = previous_width;
-                                base.setImage();
+//                                base.setImage();
                             }
                             if (message.action == "mousemove") {
                                 if (base.image_ready) {
@@ -523,6 +531,7 @@ define([
         },
         save: function () {
             var base = this;
+
             base.schema.save();
         }
     });

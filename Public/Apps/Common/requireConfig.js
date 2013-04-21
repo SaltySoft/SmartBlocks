@@ -24,9 +24,11 @@ var sb_paths = {
     ContextMenuView: "/Apps/Common/Views/ContextMenu",
 
     Class: '/Apps/Common/Useful/Class',
-    ColorPicker: '/javascript/colorpicker',
+    ColorPicker: '/Apps/Common/Views/ColorPicker',
 
     jDeepCopy: '/javascript/jqueryDeepCopy'
+
+
 
 };
 
