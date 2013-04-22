@@ -152,6 +152,8 @@
     z-index: 2;
 }
 
+
+
 .text_overlay_edition {
     display: none;
 }
@@ -167,6 +169,10 @@
 .text_overlay.normal .text_ov_content {
     display: inline;
     cursor: move;
+    text-shadow: 0px 0px 11px white;
+    font-weight: bold;
+    background-color: rgba(255,255,255,0.5);
+    padding: 2px;
 }
 
 .text_overlay.edited .text_ov_content {

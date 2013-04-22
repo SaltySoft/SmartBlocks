@@ -7,9 +7,10 @@ define([
     var ColorPicker = Backbone.View.extend({
         tagName: "div",
         className: 'color_picker',
-        initialize: function () {
+        initialize: function (size) {
             var base = this;
             base.color = "grey";
+            base.size = size;
             return base.render();
         },
         render: function () {
@@ -28,6 +29,10 @@ define([
             base.background.onload = function () {
                 base.context.drawImage(base.background, 0, 0);
             };
+            if (base.size !== undefined) {
+                base.$el.find(".color_picker_square").css("width", base.size);
+                base.$el.find(".color_picker_square").css("height", base.size);
+            }
 
             base.initializeEvents();
             return base.$el;
