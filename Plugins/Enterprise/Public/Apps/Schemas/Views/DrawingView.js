@@ -34,7 +34,9 @@ define([
             base.schema = new Schema();
             base.controller = SchemaController;
             base.render();
+            base.id = id;
             if (id) {
+                console.log("loading");
                 base.load(id);
             }
         },
@@ -95,6 +97,25 @@ define([
                     callback();
             };
         },
+        saveImageState: function (callback) {
+            var base = this;
+            var dataUrl = base.canvas[0].toDataURL("image/png");
+            base.current_image.src = dataUrl;
+            base.schema.set('data', dataUrl);
+            if ($(base.current_image).prop("complete")) {
+                if (callback !== undefined)
+                    callback();
+            }
+            else {
+                base.current_image.onload = function () {
+                    if (callback !== undefined)
+                        callback();
+
+                };
+            }
+
+
+        },
         updateTextOverlays: function () {
             var base = this;
             base.$el.find(".canvas_container").find(".text_overlay").remove();
@@ -112,10 +133,11 @@ define([
         },
         resetImage: function (above) {
             var base = this;
-            if (above === undefined || above == false)
-                base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
-            base.context.drawImage(base.current_image, 0, 0);
-            base.updateTextOverlays();
+            if ($(base.current_image).prop("complete")) {
+                if (above === undefined || above == false)
+                    base.context.clearRect(0, 0, base.canvas[0].width, base.canvas[0].height);
+                base.context.drawImage(base.current_image, 0, 0);
+            }
         },
         undo: function () {
             var base = this;
@@ -165,21 +187,23 @@ define([
 //            }
 //            var state = new State(base.schema, base.current_image.src);
 //            base.saved_states.push(state);
-            if (base.schema.get("name").length > 0)
-                base.schema.save({}, {
-                    success: function () {
-                        console.log("saved schema");
-                    }
-                });
+//            if (base.schema.get("name").length > 0)
+//                base.schema.save({}, {
+//                    success: function () {
+//                        console.log("saved schema");
+//                    }
+//                });
             base.current_state = base.saved_states.length - 1;
         },
         drawing: false,
         counted_speed: 0,
         mouseDown: function (e, xx, yy) {
             var base = this;
-//            base.$el.find(".draw_view_container").attr("onselectstart", "return false;");
+
+
+            base.$el.find(".draw_view_container").attr("onselectstart", "return false;");
             base.drawing = true;
-//            base.$el.find(".text_overlay").css("pointer-events", "none");
+            base.$el.find(".text_overlay").css("pointer-events", "none");
             base.lastms = (new Date()).getTime();
             console.log("mousedown start");
 
@@ -205,8 +229,7 @@ define([
                 color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                 tool_id: base.tool_id
             }, base.schema.get('sessions'));
-//            base.setImage(undefined, function () {
-//            });
+
 
         },
         mouseMove: function (e, xx, yy) {
@@ -244,8 +267,6 @@ define([
                         tool_id: base.tool_id
                     }, base.schema.get('sessions'));
                 }
-
-
             }
         },
         mouseUp: function (e, xx, yy) {
@@ -254,7 +275,7 @@ define([
             base.$el.find(".text_overlay").css("pointer-events", "auto");
             if (base.drawing) {
                 base.current_tool.mouseup(e, xx, yy);
-                base.drawing = false;
+
                 var x = 0;
                 var y = 0;
                 if (xx !== undefined && yy !== undefined) {
@@ -274,10 +295,13 @@ define([
                     color: base.$el.find(".ent_sch_dv_clrpicker").val(),
                     tool_id: base.tool_id
                 }, base.schema.get('sessions'));
-                base.setImage();
+                base.saveImageState();
                 base.saveState();
+                base.save();
             }
+            base.drawing = false;
         },
+        accept_server_data: false,
         initializeEvents: function () {
             var base = this;
 
@@ -373,7 +397,12 @@ define([
             base.drawing = false;
 
             base.canvas.mousedown(function (e) {
-                base.mouseDown(e);
+                if (base.current_tool.resetter)
+                    base.saveImageState(function () {
+                        base.mouseDown(e);
+                    });
+                else
+                    base.mouseDown(e);
             });
 
             base.lastms = (new Date()).getTime();
@@ -414,6 +443,16 @@ define([
                                 }
                             });
                         }
+                        if (message.action == "received_data") {
+                            if (base.accept_server_data) {
+                                base.schema.fetch({
+                                    success: function () {
+                                        base.load(base.id);
+                                        base.accept_server_data = false;
+                                    }
+                                });
+                            }
+                        }
                         if (message.image) {
                             var image = new Image();
                             image.src = message.image;
@@ -422,7 +461,11 @@ define([
                             }
                         } else {
                             if (message.action == "mousedown") {
+                                console.log("caught distant mousedown");
                                 base.users[message.user].tool = new base.base_tools[message.tool_id](base);
+                                base.users[message.user].drawing = true;
+                                if (base.users[message.user].tool.resetter)
+                                    base.saveImageState();
                                 if (!base.context) {
                                     return;
                                 }
@@ -434,32 +477,44 @@ define([
                                 base.users[message.user].tool.mousedown(null, message.x, message.y);
                                 base.context.strokeStyle = previous_color;
                                 base.context.lineWidth = previous_width;
-//                                base.setImage();
+
                             }
                             if (message.action == "mousemove") {
-                                if (base.image_ready) {
-                                    var previous_color = base.context.strokeStyle;
-                                    base.context.strokeStyle = message.color;
-                                    var previous_width = base.context.lineWidth;
-                                    base.users[message.user].tool.size = message.size;
-                                    base.context.lineWidth = message.size;
-                                    base.users[message.user].tool.mousemove(null, message.x, message.y);
-                                    base.context.strokeStyle = previous_color;
-                                    base.context.lineWidth = previous_width;
+                                if (base.users[message.user] !== undefined && base.users[message.user].drawing) {
+                                    if (base.image_ready) {
+                                        var previous_color = base.context.strokeStyle;
+                                        base.context.strokeStyle = message.color;
+                                        var previous_width = base.context.lineWidth;
+                                        base.users[message.user].tool.size = message.size;
+                                        base.context.lineWidth = message.size;
+                                        base.users[message.user].tool.mousemove(null, message.x, message.y);
+                                        base.context.strokeStyle = previous_color;
+                                        base.context.lineWidth = previous_width;
+                                    }
                                 }
-
-//                                    base.setImage();
                             }
                             if (message.action == "mouseup") {
-                                var previous_color = base.context.strokeStyle;
-                                var previous_width = base.context.lineWidth;
-                                base.context.strokeStyle = message.color;
-                                base.users[message.user].tool.size = message.size;
-                                base.context.lineWidth = message.size;
-                                base.users[message.user].tool.mouseup(null, message.x, message.y);
-                                base.context.strokeStyle = previous_color;
-                                base.context.lineWidth = previous_width;
-                                base.saveState();
+                                if (base.users[message.user].drawing) {
+
+                                    var previous_color = base.context.strokeStyle;
+                                    var previous_width = base.context.lineWidth;
+                                    base.users[message.user].drawing = false;
+                                    base.context.strokeStyle = message.color;
+                                    base.users[message.user].tool.size = message.size;
+                                    base.context.lineWidth = message.size;
+                                    base.users[message.user].tool.mouseup(null, message.x, message.y);
+                                    base.context.strokeStyle = previous_color;
+                                    base.context.lineWidth = previous_width;
+                                    base.saveState();
+                                    base.saveImageState();
+                                }
+                                else {
+                                    console.log("Loaded when someone was drawing. I'm accepting next server data received event.");
+
+                                    base.accept_server_data = true;
+
+
+                                }
                             }
                         }
                     }
@@ -513,6 +568,7 @@ define([
         users: {},
         load: function (id) {
             var base = this;
+            //need to block stuff and show loader there
             base.schema = new Schema({ id: id });
             base.schema.fetch({
                 success: function (o) {
@@ -526,13 +582,18 @@ define([
                         base.users[sessions[k]] = {};
                     }
                     base.updateTextOverlays();
+                    //and unblock and hide loader here
                 }
             });
         },
         save: function () {
             var base = this;
-
-            base.schema.save();
+            if (base.schema.get("name").length > 0)
+                base.schema.save({}, {
+                    success: function () {
+                        console.log("saved schema");
+                    }
+                });
         }
     });
     return DrawView;

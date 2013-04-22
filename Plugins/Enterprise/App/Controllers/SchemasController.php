@@ -154,6 +154,11 @@ class SchemasController extends \Controller
             }
         }
         $schema->save();
+        foreach ($schema->getParticipants() as $user)
+        {
+            if ($user->getId() != \User::current_user()->getId())
+                \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "action" => "received_data", "schema_id" => $schema->getId(), "user" => \User::current_user()->getSessionId()));
+        }
 
         if (is_object($schema))
         {

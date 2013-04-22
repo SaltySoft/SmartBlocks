@@ -82,7 +82,8 @@ define([
         setSize: function (size) {
             var base = this;
             base.size = size;
-        }
+        },
+        resetter : false
     });
 
     var LineTool = new Class();
@@ -103,6 +104,7 @@ define([
         orx:0,
         ory:0,
         save: "",
+        resetter : true,
         mousedown: function (e, x, y) {
             var base = this;
 
@@ -187,6 +189,7 @@ define([
         orx:0,
         ory:0,
         save: "",
+        resetter : true,
         mousedown: function (e, x, y) {
             var base = this;
 
