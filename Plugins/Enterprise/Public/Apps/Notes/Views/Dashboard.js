@@ -8,33 +8,40 @@ define([
     'Enterprise/Apps/Notes/Views/Panel',
     'Enterprise/Apps/Notes/Views/CreateNote',
     'Enterprise/Apps/Notes/Views/EditNote',
+    'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/dashboard.html',
     'text!Enterprise/Apps/Notes/Templates/main.html',
     'text!Enterprise/Apps/Notes/Templates/panel.html',
     'text!Enterprise/Apps/Notes/Templates/edit_note.html',
-    'Enterprise/Apps/Notes/Collections/Notes',
-    'Enterprise/Apps/Notes/Collections/Subnotes'
-], function ($, _, Backbone, JqueryFlip, Note, Subnote, PanelView, CreateNoteView, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection, SubnotesCollection) {
+    'Enterprise/Apps/Notes/Collections/Notes'
+], function ($, _, Backbone, JqueryFlip, Note, Subnote, PanelView, CreateNoteView, EditNoteView, TextEditorView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection) {
     var Dashboard = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_dashboard",
         events:{
         },
-        initialize:function () {
+        initialize:function (SmartBlocks) {
+            var base = this;
+            base.SmartBlocks = SmartBlocks;
         },
         init:function (AppEvents) {
             var base = this;
             this.AppEvents = AppEvents;
 
+            //Init templates
             var template = _.template(MainTemplate, {});
             base.$el.html(template);
 
             var panel_template = _.template(PanelTemplate, {});
             base.$el.find(".top_panel_container").html(panel_template);
 
+            //Init sub views
+
+            var textEditor = new TextEditorView();
+            textEditor.init(base.AppEvents);
+
             //Init notes collections
             base.notes_list = new NotesCollection();
-            base.subnotes_list = new SubnotesCollection();
 
             base.render();
         },
@@ -59,38 +66,12 @@ define([
                 }
             });
         },
-        renderImportants:function () {
-            var base = this;
-            base.notes_list.fetch({
-                data:{
-                    all:"false",
-                    importants:"true"
-                },
-                success:function () {
-                    base.templateImportantsNotes = _.template(DashboardTemplate, {
-                        notes:base.notes_list.models,
-                        category:"importants"
-                    });
-                    base.$el.append(base.templateImportantsNotes);
-                }
-            });
-        },
         renderEditNote:function (id) {
             var base = this;
-            base.note = new Note({
-                id:id
-            });
-            base.note.fetch({
-                data:{
-                },
-                success:function () {
-                    base["template" + id] = _.template(EditNoteTemplate, {
-                        note:base.note,
-                        subnotes:base.note.get("subnotes").models
-                    });
-                    base.$el.find(".note_editor").html(base["template" + id]);
-                }
-            });
+            var editNote = new EditNoteView();
+            base.editNote = editNote;
+            base.editNote.init(base.AppEvents, base.SmartBlocks, id);
+            base.$el.find(".note_editor").html(base.editNote.$el);
         },
         changeNoteName:function (note, note_div) {
             note_div.removeClass("edited");

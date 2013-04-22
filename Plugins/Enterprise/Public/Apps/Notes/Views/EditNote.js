@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'Enterprise/Apps/Notes/Models/Note',
+    'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/edit_note.html'
-], function ($, _, Backbone, Note, EditNoteTemplate) {
+], function ($, _, Backbone, Note, TextEditorView, EditNoteTemplate) {
     var EditNoteView = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_edition",
@@ -12,9 +13,34 @@ define([
         },
         initialize:function () {
         },
-        init:function (AppEvents) {
+        init:function (AppEvents, SmartBlocks, note_id) {
             var base = this;
-            this.AppEvents = AppEvents;
+            base.AppEvents = AppEvents;
+            base.SmartBlocks = SmartBlocks;
+            base.note_id = note_id;
+
+            //initializing the note that is going
+            base.note = new Note({ id:note_id });
+            //show some loading here
+            base.note.fetch({
+                success:function () {
+                    //stop the loading there
+                    base.render();
+                }
+            });
+        },
+        render:function () {
+            var base = this;
+
+            base["template" + base.note_id] = _.template(EditNoteTemplate, {
+                note:base.note,
+                subnotes:base.note.get("subnotes").models
+            });
+            base.editNoteTemplate = base["template" + base.note_id];
+            base.$el.html(base.editNoteTemplate);
+
+            var textEditor = new TextEditorView();
+            textEditor.init(base.AppEvents);
         },
         renderNote:function (id) {
             var base = this;

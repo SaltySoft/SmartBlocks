@@ -16,12 +16,15 @@ define([
         }
     });
 
-    var initialize = function () {
+    var initialize = function (SmartBlocks) {
+        var base = this;
+        base.SmartBlocks = SmartBlocks;
+
         //Init the events and the router
         var AppEvents = _.extend({}, Backbone.Events);
         var app_router = new AppRouter();
 
-        var dashboard = new DashboardView();
+        var dashboard = new DashboardView(base.SmartBlocks);
         dashboard.init(AppEvents);
 
         $("#app_container").html(dashboard.$el);
