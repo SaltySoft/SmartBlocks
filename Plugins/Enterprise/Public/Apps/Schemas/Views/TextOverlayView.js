@@ -32,9 +32,9 @@ define([
                     base.text.set("x", base.$el.position().left);
                     base.text.set("y", base.$el.position().top);
                     base.text.save({}, {
-                        success: function () {
-                            base.drawing_view.saveState();
-                        }
+//                        success: function () {
+//                            base.drawing_view.save();
+//                        }
                     });
                 }
             });
@@ -75,7 +75,7 @@ define([
                     text_overlay.addClass("normal");
                     schema_text.save({}, {
                         success: function () {
-                            base.drawing_view.saveState();
+//                            base.drawing_view.save();
                         }
                     });
                 }

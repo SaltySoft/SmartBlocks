@@ -347,12 +347,12 @@ define([
                     schema_id: base.schema.get("id")
                 });
                 base.schema.get("texts").add(text);
-                base.schema.save({}, {
+                text.save({}, {
                     success: function () {
-                        base.updateTextOverlays();
-                        base.saveState();
+                        console.log("Saved text overlay");
                     }
                 });
+                base.updateTextOverlays();
 
             });
 
@@ -588,12 +588,15 @@ define([
         },
         save: function () {
             var base = this;
-            if (base.schema.get("name").length > 0)
-                base.schema.save({}, {
-                    success: function () {
-                        console.log("saved schema");
-                    }
+            if (base.schema.get("name").length > 0) {
+                base.saveImageState(function () {
+                    base.schema.save({}, {
+                        success: function () {
+                            console.log("saved schema from main saver");
+                        }
+                    });
                 });
+            }
         }
     });
     return DrawView;
