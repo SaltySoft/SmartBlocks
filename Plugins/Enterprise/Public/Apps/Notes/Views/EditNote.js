@@ -32,15 +32,23 @@ define([
         render:function () {
             var base = this;
 
+            //Init subnotes collections
+            base.subnotes_list = base.note.get("subnotes").models;
+//                subnotes:base.note.get("subnotes").models
             base["template" + base.note_id] = _.template(EditNoteTemplate, {
-                note:base.note,
-                subnotes:base.note.get("subnotes").models
+                note:base.note
             });
             base.editNoteTemplate = base["template" + base.note_id];
             base.$el.html(base.editNoteTemplate);
 
             var textEditor = new TextEditorView();
             textEditor.init(base.AppEvents);
+
+            _.each(base.subnotes_list, function (subnote) {
+                textEditor.addText(subnote.get('content'));
+            });
+            base.$el.find(".editNoteContent").html(textEditor.$el);
+            textEditor.render();
         },
         renderNote:function (id) {
             var base = this;
