@@ -14,10 +14,14 @@ class SubnotesController extends \Controller
 
         if (isset($_GET["note_id"]))
         {
-            $qb->select("s")
-                ->from("Enterprise\\Subnote", "s")
-                ->where("s.note_id = :note_id")
-                ->setParameter("note_id", $_GET["note_id"]);
+            $note = Note::find($_GET["note_id"]);
+            if (is_object($note))
+            {
+                $qb->select("s")
+                    ->from("Enterprise\\Subnote", "s")
+                    ->where("s.note = :note")
+                    ->setParameter("note", $note);
+            }
         }
 
         $subnotes = $qb->getQuery()->getResult();
@@ -53,16 +57,12 @@ class SubnotesController extends \Controller
         $subnote = new Subnote();
         $data = $this->getRequestData();
         $note = Note::find($data["note_id"]);
-        $subnote->setNote($note);
-        $subnote->setContent($data["content"]);
-        $subnote->setType($data["type"]);
-        $subnote->save();
-
-        $note->addSubnote($subnote);
-        $note->save();
-
-        if (is_object($subnote))
+        if (is_object($note))
         {
+            $subnote->setNote($note);
+            $subnote->setContent($data["content"]);
+            $subnote->setType($data["type"]);
+            $subnote->save();
             echo json_encode($subnote->toArray());
         }
         else

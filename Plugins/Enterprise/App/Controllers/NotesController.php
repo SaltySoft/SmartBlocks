@@ -105,16 +105,12 @@ class NotesController extends \Controller
         $note = Note::find($params["id"]);
         if (is_object($note))
         {
+            foreach ($note->getSubnotes() as $subnote)
+            {
+                $subnote->delete();
+            }
             $note->delete();
-            $note = Note::find($params["id"]);
-            if (!is_object($note))
-            {
-                echo json_encode(array("success"));
-            }
-            else
-            {
-                echo json_encode(array("error"));
-            }
+            echo json_encode(array("success"));
         }
         else
         {

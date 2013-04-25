@@ -50,21 +50,30 @@ define([
             base.renderAll();
             base.initializeEvents();
         },
-        renderAll:function () {
+        renderInterface: function () {
             var base = this;
-            base.notes_list.fetch({
-                data:{
-                    all:"true",
-                    importants:"false"
-                },
-                success:function () {
-                    base.templateAllNotes = _.template(DashboardTemplate, {
-                        notes:base.notes_list.models,
-                        category:"all"
-                    });
-                    base.$el.find(".notes_container").html(base.templateAllNotes);
-                }
+            base.templateAllNotes = _.template(DashboardTemplate, {
+                notes:base.notes_list.models,
+                category:"all"
             });
+            base.$el.find(".notes_container").html(base.templateAllNotes);
+        },
+        renderAll:function (refetch) {
+            var base = this;
+            if (refetch === undefined || refetch) {
+                base.notes_list.fetch({
+                    data:{
+                        all:"true",
+                        importants:"false"
+                    },
+                    success:function () {
+                        base.renderInterface();
+                    }
+                });
+            }
+            else {
+                base.renderInterface();
+            }
         },
         renderEditNote:function (id) {
             var base = this;
@@ -96,14 +105,18 @@ define([
                     important:false,
                     description:""
                 });
-
+                //faster interface
+                base.notes_list.add(note);
+                base.renderAll(false);
                 note.save({}, {
                     success:function () {
                         console.log("saved note");
-                        base.renderAll();
                     },
                     error:function () {
                         console.log("error saving note");
+                        base.notes_list.remove(note);
+                        base.renderAll(false);
+                        SmartBlocks.show_message("There was an error creating the note. Please try again later.");
                     }
                 });
             });
