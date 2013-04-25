@@ -114,19 +114,6 @@ define([
                 base.renderEditNote(id);
             });
 
-            base.$el.delegate(".editNote_add_subnote_button", "click", function () {
-                var elt = $(this);
-                var id = elt.attr("data-id");
-                var type = elt.attr("data-type");
-                var subnote = new Subnote({
-                    note_id:id,
-                    content:"New content",
-                    type:"text"
-                });
-                subnote.save();
-                base.renderEditNote(id);
-            });
-
             base.$el.delegate(".show_all_button", "click", function () {
                 base.renderAll();
             });

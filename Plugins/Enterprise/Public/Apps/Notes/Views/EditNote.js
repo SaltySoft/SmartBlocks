@@ -3,9 +3,10 @@ define([
     'underscore',
     'backbone',
     'Enterprise/Apps/Notes/Models/Note',
+    'Enterprise/Apps/Notes/Models/Subnote',
     'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/edit_note.html'
-], function ($, _, Backbone, Note, TextEditorView, EditNoteTemplate) {
+], function ($, _, Backbone, Note, Subnote, TextEditorView, EditNoteTemplate) {
     var EditNoteView = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_edition",
@@ -41,14 +42,15 @@ define([
             base.editNoteTemplate = base["template" + base.note_id];
             base.$el.html(base.editNoteTemplate);
 
-            var textEditor = new TextEditorView();
-            textEditor.init(base.AppEvents);
+            base.textEditor = new TextEditorView();
+            base.textEditor.init(base.AppEvents);
 
             _.each(base.subnotes_list, function (subnote) {
-                textEditor.addText(subnote.get('content'));
+                base.textEditor.addTextInit(subnote.get('content'), subnote.get('id'));
             });
-            base.$el.find(".editNoteContent").html(textEditor.$el);
-            textEditor.render();
+            base.$el.find(".editNoteContent").html(base.textEditor.$el);
+            base.textEditor.render();
+            base.initializeEvents();
         },
         renderNote:function (id) {
             var base = this;
@@ -68,22 +70,39 @@ define([
                 }
             })
         },
-        show:function () {
-            var base = this;
-            var left_gap = ($(window).width() - base.$el.find(".editNote").width()) / 2;
-            var top_gap = ($(window).height() - base.$el.find(".editNote").height()) / 2;
-            base.$el.find(".editNote").css("left", left_gap + "px");
-            base.$el.find(".editNote").css("top", top_gap + "px");
-            base.$el.find(".noteCache").fadeIn(200);
-        },
-        hide:function () {
-            var base = this;
-            base.$el.find(".noteCache").fadeOut(100);
-        },
         initializeEvents:function () {
             var base = this;
-            base.$el.find(".closeButtonEditNote").click(function () {
-                base.hide();
+            base.$el.delegate(".editNote_add_subnote_button", "click", function () {
+                var elt = $(this);
+                var id = elt.attr("data-id");
+                var type = elt.attr("data-type");
+                base.textEditor.addText("New content", id);
+                var subnote = new Subnote({
+                    note_id:id,
+                    content:"New content",
+                    type:"text"
+                });
+                subnote.save();
+            });
+            base.$el.delegate(".textContent", "blur", function () {
+                var id = $(this).attr("data-id");
+                var newText = base.textEditor.getText(id);
+//                alert(id);
+//                alert(newText);
+//                base.textEditor.show();
+                var subnote = new Subnote({
+                    id:id
+                });
+                subnote.fetch({
+                    data:{
+                    },
+                    success:function (data) {
+                        alert("success fetch subnote");
+                        subnote.set("content", newText);
+                        console.log(subnote);
+                        subnote.save();
+                    }
+                })
             });
         }
     });

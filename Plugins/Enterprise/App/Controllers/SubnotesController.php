@@ -32,6 +32,17 @@ class SubnotesController extends \Controller
     {
         $this->render = false;
         header("Content-Type: application/json");
+
+        $subnote = Subnote::find($params['id']);
+
+        if (is_object($subnote))
+        {
+            echo json_encode($subnote->toArray());
+        }
+        else
+        {
+            echo json_encode(array("error"));
+        }
     }
 
     public function create()

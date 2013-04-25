@@ -1,0 +1,31 @@
+.textContainer {
+
+}
+
+.textContainer textarea {
+    font-family: Verdana;
+    -webkit-appearance: normal;
+    background-color: rgba(2, 64, 83, 0);
+    border: 1px solid rgba(2, 64, 83, 0.38);
+    border-image: initial;
+    -webkit-rtl-ordering: logical;
+    -webkit-user-select: text;
+    -webkit-box-orient: vertical;
+    resize: horizontal;
+    cursor: auto;
+    padding: 3px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0em;
+    font: -webkit-small-control;
+    color: initial;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: start;
+    max-width: 600px;
+    width: 300px;
+}

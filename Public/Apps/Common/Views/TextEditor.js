@@ -18,21 +18,46 @@ define([
         },
         render:function () {
             var base = this;
-
             var template = _.template(TextEditorTemplate, {
                 texts:base.textArray
             });
             base.$el.html(template);
+            base.initializeEvents();
         },
-        addText:function (text) {
+        addTextInit:function (text, id) {
             var base = this;
-            base.textArray.push(text);
+            base.textArray[id] = text;
+        },
+        addText:function (text, id) {
+            var base = this;
+            var newTextContainer = $(document.createElement("div"));
+            newTextContainer.addClass("textContainer");
+            var newTextContent = $(document.createElement("textarea"));
+            newTextContent.addClass("textContent");
+            newTextContent.name = "textAreaContent" + base.textArray.length;
+            newTextContent.attr("data-id", id);
+            newTextContent.html(text);
+            newTextContainer.append(newTextContent);
+            base.$el.find(".text_editor_container").append(newTextContainer);
+            base.textArray[id] = text;
+        },
+        getText:function (id) {
+            var base = this;
+            return (base.textArray[id]);
         },
         show:function () {
             var base = this;
             for (var key in base.textArray) {
-                alert(base.textArray[key]);
+                alert(key + " : " + base.textArray[key]);
             }
+        },
+        initializeEvents:function () {
+            var base = this;
+            base.$el.delegate(".textContent", "blur", function () {
+                var id = $(this).attr("data-id");
+                var newText = $(this).val();
+                base.textArray[id] = newText;
+            });
         }
     });
 
