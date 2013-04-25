@@ -31,13 +31,29 @@ class File extends Model
     private $owner;
 
     /**
-     * @ManyToOne(targetEntity="Folder", inversedBy="files")
+     * @ManyToOne(targetEntity="File", inversedBy="subfiles")
      */
     private $parent_folder;
 
+    /**
+     * @OneToMany(targetEntity="File", mappedBy="parent_folder")
+     */
+    private $subfiles;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $is_folder;
+
+    /**
+     * @ManyToMany(targetEntity="User")
+     */
+    private $users_allowed;
+
     public function __construct()
     {
-
+        $this->subfiles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->is_folder = false;
     }
 
     public function setId($id)
@@ -90,14 +106,62 @@ class File extends Model
         return $this->owner;
     }
 
-    public function toArray()
+    public function getSubfiles()
     {
+        return $this->subfiles;
+    }
+
+    public function addSubfile($subfile)
+    {
+        $this->subfiles[] = $subfile;
+    }
+
+    public function removeSubfile($subfile)
+    {
+        $this->subfiles->removeElement($subfile);
+    }
+
+    public function isFolder()
+    {
+        return $this->is_folder;
+    }
+
+    public function setAsFolder($is_folder)
+    {
+        return $this->is_folder = $is_folder;
+    }
+
+    public function getUsersAllowed()
+    {
+        return $this->users_allowed;
+    }
+
+    public function addAllowedUser($user)
+    {
+        $this->users_allowed[] = $user;
+    }
+
+    public function toArray($reach_subfiles = false)
+    {
+        $subfiles = array();
+        if ($reach_subfiles)
+        {
+            if ($this->is_folder)
+            {
+                foreach ($this->subfiles as $subfile)
+                {
+                    if ($subfile->getId() != $this->getId())
+                        $subfiles[] = $subfile->toArray();
+                }
+            }
+        }
         return array(
             "id" => $this->id,
             "name" => $this->name,
             "parent_folder" => $this->parent_folder != null ? $this->parent_folder->toArray() : null,
             "owner" => $this->getOwner() != null ? $this->getOwner()->toArray() : null,
+            "is_folder" => $this->is_folder,
+            "subfiles" => $subfiles
         );
     }
 }
-

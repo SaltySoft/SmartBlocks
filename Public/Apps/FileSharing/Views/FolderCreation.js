@@ -2,9 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Apps/FileSharing/Models/Folder',
+    'Apps/FileSharing/Models/File',
     'text!Apps/FileSharing/Templates/folder_creation.html'
-], function ($, _, Backbone, Folder, FolderCreationTemplate) {
+], function ($, _, Backbone, File, FolderCreationTemplate) {
     var FolderCreationView = Backbone.View.extend({
         tagName: "div",
         className: "k_fs_file_upload",
@@ -37,11 +37,13 @@ define([
             base.$el.find(".k_fs_folder_creation_button").click(function () {
                 var array = base.$el.find(".k_fs_folder_creation_form").serializeArray();
                 var ob_lit = {};
+
                 for (k in array) {
                     ob_lit[array[k].name]  = array[k].value
                 }
-
-                var folder = new Folder(ob_lit);
+                var folder = new File(ob_lit);
+                folder.set("is_folder", true);
+                folder.set("parent_folder", new File({ id: base.folder_browser.current_folder}) );
                 console.log(folder);
                 base.SmartBlocks.startLoading("Creating folder");
                 folder.save({}, {

@@ -23,7 +23,7 @@ define([
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.folder_list = new FoldersCollection();
+//            base.folder_list = new FilesCollection();
             base.files_list = new FilesCollection();
             base.parent_folder = 0;
             base.current_folder = 0;
@@ -47,7 +47,7 @@ define([
 
             base.$el.find(".k_fs_folder_tb").dblclick(function () {
                 var elt = $(this);
-                base.fetchAll(elt.attr("data-folder_id"));
+                base.fetchAll(elt.attr("data-file_id"));
             });
 
             base.$el.find(".k_fs_folder_tb").mousedown(function (e) {
@@ -131,7 +131,7 @@ define([
         },
         render: function () {
             var base = this;
-            var template = _.template(FolderBrowserTemplate, {_s: _s, files: base.files_list.models, folders: base.folder_list.models});
+            var template = _.template(FolderBrowserTemplate, {_s: _s, files: base.files_list.models});
 
             base.$el.html(template);
             base.initializeEvents();
@@ -144,38 +144,37 @@ define([
             var base = this;
             if (base.$el.is(":visible"))
                 base.SmartBlocks.startLoading("Loading folder");
-            base.fetchFolders(folder_id, function () {
-                base.fetchFiles(folder_id, function () {
-                    if (base.current_folder != folder_id) {
-                        base.parent_folder = base.current_folder;
-                        base.current_folder = folder_id;
 
-                    }
-                    base.folder = new Folder({id: folder_id});
-                    base.folder.fetch({
-                        success: function () {
-                            base.render();
-                            base.SmartBlocks.stopLoading();
-                        }
-                    });
-
-                });
-            });
-        },
-        fetchFolders: function (folder_id, callback) {
-            var base = this;
-            base.folder_list.fetch({
-                data: {
-                    "folder_id": folder_id
-                },
-                success: function () {
-                    if (callback) {
-                        callback();
-                    }
-
+            base.fetchFiles(folder_id, function () {
+                if (base.current_folder != folder_id) {
+                    base.parent_folder = base.current_folder;
+                    base.current_folder = folder_id;
+                    console.log("Fetched ");
                 }
+                base.folder = new File({id: folder_id});
+                base.folder.fetch({
+                    success: function () {
+                        base.render();
+                        base.SmartBlocks.stopLoading();
+                    }
+                });
+
             });
         },
+//        fetchFolders: function (folder_id, callback) {
+//            var base = this;
+//            base.folder_list.fetch({
+//                data: {
+//                    "folder_id": folder_id
+//                },
+//                success: function () {
+//                    if (callback) {
+//                        callback();
+//                    }
+//
+//                }
+//            });
+//        },
         fetchFiles: function (folder_id, callback) {
             var base = this;
             base.files_list.fetch({
@@ -195,8 +194,6 @@ define([
             var fc_view = new FolderCreationView();
             fc_view.init(base.SmartBlocks, base);
             $("body").prepend(fc_view.$el);
-
-
         },
 
         uploadFile: function () {
