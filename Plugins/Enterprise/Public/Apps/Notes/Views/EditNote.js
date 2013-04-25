@@ -87,9 +87,6 @@ define([
             base.$el.delegate(".textContent", "blur", function () {
                 var id = $(this).attr("data-id");
                 var newText = base.textEditor.getText(id);
-//                alert(id);
-//                alert(newText);
-//                base.textEditor.show();
                 var subnote = new Subnote({
                     id:id
                 });
@@ -97,9 +94,7 @@ define([
                     data:{
                     },
                     success:function (data) {
-                        alert("success fetch subnote");
                         subnote.set("content", newText);
-                        console.log(subnote);
                         subnote.save();
                     }
                 })
