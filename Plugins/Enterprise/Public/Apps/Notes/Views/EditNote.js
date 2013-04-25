@@ -35,7 +35,6 @@ define([
 
             //Init subnotes collections
             base.subnotes_list = base.note.get("subnotes").models;
-//                subnotes:base.note.get("subnotes").models
             base["template" + base.note_id] = _.template(EditNoteTemplate, {
                 note:base.note
             });
@@ -76,13 +75,19 @@ define([
                 var elt = $(this);
                 var id = elt.attr("data-id");
                 var type = elt.attr("data-type");
-                base.textEditor.addText("New content", id);
                 var subnote = new Subnote({
                     note_id:id,
                     content:"New content",
                     type:"text"
                 });
-                subnote.save();
+                subnote.save({}, {
+                    success:function () {
+                        base.textEditor.addText("New content", subnote.id);
+                    },
+                    error:function () {
+                        console.log("error saving subnote");
+                    }
+                });
             });
             base.$el.delegate(".textContent", "blur", function () {
                 var id = $(this).attr("data-id");
@@ -93,7 +98,7 @@ define([
                 subnote.fetch({
                     data:{
                     },
-                    success:function (data) {
+                    success:function () {
                         subnote.set("content", newText);
                         subnote.save();
                     }

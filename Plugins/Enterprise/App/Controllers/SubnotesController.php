@@ -77,10 +77,10 @@ class SubnotesController extends \Controller
         header("Content-Type: application/json");
 
         $subnote = Subnote::find($params["id"]);
-        ;
         $data = $this->getRequestData();
-        $subnote->setNote($data["note_id"]);
         $subnote->setContent($data["content"]);
+        $note = Note::find($data["note_id"]);
+        $subnote->setNote($note);
         $subnote->setType($data["type"]);
         $subnote->save();
 

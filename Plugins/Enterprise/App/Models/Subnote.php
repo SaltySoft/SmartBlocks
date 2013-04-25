@@ -37,7 +37,9 @@ class Subnote extends \Model
         $noteArray["id"] = $this->id;
         $noteArray["type"] = $this->type;
         $noteArray["content"] = $this->content;
-        $noteArray["note"] = $this->note;
+        $noteArray["note_id"] = $this->note->getId();
+//        $note = $this->note->toArray();
+//        $noteArray["note"] = $note;
 
         return $noteArray;
     }
