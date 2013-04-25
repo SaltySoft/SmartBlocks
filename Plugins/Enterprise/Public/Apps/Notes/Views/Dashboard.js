@@ -100,12 +100,12 @@ define([
                 note.save({}, {
                     success:function () {
                         console.log("saved note");
+                        base.renderAll();
                     },
                     error:function () {
                         console.log("error saving note");
                     }
                 });
-                base.renderAll();
             });
 
             base.$el.delegate(".note_edition_button", "click", function () {
