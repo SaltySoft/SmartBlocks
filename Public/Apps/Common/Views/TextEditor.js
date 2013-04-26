@@ -56,7 +56,7 @@ define([
             var base = this;
             base.$el.delegate(".textContent", "blur", function () {
                 var id = $(this).attr("data-id");
-                var newText = $(this).val();
+                var newText = $(this).html();
                 base.textArray[id] = newText;
             });
         }

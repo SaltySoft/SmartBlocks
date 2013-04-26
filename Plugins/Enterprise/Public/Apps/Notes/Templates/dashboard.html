@@ -1,13 +1,10 @@
 <ul >
     <% _.each(notes, function (note) {%>
-    <li class="dashboard_note normal" data-flip="0" data-id="<%= note.get('id') %>"
+    <li class="dashboard_note normal" href="javascript:void(0);" data-id="<%= note.get('id') %>"
         data-description="<%= note.get('description') %>" >
         <div class="name_link " >
             <span class="display" >
-                <!--<a href="#note_edition/<%= note.get('id') %>" data-id="<%= note.get('id') %>" >-->
-                    <a class="note_edition_button" href="javascript:void(0);" data-id="<%= note.get('id') %>" >
-                        <%= note.get('title') %>
-                    </a >
+                <%= note.get('title') %>
             </span >
             <span class="edition" >
                 <input type="text" />

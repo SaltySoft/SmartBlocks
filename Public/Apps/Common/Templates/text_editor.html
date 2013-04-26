@@ -1,8 +1,7 @@
 <div class="text_editor_container" >
     <% for (var key in texts) {%>
     <div class="textContainer" >
-        <textarea name="textAreaContent<%= key %>" class="textContent" data-id="<%= key %>" ><%=
-                                                                                             texts[key]%></textarea >
+        <div class="textContent" data-id="<%= key %>" contenteditable="true" ><%= texts[key]%></div >
     </div >
     <%} %>
 </div >

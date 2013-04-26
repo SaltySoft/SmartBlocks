@@ -4,17 +4,13 @@ define([
     'backbone',
     'jqueryflip',
     'Enterprise/Apps/Notes/Models/Note',
-    'Enterprise/Apps/Notes/Models/Subnote',
-    'Enterprise/Apps/Notes/Views/Panel',
-    'Enterprise/Apps/Notes/Views/CreateNote',
     'Enterprise/Apps/Notes/Views/EditNote',
     'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/dashboard.html',
     'text!Enterprise/Apps/Notes/Templates/main.html',
     'text!Enterprise/Apps/Notes/Templates/panel.html',
-    'text!Enterprise/Apps/Notes/Templates/edit_note.html',
     'Enterprise/Apps/Notes/Collections/Notes'
-], function ($, _, Backbone, JqueryFlip, Note, Subnote, PanelView, CreateNoteView, EditNoteView, TextEditorView, DashboardTemplate, MainTemplate, PanelTemplate, EditNoteTemplate, NotesCollection) {
+], function ($, _, Backbone, JqueryFlip, Note, EditNoteView, TextEditorView, DashboardTemplate, MainTemplate, PanelTemplate, NotesCollection) {
     var Dashboard = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_dashboard",
@@ -50,7 +46,7 @@ define([
             base.renderAll();
             base.initializeEvents();
         },
-        renderInterface: function () {
+        renderInterface:function () {
             var base = this;
             base.templateAllNotes = _.template(DashboardTemplate, {
                 notes:base.notes_list.models,
@@ -85,7 +81,7 @@ define([
         changeNoteName:function (note, note_div) {
             note_div.removeClass("edited");
             note.set("title", note_div.find("input").val());
-            note_div.find(".name_link .display a").html(note.get('title'));
+            note_div.find(".name_link .display").html(note.get('title'));
             note.save({}, {
                 success:function () {
                     console.log("saved note");
@@ -127,6 +123,12 @@ define([
                 base.renderEditNote(id);
             });
 
+            base.$el.delegate(".dashboard_note", "click", function () {
+                var elt = $(this);
+                var id = elt.attr("data-id");
+                base.renderEditNote(id);
+            });
+
             base.$el.delegate(".show_all_button", "click", function () {
                 base.renderAll();
             });
@@ -138,6 +140,13 @@ define([
                     var note = base.notes_list.get(note_div.attr("data-id"));
                     base.changeNoteName(note, note_div);
                 }
+            });
+
+            base.$el.delegate(".dashboard_note input", "blur", function () {
+                var elt = $(this);
+                var note_div = elt.closest(".dashboard_note");
+                var note = base.notes_list.get(note_div.attr("data-id"));
+                base.changeNoteName(note, note_div);
             });
 
             base.$el.delegate(".edit_note_button", "click", function () {

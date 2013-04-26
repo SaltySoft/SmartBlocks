@@ -69,13 +69,8 @@
 
 .dashboard_note {
     border: none;
-    padding: 10px;
-    display: block;
-    height: 30px;
+    padding: 8px;
     line-height: 30px;
-    /*width: 172px;*/
-    /*color: #000000;*/
-
     font-size: 18px;
     background-color: #e4e7e7;
     font-weight: 100;
@@ -89,12 +84,10 @@
 
 .dashboard_note .name_link {
     text-decoration: none;
-
     color: #a1a1a1;
     font-size: 18px;
-    display: block;
-    /*width: 110px;*/
-    float: left;
+    display: inline-block;
+    width: 72%;
 }
 
 .dashboard_note .note_div_button {
@@ -103,6 +96,9 @@
     height: 16px;
     float: right;
     margin: 6px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 3px;
 }
 
 .dashboard_note .delete_note_button {
@@ -134,7 +130,12 @@
 }
 
 .edition input {
-    width: 100px;
+    width: 100%;
+}
+
+.note_div_button:hover {
+    background-color: rgba(28, 119, 131, 0.15);
+    border-radius: 4px;
 }
 
 .name_link a {
@@ -160,12 +161,13 @@
 }
 
 .editNote {
-    width: 400px;
+    min-width: 500px;
+    width: 700px;
     margin: auto;
     background-color: rgba(2, 64, 83, 0.30);
     float: left;
     position: absolute;
-    padding: 10px;
+    padding: 5px;
 }
 
 .closeButtonEditNote {
@@ -187,8 +189,13 @@
 
 .notes_container {
     float: left;
-    background-color: rgba(28, 119, 131, 0.38);
-    padding: 5px;
+    background-color: rgba(28, 119, 131, 0.45);
+    padding: 0px;
+    width: 300px;
+}
+
+.notes_container ul {
+    margin: 5px;
 }
 
 .note_editor {
@@ -214,9 +221,4 @@
 .editNoteContent {
     padding: 5px;
     margin: 5px;
-    /*display: inline-block;*/
-}
-
-.editNoteSubnote {
-    contenteditable: true
 }
