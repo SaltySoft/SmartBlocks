@@ -16,7 +16,7 @@ define([
             this.AppEvents = AppEvents;
             base.textArray = new Array();
         },
-        render:function () {
+        render:function (refetch) {
             var base = this;
             var template = _.template(TextEditorTemplate, {
                 texts:base.textArray
@@ -30,16 +30,17 @@ define([
         },
         addText:function (text, id) {
             var base = this;
-            var newTextContainer = $(document.createElement("div"));
-            newTextContainer.addClass("textContainer");
-            var newTextContent = $(document.createElement("textarea"));
-            newTextContent.addClass("textContent");
-            newTextContent.name = "textAreaContent" + base.textArray.length;
-            newTextContent.attr("data-id", id);
-            newTextContent.html(text);
-            newTextContainer.append(newTextContent);
-            base.$el.find(".text_editor_container").append(newTextContainer);
+//            var newTextContainer = $(document.createElement("div"));
+//            newTextContainer.addClass("textContainer");
+//            var newTextContent = $(document.createElement("textarea"));
+//            newTextContent.addClass("textContent");
+//            newTextContent.name = "textAreaContent" + base.textArray.length;
+//            newTextContent.attr("data-id", id);
+//            newTextContent.html(text);
+//            newTextContainer.append(newTextContent);
+//            base.$el.find(".text_editor_container").append(newTextContainer);
             base.textArray[id] = text;
+            base.render();
         },
         getText:function (id) {
             var base = this;

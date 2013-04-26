@@ -25,7 +25,6 @@ define([
             //show some loading here
             base.note.fetch({
                 success:function () {
-                    //stop the loading there
                     base.render();
                 }
             });
@@ -35,10 +34,9 @@ define([
 
             //Init subnotes collections
             base.subnotes_list = base.note.get("subnotes").models;
-            base["template" + base.note_id] = _.template(EditNoteTemplate, {
+            base.editNoteTemplate = _.template(EditNoteTemplate, {
                 note:base.note
             });
-            base.editNoteTemplate = base["template" + base.note_id];
             base.$el.html(base.editNoteTemplate);
 
             base.textEditor = new TextEditorView();
@@ -50,24 +48,6 @@ define([
             base.$el.find(".editNoteContent").html(base.textEditor.$el);
             base.textEditor.render();
             base.initializeEvents();
-        },
-        renderNote:function (id) {
-            var base = this;
-            base.note = new Note({
-                id:id
-            });
-            base.note.fetch({
-                data:{
-                },
-                success:function (data) {
-                    base["template" + id] = _.template(EditNoteTemplate, {
-                        note:base.note
-                    });
-                    base.$el.html(base["template" + id]);
-                    base.initializeEvents();
-                    base.show();
-                }
-            })
         },
         initializeEvents:function () {
             var base = this;
@@ -85,7 +65,7 @@ define([
                         base.textEditor.addText("New content", subnote.id);
                     },
                     error:function () {
-                        console.log("error saving subnote");
+                        SmartBlocks.show_message("There was an error creating the subnote. Please try again later.");
                     }
                 });
             });
