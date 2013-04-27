@@ -17,6 +17,15 @@ class SchemasController extends \Controller
         }
     }
 
+    public function security_check_token($token)
+    {
+        $users = \User::where(array("token" => $token));
+        if ($users != null && count($users) == 0)
+        {
+            $this->redirect("Enterprise/Schemas/error");
+        }
+    }
+
     public function error()
     {
         $this->render = false;
@@ -44,14 +53,30 @@ class SchemasController extends \Controller
      */
     public function index()
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
-        $qb->select("s")
-            ->from("Enterprise\\Schema", "s")
-            ->leftJoin("s.participants", "p")
-            ->where("s.creator = :user OR p = :user")
-            ->setParameter("user", \User::current_user());
+
+        if (\User::current_user() != null)
+            $qb->select("s")
+                ->from("Enterprise\\Schema", "s")
+                ->leftJoin("s.participants", "p")
+                ->where("s.creator = :user OR p = :user")
+                ->setParameter("user", \User::current_user());
+        else
+        {
+            $users = \User::where(array("token" => $_GET["token"]));
+            $user = $users[0];
+            $qb->select("s")
+                ->from("Enterprise\\Schema", "s")
+                ->leftJoin("s.participants", "p")
+                ->where("s.creator = :user OR p = :user")
+                ->setParameter("user", $user);
+        }
 
         if (isset($_GET["page"]))
         {
@@ -83,6 +108,11 @@ class SchemasController extends \Controller
 
     public function show($params = array())
     {
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -100,7 +130,11 @@ class SchemasController extends \Controller
 
     public function create()
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -130,7 +164,11 @@ class SchemasController extends \Controller
 
     public function update($params = array())
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -154,10 +192,24 @@ class SchemasController extends \Controller
             }
         }
         $schema->save();
-        foreach ($schema->getParticipants() as $user)
+
+        if (\User::current_user() != null)
         {
-            if ($user->getId() != \User::current_user()->getId())
-                \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "action" => "received_data", "schema_id" => $schema->getId(), "user" => \User::current_user()->getSessionId()));
+            foreach ($schema->getParticipants() as $user)
+            {
+                if ($user->getId() != \User::current_user()->getId())
+                    \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "action" => "received_data", "schema_id" => $schema->getId(), "user" => \User::current_user()->getSessionId()));
+            }
+        }
+        else
+        {
+            $users = \User::where(array("token" => $_GET["token"]));
+            $current_user = $users[0];
+            foreach ($schema->getParticipants() as $user)
+            {
+                if ($user->getId() != $current_user->getId())
+                    \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "action" => "received_data", "schema_id" => $schema->getId(), "user" => $current_user->getSessionId()));
+            }
         }
 
         if (is_object($schema))
@@ -172,7 +224,11 @@ class SchemasController extends \Controller
 
     public function destroy($params = array())
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -195,8 +251,6 @@ class SchemasController extends \Controller
                     \NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "schemas", "data" => urlencode($data["image"])));
             }
         }
-
-
     }
 }
 

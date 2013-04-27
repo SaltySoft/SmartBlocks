@@ -17,6 +17,15 @@ class SchemaTextsController extends \Controller
         }
     }
 
+    public function security_check_token($token)
+    {
+        $users = \User::where(array("token" => $token));
+        if ($users != null && count($users) == 0)
+        {
+            $this->redirect("Enterprise/Schemas/error");
+        }
+    }
+
     public function error()
     {
         $this->render = false;
@@ -31,7 +40,11 @@ class SchemaTextsController extends \Controller
 
     public function index()
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("st")
@@ -59,6 +72,11 @@ class SchemaTextsController extends \Controller
 
     public function show($params = array())
     {
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -76,7 +94,11 @@ class SchemaTextsController extends \Controller
 
     public function create()
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -103,7 +125,11 @@ class SchemaTextsController extends \Controller
 
     public function update($params = array())
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
@@ -116,16 +142,38 @@ class SchemaTextsController extends \Controller
         if (is_object($schema))
         {
             $schema_text->setSchema($schema);
-            foreach ($schema->getParticipants() as $user)
+
+            if (\User::current_user() != null)
             {
-                if (is_object($user))
+                foreach ($schema->getParticipants() as $user)
                 {
-                    \NodeDiplomat::sendMessage($user->getSessionId(), array(
-                        "app" => "schemas",
-                        "action" => "update_text",
-                        "schema_id" => $schema->getId(),
-                        "user" => \User::current_user()->getSessionId()
-                    ));
+                    if (is_object($user))
+                    {
+                        \NodeDiplomat::sendMessage($user->getSessionId(), array(
+                            "app" => "schemas",
+                            "action" => "update_text",
+                            "schema_id" => $schema->getId(),
+                            "user" => \User::current_user()->getSessionId()
+                        ));
+                    }
+                }
+            }
+            else
+            {
+                $users = \User::where(array("token" => $_GET["token"]));
+                $current_user = $users[0];
+
+                foreach ($schema->getParticipants() as $user)
+                {
+                    if (is_object($user))
+                    {
+                        \NodeDiplomat::sendMessage($user->getSessionId(), array(
+                            "app" => "schemas",
+                            "action" => "update_text",
+                            "schema_id" => $schema->getId(),
+                            "user" => $current_user->getSessionId()
+                        ));
+                    }
                 }
             }
         }
@@ -145,7 +193,11 @@ class SchemaTextsController extends \Controller
 
     public function destroy($params = array())
     {
-        $this->security_check();
+        if (isset($_GET["token"]) && $_GET["token"] != "")
+            $this->security_check_token($_GET["token"]);
+        else
+            $this->security_check();
+
         header("Content-Type: application/json");
         $this->render = false;
 
