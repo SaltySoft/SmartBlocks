@@ -56,13 +56,12 @@ class FilesController extends Controller
 //        }
 ////
         $data = $this->getRequestData();
-        if (!(isset($data["all"]) && User::is_admin()))
-        {
-            $qb->leftJoin("f.parent_folder", "pf")
-                ->leftJoin("pf.users_allowed", "user")
-                ->andWhere("(f.owner = :user OR user = :user)")
-                ->setParameter("user", User::current_user());
-        }
+
+        $qb->leftJoin("f.parent_folder", "p")
+            ->leftJoin("p.users_allowed", "aluser")
+            ->andWhere("(f.owner = :user OR aluser = :user OR p.owner = :user)")
+            ->setParameter("user", User::current_user());
+
 
         if (isset($data["folder_id"]))
         {
@@ -78,6 +77,13 @@ class FilesController extends Controller
             }
         }
 
+        if (isset($data["shared"]) && $data["shared"])
+        {
+            $qb->join("f.users_allowed", "f_user")
+                ->andWhere("f_user = :current_user")
+                ->setParameter("current_user", \User::current_user());
+        }
+
 
         $files = $qb->getQuery()->getResult();
 
@@ -87,7 +93,7 @@ class FilesController extends Controller
             $response[] = $file->toArray();
         }
         $this->render = false;
-        header("Content-Type: application/json");
+//        header("Content-Type: application/json");
         echo json_encode($response);
     }
 
@@ -105,7 +111,7 @@ class FilesController extends Controller
         }
         else
         {
-            echo json_encode(array("id" => 0, "parent_folder" => array("id" => 0)));
+            echo json_encode(array("id" => 0, "parent_folder" => array("id" => 0),   "address" => "/"));
         }
     }
 
@@ -175,17 +181,30 @@ class FilesController extends Controller
         header("Content-Type: application/json");
         $this->render = false;
 
-        $file = File::find(($params["id"]));
+        $file = File::find($params["id"]);
         $data = $this->getRequestData();
 
         if (is_object($file) && ($file->getOwner() == User::current_user() || User::is_admin()))
         {
             $file->setName($data["name"]);
-            $folder = Folder::find($data["parent_folder"]["id"]);
-            if (is_object($folder))
+            if (isset($data["parent_folder"]) && isset($data["parent_folder"]["id"]))
             {
-                $file->setParentFolder($folder);
-                $this->send_notifs($folder);
+                $folder = null;
+                $folder = File::find($data["parent_folder"]["id"]);
+                if (is_object($folder))
+                {
+                    $file->setParentFolder($folder);
+                    $this->send_notifs($folder);
+                }
+            }
+            $file->getUsersAllowed()->clear();
+            foreach ($data["users_allowed"] as $user_array)
+            {
+                $user = \User::find($user_array["id"]);
+                if (is_object($user))
+                {
+                    $file->addAllowedUser($user);
+                }
             }
 
             $file->save();
@@ -271,6 +290,18 @@ class FilesController extends Controller
             $ext = isset($ext[0]) ? "." . $ext[count($ext) - 1] : "";
 
             header('Content-Disposition: attachment; filename="' . $file->getName() . $ext . '"');
+            echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
+        }
+    }
+
+    public function get_raw_file($params = array())
+    {
+        $data = $this->getRequestData();
+        $file = File::find($data["id"]);
+        $this->render = false;
+        header("Content-Type: = ".$file->getType());
+        if (is_object($file))
+        {
             echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
         }
     }

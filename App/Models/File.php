@@ -54,6 +54,7 @@ class File extends Model
     {
         $this->subfiles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->is_folder = false;
+        $this->users_allowed = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function setId($id)
@@ -141,6 +142,23 @@ class File extends Model
         $this->users_allowed[] = $user;
     }
 
+    public function getType()
+    {
+        $type = "unknown";
+        if (file_exists(ROOT.DS."Data".DS."User_files".DS.$this->path))
+        {
+            if (!$this->is_folder)
+            {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $type = finfo_file($finfo, ROOT.DS."Data".DS."User_files".DS.$this->path);
+                finfo_close($finfo);
+            }
+            else
+                $type = "folder";
+        }
+        return $type;
+    }
+
     public function toArray($reach_subfiles = false)
     {
         $subfiles = array();
@@ -155,13 +173,45 @@ class File extends Model
                 }
             }
         }
+
+        $users_allowed = array();
+
+        foreach ($this->users_allowed as $user) {
+            $users_allowed[] = $user->toArray();
+        }
+
+        $address = $this->name;
+        $parent = $this->parent_folder;
+        while (is_object($parent))
+        {
+            $address = $parent->getName() . "/" . $address;
+            $parent = $parent->getParentFolder();
+        }
+        $type = "unknown";
+        if (file_exists(ROOT.DS."Data".DS."User_files".DS.$this->path))
+        {
+            if (!$this->is_folder)
+            {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $type = finfo_file($finfo, ROOT.DS."Data".DS."User_files".DS.$this->path);
+                finfo_close($finfo);
+            }
+            else
+                $type = "folder";
+        }
+
+
+
         return array(
             "id" => $this->id,
             "name" => $this->name,
             "parent_folder" => $this->parent_folder != null ? $this->parent_folder->toArray() : null,
             "owner" => $this->getOwner() != null ? $this->getOwner()->toArray() : null,
             "is_folder" => $this->is_folder,
-            "subfiles" => $subfiles
+            "subfiles" => $subfiles,
+            "users_allowed" => $users_allowed,
+            "address" => "/" . $address,
+            "type" => $type
         );
     }
 }

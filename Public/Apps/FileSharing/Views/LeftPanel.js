@@ -2,9 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Apps/FileSharing/Collections/Folders',
+    'Apps/FileSharing/Collections/Files',
     'text!Apps/FileSharing/Templates/left_panel.html'
-], function ($, _, Backbone, FoldersCollection, LeftPanelTemplate) {
+], function ($, _, Backbone, FilesCollection, LeftPanelTemplate) {
     var LeftPanelView = Backbone.View.extend({
         tagName: "div",
         className: "k_fs_left_panel",
@@ -15,12 +15,11 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.folder_browser = folder_browser;
-            base.shared_folders = new FoldersCollection();
+            base.shared_folders = new FilesCollection();
             SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "k_fs") {
                     if (message.status == "sharing_update")
                     {
-
                         base.refresh();
                     }
                 }
@@ -31,7 +30,7 @@ define([
         },
         refresh: function () {
             var base = this;
-            base.shared_folders = new FoldersCollection();
+            base.shared_folders = new FilesCollection();
             base.shared_folders.fetch({
                 data: {
                     "shared": true

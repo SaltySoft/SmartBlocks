@@ -43,9 +43,9 @@ define([
         initializeEvents: function () {
             var base = this;
             base.$el.attr("oncontextmenu", "return false;");
-//            base.$el.find(".k_fs_thumbnail").disableSelection();
+            base.$el.find(".k_fs_thumbnail").disableSelection();
 
-            base.$el.find(".k_fs_folder_tb").dblclick(function () {
+            base.$el.find(".k_fs_folder_tb").click(function () {
                 var elt = $(this);
                 base.fetchAll(elt.attr("data-file_id"));
             });
@@ -69,7 +69,7 @@ define([
                             }
                         }, '/images/icons/cross.png');
                         context_menu.addButton("Properties", function () {
-                            var folder_properties = new FolderPropertiesView({ model: new Folder({id: elt.attr('data-folder_id')}) });
+                            var folder_properties = new FolderPropertiesView({ model: base.files_list.get(elt.attr('data-file_id')) });
                             folder_properties.init(base.SmartBlocks, base);
                             $("body").prepend(folder_properties.$el);
                         }, '/images/icons/folder_wrench.png');
@@ -134,6 +134,7 @@ define([
 
             base.$el.html(template);
             base.initializeEvents();
+            $(".k_fs_current_address").html(base.folder.get("address") !== undefined ? base.folder.get("address") : "/");
         },
         reload: function () {
             var base = this;
@@ -150,8 +151,10 @@ define([
                 base.folder = new File({id: folder_id});
                 base.folder.fetch({
                     success: function () {
+
                         base.render();
                         base.SmartBlocks.stopLoading();
+
                     }
                 });
 
