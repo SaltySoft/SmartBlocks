@@ -1,3 +1,7 @@
+.text_editor_container {
+
+}
+
 .textContainer {
 
 }
@@ -8,6 +12,11 @@
     max-width: 600px;
     width: 300px;
     border: 1px solid rgba(2, 64, 83, 0.52);
+}
+
+.textEditor {
+    width: 500px;
+    height: 170px;
 }
 
 .textContainer textarea {
@@ -36,4 +45,34 @@
     text-align: start;
     max-width: 600px;
     width: 300px;
+}
+
+.editor_button_container {
+}
+
+.editor_button {
+    /*height: 21px;*/
+    /*width: 21px;*/
+}
+
+#bold_button {
+    font-weight: bold;
+}
+
+#italic_button {
+    font-style: italic;
+}
+
+#underline_button {
+    text-decoration: underline;
+}
+
+.richTextEditor {
+    frameborder: 0;
+    /*width: 300px;*/
+    height: 100px;
+}
+
+.richTextEditor_containerDiv {
+    border: 1px solid #024053;
 }

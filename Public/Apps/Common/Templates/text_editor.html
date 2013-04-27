@@ -2,6 +2,23 @@
     <% for (var key in texts) {%>
     <div class="textContainer" >
         <div class="textContent" data-id="<%= key %>" contenteditable="true" ><%= texts[key]%></div >
+
     </div >
     <%} %>
+    <div class="editor_button_container" >
+        <input type="button" class="editor_button" id="bold_button" commandName="bold" value="B" />
+        <input type="button" class="editor_button" id="italic_button" commandName="italic" value="I" />
+        <input type="button" class="editor_button" id="underline_button" commandName="underline" value="U" />
+        <a href="javascript:void(0);" id="showText">showText</a><!--<a class="editor_button" href="javascript:void(0);" commandName="bold" >-->
+        <!--B-->
+        <!--</a >-->
+    </div >
+    <div class="richTextEditor_containerDiv" >
+        <iframe class="richTextEditor" >
+        </iframe >
+    </div >
+    <div class="richTextEditor_containerDiv" >
+        <iframe class="richTextEditor" >
+        </iframe >
+    </div >
 </div >

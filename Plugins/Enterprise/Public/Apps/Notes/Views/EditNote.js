@@ -84,6 +84,15 @@ define([
                     }
                 })
             });
+//            base.$el.delegate(".richTextEditor", "blur", function () {
+//                alert("leaving iFrame");
+//                document.getElementById(editor).contentWindow.document.body.innerHTML;
+//            });
+//            base.$el.delegate(".richTextEditor", "blur", function () {
+//                alert("leaving iFrame");
+////                document.getElementById(editor).contentWindow.document.body.innerHTML;
+//            });
+
         }
     });
 
