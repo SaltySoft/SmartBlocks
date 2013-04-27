@@ -55,7 +55,8 @@ class FilesController extends Controller
 //                ->setMaxResults($page_size);
 //        }
 ////
-        if (!(isset($_GET["all"]) && User::is_admin()))
+        $data = $this->getRequestData();
+        if (!(isset($data["all"]) && User::is_admin()))
         {
             $qb->leftJoin("f.parent_folder", "pf")
                 ->leftJoin("pf.users_allowed", "user")
@@ -63,9 +64,9 @@ class FilesController extends Controller
                 ->setParameter("user", User::current_user());
         }
 
-        if (isset($_GET["folder_id"]))
+        if (isset($data["folder_id"]))
         {
-            $parent_folder = File::find($_GET["folder_id"]);
+            $parent_folder = File::find($data["folder_id"]);
             if (is_object($parent_folder))
             {
                 $qb->andWhere("f.parent_folder = :parent_folder")
@@ -76,13 +77,7 @@ class FilesController extends Controller
                 $qb->andWhere("f.parent_folder is NULL");
             }
         }
-//
-//
-//        if (isset($_GET["filter"]) && $_GET["filter"] != "")
-//        {
-//            $qb->andWhere("f.name LIKE :name")
-//                ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
-//        }
+
 
         $files = $qb->getQuery()->getResult();
 
@@ -110,7 +105,7 @@ class FilesController extends Controller
         }
         else
         {
-            echo json_encode(array("error"));
+            echo json_encode(array("id" => 0, "parent_folder" => array("id" => 0)));
         }
     }
 
@@ -133,6 +128,13 @@ class FilesController extends Controller
                 if (is_object($folder) && $folder->isFolder())
                     $file->setParentFolder($folder);
             }
+            else if (isset($data["parent_folder"]))
+            {
+                $folder = File::find($data["parent_folder"]);
+                if (is_object($folder) && $folder->isFolder())
+                    $file->setParentFolder($folder);
+            }
+
 
             if (isset($data["owner"]))
             {
@@ -165,7 +167,6 @@ class FilesController extends Controller
             $file->save();
             echo json_encode($file->toArray());
         }
-
     }
 
     public function update($params = array())

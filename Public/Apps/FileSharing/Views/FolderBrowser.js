@@ -123,8 +123,7 @@ define([
             $(".k_fs_parent_folder").unbind("click");
             $(".k_fs_parent_folder").click(function () {
                 var elt = $(this);
-                console.log(base.folder.get('parent_folder'));
-                base.fetchAll(base.folder.get('parent_folder') != undefined ? base.folder.get('parent_folder') : 0);
+                base.fetchAll(base.folder.get('parent_folder') !== undefined ? base.folder.get('parent_folder').get("id") : 0);
             });
 
 
@@ -144,12 +143,9 @@ define([
             var base = this;
             if (base.$el.is(":visible"))
                 base.SmartBlocks.startLoading("Loading folder");
-
             base.fetchFiles(folder_id, function () {
                 if (base.current_folder != folder_id) {
-                    base.parent_folder = base.current_folder;
-                    base.current_folder = folder_id;
-                    console.log("Fetched ");
+                    base.current_folder = folder_id !== undefined ? folder_id : 0;
                 }
                 base.folder = new File({id: folder_id});
                 base.folder.fetch({
@@ -161,27 +157,16 @@ define([
 
             });
         },
-//        fetchFolders: function (folder_id, callback) {
-//            var base = this;
-//            base.folder_list.fetch({
-//                data: {
-//                    "folder_id": folder_id
-//                },
-//                success: function () {
-//                    if (callback) {
-//                        callback();
-//                    }
-//
-//                }
-//            });
-//        },
         fetchFiles: function (folder_id, callback) {
             var base = this;
+
+
             base.files_list.fetch({
                 data: {
-                    "folder_id": folder_id
+                    "folder_id": folder_id + ""
                 },
                 success: function () {
+                    console.log(folder_id);
                     if (callback) {
                         callback();
                     }
