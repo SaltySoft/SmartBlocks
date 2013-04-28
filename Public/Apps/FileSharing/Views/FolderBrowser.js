@@ -30,7 +30,8 @@ define([
             SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "k_fs") {
                     if (message.status == "changed_directory") {
-                        if (message.folder_id == base.current_folder) {
+                        if (message.folder_id == base.folder.get("id")) {
+                            console.log(message);
                             base.reload();
                         }
                     }
@@ -60,7 +61,7 @@ define([
                         }, '/images/icons/folder_go.png');
                         context_menu.addButton("Delete", function () {
                             if (confirm("Are you sure you want to delete that folder and all the files in it ?")) {
-                                var folder = new Folder({id: elt.attr("data-folder_id")});
+                                var folder = new File({id: elt.attr("data-file_id")});
                                 folder.destroy({
                                     success: function () {
                                         base.fetchAll(base.current_folder);
@@ -106,9 +107,11 @@ define([
                         context_menu.addButton("Delete", function () {
                             if (confirm("Are you sure you want to delete that file ?")) {
                                 var file = new File({ id: elt.attr("data-file_id")});
+                                console.log("deleting");
                                 file.destroy({
                                     success: function () {
                                         base.fetchAll(base.current_folder);
+                                        console.log("deleted");
                                     }
                                 });
                             }

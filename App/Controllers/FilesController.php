@@ -56,11 +56,13 @@ class FilesController extends Controller
 //        }
 ////
         $data = $this->getRequestData();
-
-        $qb->leftJoin("f.parent_folder", "p")
-            ->leftJoin("p.users_allowed", "aluser")
-            ->andWhere("(f.owner = :user OR aluser = :user OR p.owner = :user)")
-            ->setParameter("user", User::current_user());
+        if (!(isset($data["shared"])  && $data["shared"]))
+        {
+            $qb->leftJoin("f.parent_folder", "p")
+                ->leftJoin("p.users_allowed", "aluser")
+                ->andWhere("(f.owner = :user OR aluser = :user OR p.owner = :user)")
+                ->setParameter("user", User::current_user());
+        }
 
 
         if (isset($data["folder_id"]))
@@ -171,6 +173,8 @@ class FilesController extends Controller
                 move_uploaded_file($_FILES["file"]["tmp_name"], $path . $file->getPath());
             }
             $file->save();
+            if (is_object($file->getParentFolder()))
+                $this->send_notifs($file->getParentFolder());
             echo json_encode($file->toArray());
         }
     }
@@ -197,6 +201,7 @@ class FilesController extends Controller
                     $this->send_notifs($folder);
                 }
             }
+            $old_users = $file->getUsersAllowed()->toArray();
             $file->getUsersAllowed()->clear();
             foreach ($data["users_allowed"] as $user_array)
             {
@@ -204,15 +209,25 @@ class FilesController extends Controller
                 if (is_object($user))
                 {
                     $file->addAllowedUser($user);
+
                 }
             }
 
             $file->save();
+            foreach($old_users as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+            }
+            foreach($file->getUsersAllowed() as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+            }
             echo json_encode($file->toArray());
         }
         else
             echo json_encode(array("error"));
     }
+
 
     public function destroy($params = array())
     {
