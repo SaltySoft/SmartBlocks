@@ -94,6 +94,7 @@
     font-size: 1em;
     color: black;
 
+
     /* Firefox */
     -moz-transition: all 100ms ease-in;
     /* WebKit */
@@ -103,6 +104,47 @@
     /* Standard */
     transition: all 100ms ease-in;
 }
+
+.k_fs_thunbnail_image {
+    height: 70px;
+    width: 64px;
+    margin: auto;
+    background-image: url("/images/file_small.png");
+    background-repeat: no-repeat;
+}
+
+.k_fs_thunbnail_image.folder {
+    background-image: url("/images/folder_small.png");
+
+}
+
+.k_fs_thunbnail_image.image_png, .k_fs_thunbnail_image.image_jpg,
+.k_fs_thunbnail_image.image_jpeg, .k_fs_thunbnail_image.image_bmp  {
+    background-image: url("/images/picture_small.png");
+}
+
+.k_fs_thunbnail_image.application_msword {
+    background-image: url("/Apps/FileSharing/Resources/ms_icons_small.png");
+    background-position: -256px -176px;
+}
+
+.k_fs_thunbnail_image.application_vnd_ms-excel {
+    background-image: url("/Apps/FileSharing/Resources/ms_icons_small.png");
+    background-position: -96px -96px;
+}
+
+.k_fs_thunbnail_image.application_vnd_ms-powerpoint {
+    background-image: url("/Apps/FileSharing/Resources/ms_icons_small.png");
+    background-position: -15px -96px;
+}
+
+.k_fs_thunbnail_image img {
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+
+
 .k_fs_thumbnail:hover {
     background-color: rgba(110, 144, 254, 0.16);
     /*color: white;*/
@@ -128,7 +170,7 @@
     float: left;
     background-color: #f0f3f7;
     color: black;
-    width: 230px;
+    width: 233px;
     margin: 10px;
     margin-top:0px;
     margin-bottom: 0px;
@@ -278,4 +320,36 @@
 }
 .k_fs_thumbnail:hover .file_information {
     display: block;
+}
+
+.k_fs_folder_properties .object_selected {
+    display: block;
+    float: left;
+    height: 75px;
+    width: 192px;
+    border: 1px grey solid;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 75px;
+}
+
+.k_fs_folder_properties .object_selected:hover {
+    background-color: #d3d3d3;
+}
+
+.k_fs_folder_properties .objects_selection {
+    overflow-y: scroll;
+    height: 200px;
+}
+
+.k_fs_current_address {
+    height: 14px;
+    border: 1px #d3d3d3 solid;
+    background-color: white;
+    padding: 4px;
+    font-weight: bold;
+    margin-left: 34px;
+    width: 456px;
+    float: left;
+    margin-top: 3px;
 }

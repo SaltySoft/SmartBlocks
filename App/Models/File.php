@@ -145,12 +145,12 @@ class File extends Model
     public function getType()
     {
         $type = "unknown";
-        if (file_exists(ROOT.DS."Data".DS."User_files".DS.$this->path))
+        if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $this->path))
         {
             if (!$this->is_folder)
             {
                 $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $type = finfo_file($finfo, ROOT.DS."Data".DS."User_files".DS.$this->path);
+                $type = finfo_file($finfo, ROOT . DS . "Data" . DS . "User_files" . DS . $this->path);
                 finfo_close($finfo);
             }
             else
@@ -176,7 +176,8 @@ class File extends Model
 
         $users_allowed = array();
 
-        foreach ($this->users_allowed as $user) {
+        foreach ($this->users_allowed as $user)
+        {
             $users_allowed[] = $user->toArray();
         }
 
@@ -188,18 +189,19 @@ class File extends Model
             $parent = $parent->getParentFolder();
         }
         $type = "unknown";
-        if (file_exists(ROOT.DS."Data".DS."User_files".DS.$this->path))
+        if (!$this->is_folder)
         {
-            if (!$this->is_folder)
+            if (file_exists(ROOT . DS . "Data" . DS . "User_files" . DS . $this->path))
             {
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $type = finfo_file($finfo, ROOT.DS."Data".DS."User_files".DS.$this->path);
-                finfo_close($finfo);
-            }
-            else
-                $type = "folder";
-        }
 
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $type = finfo_file($finfo, ROOT . DS . "Data" . DS . "User_files" . DS . $this->path);
+                finfo_close($finfo);
+
+            }
+        }
+        else
+            $type = "folder";
 
 
         return array(
