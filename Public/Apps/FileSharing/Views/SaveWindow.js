@@ -50,21 +50,27 @@ define([
         },
         saveFile: function () {
             var base = this;
-            console.log(base.data);
-            base.SmartBlocks.startLoading("Exporting image to file");
-            var file = new File();
-            file.set("name", base.name);
-            file.set("data", base.data);
-            if (base.extension !== undefined)
-                file.set("extension", base.extension);
-            file.set("parent_folder", base.folder);
-            file.save({}, {
-                success: function () {
-                    base.$el.remove();
-                    base.SmartBlocks.show_message("Schema was succesfully exported.");
-                    base.SmartBlocks.stopLoading();
-                }
-            });
+
+            if (base.name != "") {
+                base.SmartBlocks.startLoading("Exporting image to file");
+                var file = new File();
+                file.set("name", base.name);
+                file.set("data", base.data);
+                if (base.extension !== undefined)
+                    file.set("extension", base.extension);
+                file.set("parent_folder", base.folder);
+                file.save({}, {
+                    success: function () {
+                        base.$el.remove();
+                        base.SmartBlocks.show_message("Schema was succesfully exported.");
+                        base.SmartBlocks.stopLoading();
+                    }
+                });
+            } else {
+                var errors = base.$el.find(".error_messages");
+                errors.html("The name cannot be blank");
+                errors.show();
+            }
         },
         initializeEvents: function () {
             var base = this;
@@ -88,6 +94,9 @@ define([
 
             base.$el.delegate(".file_to_save_name", "keyup", function () {
                 base.name = $(this).val();
+                if (base.name != "") {
+                    base.$el.find(".error_messages").hide();
+                }
             });
 
             base.$el.delegate(".control_button", "click", function () {

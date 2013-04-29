@@ -14,7 +14,7 @@
     height: 360px;
     width: 460px;
     overflow-y: scroll;
-    background-color: #d3d3d3;
+    background-color: #ededed;
     padding: 20px;
 }
 
@@ -55,4 +55,14 @@
 
 .k_fs_save_window .browser_button {
     float: left;
+}
+
+.k_fs_save_window .error_messages {
+    padding: 5px;
+    margin-top: 5px;
+    background-color: rgba(255, 160, 122, 0.75);
+    border: 2px rgba(175, 0, 8, 0.75) solid;
+    display: none;
+    color: rgba(175, 0, 8, 0.75);
+    font-weight: bold;
 }
