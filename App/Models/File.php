@@ -50,11 +50,14 @@ class File extends Model
      */
     private $users_allowed;
 
+    private $address;
+
     public function __construct()
     {
         $this->subfiles = new \Doctrine\Common\Collections\ArrayCollection();
         $this->is_folder = false;
         $this->users_allowed = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->address = null;
     }
 
     public function setId($id)
@@ -142,6 +145,31 @@ class File extends Model
         $this->users_allowed[] = $user;
     }
 
+    public function setAddress($address)
+    {
+        $this->address = $address;
+    }
+
+    public function getAddress()
+    {
+        if ($this->address == null)
+        {
+            $address = $this->name;
+            $parent = $this->parent_folder;
+            while (is_object($parent))
+            {
+                $address = $parent->getName() . "/" . $address;
+                $parent = $parent->getParentFolder();
+            }
+            return $address;
+        }
+        else
+        {
+            return $this->address;
+        }
+
+    }
+
     public function getType()
     {
         $type = "unknown";
@@ -157,6 +185,29 @@ class File extends Model
                 $type = "folder";
         }
         return $type;
+    }
+
+    public static function getHome()
+    {
+        $file = new File();
+        $file->id = 0;
+        $file->setOwner(\User::current_user());
+        $file->setAsFolder(true);
+        $file->setName("Home");
+        //getting user subfiles
+        $em = Model::getEntityManager();
+        $qb = $em->createQuerybuilder();
+        $qb->select("f")
+            ->from("File", "f")
+            ->andWhere("f.parent_folder is NULL")
+            ->andWhere("f.owner = :user")
+            ->setParameter("user", \User::current_user());
+        $results = $qb->getQuery()->getResult();
+        foreach ($results as $result)
+        {
+            $file->addSubfile($result);
+        }
+        return $file;
     }
 
     public function toArray($reach_subfiles = false)
@@ -181,13 +232,7 @@ class File extends Model
             $users_allowed[] = $user->toArray();
         }
 
-        $address = $this->name;
-        $parent = $this->parent_folder;
-        while (is_object($parent))
-        {
-            $address = $parent->getName() . "/" . $address;
-            $parent = $parent->getParentFolder();
-        }
+
         $type = "unknown";
         if (!$this->is_folder)
         {
@@ -207,12 +252,12 @@ class File extends Model
         return array(
             "id" => $this->id,
             "name" => $this->name,
-            "parent_folder" => $this->parent_folder != null ? $this->parent_folder->toArray() : null,
+            "parent_folder" => $this->parent_folder != null ? $this->parent_folder->toArray() : self::getHome(),
             "owner" => $this->getOwner() != null ? $this->getOwner()->toArray() : null,
             "is_folder" => $this->is_folder,
             "subfiles" => $subfiles,
             "users_allowed" => $users_allowed,
-            "address" => "/" . $address,
+            "address" => "/" . $this->getAddress(),
             "type" => $type
         );
     }

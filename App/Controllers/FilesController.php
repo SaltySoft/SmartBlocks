@@ -46,17 +46,9 @@ class FilesController extends Controller
         $qb = $em->createQueryBuilder();
         $qb->select("f")
             ->from("File", "f");
-//
-//        if (isset($_GET["page"]))
-//        {
-//            $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
-//            $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
-//            $qb->setFirstResult(($page - 1) * $page_size)
-//                ->setMaxResults($page_size);
-//        }
-////
+
         $data = $this->getRequestData();
-        if (!(isset($data["shared"])  && $data["shared"]))
+        if (!(isset($data["shared"]) && $data["shared"]))
         {
             $qb->leftJoin("f.parent_folder", "p")
                 ->leftJoin("p.users_allowed", "aluser")
@@ -95,7 +87,7 @@ class FilesController extends Controller
             $response[] = $file->toArray();
         }
         $this->render = false;
-//        header("Content-Type: application/json");
+        header("Content-Type: application/json");
         echo json_encode($response);
     }
 
@@ -109,11 +101,13 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
-            echo json_encode($file->toArray());
+            echo json_encode($file->toArray(true));
         }
         else
         {
-            echo json_encode(array("id" => 0, "parent_folder" => array("id" => 0),   "address" => "/"));
+            $file = File::getHome();
+//            var_dump($file->getSubfiles()->toArray());
+            echo json_encode($file->toArray(true));
         }
     }
 
@@ -172,6 +166,31 @@ class FilesController extends Controller
                 $file->setPath($file->getPath() . PATHINFO_EXTENSION . $ext);
                 move_uploaded_file($_FILES["file"]["tmp_name"], $path . $file->getPath());
             }
+            if (isset($data["data"]))
+            {
+                $path = ROOT . DS . "Data" . DS . "User_files" . DS;
+                $exploded_name = explode(".", $file->getName());
+                if (isset($data["extension"]))
+                {
+                    $ext = "." . $data["extension"];
+                }
+                else
+                {
+                    $ext = count($exploded_name) > 1 ? "." . $exploded_name[count($exploded_name) - 1] : "";
+                }
+                $file->setPath($file->getPath() . $ext);
+                $data = $data["data"];
+                $array = explode(",", $data);
+                if (isset($array[1]))
+                {
+                    $data = $array[1];
+                }
+                if (base64_encode(base64_decode($data)) === $data)
+                {
+                    $data = base64_decode($data);
+                }
+                file_put_contents($path . $file->getPath(), $data);
+            }
             $file->save();
             if (is_object($file->getParentFolder()))
                 $this->send_notifs($file->getParentFolder());
@@ -214,11 +233,11 @@ class FilesController extends Controller
             }
 
             $file->save();
-            foreach($old_users as $user)
+            foreach ($old_users as $user)
             {
                 NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
             }
-            foreach($file->getUsersAllowed() as $user)
+            foreach ($file->getUsersAllowed() as $user)
             {
                 NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
             }
@@ -314,7 +333,7 @@ class FilesController extends Controller
         $data = $this->getRequestData();
         $file = File::find($data["id"]);
         $this->render = false;
-        header("Content-Type: = ".$file->getType());
+        header("Content-Type: = " . $file->getType());
         if (is_object($file))
         {
             echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());

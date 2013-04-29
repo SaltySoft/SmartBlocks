@@ -386,8 +386,8 @@ h6 {
 }
 
 button {
-    margin-top: 20px;
-    padding: 10px 10px 10px 10px;
+    /*margin-top: 20px;*/
+    padding: 5px 5px 5px 5px;
     background-color: #6e90fe;
     border: 1px solid #dddddd;
     color: #fff;
@@ -402,6 +402,7 @@ button {
     -o-transition: all 50ms ease-in;
     /* Standard */
     transition: all 50ms ease-in;
+    margin: 0px;
 }
 
 button:hover {
