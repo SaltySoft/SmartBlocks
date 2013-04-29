@@ -152,19 +152,34 @@ class Schema extends \Model
             $texts_list[] = $st->toArray();
         }
 
-        $array = array(
-            "id" => $this->id,
-            "name" => $this->name,
-            "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
-            "sessions" => $participants,
-            "data" => "data:image/png;base64," . urlencode(base64_encode(file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename))),
-            "contents" => file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename),
-            "texts" => $texts_list
-        );
+        $array = array();
+
+        if (\User::current_user() != null)
+        {
+            $array = array(
+                "id" => $this->id,
+                "name" => $this->name,
+                "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
+                "sessions" => $participants,
+                "data" => "data:image/png;base64," . urlencode(base64_encode(file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename))),
+                "contents" => file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename),
+                "texts" => $texts_list
+            );
+        }
+        else
+        {
+            $array = array(
+                "id" => $this->id,
+                "name" => $this->name,
+                "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
+                "sessions" => $participants,
+                "data" => base64_encode(file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename)),
+                "contents" => file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename),
+                "texts" => $texts_list
+            );
+        }
+
         return $array;
-
     }
-
-
 }
 

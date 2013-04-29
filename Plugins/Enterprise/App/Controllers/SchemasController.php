@@ -97,10 +97,21 @@ class SchemasController extends \Controller
 
         $response = array();
 
-        foreach ($schemas as $schema)
-        {
-            $response[] = $schema->toArray();
-        }
+        //if (\User::current_user() != null)
+        //{
+            foreach ($schemas as $schema)
+            {
+                $response[] = $schema->toArray();
+            }
+        //}
+        //else
+        //{
+            //foreach ($schemas as $schema)
+            //{
+                //$response[] = $schema->toArray(1);
+            //}
+        //}
+
         $this->render = false;
         header("Content-Type: application/json");
         echo json_encode($response);
