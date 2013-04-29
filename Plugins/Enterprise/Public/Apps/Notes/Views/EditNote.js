@@ -41,7 +41,6 @@ define([
 
             base.textEditor = new TextEditorView();
             base.textEditor.init();
-            base.textEditor.events.on();
 
             _.each(base.subnotes_list, function (subnote) {
                 base.textEditor.addTextInit(subnote.get('content'), subnote.get('id'));
@@ -70,21 +69,25 @@ define([
                     }
                 });
             });
-//            base.$el.delegate(".textContent", "blur", function () {
-//                var id = $(this).attr("data-id");
-//                var newText = base.textEditor.getText(id);
-//                var subnote = new Subnote({
-//                    id:id
-//                });
-//                subnote.fetch({
-//                    data:{
-//                    },
-//                    success:function () {
-//                        subnote.set("content", newText);
-//                        subnote.save();
-//                    }
-//                })
-//            });
+
+            base.textEditor.events.on('textEditor_notification', function (message) {
+                if (message.status == "text_update") {
+                    var id = message.textId;
+                    var textUpdate = message.text;
+//                    console.log("editNote textUpdate, id : " + id + ", text :" + textUpdate);
+                    var subnote = new Subnote({
+                        id:id
+                    });
+                    subnote.fetch({
+                        data:{
+                        },
+                        success:function () {
+                            subnote.set("content", textUpdate);
+                            subnote.save();
+                        }
+                    })
+                }
+            });
         }
     });
 

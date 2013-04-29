@@ -14,7 +14,6 @@ define([
         init:function () {
             var base = this;
             base.events = _.extend({}, Backbone.Events);
-
             base.textArray = new Array();
         },
         render:function () {
@@ -26,7 +25,6 @@ define([
 
             base.initRichTextEditor();
             base.initializeEvents();
-            base.initializeRichTextEditorEvents();
         },
         addTextInit:function (text, id) {
             var base = this;
@@ -45,8 +43,8 @@ define([
             var base = this;
             var frames = $(".richTextEditor");
             for (var i = 0; i < frames.length; ++i) {
-                var id = frames.attr("data-id");
                 var frame = frames[i];
+                var id = $(frame).attr("data-id");
                 var frameDoc = frame.contentWindow.document;
                 frameDoc.open();
                 frameDoc.write(base.textArray[id]);
@@ -54,21 +52,7 @@ define([
                 frameDoc.designMode = "on";
             }
         },
-        getInfo:function () {
-            var base = this;
-            for (var key in base.textArray) {
-                alert(key + " : " + base.textArray[key]);
-            }
-        },
         initializeEvents:function () {
-            var base = this;
-//            base.$el.delegate(".textContent", "blur", function () {
-//                var id = $(this).attr("data-id");
-//                var newText = $(this).html();
-//                base.textArray[id] = newText;
-//            });
-        },
-        initializeRichTextEditorEvents:function () {
             var base = this;
             base.$el.delegate(".editor_button", "click", function (e) {
                 $(this).toggleClass("selected");
@@ -80,17 +64,21 @@ define([
                     contentWindow.document.execCommand($(this).attr("commandName"), false, null);
                     contentWindow.focus();
                 }
-
-                return false;
             });
+
             $('body', $('.richTextEditor').contents()).blur(function (event) {
-                var id = $(this).attr("data-id");
-                base.textArray[id] = event.currentTarget.innerHTML;
-                console.log("blur TextEditor : " + event.currentTarget.innerHTML);
+                var id = $('.richTextEditor').attr("data-id");
+                var textUpdate = event.currentTarget.innerHTML;
+                base.textArray[id] = textUpdate;
+                var message = {
+                    status:"text_update",
+                    textId:id,
+                    text:textUpdate
+                };
+                base.events.trigger('textEditor_notification', message);
             });
         }
     });
 
     return TextEditorView;
-})
-;
+});
