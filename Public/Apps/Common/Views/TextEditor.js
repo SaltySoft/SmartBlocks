@@ -11,9 +11,9 @@ define([
         },
         initialize:function () {
         },
-        init:function (AppEvents) {
+        init:function () {
             var base = this;
-            this.AppEvents = AppEvents;
+            base.events = _.extend({}, Backbone.Events);
 
             base.textArray = new Array();
         },
@@ -43,12 +43,13 @@ define([
         },
         initRichTextEditor:function () {
             var base = this;
-//            base.$el.find(".textContent").hide();
             var frames = $(".richTextEditor");
             for (var i = 0; i < frames.length; ++i) {
+                var id = frames.attr("data-id");
                 var frame = frames[i];
                 var frameDoc = frame.contentWindow.document;
                 frameDoc.open();
+                frameDoc.write(base.textArray[id]);
                 frameDoc.close();
                 frameDoc.designMode = "on";
             }
@@ -59,24 +60,17 @@ define([
                 alert(key + " : " + base.textArray[key]);
             }
         },
-        fontEdit:function (x, y) {
-            var base = this;
-            base.iFrameTextEditor.document.execCommand(x, "", y);
-            base.iFrameTextEditor.focus();
-        },
         initializeEvents:function () {
             var base = this;
-            base.$el.delegate(".textContent", "blur", function () {
-                var id = $(this).attr("data-id");
-                var newText = $(this).html();
-                base.textArray[id] = newText;
-            });
+//            base.$el.delegate(".textContent", "blur", function () {
+//                var id = $(this).attr("data-id");
+//                var newText = $(this).html();
+//                base.textArray[id] = newText;
+//            });
         },
         initializeRichTextEditorEvents:function () {
             var base = this;
-
-            base.$el.delegate(".editor_button", "click", execCommand);
-            function execCommand(e) {
+            base.$el.delegate(".editor_button", "click", function (e) {
                 $(this).toggleClass("selected");
                 var frames = $(".richTextEditor");
                 for (var i = 0; i < frames.length; ++i) {
@@ -88,21 +82,12 @@ define([
                 }
 
                 return false;
-            }
-
-//            base.$el.delegate("#showText", "click", function () {
-//
-//            });
-//
-//            base.$el.delegate(".richTextEditor", "blur", function () {
-//                alert("leaving iFrame");
-////                document.getElementById(editor).contentWindow.document.body.innerHTML;
-//            });
-//
-//            base.$el.delegate(".richTextEditor_containerDiv", "blur", function () {
-//                alert("leaving iFrame container");
-////                document.getElementById(editor).contentWindow.document.body.innerHTML;
-//            });
+            });
+            $('body', $('.richTextEditor').contents()).blur(function (event) {
+                var id = $(this).attr("data-id");
+                base.textArray[id] = event.currentTarget.innerHTML;
+                console.log("blur TextEditor : " + event.currentTarget.innerHTML);
+            });
         }
     });
 

@@ -6,11 +6,17 @@
     </div >
     <% for (var key in texts) {%>
     <div class="textContainer" >
-        <div class="richTextEditor_containerDiv" >
-            <iframe class="richTextEditor" data-id="<%= key %>" >
-            </iframe >
-        </div >
+        <div class="textContent" data-id="<%= key %>" contenteditable="true" ><%= texts[key]%></div >
+
     </div >
     <%} %>
-</div >
 
+    <div class="richTextEditor_containerDiv" >
+        <iframe class="richTextEditor" >
+        </iframe >
+    </div >
+    <div class="richTextEditor_containerDiv" >
+        <iframe class="richTextEditor" >
+        </iframe >
+    </div >
+</div >

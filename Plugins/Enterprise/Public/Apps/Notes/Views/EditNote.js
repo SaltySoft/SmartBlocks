@@ -40,7 +40,8 @@ define([
             base.$el.html(base.editNoteTemplate);
 
             base.textEditor = new TextEditorView();
-            base.textEditor.init(base.AppEvents);
+            base.textEditor.init();
+            base.textEditor.events.on();
 
             _.each(base.subnotes_list, function (subnote) {
                 base.textEditor.addTextInit(subnote.get('content'), subnote.get('id'));
@@ -69,30 +70,21 @@ define([
                     }
                 });
             });
-            base.$el.delegate(".textContent", "blur", function () {
-                var id = $(this).attr("data-id");
-                var newText = base.textEditor.getText(id);
-                var subnote = new Subnote({
-                    id:id
-                });
-                subnote.fetch({
-                    data:{
-                    },
-                    success:function () {
-                        subnote.set("content", newText);
-                        subnote.save();
-                    }
-                })
-            });
-//            base.$el.delegate(".richTextEditor", "blur", function () {
-//                alert("leaving iFrame");
-//                document.getElementById(editor).contentWindow.document.body.innerHTML;
+//            base.$el.delegate(".textContent", "blur", function () {
+//                var id = $(this).attr("data-id");
+//                var newText = base.textEditor.getText(id);
+//                var subnote = new Subnote({
+//                    id:id
+//                });
+//                subnote.fetch({
+//                    data:{
+//                    },
+//                    success:function () {
+//                        subnote.set("content", newText);
+//                        subnote.save();
+//                    }
+//                })
 //            });
-//            base.$el.delegate(".richTextEditor", "blur", function () {
-//                alert("leaving iFrame");
-////                document.getElementById(editor).contentWindow.document.body.innerHTML;
-//            });
-
         }
     });
 
