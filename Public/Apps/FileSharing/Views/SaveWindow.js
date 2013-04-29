@@ -64,6 +64,7 @@ define([
                         base.$el.remove();
                         base.SmartBlocks.show_message("Schema was succesfully exported.");
                         base.SmartBlocks.stopLoading();
+                        base.SmartBlocks.FileSharingApp.refresh();
                     }
                 });
             } else {

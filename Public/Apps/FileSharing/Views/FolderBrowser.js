@@ -143,6 +143,10 @@ define([
             var base = this;
             base.fetchAll(base.current_folder);
         },
+        refresh: function () {
+            var base = this;
+            base.fetchAll(base.folder.get("id"));
+        },
         fetchAll: function (folder_id, callback) {
             var base = this;
             if (base.$el.is(":visible"))

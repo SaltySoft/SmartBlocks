@@ -29,7 +29,9 @@ requirejs(apps,
         }
 
         ChatApp.initialize(websocket);
+        SmartBlocks.ChatApp = ChatApp;
         FileSharingApp.initialize(SmartBlocks);
+        SmartBlocks.FileSharingApp = FileSharingApp;
         if (App)
             App.initialize(SmartBlocks);
     });
