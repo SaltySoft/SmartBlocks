@@ -15,6 +15,9 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.render();
+            base.initalizeEvents();
+            if (base.model.get("id") !== undefined)
+                base.$el.attr("data-id", base.model.get("id"));
         },
         render: function () {
             var base = this;
@@ -23,7 +26,7 @@ define([
             if (base.model.get("completion_date") != null) {
                 base.$el.addClass("completed");
             }
-            base.initalizeEvents();
+
         },
         initalizeEvents: function () {
             var base = this;
@@ -51,14 +54,21 @@ define([
                     base.model.save({}, {
                         success: function () {
                             base.SmartBlocks.stopLoading();
+                            base.render();
                         }
                     });
                     base.$el.find(".task_name").html(base.model.get("name"));
                     base.leaveEditMode();
+
                 }
 
-                if (action = "cancel") {
-
+                if (action == "delete") {
+                    if (confirm("Are you sure you want to delete this task ?")) {
+                        base.model.destroy();
+                        base.$el.slideUp(200, function () {
+                            base.$el.remove();
+                        });
+                    }
                 }
             });
 

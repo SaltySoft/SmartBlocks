@@ -15,7 +15,8 @@ class TasksController extends \Controller
         $qb->select("t")
             ->from("\\Enterprise\\Task", "t")
             ->where("t.owner = :user")
-            ->setParameter("user", \User::current_user());
+            ->setParameter("user", \User::current_user())
+            ->orderBy("t.order_index");
 
         $results = $qb->getQuery()->getResult();
 
@@ -68,6 +69,7 @@ class TasksController extends \Controller
             $data = $this->getRequestData();
             $task->setName($data["name"]);
             $task->setCompletionDate($data["completion_date"]);
+            $task->setOrderIndex($data["order_index"]);
             $task->save();
             echo json_encode($task->toArray());
         }
@@ -77,8 +79,10 @@ class TasksController extends \Controller
         }
     }
 
-    public function delete($params = array())
+    public function destroy($params = array())
     {
+        $this->render = false;
+        header("Content-Type: application/json");
         $task = Task::find($params["id"]);
         if (is_object($task))
         {

@@ -53,11 +53,17 @@ class Task extends \Model
      */
     private $completion_date;
 
+    /**
+     * @Column(type="integer")
+     */
+    private $order_index;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
         $this->name = "New task";
         $this->creation_date = time();
+        $this->order_index = self::count() + 1;
     }
 
     public function getId()
@@ -105,6 +111,16 @@ class Task extends \Model
         return $this->creation_date;
     }
 
+    public function setOrderIndex($order_index)
+    {
+        $this->order_index = $order_index;
+    }
+
+    public function getOrderIndex()
+    {
+        return $this->order_index;
+    }
+
     public function toArray()
     {
         $array = array(
@@ -112,7 +128,8 @@ class Task extends \Model
             "name" => $this->name,
             "owner" => $this->owner->toArray(),
             "creation_date" => $this->creation_date,
-            "completion_date" => $this->completion_date
+            "completion_date" => $this->completion_date,
+            "order_index" => $this->order_index
         );
         return $array;
     }

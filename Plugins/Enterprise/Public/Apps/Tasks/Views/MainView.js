@@ -5,7 +5,8 @@ define([
     'Enterprise/Apps/Tasks/Models/Task',
     'Enterprise/Apps/Tasks/Collections/Tasks',
     'text!Enterprise/Apps/Tasks/Templates/main_view.html',
-    'Enterprise/Apps/Tasks/Views/TaskItem'
+    'Enterprise/Apps/Tasks/Views/TaskItem',
+    'jqueryui'
 ], function ($, _, Backbone, Task, TasksCollection, MainViewTemplate, TaskItemView) {
     var MainView = Backbone.View.extend({
         tagName: "div",
@@ -22,6 +23,7 @@ define([
             base.tasks_list = new TasksCollection();
 
             base.render();
+
         },
         render: function () {
             var base = this;
@@ -39,7 +41,21 @@ define([
                     base.renderList();
                 }
             });
+            base.$el.find(".tasks_list").sortable({
+                handle: '.handle',
+                stop: function () {
+                    //handle order
+                    var i = 0;
+                    base.$el.find(".task_item").each(function () {
+                        var elt = $(this);
+                        var model = base.tasks_list.get(elt.attr("data-id"));
+                        model.set("order_index", i++);
+                        model.save();
+                    });
 
+                }
+            });
+            base.$el.find(".tasks_list").disableSelection();
             base.initializeEvents();
         },
         renderList: function () {
@@ -49,7 +65,7 @@ define([
             var list_container = base.$el.find(".tasks_list");
             list_container.html("");
             for (var k in tasks_list) {
-                var taskItemView = new TaskItemView( tasks_list[k]);
+                var taskItemView = new TaskItemView(tasks_list[k]);
                 taskItemView.init(base.SmartBlocks);
                 list_container.append(taskItemView.$el);
             }
