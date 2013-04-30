@@ -1,0 +1,30 @@
+.ent_tsk {
+    width: 800px;
+    position: relative;
+    height: 600px;
+
+    margin: auto;
+    top: 50px;
+
+}
+
+.ent_tsk .task_item {
+    border-top: 1px #d3d3d3 solid;
+    padding: 5px;
+}
+
+.ent_tsk .task_item.normal .task_edition {
+     display: none;
+ }
+
+.ent_tsk .task_item.normal .task_display {
+    display: inline;
+}
+
+.ent_tsk .task_item.edition .task_edition {
+    display: inline;
+}
+
+.ent_tsk .task_item.edition .task_display {
+    display: none;
+}
