@@ -23,7 +23,7 @@ define([
             container.addClass("file_upload_form");
             base.$el.append(container);
 
-            var template = _.template(FileUploadTemplate, { parent_folder_id: base.folder_browser.current_folder  });
+            var template = _.template(FileUploadTemplate, { parent_folder_id: base.folder_browser.folder.get("id")  });
             container.html(template);
 
             base.initializeEvents();

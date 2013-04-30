@@ -9,8 +9,9 @@ define([
     'Enterprise/Apps/Schemas/Models/SchemaText',
     'Enterprise/Apps/Schemas/Views/TextOverlayView',
     'Enterprise/Apps/Schemas/Business/State',
-    'Apps/Common/Views/ColorPicker'
-], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView, State, ColorPickerView) {
+    'Apps/Common/Views/ColorPicker',
+    'Apps/FileSharing/Views/SaveWindow'
+], function ($, _, Backbone, DrawTemplate, Tools, Schema, TextOverlayTemplate, TextOverlay, TextOverlayView, State, ColorPickerView, SaveWindowView) {
     var DrawView = Backbone.View.extend({
         tagName: "div",
         className: "ent_sch_drawview",
@@ -532,6 +533,47 @@ define([
                     base.simulation = false;
                 }
             });
+
+            //File export
+            base.$el.delegate(".ent_sch_export_button", "click", function () {
+                //generate image file
+                var save_canvas = document.createElement("canvas");
+                if (save_canvas) {
+                    var $save_canvas = $(save_canvas);
+                    $save_canvas.attr("width", 1020);
+                    $save_canvas.attr("height", 655);
+
+                    var context = save_canvas.getContext("2d");
+                    if (base.context)  {
+                        var image = new Image();
+                        image.src = base.canvas[0].toDataURL("image/png");
+                        image.onload = function () {
+                            context.drawImage(image, 0, 0);
+                            var text_overlays = base.schema.get("texts").models;
+                            context.lineWidth=1;
+                            context.fillStyle="#000000";
+                            context.lineStyle="#000000";
+                            context.font="18px sans-serif";
+
+                            for (var k in text_overlays) {
+                                context.fillText(text_overlays[k].get("content"), text_overlays[k].get("x"), text_overlays[k].get("y") + 9);
+                            }
+                            var save_window = new SaveWindowView(base.SmartBlocks, save_canvas.toDataURL("image/png"), "png");
+                            save_window.show();
+                        }
+                    }
+                    //instanciate folder choice window
+
+                }
+            });
+        },
+        getBlob: function (dataURI) {
+            var binary = atob(dataURI.split(",")[1]);
+            var array = new Array();
+            for (var i=0; i < binary.length; i++) {
+                array.push(binary.charCodeAt(i));
+            }
+            return new Blob(new Uint8Array(array), {type: 'image/png'});
         },
         simulation: false,
         simx: 50,

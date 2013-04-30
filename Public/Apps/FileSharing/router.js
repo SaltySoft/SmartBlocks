@@ -12,7 +12,7 @@ define([
             "show_folder/:id": "show_folder"
         }
     });
-
+    var main_view;
     var initialize = function (SmartBlocks) {
         var base = this;
         User.getCurrent(function (current_user) {
@@ -39,7 +39,7 @@ define([
                     $(container).css("left", $(window).width() / 2 - container.width() / 2);
             });
 
-            var main_view = new MainView();
+            main_view = new MainView();
             main_view.init(SmartBlocks);
             container.append(main_view.$el);
 
@@ -54,6 +54,9 @@ define([
     };
 
     return {
-        initialize: initialize
+        initialize: initialize,
+        refresh: function () {
+            main_view.refresh();
+        }
     };
 });
