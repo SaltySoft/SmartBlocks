@@ -1,16 +1,11 @@
-<div class="text_editor_container" >
-    <div class="editor_button_container" >
-        <input type="button" class="editor_button" id="bold_button" commandName="bold" value="B" />
-        <input type="button" class="editor_button" id="italic_button" commandName="italic" value="I" />
-        <input type="button" class="editor_button" id="underline_button" commandName="underline" value="U" />
-    </div >
-    <% for (var key in texts) {%>
-    <div class="textContainer" >
-        <div class="richTextEditor_containerDiv" >
-            <iframe class="richTextEditor" data-id="<%= key %>" >
-            </iframe >
-        </div >
-    </div >
-    <%} %>
+<div class="editor_button_container" >
+    <input type="button" class="editor_button" id="bold_button" data-commandName="bold" value="B" />
+    <input type="button" class="editor_button" id="italic_button" data-commandName="italic" value="I" />
+    <input type="button" class="editor_button" id="underline_button" data-commandName="underline" value="U" />
 </div >
-
+<div class="textContainer" >
+    <div class="richTextEditor_containerDiv" >
+        <iframe class="richTextEditor" >
+        </iframe >
+    </div >
+</div >

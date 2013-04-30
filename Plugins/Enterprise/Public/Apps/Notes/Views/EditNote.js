@@ -4,9 +4,10 @@ define([
     'backbone',
     'Enterprise/Apps/Notes/Models/Note',
     'Enterprise/Apps/Notes/Models/Subnote',
+    'Enterprise/Apps/Notes/Views/EditSubnote',
     'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/edit_note.html'
-], function ($, _, Backbone, Note, Subnote, TextEditorView, EditNoteTemplate) {
+], function ($, _, Backbone, Note, Subnote, EditSubnoteView, TextEditorView, EditNoteTemplate) {
     var EditNoteView = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_edition",
@@ -22,6 +23,7 @@ define([
 
             //initializing the note that is going
             base.note = new Note({ id:note_id });
+
             //show some loading here
             base.note.fetch({
                 success:function () {
@@ -33,20 +35,23 @@ define([
             var base = this;
 
             //Init subnotes collections
-            base.subnotes_list = base.note.get("subnotes").models;
             base.editNoteTemplate = _.template(EditNoteTemplate, {
                 note:base.note
             });
             base.$el.html(base.editNoteTemplate);
 
-            base.textEditor = new TextEditorView();
-            base.textEditor.init();
+            base.subnotes_views_list = new Array();
+            base.subnotes_list = base.note.get("subnotes").models;
 
             _.each(base.subnotes_list, function (subnote) {
-                base.textEditor.addTextInit(subnote.get('content'), subnote.get('id'));
+                var editSubnoteView = new EditSubnoteView();
+                var subNoteId = subnote.get('id');
+                var suNoteText = subnote.get('content');
+                editSubnoteView.init(base.AppEvents, base.SmartBlocks, subNoteId, suNoteText);
+                base.$el.find(".editNoteContent").append(editSubnoteView.$el);
+                base.subnotes_views_list[subNoteId] = editSubnoteView;
             });
-            base.$el.find(".editNoteContent").html(base.textEditor.$el);
-            base.textEditor.render();
+
             base.initializeEvents();
         },
         initializeEvents:function () {
@@ -62,31 +67,17 @@ define([
                 });
                 subnote.save({}, {
                     success:function () {
-                        base.textEditor.addText("New content", subnote.id);
+                        var editSubnoteView = new EditSubnoteView();
+                        var subNoteId = subnote.id;
+                        var suNoteText = "New content";
+                        editSubnoteView.init(base.AppEvents, base.SmartBlocks, subNoteId, suNoteText);
+                        base.$el.find(".editNoteContent").append(editSubnoteView.$el);
+                        base.subnotes_views_list[subNoteId] = editSubnoteView;
                     },
                     error:function () {
                         SmartBlocks.show_message("There was an error creating the subnote. Please try again later.");
                     }
                 });
-            });
-
-            base.textEditor.events.on('textEditor_notification', function (message) {
-                if (message.status == "text_update") {
-                    var id = message.textId;
-                    var textUpdate = message.text;
-//                    console.log("editNote textUpdate, id : " + id + ", text :" + textUpdate);
-                    var subnote = new Subnote({
-                        id:id
-                    });
-                    subnote.fetch({
-                        data:{
-                        },
-                        success:function () {
-                            subnote.set("content", textUpdate);
-                            subnote.save();
-                        }
-                    })
-                }
             });
         }
     });

@@ -1,4 +1,4 @@
-.top_panel_container {
+.quick_control_panel_container {
     height: 100%;
     margin: 0px;
     padding: 0px;
@@ -6,13 +6,13 @@
     border-bottom: 1px #1f70b8 solid;
 }
 
-.top_panel_container li {
+.quick_control_panel_container li {
     list-style: none;
     float: left;
     width: 191px;
 }
 
-.top_panel_container li a {
+.quick_control_panel_container li a {
     display: block;
     width: 100%;
     height: 50px;
@@ -23,13 +23,13 @@
     border-right: 1px #bbd1d8 solid;
 }
 
-.top_panel_container li a:hover {
+.quick_control_panel_container li a:hover {
     background-color: #d3d3d3;
     height: 45px;
     border-bottom: 5px #1f70b8 solid;
 }
 
-.top_panel_container li a:active {
+.quick_control_panel_container li a:active {
     height: 45px;
     border-bottom: 5px #1f70b8 solid;
 
@@ -160,14 +160,16 @@
     font-size: 18px;
 }
 
-.editNote {
+.ent_notes_edition {
     min-width: 500px;
-    width: 700px;
     margin: auto;
     background-color: rgba(2, 64, 83, 0.30);
-    float: left;
+    left: 300px;
     position: absolute;
+    right: 5px;
     padding: 5px;
+    height: 500px;
+    bottom: -510px;
 }
 
 .closeButtonEditNote {
@@ -178,13 +180,14 @@
     float: right;
 }
 
-.left_panel_container {
+.notes_organizer_container {
     float: left;
     background-color: rgba(48, 146, 73, 0.37);
 }
 
 .content_container {
-    float: left;
+    margin-left: 250px;
+    position: relative;
 }
 
 .notes_container {
@@ -221,4 +224,5 @@
 .editNoteContent {
     padding: 5px;
     margin: 5px;
+    height: 460px;
 }

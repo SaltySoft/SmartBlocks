@@ -5,12 +5,11 @@ define([
     'jqueryflip',
     'Enterprise/Apps/Notes/Models/Note',
     'Enterprise/Apps/Notes/Views/EditNote',
-    'TextEditorView',
     'text!Enterprise/Apps/Notes/Templates/dashboard.html',
     'text!Enterprise/Apps/Notes/Templates/main.html',
     'text!Enterprise/Apps/Notes/Templates/panel.html',
     'Enterprise/Apps/Notes/Collections/Notes'
-], function ($, _, Backbone, JqueryFlip, Note, EditNoteView, TextEditorView, DashboardTemplate, MainTemplate, PanelTemplate, NotesCollection) {
+], function ($, _, Backbone, JqueryFlip, Note, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, NotesCollection) {
     var Dashboard = Backbone.View.extend({
         tagName:"div",
         className:"ent_notes_dashboard",
@@ -29,12 +28,7 @@ define([
             base.$el.html(template);
 
             var panel_template = _.template(PanelTemplate, {});
-            base.$el.find(".top_panel_container").html(panel_template);
-
-            //Init sub views
-
-            var textEditor = new TextEditorView();
-            textEditor.init(base.AppEvents);
+            base.$el.find(".quick_control_panel_container").html(panel_template);
 
             //Init notes collections
             base.notes_list = new NotesCollection();
@@ -76,7 +70,8 @@ define([
             var editNote = new EditNoteView();
             base.editNote = editNote;
             base.editNote.init(base.AppEvents, base.SmartBlocks, id);
-            base.$el.find(".note_editor").html(base.editNote.$el);
+            base.$el.find(".ent_notes_edition").remove();
+            base.$el.find(".content_container").append(base.editNote.$el);
         },
         changeNoteName:function (note, note_div) {
             note_div.removeClass("edited");
