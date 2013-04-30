@@ -18,8 +18,11 @@ define([
         },
         render: function () {
             var base = this;
-            var template = _.template(TaskItemTemplate, { task:  base.model });
+            var template = _.template(TaskItemTemplate, { task:  base.model, time: new Date(base.model.get("creation_date") * 1000) });
             base.$el.html(template);
+            if (base.model.get("completion_date") != null) {
+                base.$el.addClass("completed");
+            }
             base.initalizeEvents();
         },
         initalizeEvents: function () {
@@ -27,7 +30,7 @@ define([
 
 
             base.$el.delegate(".task_display", "click", function () {
-                var name_input = base.$el.find("task_edition_name_input");
+                var name_input = base.$el.find(".task_edition_name_input");
                 name_input.val(base.$el.find(".task_name").html());
                 base.enterEditMode();
             });
@@ -52,6 +55,24 @@ define([
                     });
                     base.$el.find(".task_name").html(base.model.get("name"));
                     base.leaveEditMode();
+                }
+
+                if (action = "cancel") {
+
+                }
+            });
+
+            base.$el.delegate(".checkbox", "click", function () {
+                var elt = base.$el.find(".task_complete_checkbox");
+                elt.prop("checked", !elt.prop("checked"));
+                if (elt.prop("checked")) {
+                    base.model.set("completion_date", new Date().getDate());
+                    base.model.save();
+                    base.$el.addClass("completed");
+                } else {
+                    base.model.set("completion_date", null);
+                    base.model.save();
+                    base.$el.removeClass("completed");
                 }
             });
         },

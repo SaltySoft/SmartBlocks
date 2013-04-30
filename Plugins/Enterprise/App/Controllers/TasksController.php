@@ -67,7 +67,7 @@ class TasksController extends \Controller
         {
             $data = $this->getRequestData();
             $task->setName($data["name"]);
-            $task->setCompletionDate($task["completion_date"]);
+            $task->setCompletionDate($data["completion_date"]);
             $task->save();
             echo json_encode($task->toArray());
         }

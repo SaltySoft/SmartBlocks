@@ -8,9 +8,42 @@
 
 }
 
+
+
 .ent_tsk .task_item {
     border-top: 1px #d3d3d3 solid;
     padding: 5px;
+}
+
+.ent_tsk .task_item .checkbox_container input[type="checkbox"]{
+    display: none;
+}
+
+.ent_tsk .task_item .checkbox {
+    float: left;
+    height: 15px;
+    width: 15px;
+    border: 1px black solid;
+    cursor: pointer;
+}
+
+.ent_tsk .task_item .date {
+    float: right;
+    display: block;
+}
+
+.ent_tsk .task_item.completed .checkbox {
+    background-image: url("/images/icons/tick.png");
+    border: 1px grey solid;
+}
+
+.ent_tsk .task_item .checkbox:hover {
+    background-color: #f7f7f7;
+}
+
+
+.ent_tsk .task_item.completed {
+    color: #979797;
 }
 
 .ent_tsk .task_item.normal .task_edition {
@@ -28,3 +61,4 @@
 .ent_tsk .task_item.edition .task_display {
     display: none;
 }
+
