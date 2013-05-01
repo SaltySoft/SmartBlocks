@@ -140,6 +140,24 @@ define([
                 }, base.user_sessions);
             });
 
+            base.text_editor.events.on('focus', function () {
+                base.$el.addClass("edited");
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command: "lock",
+                    sender: base.SmartBlocks.current_session,
+                    subnote_id: base.subnote.get("id")
+                }, base.user_sessions);
+            });
+
+            base.text_editor.events.on('blur', function () {
+                base.$el.removeClass("edited");
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command: "unlock",
+                    sender: base.SmartBlocks.current_session,
+                    subnote_id: base.subnote.get("id")
+                }, base.user_sessions);
+            });
+
             base.SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "ent_notes") {
 
@@ -160,6 +178,14 @@ define([
                             if (message.command == "half_size") {
                                 base.$el.addClass("halfsize");
                                 base.$el.removeClass("fullsize");
+                            }
+                            if (message.command == "lock") {
+                                base.$el.addClass("locked");
+                                base.text_editor.lock();
+                            }
+                            if (message.command == "unlock") {
+                                base.$el.removeClass("locked");
+                                base.text_editor.unlock();
                             }
                         }
                     }

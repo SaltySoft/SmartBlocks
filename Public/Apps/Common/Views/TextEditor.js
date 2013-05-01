@@ -94,14 +94,39 @@ define([
             });
 
             $('body', $(frame).contents()).blur(function (event) {
-                var textUpdate = event.currentTarget.innerHTML;
-                base.text = textUpdate;
-                var message = {
-                    status: "text_update",
-                    text: textUpdate
-                };
-                base.events.trigger('text_editor_blur', message);
+//                var textUpdate = event.currentTarget.innerHTML;
+//                base.text = textUpdate;
+//                var message = {
+//                    status: "text_update",
+//                    text: textUpdate
+//                };
+                base.$el.find(".editor_button_container").fadeOut();
+                base.events.trigger('blur');
             });
+            var show_timer = 0;
+            base.$el.mouseover(function () {
+                clearTimeout(show_timer);
+                clearTimeout(hide_timer);
+                show_timer = setTimeout(function () {
+                    base.$el.find(".editor_button_container").fadeIn();
+                }, 100);
+
+            });
+            var hide_timer = 0;
+            base.$el.mouseout(function () {
+                clearTimeout(hide_timer);
+                hide_timer = setTimeout(function () {
+                    base.$el.find(".editor_button_container").fadeOut();
+                }, 1000);
+
+            });
+
+            $('body', $(frame).contents()).focus(function (event) {
+                clearTimeout(hide_timer);
+                base.$el.find(".editor_button_container").fadeIn();
+                base.events.trigger('focus');
+            });
+
             base.caret = 0;
             frame.contents().delegate("body", "keydown", function (e) {
                 text_save = base.getText();
@@ -140,6 +165,14 @@ define([
             console.log("OFFSET", range);
 
             return {start: range.line, end: range.endOffset};
+        },
+        lock: function () {
+            var base = this;
+            base.frameDoc.designMode = "off";
+        },
+        unlock: function () {
+            var base = this;
+            base.frameDoc.designMode = "on";
         }
     });
 
