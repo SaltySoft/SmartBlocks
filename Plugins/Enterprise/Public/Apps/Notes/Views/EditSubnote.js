@@ -21,6 +21,7 @@ define([
 
             base.text_editor = new TextEditorView();
             base.text_editor.init(subnote.get("content"), 150);
+            base.buffer = [];
             base.render();
         },
         render: function () {
@@ -40,35 +41,60 @@ define([
                     base.subnote.save();
                 }, 100);
                 base.SmartBlocks.sendWs("ent_notes", {
-                    command : "print",
-                    caret : caret,
-                    keycode: keycode
+                    command: "print",
+                    caret: caret,
+                    keycode: keycode,
+                    sender : base.SmartBlocks.current_session
                 }, [
-
+                    '0eb59866437fdc6f9609ef58dce71049',
+                    '0b55325ff882939ff9d9575213511864'
                 ]);
             });
 
             base.text_editor.events.on('text_editor_text_change', function () {
+                base.subnote.save();
                 base.SmartBlocks.sendWs("ent_notes", {
-                    command : "text_change",
-                    text : base.text_editor.getText()
+                    command: "text_change",
+                    text: base.text_editor.getText(),
+                    sender : base.SmartBlocks.current_session
                 }, [
+                    '0eb59866437fdc6f9609ef58dce71049',
+                    '0b55325ff882939ff9d9575213511864'
+                ]);
+            });
 
+            base.text_editor.events.on('inserted_at', function (buffer, caret) {
+                base.subnote.save();
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command: "insert",
+                    text: buffer,
+                    caret: caret,
+                    sender : base.SmartBlocks.current_session
+                }, [
+                    '0eb59866437fdc6f9609ef58dce71049',
+                    '0b55325ff882939ff9d9575213511864'
                 ]);
             });
 
             base.text_editor.events.on('text_editor_select', function (caret) {
                 base.SmartBlocks.sendWs("ent_notes", {
-                    command : "select",
-                    caret : caret
+                    command: "select",
+                    caret: caret,
+                    sender : base.SmartBlocks.current_session
                 }, [
-
+                    '0eb59866437fdc6f9609ef58dce71049',
+                    '0b55325ff882939ff9d9575213511864'
                 ]);
             });
 
             base.SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "ent_notes") {
-                    console.log(message);
+
+                    if (message.sender != base.SmartBlocks.current_session) {
+                        if (message.command = "insert") {
+                            base.text_editor.insertAt(message.text, message.caret.start);
+                        }
+                    }
                 }
             });
         }

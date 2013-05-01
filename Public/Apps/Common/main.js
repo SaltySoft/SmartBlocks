@@ -21,6 +21,7 @@ requirejs(apps,
 
         SmartBlocks.events = _.extend({}, Backbone.Events);
         SmartBlocks.server_handshake(websocket, user_session);
+        SmartBlocks.current_session = user_session;
         if (websocket !== undefined) {
             websocket.onmessage = function(data) {
                 var message = SmartBlocks.parseWs(data);
