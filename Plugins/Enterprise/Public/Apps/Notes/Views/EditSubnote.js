@@ -33,17 +33,37 @@ define([
 
             var save_timer = 0;
 
-            base.text_editor.events.on('text_editor_keyup', function (caret, keycode) {
+            base.text_editor.events.on('text_editor_keydown', function (caret, keycode) {
                 base.subnote.set("content", base.text_editor.getText());
                 clearTimeout(save_timer);
                 save_timer = setTimeout(function () {
                     base.subnote.save();
                 }, 100);
-                //send insert commands to node
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command : "print",
+                    caret : caret,
+                    keycode: keycode
+                }, [
+
+                ]);
+            });
+
+            base.text_editor.events.on('text_editor_text_change', function () {
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command : "text_change",
+                    text : base.text_editor.getText()
+                }, [
+
+                ]);
             });
 
             base.text_editor.events.on('text_editor_select', function (caret) {
-                //send selection commands to node
+                base.SmartBlocks.sendWs("ent_notes", {
+                    command : "select",
+                    caret : caret
+                }, [
+
+                ]);
             });
 
             base.SmartBlocks.events.on("ws_notification", function (message) {
