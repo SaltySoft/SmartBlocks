@@ -26,6 +26,16 @@ class Subnote extends \Model
      */
     private $note;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $full_size;
+
+    public function __construct()
+    {
+        $this->full_size = false;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -38,8 +48,15 @@ class Subnote extends \Model
         $noteArray["type"] = $this->type;
         $noteArray["content"] = $this->content;
         $noteArray["note_id"] = $this->note->getId();
+        $noteArray["fullsize"] = $this->full_size;
 //        $note = $this->note->toArray();
 //        $noteArray["note"] = $note;
+
+        foreach ($this->note->getUsers() as $user)
+        {
+            $users[] = $user->toArray();
+        }
+        $noteArray["users"] = $users;
 
         return $noteArray;
     }
@@ -72,5 +89,15 @@ class Subnote extends \Model
     public function getNote()
     {
         return $this->note;
+    }
+
+    public function setFullSize($full_size)
+    {
+        $this->full_size = $full_size;
+    }
+
+    public function isFullSize()
+    {
+        return $this->full_size;
     }
 }

@@ -140,7 +140,7 @@
     padding: 5px;
     bottom: 0px;
     top: 0px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .content_container {
@@ -162,11 +162,23 @@
 }
 
 .ent_subnote_edition {
+    float:left;
+}
+
+.ent_subnote_edition.fullsize {
     width: 100%;
+}
+
+.ent_subnote_edition.halfsize {
+    width: 50%;
 }
 
 .ent_subnote_edition iframe {
     width: 100%;
+}
+
+.subnote_container {
+    padding: 10px;
 }
 
 .editNote_add_subnote_button {

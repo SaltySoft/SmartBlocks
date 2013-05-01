@@ -25,11 +25,12 @@ class NotesController extends \Controller
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
 
-//        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
-//        {
         $qb->select("n")
-            ->from("Enterprise\\Note", "n");
-//        }
+            ->from("Enterprise\\Note", "n")
+            ->leftJoin("n.users", "user")
+            ->andWhere("user = :user")
+            ->setParameter("user", \User::current_user());
+
         if (isset($_GET["importants"]) && $_GET["importants"] == "true")
         {
             $qb->andWhere("n.important = 1");
@@ -73,7 +74,7 @@ class NotesController extends \Controller
         $note->setImportant($data["important"]);
         $note->setDescription($data["description"]);
 
-        $note->addParticipant(\User::current_user());
+        $note->addUser(\User::current_user());
         $note->save();
 
         if (is_object($note))
@@ -102,7 +103,7 @@ class NotesController extends \Controller
             $user = \User::find($p["id"]);
             if (is_object($user))
             {
-                $note->addParticipant($user);
+                $note->addUser($user);
             }
         }
 

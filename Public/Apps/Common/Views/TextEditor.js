@@ -35,18 +35,12 @@ define([
         setText: function (text) {
             var base = this;
             base.frame.contents().find("body").html(text);
-        },
-        insertAt: function (string, pos) {
-            var base = this;
-            var content =  base.frame.contents().find("body").html();
-            var front =  content.substring(0,pos);
-            var back = content.substring(pos,content.length);
-            base.frame.contents().find("body").html(front+string+back);
+            base.resizeFrame();
         },
         charAt: function (pos) {
             var base = this;
-            var content =  base.frame.contents().find("body").html();
-            return content.substring(pos, pos+1);
+            var content = base.frame.contents().find("body").html();
+            return content.substring(pos, pos + 1);
         },
         initRichTextEditor: function () {
             var base = this;
@@ -73,7 +67,6 @@ define([
                 base.initializeEvents();
                 base.resizeFrame();
             });
-
         },
         resizeFrame: function () {
             var base = this;
@@ -82,7 +75,7 @@ define([
             if (needed_height % base.heightFactor != 0) {
                 needed_height += base.heightFactor - (needed_height % base.heightFactor);
             }
-            base.frame.css("height", needed_height + "px");
+            base.frame.css("height", needed_height);
         },
         initializeEvents: function () {
             var base = this;
@@ -96,6 +89,8 @@ define([
                 contentWindow.focus();
                 contentWindow.document.execCommand($(this).attr("data-commandName"), false, null);
                 contentWindow.focus();
+
+                base.events.trigger("text_editor_text_change");
             });
 
             $('body', $(frame).contents()).blur(function (event) {
@@ -118,10 +113,10 @@ define([
             });
 
             frame.contents().delegate("body", "keyup", function (e) {
-//                if (base.getText() != text_save)
-//                    base.events.trigger("text_editor_text_change");
-                base.events.trigger("inserted_at", base.buffer, base.caret);
-                base.buffer = "";
+                if (base.getText() != text_save) {
+                    base.events.trigger("text_editor_text_change");
+                }
+                base.resizeFrame();
             });
 
             var text_save = null;
@@ -135,14 +130,16 @@ define([
                 if (base.getText() != text_save) {
                     base.events.trigger("text_editor_text_change");
                 }
+                base.resizeFrame();
             });
         },
         caretPosition: function () {
             var base = this;
             var element = base.frame[0];
             var range = element.contentWindow.getSelection().getRangeAt(0);
-            console.log("OFFSET", range.start, range.endOffset);
-            return {start: range.startOffset, end: range.endOffset};
+            console.log("OFFSET", range);
+
+            return {start: range.line, end: range.endOffset};
         }
     });
 

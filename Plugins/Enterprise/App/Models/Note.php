@@ -41,9 +41,12 @@ class Note extends \Model
      */
     private $users;
 
+
+
     public function __construct()
     {
         $this->subnotes = new \Doctrine\Common\Collections\ArrayCollection();
+
     }
 
     public function setArchived($archived)
@@ -80,6 +83,8 @@ class Note extends \Model
     {
         return $this->title;
     }
+
+
 
     public function toArray()
     {
