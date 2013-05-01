@@ -24,11 +24,8 @@ var sb_paths = {
     ContextMenuView: "/Apps/Common/Views/ContextMenu",
 
     Class: '/Apps/Common/Useful/Class',
-    ColorPicker: '/Apps/Common/Views/ColorPicker',
-
-    jDeepCopy: '/javascript/jqueryDeepCopy'
-
-
+    ColorPicker: '/javascript/colorpicker',
+    TextEditorView : "/Apps/Common/Views/TextEditor"
 
 };
 
@@ -46,9 +43,6 @@ var sb_shims = {
         exports: 'Backbone'
     },
     'jqueryflip': {
-        deps: ['jquery']
-    },
-    'jDeepCopy' : {
         deps: ['jquery']
     }
 };
