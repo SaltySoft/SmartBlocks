@@ -6,6 +6,15 @@
     <button class="editor_button justifyleft" data-commandName="justifyleft" title="align left">L</button>
     <button class="editor_button justifycenter" data-commandName="justifycenter" title="center">C</button>
     <button class="editor_button justifyright" data-commandName="justifyright" title="align right">R</button>
+|
+    <select id="fonts" onChange="fontEdit('fontname',this[this.selectedIndex].value)">
+        <option value="Arial">Arial</option>
+        <option value="Comic Sans MS">Comic Sans MS</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Monotype Corsiva">Monotype</option>
+        <option value="Tahoma">Tahoma</option>
+        <option value="Times">Times</option>
+    </select>
 </div >
 <div class="textContainer" >
     <div class="richTextEditor_containerDiv" >
