@@ -1,5 +1,5 @@
 .ent_notes_dashboard {
-    width: 800px;
+    width: 1000px;
     margin: auto;
 }
 
@@ -92,7 +92,6 @@
     color: #a1a1a1;
     font-size: 15px;
     display: inline-block;
-    width: 100px;
 }
 
 .dashboard_note .note_div_button {
@@ -200,6 +199,8 @@
     background-color: rgba(28, 119, 131, 0.45);
     padding: 0px;
     width: 200px;
+    height: 700px;
+    overflow-y: scroll;
 }
 
 .notes_container ul {
