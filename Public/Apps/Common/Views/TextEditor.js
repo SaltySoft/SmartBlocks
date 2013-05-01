@@ -103,7 +103,7 @@ define([
 
                 base.events.trigger("text_editor_text_change");
             });
-
+            var fire_blur_timer = 0;
             $('body', $(frame).contents()).blur(function (event) {
 //                var textUpdate = event.currentTarget.innerHTML;
 //                base.text = textUpdate;
@@ -111,8 +111,14 @@ define([
 //                    status: "text_update",
 //                    text: textUpdate
 //                };
-                base.$el.find(".editor_button_container").fadeOut();
-                base.events.trigger('blur');
+                clearTimeout(hide_timer);
+                hide_timer = setTimeout(function () {
+                    base.$el.find(".editor_button_container").fadeOut();
+                }, 1000);
+                clearTimeout(fire_blur_timer);
+                fire_blur_timer = setTimeout(function () {
+                    base.events.trigger('blur');
+                }, 500);
             });
             var show_timer = 0;
             base.$el.mouseover(function () {
@@ -133,8 +139,12 @@ define([
             });
 
             $('body', $(frame).contents()).focus(function (event) {
+                clearTimeout(show_timer);
                 clearTimeout(hide_timer);
-                base.$el.find(".editor_button_container").fadeIn();
+                show_timer = setTimeout(function () {
+                    base.$el.find(".editor_button_container").fadeIn();
+                }, 100);
+                clearTimeout(fire_blur_timer);
                 base.events.trigger('focus');
             });
 
