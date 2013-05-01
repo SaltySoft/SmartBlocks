@@ -93,6 +93,17 @@ define([
                 base.events.trigger("text_editor_text_change");
             });
 
+            base.$el.delegate(".editor_option", "change", function () {
+                console.log("onchange", $(this).val());
+                var contentWindow = frame[0].contentWindow;
+
+                contentWindow.focus();
+                contentWindow.document.execCommand('fontname', false, $(this).val());
+                contentWindow.focus();
+
+                base.events.trigger("text_editor_text_change");
+            });
+
             $('body', $(frame).contents()).blur(function (event) {
 //                var textUpdate = event.currentTarget.innerHTML;
 //                base.text = textUpdate;
