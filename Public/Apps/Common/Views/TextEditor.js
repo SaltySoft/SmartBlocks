@@ -82,8 +82,6 @@ define([
             });
 
             $('body', $(frame).contents()).blur(function (event) {
-                console.log("blur: ");
-
                 var textUpdate = event.currentTarget.innerHTML;
                 base.text = textUpdate;
                 var message = {
@@ -97,8 +95,7 @@ define([
 
             frame.contents().delegate("body", "keyup", function (e) {
                 base.resizeFrame();
-                console.log("Caret : ", base.caretPosition());
-                base.events.trigger("text_editor_keyup",  base.caretPosition(), e.keyCode);
+                base.events.trigger("text_editor_keyup", e.keyCode);
             });
 
             frame.contents().delegate("body", "select", function (e) {
