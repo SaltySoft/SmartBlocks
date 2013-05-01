@@ -82,7 +82,6 @@ define([
             });
 
             $('body', $(frame).contents()).blur(function (event) {
-                base.resizeIframe();
                 console.log("blur: ");
 
                 var textUpdate = event.currentTarget.innerHTML;
@@ -98,12 +97,20 @@ define([
 
             frame.contents().delegate("body", "keyup", function (e) {
                 base.resizeFrame();
-                base.events.trigger("text_editor_keyup", e.keyCode);
+                console.log("Caret : ", base.caretPosition());
+                base.events.trigger("text_editor_keyup",  base.caretPosition(), e.keyCode);
+            });
+
+            frame.contents().delegate("body", "select", function (e) {
+                console.log("Caret : ", base.caretPosition());
+                base.events.trigger("text_editor_select", base.caretPosition(), base.getText());
             });
         },
-        resizeIframe: function () {
+        caretPosition: function () {
             var base = this;
-
+            var element =  base.frame[0];
+            var range = element.contentWindow.getSelection().getRangeAt(0);
+            return {start : range.startOffset, end: range.endOffset};
         }
     });
 
