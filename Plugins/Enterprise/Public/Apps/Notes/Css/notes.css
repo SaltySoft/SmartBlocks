@@ -92,6 +92,7 @@
     color: #a1a1a1;
     font-size: 15px;
     display: inline-block;
+    width: 100px;
 }
 
 .dashboard_note .note_div_button {
