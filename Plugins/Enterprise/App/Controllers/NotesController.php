@@ -4,6 +4,14 @@ namespace Enterprise;
 
 class NotesController extends \Controller
 {
+    public function security_check()
+    {
+        if (!\User::logged_in() || \User::current_user() == null)
+        {
+            $this->redirect("/Users/login_form");
+        }
+    }
+
     public function dashboard($params = array())
     {
         $this->set("app", "Enterprise/Apps/Notes/app");
@@ -12,7 +20,7 @@ class NotesController extends \Controller
     public function index()
     {
         $this->render = false;
-//        header("Content-Type: application/json");
+        header("Content-Type: application/json");
         $response = array();
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
@@ -53,6 +61,8 @@ class NotesController extends \Controller
 
     public function create()
     {
+        $this->security_check();
+
         $this->render = false;
         header("Content-Type: application/json");
 
@@ -62,6 +72,8 @@ class NotesController extends \Controller
         $note->setArchived($data["archived"]);
         $note->setImportant($data["important"]);
         $note->setDescription($data["description"]);
+
+        $note->addParticipant(\User::current_user());
         $note->save();
 
         if (is_object($note))
@@ -84,6 +96,15 @@ class NotesController extends \Controller
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
         $note->setImportant(isset($data["importante"]) ? $data["importante"] : $note->getImportant());
+
+        foreach ($data["users"] as $p)
+        {
+            $user = \User::find($p["id"]);
+            if (is_object($user))
+            {
+                $note->addParticipant($user);
+            }
+        }
 
         $note->save();
 

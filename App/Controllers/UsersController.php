@@ -131,7 +131,6 @@ class UsersController extends Controller
 
     function create($params = array())
     {
-
         $users = User::where(array("admin" => 1));
         if (count($users) > 0)
         {
