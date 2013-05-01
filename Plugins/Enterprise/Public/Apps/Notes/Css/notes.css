@@ -172,3 +172,66 @@
 .editNote_add_subnote_button {
     float: right;
 }
+
+.ent_notes_np {
+    background-color: white;
+    width: 400px;
+    margin: auto;
+    position: relative;
+    top: 50px;
+    padding: 10px;
+}
+
+.ent_notes_np_form_container {
+    padding: 20px;
+}
+
+#ent_sch_cv_title {
+    font-style: italic;
+}
+
+.users_choice {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.user_search_result {
+    margin-top: 15px;
+}
+
+.user_search_result {
+    height: 150px;
+}
+
+.user_selection {
+    margin-top: 15px;
+    height: 150px;
+}
+
+.user_search_result a {
+    line-height: 25px;
+    height: 25px;
+    background-color: #f0f3f7;
+    display: block;
+    color: black;
+    padding: 5px;
+    float: left;
+    width: 123px;
+    text-align: center;
+    border: 1px solid #aaaaaa;
+    margin: 5px 5px 5px 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    -moz-transition: all 100ms ease-in;
+    -webkit-transition: all 100ms ease-in;
+    -o-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+}
+
+.search_results {
+    width: 308px;
+}
+
+.search_result {
+    width: 144px;
+}

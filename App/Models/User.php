@@ -26,7 +26,6 @@
  */
 class User extends UserBase
 {
-
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
