@@ -41,6 +41,12 @@ class Subnote extends \Model
 //        $note = $this->note->toArray();
 //        $noteArray["note"] = $note;
 
+        foreach ($this->note->getUsers() as $user)
+        {
+            $users[] = $user->toArray();
+        }
+        $noteArray["users"] = $users;
+
         return $noteArray;
     }
 

@@ -18,6 +18,14 @@ define([
             base.AppEvents = AppEvents;
             base.SmartBlocks = SmartBlocks;
             base.subnote = subnote;
+            base.user_sessions = [];
+            console.log(base.subnote);
+            var users = base.subnote.get("users");
+            for (var k in users) {
+                base.user_sessions.push(users[k].session_id);
+            }
+
+            console.log(base.user_sessions);
 
             base.text_editor = new TextEditorView();
             base.text_editor.init(subnote.get("content"), 150);
@@ -34,6 +42,8 @@ define([
 
             var save_timer = 0;
 
+
+
             base.text_editor.events.on('text_editor_keydown', function (caret, keycode) {
                 base.subnote.set("content", base.text_editor.getText());
                 clearTimeout(save_timer);
@@ -45,10 +55,7 @@ define([
                     caret: caret,
                     keycode: keycode,
                     sender : base.SmartBlocks.current_session
-                }, [
-                    '0eb59866437fdc6f9609ef58dce71049',
-                    '0b55325ff882939ff9d9575213511864'
-                ]);
+                },base.user_sessions);
             });
 
             base.text_editor.events.on('text_editor_text_change', function () {
@@ -57,10 +64,7 @@ define([
                     command: "text_change",
                     text: base.text_editor.getText(),
                     sender : base.SmartBlocks.current_session
-                }, [
-                    '0eb59866437fdc6f9609ef58dce71049',
-                    '0b55325ff882939ff9d9575213511864'
-                ]);
+                }, base.user_sessions);
                 base.subnote.set("content", base.text_editor.getText());
                 base.subnote.save();
             });
@@ -70,10 +74,7 @@ define([
                     command: "select",
                     caret: caret,
                     sender : base.SmartBlocks.current_session
-                }, [
-                    '0eb59866437fdc6f9609ef58dce71049',
-                    '0b55325ff882939ff9d9575213511864'
-                ]);
+                }, base.user_sessions);
             });
 
             base.SmartBlocks.events.on("ws_notification", function (message) {
