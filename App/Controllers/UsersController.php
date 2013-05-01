@@ -39,7 +39,6 @@ class UsersController extends Controller
         }
     }
 
-
     public function user_error($params = array())
     {
         $this->render = false;
@@ -310,5 +309,23 @@ class UsersController extends Controller
     {
         $this->interface_security_check();
         $this->set("app", "Apps/UserManagement/app");
+    }
+
+    public function connect($params = array())
+    {
+        $this->render = false;
+        header("application/json");
+        $users = User::where(array("name" => $params["username"], "hash" => $params["password"]));
+        if (count($users) > 0)
+        {
+            $user = $users[0];
+            $token = sha1(microtime());
+            $user->setToken($token);
+            $user->save();
+
+            $array = array("session_id" => $user->getSessionId(), "token" => $token);
+
+            echo json_encode($array);
+        }
     }
 }
