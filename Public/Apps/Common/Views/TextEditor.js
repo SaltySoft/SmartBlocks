@@ -67,7 +67,6 @@ define([
                 base.initializeEvents();
                 base.resizeFrame();
             });
-
         },
         resizeFrame: function () {
             var base = this;
@@ -76,7 +75,7 @@ define([
             if (needed_height % base.heightFactor != 0) {
                 needed_height += base.heightFactor - (needed_height % base.heightFactor);
             }
-            base.frame.css("height", needed_height + "px");
+            base.frame.css("height", needed_height);
         },
         initializeEvents: function () {
             var base = this;

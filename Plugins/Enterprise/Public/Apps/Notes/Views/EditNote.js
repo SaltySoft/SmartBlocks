@@ -46,10 +46,11 @@ define([
 
             _.each(base.subnotes_list, function (subnote) {
                 var editSubnoteView = new EditSubnoteView();
+                base.$el.find(".editNoteContent").append(editSubnoteView.$el);
                 var subNoteId = subnote.get('id');
                 var suNoteText = subnote.get('content');
                 editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
-                base.$el.find(".editNoteContent").append(editSubnoteView.$el);
+
                 base.subnotes_views_list[subNoteId] = editSubnoteView;
             });
 
@@ -69,10 +70,10 @@ define([
                 subnote.save({}, {
                     success:function () {
                         var editSubnoteView = new EditSubnoteView();
-                        var subNoteId = subnote.id;
-                        var suNoteText = "New content";
-                        editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
                         base.$el.find(".editNoteContent").append(editSubnoteView.$el);
+                        var subNoteId = subnote.id;
+                        editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
+
                         base.subnotes_views_list[subNoteId] = editSubnoteView;
                     },
                     error:function () {
