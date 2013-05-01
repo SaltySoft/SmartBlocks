@@ -7,45 +7,48 @@ define([
     'TextEditorView'
 ], function ($, _, Backbone, Note, Subnote, TextEditorView) {
     var EditSubnoteView = Backbone.View.extend({
-        tagName:"div",
-        className:"ent_subnote_edition",
-        events:{
+        tagName: "div",
+        className: "ent_subnote_edition",
+        events: {
         },
-        initialize:function () {
+        initialize: function () {
         },
-        init:function (AppEvents, SmartBlocks, id, text) {
+        init: function (AppEvents, SmartBlocks, subnote) {
             var base = this;
             base.AppEvents = AppEvents;
             base.SmartBlocks = SmartBlocks;
-            base.subnote_id = id;
-            base.subnote_text = text;
+            base.subnote = subnote;
 
-            base.textEditor = new TextEditorView();
-            base.textEditor.init(base.subnote_text, 150);
+            base.text_editor = new TextEditorView();
+            base.text_editor.init(subnote.get("content"), 150);
             base.render();
         },
-        render:function () {
+        render: function () {
             var base = this;
-            base.$el.html(base.textEditor.$el);
+            base.$el.html(base.text_editor.$el);
             base.initializeEvents();
         },
-        initializeEvents:function () {
+        initializeEvents: function () {
             var base = this;
 
-            base.textEditor.events.on('textEditor_notification', function (message) {
-                if (message.status == "text_update") {
-                    var textUpdate = message.text;
-                    var subnote = new Subnote({
-                        id:base.subnote_id
-                    });
-                    subnote.fetch({
-                        data:{
-                        },
-                        success:function () {
-                            subnote.set("content", textUpdate);
-                            subnote.save();
-                        }
-                    })
+            var save_timer = 0;
+
+            base.text_editor.events.on('text_editor_keyup', function (caret, keycode) {
+                base.subnote.set("content", base.text_editor.getText());
+                clearTimeout(save_timer);
+                save_timer = setTimeout(function () {
+                    base.subnote.save();
+                }, 100);
+                //send insert commands to node
+            });
+
+            base.text_editor.events.on('text_editor_select', function (caret) {
+                //send selection commands to node
+            });
+
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.app == "ent_notes") {
+                    console.log(message);
                 }
             });
         }

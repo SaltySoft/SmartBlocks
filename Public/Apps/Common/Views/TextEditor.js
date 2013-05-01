@@ -95,12 +95,12 @@ define([
 
             frame.contents().delegate("body", "keyup", function (e) {
                 base.resizeFrame();
-                base.events.trigger("text_editor_keyup", e.keyCode);
+                base.events.trigger("text_editor_keyup", base.caretPosition(), e.keyCode);
             });
 
             frame.contents().delegate("body", "select", function (e) {
                 console.log("Caret : ", base.caretPosition());
-                base.events.trigger("text_editor_select", base.caretPosition(), base.getText());
+                base.events.trigger("text_editor_select", base.caretPosition());
             });
         },
         caretPosition: function () {
