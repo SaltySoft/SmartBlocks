@@ -58,17 +58,25 @@ define([
 
                 if (action == "full_size") {
                     base.subnote.set("fullsize", true);
-                    console.log(base.subnote);
                     base.subnote.save();
                     base.$el.addClass("fullsize");
                     base.$el.removeClass("halfsize");
+                    base.SmartBlocks.sendWs("ent_notes", {
+                        command: "full_size",
+                        sender: base.SmartBlocks.current_session,
+                        subnote_id: base.subnote.get("id")
+                    }, base.user_sessions);
                 }
                 if (action == "half_size") {
                     base.subnote.set("fullsize", false);
-                    console.log(base.subnote);
                     base.subnote.save();
                     base.$el.addClass("halfsize");
                     base.$el.removeClass("fullsize");
+                    base.SmartBlocks.sendWs("ent_notes", {
+                        command: "half_size",
+                        sender: base.SmartBlocks.current_session,
+                        subnote_id: base.subnote.get("id")
+                    }, base.user_sessions);
                 }
                 if (action == 'delete') {
                     if (confirm("Are you sure you want to delete this subnote ?")) {
@@ -141,10 +149,17 @@ define([
                                 base.text_editor.setText(message.text);
                             }
                             if (message.command == "delete") {
-                                console.log("note got deleted by third party.");
                                 base.$el.fadeOut(300, function () {
                                     base.$el.remove();
                                 });
+                            }
+                            if (message.command == "full_size") {
+                                base.$el.addClass("fullsize");
+                                base.$el.removeClass("halfsize");
+                            }
+                            if (message.command == "half_size") {
+                                base.$el.addClass("halfsize");
+                                base.$el.removeClass("fullsize");
                             }
                         }
                     }
