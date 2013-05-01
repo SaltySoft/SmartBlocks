@@ -93,14 +93,22 @@ define([
 
 
 
-            frame.contents().delegate("body", "keyup", function (e) {
+            frame.contents().delegate("body", "keydown", function (e) {
                 base.resizeFrame();
-                base.events.trigger("text_editor_keyup", base.caretPosition(), e.keyCode);
+                base.events.trigger("text_editor_keydown", base.caretPosition(), e.keyCode);
+            });
+            var text_save = null;
+            frame.contents().delegate("body", "mousedown", function (e) {
+                text_save = base.getText();
             });
 
-            frame.contents().delegate("body", "select", function (e) {
+            frame.contents().delegate("body", "mouseup", function (e) {
                 console.log("Caret : ", base.caretPosition());
                 base.events.trigger("text_editor_select", base.caretPosition());
+
+                if (base.getText() != text_save) {
+                    base.events.trigger("text_editor_text_change");
+                }
             });
         },
         caretPosition: function () {

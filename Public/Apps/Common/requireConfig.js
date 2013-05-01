@@ -25,7 +25,9 @@ var sb_paths = {
 
     Class: '/Apps/Common/Useful/Class',
     ColorPicker: '/javascript/colorpicker',
-    TextEditorView : "/Apps/Common/Views/TextEditor"
+    TextEditorView : "/Apps/Common/Views/TextEditor",
+
+    jDeepCopy: "/javascript/jqueryDeepCopy"
 
 };
 
