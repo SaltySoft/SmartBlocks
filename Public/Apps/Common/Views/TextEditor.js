@@ -91,11 +91,14 @@ define([
                     status: "text_update",
                     text: textUpdate
                 };
-                base.events.trigger('textEditor_notification', message);
+                base.events.trigger('text_editor_blur', message);
             });
 
-            $(frame).contents().delegate("body", "keyup", function () {
+
+
+            frame.contents().delegate("body", "keyup", function (e) {
                 base.resizeFrame();
+                base.events.trigger("text_editor_keyup", e.keyCode, );
             });
         },
         resizeIframe: function () {
