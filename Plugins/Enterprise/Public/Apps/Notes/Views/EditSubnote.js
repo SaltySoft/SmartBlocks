@@ -52,7 +52,7 @@ define([
             });
 
             base.text_editor.events.on('text_editor_text_change', function () {
-                base.subnote.save();
+
                 base.SmartBlocks.sendWs("ent_notes", {
                     command: "text_change",
                     text: base.text_editor.getText(),
@@ -61,19 +61,8 @@ define([
                     '0eb59866437fdc6f9609ef58dce71049',
                     '0b55325ff882939ff9d9575213511864'
                 ]);
-            });
-
-            base.text_editor.events.on('inserted_at', function (buffer, caret) {
+                base.subnote.set("content", base.text_editor.getText());
                 base.subnote.save();
-                base.SmartBlocks.sendWs("ent_notes", {
-                    command: "insert",
-                    text: buffer,
-                    caret: caret,
-                    sender : base.SmartBlocks.current_session
-                }, [
-                    '0eb59866437fdc6f9609ef58dce71049',
-                    '0b55325ff882939ff9d9575213511864'
-                ]);
             });
 
             base.text_editor.events.on('text_editor_select', function (caret) {
@@ -91,8 +80,8 @@ define([
                 if (message.app == "ent_notes") {
 
                     if (message.sender != base.SmartBlocks.current_session) {
-                        if (message.command = "insert") {
-                            base.text_editor.insertAt(message.text, message.caret.start);
+                        if (message.command == "text_change") {
+                            base.text_editor.setText(message.text);
                         }
                     }
                 }

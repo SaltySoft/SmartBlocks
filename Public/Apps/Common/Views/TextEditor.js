@@ -36,17 +36,10 @@ define([
             var base = this;
             base.frame.contents().find("body").html(text);
         },
-        insertAt: function (string, pos) {
-            var base = this;
-            var content =  base.frame.contents().find("body").html();
-            var front =  content.substring(0,pos);
-            var back = content.substring(pos,content.length);
-            base.frame.contents().find("body").html(front+string+back);
-        },
         charAt: function (pos) {
             var base = this;
-            var content =  base.frame.contents().find("body").html();
-            return content.substring(pos, pos+1);
+            var content = base.frame.contents().find("body").html();
+            return content.substring(pos, pos + 1);
         },
         initRichTextEditor: function () {
             var base = this;
@@ -96,6 +89,8 @@ define([
                 contentWindow.focus();
                 contentWindow.document.execCommand($(this).attr("data-commandName"), false, null);
                 contentWindow.focus();
+
+                base.events.trigger("text_editor_text_change");
             });
 
             $('body', $(frame).contents()).blur(function (event) {
@@ -118,10 +113,9 @@ define([
             });
 
             frame.contents().delegate("body", "keyup", function (e) {
-//                if (base.getText() != text_save)
-//                    base.events.trigger("text_editor_text_change");
-                base.events.trigger("inserted_at", base.buffer, base.caret);
-                base.buffer = "";
+                if (base.getText() != text_save) {
+                    base.events.trigger("text_editor_text_change");
+                }
             });
 
             var text_save = null;
@@ -141,8 +135,9 @@ define([
             var base = this;
             var element = base.frame[0];
             var range = element.contentWindow.getSelection().getRangeAt(0);
-            console.log("OFFSET", range.start, range.endOffset);
-            return {start: range.startOffset, end: range.endOffset};
+            console.log("OFFSET", range);
+
+            return {start: range.line, end: range.endOffset};
         }
     });
 
