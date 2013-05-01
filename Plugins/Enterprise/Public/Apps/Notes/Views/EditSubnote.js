@@ -4,8 +4,9 @@ define([
     'backbone',
     'Enterprise/Apps/Notes/Models/Note',
     'Enterprise/Apps/Notes/Models/Subnote',
-    'TextEditorView'
-], function ($, _, Backbone, Note, Subnote, TextEditorView) {
+    'TextEditorView',
+    'text!Enterprise/Apps/Notes/Templates/subnote.html'
+], function ($, _, Backbone, Note, Subnote, TextEditorView, SubnoteTemplate) {
     var EditSubnoteView = Backbone.View.extend({
         tagName: "div",
         className: "ent_subnote_edition",
@@ -34,13 +35,62 @@ define([
         },
         render: function () {
             var base = this;
-            base.$el.html(base.text_editor.$el);
+
+            if (base.subnote.get("fullsize")) {
+                base.$el.addClass("fullsize");
+            } else {
+                base.$el.addClass("halfsize");
+            }
+
+            var template = _.template(SubnoteTemplate, {});
+            base.$el.html(template);
+            base.$el.find(".subnote_text_editor").html(base.text_editor.$el);
             base.initializeEvents();
         },
         initializeEvents: function () {
             var base = this;
 
             var save_timer = 0;
+
+            base.$el.delegate(".subnote_button", "click", function () {
+                var elt = $(this);
+                var action = elt.attr("data-action");
+
+                if (action == "full_size") {
+                    base.subnote.set("fullsize", true);
+                    console.log(base.subnote);
+                    base.subnote.save();
+                    base.$el.addClass("fullsize");
+                    base.$el.removeClass("halfsize");
+                }
+                if (action == "half_size") {
+                    base.subnote.set("fullsize", false);
+                    console.log(base.subnote);
+                    base.subnote.save();
+                    base.$el.addClass("halfsize");
+                    base.$el.removeClass("fullsize");
+                }
+                if (action == 'delete') {
+                    if (confirm("Are you sure you want to delete this subnote ?")) {
+
+                        base.SmartBlocks.startLoading("Deleting note");
+                        base.subnote.destroy({
+                            success: function () {
+                                base.SmartBlocks.stopLoading();
+                            }
+                        });
+
+                        base.SmartBlocks.sendWs("ent_notes", {
+                            command: "delete",
+                            sender: base.SmartBlocks.current_session,
+                            subnote_id: base.subnote.get("id")
+                        }, base.user_sessions);
+                        base.$el.fadeOut(300, function () {
+                            base.$el.remove();
+                        });
+                    }
+                }
+            });
 
 
             base.text_editor.events.on('text_editor_keydown', function (caret, keycode) {
@@ -89,6 +139,12 @@ define([
                         if (message.subnote_id == base.subnote.get("id")) {
                             if (message.command == "text_change") {
                                 base.text_editor.setText(message.text);
+                            }
+                            if (message.command == "delete") {
+                                console.log("note got deleted by third party.");
+                                base.$el.fadeOut(300, function () {
+                                    base.$el.remove();
+                                });
                             }
                         }
                     }

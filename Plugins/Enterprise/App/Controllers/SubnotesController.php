@@ -82,6 +82,7 @@ class SubnotesController extends \Controller
         $note = Note::find($data["note_id"]);
         $subnote->setNote($note);
         $subnote->setType($data["type"]);
+        $subnote->setFullSize($data["fullsize"]);
         $subnote->save();
 
         if (is_object($subnote))
