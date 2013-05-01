@@ -165,6 +165,28 @@
     float: left;
 }
 
+.ent_subnote_edition .pencil {
+    float: right;
+    display: none;
+}
+
+.ent_subnote_edition.edited .pencil {
+    display: inline-block;
+}
+
+.ent_subnote_edition .lock {
+    float: right;
+    display: none;
+}
+
+.ent_subnote_edition.locked .lock {
+    display: inline-block;
+}
+
+.ent_subnote_edition.locked {
+    background-color: #a3242a;
+}
+
 .ent_subnote_edition.fullsize {
     width: 100%;
 }

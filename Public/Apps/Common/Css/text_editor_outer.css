@@ -19,3 +19,11 @@
 .editor_button .underline {
     text-decoration: underline;
 }
+
+.editor_button_container {
+    display: none;
+}
+
+.text_editor .tool_box {
+    height: 30px;
+}
