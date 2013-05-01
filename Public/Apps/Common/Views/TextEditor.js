@@ -66,7 +66,9 @@ define([
 
             base.$el.delegate(".editor_button", "click", function (e) {
                 $(this).toggleClass("selected");
-                var contentWindow = frame.contentWindow;
+                console.log("click", frame);
+                var contentWindow = frame[0].contentWindow;
+
                 contentWindow.focus();
                 contentWindow.document.execCommand($(this).attr("data-commandName"), false, null);
                 contentWindow.focus();
