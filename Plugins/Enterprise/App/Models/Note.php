@@ -36,6 +36,11 @@ class Note extends \Model
      */
     private $subnotes;
 
+    /**
+     * @ManyToMany(targetEntity="\User")
+     */
+    private $users;
+
     public function __construct()
     {
         $this->subnotes = new \Doctrine\Common\Collections\ArrayCollection();
@@ -93,6 +98,14 @@ class Note extends \Model
         }
         $noteArray["subnotes"] = $subnotes;
 
+        $users = array();
+
+        foreach ($this->users as $user)
+        {
+            $users[] = $user->toArray();
+        }
+        $noteArray["users"] = $users;
+
         return $noteArray;
     }
 
@@ -119,5 +132,20 @@ class Note extends \Model
     public function getSubnotes()
     {
         return $this->subnotes;
+    }
+
+    public function setUsers($users)
+    {
+        $this->users = $users;
+    }
+
+    public function addUser($user)
+    {
+        $this->users[] = $user;
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
     }
 }
