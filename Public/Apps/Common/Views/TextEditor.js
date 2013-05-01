@@ -91,18 +91,16 @@ define([
                 base.events.trigger('text_editor_blur', message);
             });
 
-
-
-            frame.contents().delegate("body", "keydown", function (e) {
+            frame.contents().delegate("body", "keyup", function (e) {
                 base.resizeFrame();
-                base.events.trigger("text_editor_keydown", base.caretPosition(), e.keyCode);
+                base.events.trigger("text_editor_keyup", base.caretPosition(), e.keyCode);
             });
             var text_save = null;
             frame.contents().delegate("body", "mousedown", function (e) {
                 text_save = base.getText();
             });
 
-            frame.contents().delegate("body", "mouseup", function (e) {
+            frame.contents().delegate("body", "select", function (e) {
                 console.log("Caret : ", base.caretPosition());
                 base.events.trigger("text_editor_select", base.caretPosition());
 
