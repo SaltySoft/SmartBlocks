@@ -1,0 +1,11 @@
+.editor_button .bold {
+    font-weight: bold;
+}
+
+.editor_button .italic {
+    font-style: italic;
+}
+
+.editor_button .underline {
+    text-decoration: underline;
+}
