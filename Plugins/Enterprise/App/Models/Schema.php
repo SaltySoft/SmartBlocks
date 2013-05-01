@@ -32,7 +32,7 @@ class Schema extends \Model
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
     public $id;
-    
+
     /**
      * @Column(type="string")
      */
@@ -53,11 +53,17 @@ class Schema extends \Model
      */
     private $filename;
 
+    /**
+     * @OneToMany(targetEntity="\Enterprise\SchemaText", mappedBy="schema")
+     */
+    private $schema_texts;
+
     public function __construct()
     {
         $this->participants = new \Doctrine\Common\Collections\ArrayCollection();
         $this->creator = \User::current_user();
         $this->name = "new schema";
+        $this->schema_texts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -110,30 +116,70 @@ class Schema extends \Model
         return $this->filename;
     }
 
+    public function addSchemaText($schema_text)
+    {
+        $this->schema_texts[] = $schema_text;
+    }
+
+    public function clearSchemaText()
+    {
+        $this->schema_texts->clear();
+    }
+
+    public function getSchemaTexts()
+    {
+        return $this->schema_texts;
+    }
+
     public function toArray()
     {
         $participants = array();
 
-        foreach ($this->participants as $p) {
+        foreach ($this->participants as $p)
+        {
             $participants[] = $p->getSessionId();
         }
 
-        if (!file_exists(ROOT.DS."Data".DS."Schemas".DS.$this->filename)) {
-            file_put_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename, "");
+        if (!file_exists(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename))
+        {
+            file_put_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename, "");
         }
 
-        $array = array(
-            "id" => $this->id,
-            "name" => $this->name,
-            "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
-            "sessions" => $participants,
-            "data" =>"data:image/png;base64,". urlencode(base64_encode(file_get_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename))),
-            "contents" => file_get_contents(ROOT.DS."Data".DS."Schemas".DS.$this->filename)
-        );
+        $texts_list = array();
+
+        foreach ($this->schema_texts as $st)
+        {
+            $texts_list[] = $st->toArray();
+        }
+
+        $array = array();
+
+        if (\User::current_user() != null)
+        {
+            $array = array(
+                "id" => $this->id,
+                "name" => $this->name,
+                "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
+                "sessions" => $participants,
+                "data" => "data:image/png;base64," . urlencode(base64_encode(file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename))),
+                "contents" => file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename),
+                "texts" => $texts_list
+            );
+        }
+        else
+        {
+            $array = array(
+                "id" => $this->id,
+                "name" => $this->name,
+                "participants" => is_object($this->participants) ? $this->participants->toArray() : array(),
+                "sessions" => $participants,
+                "data" => base64_encode(file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename)),
+                "contents" => file_get_contents(ROOT . DS . "Data" . DS . "Schemas" . DS . $this->filename),
+                "texts" => $texts_list
+            );
+        }
+
         return $array;
-
     }
-
-
 }
 

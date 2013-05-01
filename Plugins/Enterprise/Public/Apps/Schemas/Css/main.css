@@ -1,6 +1,6 @@
 .ent_sch_drawview {
-    width: 1000px;
-    height: 600px;
+    width: 1020px;
+
     padding: 5px;
 
     border-radius: 5px;
@@ -133,4 +133,48 @@
 {
     width: 800px;
     margin: auto;
+}
+
+.canvas_container {
+    position: relative;
+    width: 1020px;
+    height: 655px;
+    z-index: 0;
+}
+
+.text_overlay {
+    position: absolute;
+    z-index: 2;
+}
+
+#ent_sch_dv_canvas {
+    position: absolute;
+    z-index: 2;
+}
+
+
+
+.text_overlay_edition {
+    display: none;
+}
+
+.text_overlay.normal .text_ov_edition {
+    display: none;
+}
+
+.text_overlay.edited .text_ov_edition {
+    display: inline;
+}
+
+.text_overlay.normal .text_ov_content {
+    display: inline;
+    cursor: move;
+    text-shadow: 0px 0px 11px white;
+    font-weight: bold;
+    background-color: rgba(255,255,255,0.5);
+    padding: 2px;
+}
+
+.text_overlay.edited .text_ov_content {
+    display: none;
 }

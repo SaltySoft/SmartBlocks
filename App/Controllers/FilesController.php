@@ -22,10 +22,10 @@ class FilesController extends Controller
         if ($update_folder == 0)
             $update_folder = $folder->getId();
 
-        if ($folder->getParent() != null)
-            $this->send_notifs($folder->getParent(), $update_folder);
+        if ($folder->getParentFolder() != null)
+            $this->send_notifs($folder->getParentFolder(), $update_folder);
 
-        NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
+        NodeDiplomat::sendMessage($folder->getOwner()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
         foreach ($folder->getUsersAllowed() as $user)
         {
             NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $update_folder == 0 ? $folder->getId() : $update_folder));
@@ -47,25 +47,19 @@ class FilesController extends Controller
         $qb->select("f")
             ->from("File", "f");
 
-        if (isset($_GET["page"]))
+        $data = $this->getRequestData();
+        if (!(isset($data["shared"]) && $data["shared"]))
         {
-            $page = (isset($_GET["page"]) ? $_GET["page"] : 1);
-            $page_size = (isset($_GET["page_size"]) ? $_GET["page_size"] : 10);
-            $qb->setFirstResult(($page - 1) * $page_size)
-                ->setMaxResults($page_size);
+            $qb->leftJoin("f.parent_folder", "p")
+                ->leftJoin("p.users_allowed", "aluser")
+                ->andWhere("(f.owner = :user OR aluser = :user OR p.owner = :user)")
+                ->setParameter("user", User::current_user());
         }
 
-        if (!(isset($_GET["all"]) && User::is_admin()))
-        {
-            $qb->leftJoin("f.parent_folder", "pf")
-                ->leftJoin("pf.users_allowed", "user")
-                ->andWhere("(f.owner = :owner OR user = :owner OR pf.creator = :owner)")
-                ->setParameter("owner", User::current_user());
-        }
 
-        if (isset($_GET["folder_id"]))
+        if (isset($data["folder_id"]))
         {
-            $parent_folder = Folder::find($_GET["folder_id"]);
+            $parent_folder = File::find($data["folder_id"]);
             if (is_object($parent_folder))
             {
                 $qb->andWhere("f.parent_folder = :parent_folder")
@@ -77,17 +71,17 @@ class FilesController extends Controller
             }
         }
 
-
-        if (isset($_GET["filter"]) && $_GET["filter"] != "")
+        if (isset($data["shared"]) && $data["shared"])
         {
-            $qb->andWhere("f.name LIKE :name")
-                ->setParameter("name", '%' . mysql_real_escape_string($_GET["filter"]) . '%');
+            $qb->join("f.users_allowed", "f_user")
+                ->andWhere("f_user = :current_user")
+                ->setParameter("current_user", \User::current_user());
         }
+
 
         $files = $qb->getQuery()->getResult();
 
         $response = array();
-
         foreach ($files as $file)
         {
             $response[] = $file->toArray();
@@ -107,11 +101,13 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
-            echo json_encode($file->toArray());
+            echo json_encode($file->toArray(true));
         }
         else
         {
-            echo json_encode(array("error"));
+            $file = File::getHome();
+//            var_dump($file->getSubfiles()->toArray());
+            echo json_encode($file->toArray(true));
         }
     }
 
@@ -128,31 +124,23 @@ class FilesController extends Controller
         {
             $file->setPath(md5(microtime()));
 
-            if (isset($data["parent_folder"]["id"]))
+            if (isset($data["parent_folder"]) && isset($data["parent_folder"]["id"]))
             {
-                $folder = Folder::find($data["parent_folder"]["id"]);
+                $folder = File::find($data["parent_folder"]["id"]);
+                if (is_object($folder) && $folder->isFolder())
+                    $file->setParentFolder($folder);
             }
-            else
+            else if (isset($data["parent_folder"]))
             {
-                $folder = Folder::find($data["parent_folder"]);
+                $folder = File::find($data["parent_folder"]);
+                if (is_object($folder) && $folder->isFolder())
+                    $file->setParentFolder($folder);
             }
 
 
-            if (is_object($folder))
-            {
-                $file->setParentFolder($folder);
-                echo $folder->getCreator()->getSessionId();
-//                NodeDiplomat::sendMessage($folder->getCreator()->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-//                foreach ($folder->getUsersAllowed() as $user)
-//                {
-//                    NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "changed_directory", "folder_id" => $folder->getId()));
-//                }
-                $this->send_notifs($folder);
-            }
             if (isset($data["owner"]))
             {
                 $owner = User::find($data["owner"]["id"]);
-
                 if (is_object($owner))
                 {
                     $file->setOwner($owner);
@@ -161,6 +149,11 @@ class FilesController extends Controller
             else
             {
                 $file->setOwner(User::current_user());
+            }
+
+            if (isset($data["is_folder"]))
+            {
+                $file->setAsFolder($data["is_folder"]);
             }
 
 
@@ -173,11 +166,36 @@ class FilesController extends Controller
                 $file->setPath($file->getPath() . PATHINFO_EXTENSION . $ext);
                 move_uploaded_file($_FILES["file"]["tmp_name"], $path . $file->getPath());
             }
-
+            if (isset($data["data"]))
+            {
+                $path = ROOT . DS . "Data" . DS . "User_files" . DS;
+                $exploded_name = explode(".", $file->getName());
+                if (isset($data["extension"]))
+                {
+                    $ext = "." . $data["extension"];
+                }
+                else
+                {
+                    $ext = count($exploded_name) > 1 ? "." . $exploded_name[count($exploded_name) - 1] : "";
+                }
+                $file->setPath($file->getPath() . $ext);
+                $data = $data["data"];
+                $array = explode(",", $data);
+                if (isset($array[1]))
+                {
+                    $data = $array[1];
+                }
+                if (base64_encode(base64_decode($data)) === $data)
+                {
+                    $data = base64_decode($data);
+                }
+                file_put_contents($path . $file->getPath(), $data);
+            }
             $file->save();
+            if (is_object($file->getParentFolder()))
+                $this->send_notifs($file->getParentFolder());
             echo json_encode($file->toArray());
         }
-
     }
 
     public function update($params = array())
@@ -186,31 +204,49 @@ class FilesController extends Controller
         header("Content-Type: application/json");
         $this->render = false;
 
-        $file = File::find(($params["id"]));
+        $file = File::find($params["id"]);
         $data = $this->getRequestData();
 
         if (is_object($file) && ($file->getOwner() == User::current_user() || User::is_admin()))
         {
             $file->setName($data["name"]);
-            $folder = Folder::find($data["parent_folder"]["id"]);
-            if (is_object($folder))
+            if (isset($data["parent_folder"]) && isset($data["parent_folder"]["id"]))
             {
-                $file->setParentFolder($folder);
-                $this->send_notifs($folder);
+                $folder = null;
+                $folder = File::find($data["parent_folder"]["id"]);
+                if (is_object($folder))
+                {
+                    $file->setParentFolder($folder);
+                    $this->send_notifs($folder);
+                }
             }
-
-            $owner = User::find($data["owner"]["id"]);
-            if (is_object($owner))
+            $old_users = $file->getUsersAllowed()->toArray();
+            $file->getUsersAllowed()->clear();
+            foreach ($data["users_allowed"] as $user_array)
             {
-                $file->setOwner($owner);
+                $user = \User::find($user_array["id"]);
+                if (is_object($user))
+                {
+                    $file->addAllowedUser($user);
+
+                }
             }
 
             $file->save();
+            foreach ($old_users as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+            }
+            foreach ($file->getUsersAllowed() as $user)
+            {
+                NodeDiplomat::sendMessage($user->getSessionId(), array("app" => "k_fs", "status" => "sharing_update"));
+            }
             echo json_encode($file->toArray());
         }
         else
             echo json_encode(array("error"));
     }
+
 
     public function destroy($params = array())
     {
@@ -284,11 +320,22 @@ class FilesController extends Controller
 
         if (is_object($file))
         {
-
             $ext = explode(".", $file->getPath());
             $ext = isset($ext[0]) ? "." . $ext[count($ext) - 1] : "";
 
             header('Content-Disposition: attachment; filename="' . $file->getName() . $ext . '"');
+            echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
+        }
+    }
+
+    public function get_raw_file($params = array())
+    {
+        $data = $this->getRequestData();
+        $file = File::find($data["id"]);
+        $this->render = false;
+        header("Content-Type: = " . $file->getType());
+        if (is_object($file))
+        {
             echo file_get_contents(ROOT . DS . "Data" . DS . "User_files" . DS . $file->getPath());
         }
     }

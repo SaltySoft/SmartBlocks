@@ -1,39 +1,38 @@
-<div><a href="javascript:void(0);" class="ent_sch_dv_backtomenu_button">Back to menu</a></div>
-<div onselectstart="return false;">
+<div><a href="javascript:void(0);" class="ent_sch_dv_backtomenu_button">Back to menu</a> - <a href="javascript:void(0);" class="ent_sch_export_button">Export to file</a></div>
+<div class="draw_view_container">
     <div class="ent_sch_dv_tools">
         <div class="tool" data-id="0"><img style="max-width: 15px" src="/Enterprise/Apps/Schemas/Resources/brush.png"/>
         </div>
-        <div class="tool" data-id="1"><img style="max-width: 15px" src="/Enterprise/Apps/Schemas/Resources/line.png"/></div>
-        <div class="tool" data-id="2"><img style="max-width: 15px" src="/Enterprise/Apps/Schemas/Resources/rectangle.png"/></div>
-        <a href="javascript:void(0);" class="ent_sch_dv_urb ent_sch_dv_undo_button"><img style="max-width: 30px" src="/Enterprise/Apps/Schemas/Resources/undo.png"/></a>
-        <a href="javascript:void(0);" class="ent_sch_dv_urb ent_sch_dv_redo_button"><img style="max-width: 30px" src="/Enterprise/Apps/Schemas/Resources/redo.png"/></a>
+        <div class="tool" data-id="1"><img style="max-width: 15px" src="/Enterprise/Apps/Schemas/Resources/line.png"/>
+        </div>
+        <div class="tool" data-id="2"><img style="max-width: 15px"
+                                           src="/Enterprise/Apps/Schemas/Resources/rectangle.png"/></div>
+        <div class="text_tool tool"><img style="max-width: 15px"
+                                         src="/Enterprise/Apps/Schemas/Resources/text.png"/></div>
+        <!--<a href="javascript:void(0);" class="ent_sch_dv_urb ent_sch_dv_undo_button"><img style="max-width: 30px"-->
+                                                                                         <!--src="/Enterprise/Apps/Schemas/Resources/undo.png"/></a>-->
+        <!--<a href="javascript:void(0);" class="ent_sch_dv_urb ent_sch_dv_redo_button"><img style="max-width: 30px"-->
+                                                                                         <!--src="/Enterprise/Apps/Schemas/Resources/redo.png"/></a>-->
+
+
+        <div style="float: right">
+            <input type="hidden" value="grey" name="favcolor" class="ent_sch_dv_clrpicker">
+            <div class="color_picker_holder"></div>
+            <!--<button class="ent_sch_dv_save_button">SAVE</button>-->
+        </div>
     </div>
     <div>
         <div>
             <div class="size_chooser">
-            size: <input type="number" class="ent_sch_dv_toolsize"/>
+                size: <input type="number" class="ent_sch_dv_toolsize"/>
             </div>
-            <div style="float: right">
-                <input type="color" name="favcolor" class="ent_sch_dv_clrpicker">
-            <!--<div class="color_chooser"></div>-->
 
-                <!--<div class="saved_colors">-->
-                    <!--<% for (var i =0; i < 20; i++) { %>-->
-                    <!--<div class="saved_color">-->
-
-                    <!--</div>-->
-                    <!--<% } %>-->
-                <!--</div>-->
-                <!--&lt;!&ndash;<div class="ent_sch_dv_colorpicker">&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="slider"></div>&ndash;&gt;-->
-                    <!--&lt;!&ndash;<div class="picker"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
-            <!--</div>-->
         </div>
-    </div>
-    <canvas id="ent_sch_dv_canvas" width="1000" height="500">
+        <div class="canvas_container">
+            <canvas id="ent_sch_dv_canvas" width="1020" height="655">
+            </canvas>
 
-    </canvas>
-    <button class="ent_sch_dv_save_button">SAVE</button>
+        </div>
+
+    </div>
 </div>

@@ -8,6 +8,7 @@ define([
         Router.initialize(SmartBlocks);
     };
     return {
-        initialize:initialize
+        initialize: initialize,
+        refresh: Router.refresh
     };
 });

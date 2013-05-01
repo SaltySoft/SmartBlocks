@@ -38,3 +38,5 @@ Router::connect(array("url" => "root", "controller" => "Organizer", "action" => 
 Router::connect(array("url" => "/set_locale/:locale", "controller" => "Pages", "action" => "setLocale"));
 
 Router::connect(array("url" => "/Files/get_file/#id", "controller" => "Files", "action" => "get_file"));
+
+Router::connect(array("url" => "Users/Connect/:username/:password", "controller" => "Users", "action" => "connect"));

@@ -57,11 +57,17 @@ class User extends UserBase
      */
     private $note_preference;
 
+    /**
+     * @Column(type="string")
+     */
+    private $token;
+
 
     public function __construct()
     {
         $this->firstname = "";
         $this->lastname = "";
+        $this->token = "";
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -136,6 +142,15 @@ class User extends UserBase
         return $this->jobs;
     }
 
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
 
     public function toArray($load_sub = 1)
     {
