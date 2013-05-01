@@ -111,10 +111,7 @@ define([
 
             base.$el.find(".ent_note_np_validate").click(function () {
                 base.SmartBlocks.startLoading("Validating parameters");
-                console.log("base.selected_users validate", base.selected_users);
-                console.log("base.selected_users validate toarray", base.selected_users.toArray());
-                base.note.users = base.selected_users.toArray();
-                console.log("ent_note_np_validate", base.note);
+                base.note.set("users", base.selected_users.toArray());
                 base.note.save({}, {
                     success:function () {
                         console.log("NoteParameters note save success");

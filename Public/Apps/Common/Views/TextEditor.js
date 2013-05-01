@@ -35,6 +35,7 @@ define([
         setText: function (text) {
             var base = this;
             base.frame.contents().find("body").html(text);
+            base.resizeFrame();
         },
         charAt: function (pos) {
             var base = this;
