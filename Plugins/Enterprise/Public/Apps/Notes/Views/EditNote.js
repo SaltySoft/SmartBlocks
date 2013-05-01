@@ -47,7 +47,7 @@ define([
                 var editSubnoteView = new EditSubnoteView();
                 var subNoteId = subnote.get('id');
                 var suNoteText = subnote.get('content');
-                editSubnoteView.init(base.AppEvents, base.SmartBlocks, subNoteId, suNoteText);
+                editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
                 base.$el.find(".editNoteContent").append(editSubnoteView.$el);
                 base.subnotes_views_list[subNoteId] = editSubnoteView;
             });
@@ -70,7 +70,7 @@ define([
                         var editSubnoteView = new EditSubnoteView();
                         var subNoteId = subnote.id;
                         var suNoteText = "New content";
-                        editSubnoteView.init(base.AppEvents, base.SmartBlocks, subNoteId, suNoteText);
+                        editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
                         base.$el.find(".editNoteContent").append(editSubnoteView.$el);
                         base.subnotes_views_list[subNoteId] = editSubnoteView;
                     },
