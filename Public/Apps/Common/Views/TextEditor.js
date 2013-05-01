@@ -32,15 +32,10 @@ define([
         },
         initRichTextEditor:function () {
             var base = this;
-            console.log("initRichTextEditor");
             var frame = base.$el.find(".richTextEditor");
-//            frame.html(base.text);
-            console.log("myframe", frame);
 
             frame.load(function () {
-                console.log("IFRAME READY");
                 var frameDoc = frame[0].contentWindow.document;
-                console.log("frameDoc", frameDoc);
 
                 frameDoc.open();
                 frameDoc.write(base.text);
@@ -50,10 +45,9 @@ define([
                 frame.css("height", 0);
                 var actual_height = frame[0].clientHeight;
                 var needed_height = frame[0].contentDocument.height;
-                console.log("actual_height " + actual_height);
-                console.log("needed_height " + needed_height);
+//                console.log("actual_height " + actual_height);
+//                console.log("needed_height " + needed_height);
                 if (actual_height != needed_height) {
-                    console.log("change height init: ");
                     $(frame).css("height", needed_height);
                 }
 
@@ -66,7 +60,6 @@ define([
 
             base.$el.delegate(".editor_button", "click", function (e) {
                 $(this).toggleClass("selected");
-                console.log("click", frame);
                 var contentWindow = frame[0].contentWindow;
 
                 contentWindow.focus();
@@ -76,8 +69,6 @@ define([
 
             $('body', $(frame).contents()).blur(function (event) {
                 base.resizeIframe();
-                console.log("blur: ");
-
                 var textUpdate = event.currentTarget.innerHTML;
                 base.text = textUpdate;
                 var message = {
