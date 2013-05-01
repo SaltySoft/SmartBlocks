@@ -95,7 +95,7 @@ define([
                 var contentWindow = frame[0].contentWindow;
 
                 contentWindow.focus();
-                contentWindow.document.execCommand('fontname', false, $(this).val());
+                contentWindow.document.execCommand($(this).attr("data-commandName"), false, $(this).val());
                 contentWindow.focus();
 
                 base.events.trigger("text_editor_text_change");

@@ -7,7 +7,7 @@
     <button class="editor_button justifycenter" data-commandName="justifycenter" title="center" >C</button >
     <button class="editor_button justifyright" data-commandName="justifyright" title="align right" >R</button >
     |
-    <select class="editor_option fonts" >
+    <select class="editor_option fonts" data-commandName="fontname" >
         <option value="Arial" >Arial</option >
         <option value="Comic Sans MS" >Comic Sans MS</option >
         <option value="Courier New" >Courier New</option >
@@ -15,6 +15,29 @@
         <option value="Tahoma" >Tahoma</option >
         <option value="Times" >Times</option >
     </select >
+    |
+    <select class="editor_option fontsize" data-commandName="fontsize" >
+        <option value="1" >10</option >
+        <option value="2" >11</option >
+        <option value="3" selected="selected" >13,5</option >
+        <option value="4" >18</option >
+        <option value="5" >24</option >
+    </select >
+    <select class="editor_option foreColor" data-commandName="ForeColor" >
+        <option value="black" selected="selected">●</option >
+        <option style="color:red;" value="red" >●</option >
+        <option style="color:blue;" value="blue" >●</option >
+        <option style="color:green;" value="green" >●</option >
+        <option style="color:pink;" value="pink" >●</option >
+    </select >
+    |
+    <button class="editor_button insertorderedlist" data-commandName="insertorderedlist" title="Numbered List" >1
+    </button >
+    <button class="editor_button insertunorderedlist" data-commandName="insertunorderedlist" title="Bullets List" >●
+    </button >
+    <button class="editor_button outdent" data-commandName="outdent" title="Outdent" >←</button >
+    <button class="editor_button indent" data-commandName="indent" title="Indent" >→</button >
+</div >
 </div >
 <div class="textContainer" >
     <div class="richTextEditor_containerDiv" >
