@@ -1,3 +1,8 @@
+.ent_notes_dashboard {
+    width: 800px;
+    margin: auto;
+}
+
 .quick_control_panel_container {
     height: 100%;
     margin: 0px;
@@ -85,9 +90,8 @@
 .dashboard_note .name_link {
     text-decoration: none;
     color: #a1a1a1;
-    font-size: 18px;
+    font-size: 15px;
     display: inline-block;
-    width: 72%;
 }
 
 .dashboard_note .note_div_button {
@@ -161,15 +165,15 @@
 }
 
 .ent_notes_edition {
-    min-width: 500px;
-    margin: auto;
+
     background-color: rgba(2, 64, 83, 0.30);
-    left: 300px;
+    left: 200px;
     position: absolute;
-    right: 5px;
+    right: 0px;
     padding: 5px;
-    height: 500px;
-    bottom: -510px;
+    bottom: 0px;
+    top: 0px;
+    overflow: auto;
 }
 
 .closeButtonEditNote {
@@ -186,7 +190,7 @@
 }
 
 .content_container {
-    margin-left: 250px;
+    margin-left: 0px;
     position: relative;
 }
 
@@ -194,7 +198,7 @@
     float: left;
     background-color: rgba(28, 119, 131, 0.45);
     padding: 0px;
-    width: 300px;
+    width: 200px;
 }
 
 .notes_container ul {
@@ -221,8 +225,15 @@
 
 }
 
-.editNoteContent {
-    padding: 5px;
-    margin: 5px;
-    height: 460px;
+.ent_subnote_edition {
+    width: 100%;
+}
+
+
+.ent_subnote_edition iframe {
+    width: 100%;
+}
+
+.editNote_add_subnote_button {
+    float: right;
 }

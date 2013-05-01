@@ -23,8 +23,6 @@ define([
             base.textEditor = new TextEditorView();
             base.textEditor.init(base.subnote_text, 150);
             base.render();
-
-
         },
         render:function () {
             var base = this;

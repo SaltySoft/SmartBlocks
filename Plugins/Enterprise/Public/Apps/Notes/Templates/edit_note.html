@@ -1,11 +1,10 @@
 <div class="editNoteHeader" >
-    Edit the note
-    </br>
-    Titre : <%= note.get('title') %>
-    <a class="editNote_add_subnote_button" href="javascript:void(0);"
-       data-id="<%= note.get('id') %>" data-type="text" >
+    <button class="editNote_add_subnote_button"
+            data-id="<%= note.get('id') %>" data-type="text" >
         Add text content
-    </a >
+    </button>
+    <h2><%= note.get('title') %></h2>
+
     </br>
 </div >
 <div class="editNoteContent" >
