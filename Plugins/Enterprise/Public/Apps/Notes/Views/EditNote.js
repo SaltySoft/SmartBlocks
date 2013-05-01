@@ -59,7 +59,7 @@ define([
             var base = this;
             base.$el.delegate(".editNote_add_subnote_button", "click", function () {
                 var elt = $(this);
-                var id = elt.attr("data-id");
+                var id = base.note.get("id");
                 var type = elt.attr("data-type");
                 var subnote = new Subnote({
                     note_id:id,
@@ -76,7 +76,7 @@ define([
                         base.subnotes_views_list[subNoteId] = editSubnoteView;
                     },
                     error:function () {
-                        SmartBlocks.show_message("There was an error creating the subnote. Please try again later.");
+                        base.SmartBlocks.show_message("There was an error creating the subnote. Please try again later.");
                     }
                 });
             });

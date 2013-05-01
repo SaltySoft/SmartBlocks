@@ -117,6 +117,7 @@ define([
                 if (base.getText() != text_save) {
                     base.events.trigger("text_editor_text_change");
                 }
+                base.resizeFrame();
             });
 
             var text_save = null;
@@ -130,6 +131,7 @@ define([
                 if (base.getText() != text_save) {
                     base.events.trigger("text_editor_text_change");
                 }
+                base.resizeFrame();
             });
         },
         caretPosition: function () {

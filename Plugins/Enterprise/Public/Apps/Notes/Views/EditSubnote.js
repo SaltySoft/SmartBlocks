@@ -28,7 +28,7 @@ define([
             console.log(base.user_sessions);
 
             base.text_editor = new TextEditorView();
-            base.text_editor.init(subnote.get("content"), 150);
+            base.text_editor.init(subnote.get("content"), 75);
             base.buffer = [];
             base.render();
         },
@@ -43,19 +43,19 @@ define([
             var save_timer = 0;
 
 
-
             base.text_editor.events.on('text_editor_keydown', function (caret, keycode) {
                 base.subnote.set("content", base.text_editor.getText());
                 clearTimeout(save_timer);
                 save_timer = setTimeout(function () {
                     base.subnote.save();
-                }, 100);
+                }, 200);
                 base.SmartBlocks.sendWs("ent_notes", {
                     command: "print",
                     caret: caret,
                     keycode: keycode,
-                    sender : base.SmartBlocks.current_session
-                },base.user_sessions);
+                    sender: base.SmartBlocks.current_session,
+                    subnote_id: base.subnote.get("id")
+                }, base.user_sessions);
             });
 
             base.text_editor.events.on('text_editor_text_change', function () {
@@ -63,17 +63,22 @@ define([
                 base.SmartBlocks.sendWs("ent_notes", {
                     command: "text_change",
                     text: base.text_editor.getText(),
-                    sender : base.SmartBlocks.current_session
+                    sender: base.SmartBlocks.current_session,
+                    subnote_id: base.subnote.get("id")
                 }, base.user_sessions);
                 base.subnote.set("content", base.text_editor.getText());
-                base.subnote.save();
+                clearTimeout(save_timer);
+                save_timer = setTimeout(function () {
+                    base.subnote.save();
+                }, 200);
             });
 
             base.text_editor.events.on('text_editor_select', function (caret) {
                 base.SmartBlocks.sendWs("ent_notes", {
                     command: "select",
                     caret: caret,
-                    sender : base.SmartBlocks.current_session
+                    sender: base.SmartBlocks.current_session,
+                    subnote_id: base.subnote.get("id")
                 }, base.user_sessions);
             });
 
@@ -81,8 +86,10 @@ define([
                 if (message.app == "ent_notes") {
 
                     if (message.sender != base.SmartBlocks.current_session) {
-                        if (message.command == "text_change") {
-                            base.text_editor.setText(message.text);
+                        if (message.subnote_id == base.subnote.get("id")) {
+                            if (message.command == "text_change") {
+                                base.text_editor.setText(message.text);
+                            }
                         }
                     }
                 }
