@@ -183,10 +183,6 @@
     display: inline-block;
 }
 
-.ent_subnote_edition.locked {
-    background-color: #a3242a;
-}
-
 .ent_subnote_edition.fullsize {
     width: 100%;
 }

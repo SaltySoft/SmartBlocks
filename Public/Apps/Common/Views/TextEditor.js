@@ -191,11 +191,13 @@ define([
             var base = this;
             if (base.frameDoc)
                 base.frameDoc.designMode = "off";
+            base.$el.find(".richTextEditor").addClass("locked");
         },
         unlock: function () {
             var base = this;
             if (base.frameDoc)
                 base.frameDoc.designMode = "on";
+            base.$el.find(".richTextEditor").removeClass("locked");
         }
     });
 
