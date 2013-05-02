@@ -130,7 +130,7 @@ define([
             base.sendWs("heartbeat", {
                 app: "heartbeat",
                 user: user.attributes
-            });
+            }, "all");
         }
     };
 

@@ -31,19 +31,7 @@ requirejs(apps,
         User.getCurrent(function (current_user) {
             SmartBlocks.connected_users = new UsersCollection();
             var timers = [];
-            SmartBlocks.events.on("ws_notification", function (message) {
-                if (message.app == "heartbeat") {
-                    SmartBlocks.connected_users.push(message.user);
-                    clearTimeout(timers[message.user.id]);
-                    timers[message.user.id] = setTimeout(function () {
-                        SmartBlocks.connected_users.remove(message.user);
-                    }, 1000);
-                }
-            });
 
-            setInterval(function (){
-                SmartBlocks.heartBeat(current_user);
-            }, 500);
 
 
             SmartBlocks.current_user = current_user;
@@ -53,6 +41,20 @@ requirejs(apps,
             SmartBlocks.FileSharingApp = FileSharingApp;
             if (App)
                 App.initialize(SmartBlocks);
+            
+            //Hearbeats. If I'm living, my heart beats.
+            SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.app == "heartbeat") {
+                    SmartBlocks.connected_users.push(message.user);
+                    clearTimeout(timers[message.user.id]);
+                    timers[message.user.id] = setTimeout(function () {
+                        SmartBlocks.connected_users.remove(message.user);
+                    }, 1000);
+                }
+            });
+            setInterval(function (){
+                SmartBlocks.heartBeat(current_user);
+            }, 500);
         });
 
     });
