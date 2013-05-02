@@ -31,6 +31,7 @@ define([
             base.note.fetch({
                 success: function () {
                     base.caller_button.find(".display").html(base.note.get("title"));
+                    base.id = base.note.get("id");
                     base.render();
                 }
             });
@@ -152,30 +153,36 @@ define([
                     title.find(".title_display_text").html(base.note.get("title"));
                     base.caller_button.find(".display").html(base.note.get("title"));
                     title.removeClass("edition");
-
                 }
+            });
 
+            base.SmartBlocks.events.on("ent_notes_deleted_note", function (id) {
+                if (id == base.id) {
+                    base.$el.html("");
+                    base.$el.remove();
+                }
             });
 
             base.SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "ent_notes") {
                     if (message.sender != base.SmartBlocks.current_session) {
-                        if (message.note_id == base.note.get("id")) {
+                        if (message.note_id == base.id) {
                             if (message.command == "retrieve_note") {
                                 base.retrieveSubnote(message.subnote_id);
                             }
-
                             if (message.command == "change_title") {
                                 base.note.fetch({
                                     success: function () {
                                         var title = base.$el.find(".ent_note_title");
                                         title.find(".title_display_text").html(base.note.get("title"));
-                                        base.caller_button.find(".display").html(base.note.get("title"));
                                     }
                                 });
                             }
+                            if (message.command == "remove_note") {
+                                base.SmartBlocks.show_message("The note was deleted by someone else.");
+                                base.$el.remove();
+                            }
                         }
-
                     }
                 }
             })

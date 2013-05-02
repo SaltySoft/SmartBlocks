@@ -117,6 +117,17 @@ define([
                         console.log("NoteParameters note save success");
                         base.hide();
                         base.SmartBlocks.stopLoading();
+
+                        var users = base.note.get("users").models;
+                        var user_sessions = [];
+                        for (var k in users) {
+                            user_sessions.push(users[k].get("session_id"));
+                        }
+//                        alert("ws send");
+                        base.SmartBlocks.sendWs("ent_notes", {
+                            command: "refetch_notes",
+                            sender: base.SmartBlocks.current_user.get("session_id")
+                        }, user_sessions);
                     },
                     error:function () {
                         console.log("NoteParameters note save error");
