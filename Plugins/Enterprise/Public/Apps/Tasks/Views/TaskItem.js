@@ -21,7 +21,8 @@ define([
         },
         render: function () {
             var base = this;
-            var template = _.template(TaskItemTemplate, { task:  base.model, time: new Date(base.model.get("creation_date") * 1000) });
+            var creation = base.model.get("creation_date");
+            var template = _.template(TaskItemTemplate, { task:  base.model, time: creation !== undefined ?  new Date(creation * 1000) : undefined });
             base.$el.html(template);
             if (base.model.get("completion_date") != null) {
                 base.$el.addClass("completed");

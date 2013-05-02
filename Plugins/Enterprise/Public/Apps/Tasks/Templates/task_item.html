@@ -9,7 +9,7 @@
 <span class="task_display">
 </div>
     <span class="task_name"><%= task.get("name") %></span>
-    <span class="date"><%= time.getDate() %>/<%= time.getMonth() + 1 %>/<%= time.getFullYear() %></span>
+    <span class="date"><% if (time !== undefined) {%><%= time.getDate() %>/<%= time.getMonth() + 1 %>/<%= time.getFullYear() %><% } %></span>
 
 </span>
 <span class="task_edition">
