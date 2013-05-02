@@ -27,3 +27,11 @@
 .text_editor .tool_box {
     height: 48px;
 }
+
+.richTextEditor {
+    background-color: white;
+}
+
+.richTextEditor.locked {
+    background-color: #e5b6a7;
+}
