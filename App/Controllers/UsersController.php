@@ -322,10 +322,24 @@ class UsersController extends Controller
             $token = sha1(microtime());
             $user->setToken($token);
             $user->save();
+            $session = $user->getSessionId();
 
-            $array = array("session_id" => $user->getSessionId(), "token" => $token);
+            if ($session == null)
+            {
+                $session = md5(microtime() . rand());
+                $user->setSessionId($session);
+                $user->save();
 
-            echo json_encode($array);
+                $array = array("session_id" => $session, "token" => $token);
+
+                echo json_encode($array);
+            }
+            else
+            {
+                $array = array("session_id" => $user->getSessionId(), "token" => $token);
+
+                echo json_encode($array);
+            }
         }
     }
 }
