@@ -116,6 +116,13 @@ define([
                 var noteParametersView = new NoteParametersView();
                 noteParametersView.init(base.SmartBlocks, base.note);
                 noteParametersView.show();
+                noteParametersView.events.on("changed_users", function () {
+                    base.note.fetch({
+                        success: function () {
+                            console.log("Refetched note");
+                        }
+                    });
+                });
             });
 
             base.$el.delegate(".ent_note_title .title_button", "click", function () {

@@ -19,8 +19,13 @@ define([
             base.note = note;
             base.user_search_results = new UsersCollection();
             base.selected_users = new UsersCollection();
-
-            base.render();
+            base.events = $.extend(true, {}, Backbone.Events);
+            base.note.fetch({
+                success: function () {
+                    base.old_users = base.note.get("users").toArray();
+                    base.render();
+                }
+            });
         },
         render:function () {
             var base = this;
@@ -29,7 +34,18 @@ define([
             content.addClass('ent_notes_np');
             content.html(template);
             base.$el.append(content);
+            base.selected_users = base.note.get("users");
+            var template = _.template(SelectionTemplate, {
+                type:"User",
+                selection:base.selected_users.models,
+                field:"username"
+            });
+            base.$el.find(".user_selection").html(template);
 
+            base.$el.find(".remove_from_selection").click(function () {
+                var elt = $(this);
+                base.selected_users.remove(base.selected_users.get(elt.attr("data-id")));
+            });
             base.user_search_results.fetch({
                 data:{
                     filter:base.$el.find(".user_search_input").val()
@@ -49,6 +65,8 @@ define([
                     });
                 }
             });
+
+
 
             base.initializeEvents();
         },
@@ -79,7 +97,7 @@ define([
                     });
                 }, 100);
             });
-            base.selected_users.on("add", function () {
+            base.selected_users.on("add", function (model, collection) {
 
                 var template = _.template(SelectionTemplate, {
                     type:"User",
@@ -87,7 +105,6 @@ define([
                     field:"username"
                 });
                 base.$el.find(".user_selection").html(template);
-
                 base.$el.find(".remove_from_selection").click(function () {
                     var elt = $(this);
                     base.selected_users.remove(base.selected_users.get(elt.attr("data-id")));
@@ -111,23 +128,28 @@ define([
 
             base.$el.find(".ent_note_np_validate").click(function () {
                 base.SmartBlocks.startLoading("Validating parameters");
-                base.note.set("users", base.selected_users.toArray());
+                var users = base.old_users;
+                base.user_sessions = [];
+                for (var k in users) {
+                    base.user_sessions.push(users[k].get("session_id"));
+                }
+                console.log(users);
+                for (var k in base.selected_users.models) {
+                    base.user_sessions.push(base.selected_users.models[k].get("session_id"));
+                }
+
+
+                base.note.set("users", base.selected_users);
                 base.note.save({}, {
                     success:function () {
                         console.log("NoteParameters note save success");
                         base.hide();
                         base.SmartBlocks.stopLoading();
-
-                        var users = base.note.get("users").models;
-                        var user_sessions = [];
-                        for (var k in users) {
-                            user_sessions.push(users[k].get("session_id"));
-                        }
-//                        alert("ws send");
                         base.SmartBlocks.sendWs("ent_notes", {
                             command: "refetch_notes",
                             sender: base.SmartBlocks.current_user.get("session_id")
-                        }, user_sessions);
+                        }, base.user_sessions);
+                        base.events.trigger("changed_users");
                     },
                     error:function () {
                         console.log("NoteParameters note save error");

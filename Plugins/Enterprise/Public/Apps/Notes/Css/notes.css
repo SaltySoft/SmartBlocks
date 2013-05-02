@@ -230,12 +230,33 @@
 }
 
 .user_search_result {
-    height: 150px;
+    height: 180px;
+    overflow-y: scroll;
 }
 
 .user_selection {
     margin-top: 15px;
-    height: 150px;
+    height: 180px;
+    overflow-y: scroll;
+}
+.user_selection .object_selected  {
+    line-height: 25px;
+    height: 25px;
+    background-color: #f0f3f7;
+    display: block;
+    color: black;
+    padding: 5px;
+    float: left;
+    width: 123px;
+    text-align: center;
+    border: 1px solid #aaaaaa;
+    margin: 5px 5px 5px 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    -moz-transition: all 100ms ease-in;
+    -webkit-transition: all 100ms ease-in;
+    -o-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
 }
 
 .user_search_result a {
