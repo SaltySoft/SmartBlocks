@@ -8,20 +8,23 @@ define([
 
     var AppRouter = Backbone.Router.extend({
         routes:{
-            '':"home",
-            'show_all':'show_all',
-            'show_importants':'show_importants',
-            'create_note':'create_note',
-            'note_edition/:id':'note_edition'
+//            '':"home",
+//            'show_all':'show_all',
+//            'show_importants':'show_importants',
+//            'create_note':'create_note',
+//            'note_edition/:id':'note_edition'
         }
     });
 
-    var initialize = function () {
+    var initialize = function (SmartBlocks) {
+        var base = this;
+        base.SmartBlocks = SmartBlocks;
+
         //Init the events and the router
         var AppEvents = _.extend({}, Backbone.Events);
         var app_router = new AppRouter();
 
-        var dashboard = new DashboardView();
+        var dashboard = new DashboardView(base.SmartBlocks);
         dashboard.init(AppEvents);
 
         $("#app_container").html(dashboard.$el);
@@ -38,24 +41,24 @@ define([
 //            app_router.navigate(route, {trigger: true});
         });
 
-        app_router.on('route:home', function () {
-            dashboard.clear();
-            dashboard.render();
-        });
-        app_router.on('route:show_all', function () {
-            dashboard.clear();
-            dashboard.renderAll();
-        });
-        app_router.on('route:show_importants', function () {
-            dashboard.clear();
-            dashboard.renderImportants();
-        });
-        app_router.on('route:create_note', function () {
-            dashboard.showCreateNote();
-        });
-        app_router.on('route:note_edition', function (id) {
-            dashboard.showEditNote(id);
-        });
+//        app_router.on('route:home', function () {
+//            dashboard.clear();
+//            dashboard.render();
+//        });
+//        app_router.on('route:show_all', function () {
+//            dashboard.clear();
+//            dashboard.renderAll();
+//        });
+//        app_router.on('route:show_importants', function () {
+//            dashboard.clear();
+//            dashboard.renderImportants();
+//        });
+//        app_router.on('route:create_note', function () {
+//            dashboard.showCreateNote();
+//        });
+//        app_router.on('route:note_edition', function (id) {
+//            dashboard.showEditNote(id);
+//        });
 
         Backbone.history.start();
     };

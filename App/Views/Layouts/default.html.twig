@@ -6,7 +6,7 @@
     <title>My website</title>
     {{ HtmlHelper.importJs("jquery") }}
     {{ HtmlHelper.importCss("reset") }}
-    <link rel="stylesheet" type="text/css" href="/Apps/Common/Css/color_picker.css" />
+    <link rel="stylesheet" type="text/css" href="/Apps/Common/Css/color_picker.css"/>
     {{ HtmlHelper.importCss("default") }}
     {{ HtmlHelper.importJs("require") }}
     <link rel="icon" type="image/jpg" href="/images/favicon.png"/>
@@ -22,12 +22,12 @@
 <div id="container">
     <div id="left_menu">
         <a class="menu_button" href="/" title="Home">
-            <img src="/images/icons/house.png" />
+            <img src="/images/icons/house.png"/>
 
         </a>
         {% if user.is_admin() %}
             <a class="menu_button" href="/Users/user_management" title="User management">
-                <img src="/images/icons/user_edit.png" >
+                <img src="/images/icons/user_edit.png">
             </a>
         {% endif %}
     </div>
@@ -46,9 +46,11 @@
         </div>
     </div>
     {% if user_set %}
-    <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>
+        <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>
 
-    <div id="chat_button"><div id="chat_notif" class="chat_notif"></div><p id="chat_text">Chat</p></div>
+        <div id="chat_button">
+            <div id="chat_notif" class="chat_notif"></div>
+            <p id="chat_text">Chat</p></div>
     {% endif %}
 </div>
 <script type="text/javascript">
@@ -63,13 +65,16 @@
 
     {% endif %}
 </script>
+
+
 <div id="chat_container"></div>
 <div id="file_sharing_container"></div>
 
-<link rel="stylesheet" href="/Apps/FileSharing/Css/main.css" type="text/css">
-<link rel="stylesheet" href="/Apps/FileSharing/Css/save_window.css" type="text/css">
-<link rel="stylesheet" href="/Apps/Chat/Css/main.css" type="text/css">
-<link rel="stylesheet" href="/Apps/Chat/Css/discussion_creation.css" type="text/css">
+<link rel="stylesheet" href="/Apps/Common/Css/text_editor_outer.css" type="text/css"/>
+<link rel="stylesheet" href="/Apps/FileSharing/Css/main.css" type="text/css"/>
+<link rel="stylesheet" href="/Apps/FileSharing/Css/save_window.css" type="text/css"/>
+<link rel="stylesheet" href="/Apps/Chat/Css/main.css" type="text/css"/>
+<link rel="stylesheet" href="/Apps/Chat/Css/discussion_creation.css" type="text/css"/>
 <script type="text/javascript" src="/Apps/Common/requireConfig.js"></script>
 <script type="text/javascript" src="/Apps/Common/main.js"></script>
 </body>

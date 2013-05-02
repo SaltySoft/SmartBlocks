@@ -77,7 +77,7 @@
 </div>
 
 <div class="block">
-    <form action="/Users/create" method="post">
+    <form id="form_form" action="/Users/create" method="post">
         <div class="form_line">
             <label for="username">Username</label>
             <input type="text" id="username" name="name"/>
@@ -95,7 +95,7 @@
         <div style="clear: right"></div>
         <div class="form_line">
             <label for="repass">Confirm password</label>
-            <input type="password" id="repass" name="password"/>
+            <input type="password" id="repass" name="repass"/>
         </div>
         <div style="clear: right"></div>
         <div class="form_line">
@@ -137,7 +137,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("#submit_button").click(function () {
-            if ($("#form_password").val() == $("#form_password2").val())
+            alert("daw");
+            if ($("#password").val() == $("#repass").val())
             {
                 $("#form_form").submit();
             }

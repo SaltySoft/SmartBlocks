@@ -1,9 +1,11 @@
 <?php
 
+namespace Enterprise;
+
 /**
- * @Entity @Table(name="noteTypes")
+ * @Entity @Table(name="ent_note_types")
  */
-class NoteType extends Model
+class NoteType extends \Model
 {
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")

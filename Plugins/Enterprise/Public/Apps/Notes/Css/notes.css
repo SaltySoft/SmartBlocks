@@ -1,67 +1,42 @@
-.ent_notes_panel {
-    float: left;
+.ent_notes_dashboard {
+    width: 1000px;
+    margin: auto;
 }
 
-.panel_container {
+.quick_control_panel_container {
     height: 100%;
     margin: 0px;
     padding: 0px;
-    background-color: grey;
+    background-color: #eff2f6;
+    border-bottom: 1px #1f70b8 solid;
 }
 
-.panel_container li {
+.quick_control_panel_container li {
     list-style: none;
+    float: left;
+    width: 191px;
 }
 
-.panel_container li a {
-    float: left;
-    height: 20px;
-    width: 100px;
-    padding: 15px;
-    background-color: grey;
-    color: white;
+.quick_control_panel_container li a {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    color: #2172b9;
     text-align: center;
     text-decoration: none;
+    border-right: 1px #bbd1d8 solid;
 }
 
-.panel_container li a:hover {
+.quick_control_panel_container li a:hover {
     background-color: #d3d3d3;
+    height: 45px;
+    border-bottom: 5px #1f70b8 solid;
 }
 
-.panel_container li a:active {
-    background-color: #02991a;
-}
-
-.notes_container {
-    float: left;
-}
-
-.noteCache {
-    position: fixed;
-    z-index: 10;
-    background-color: rgba(0, 0, 0, 0.60);
-    /*filter: alpha(opacity = 20);*/
-    width: 100%;
-    height: 100%;
-    /*display: block;*/
-    display: none;
-}
-
-.createNote {
-    width: 400px;
-    margin: auto;
-    background-color: #024053;
-    float: left;
-    position: absolute;
-    padding: 10px;
-}
-
-.closeButtonCreateNote {
-    margin: 3px;
-    z-index: 11;
-    cursor: pointer;
-    display: inline-block;
-    float: right;
+.quick_control_panel_container li a:active {
+    height: 45px;
+    border-bottom: 5px #1f70b8 solid;
 }
 
 .createNoteContent {
@@ -70,60 +45,254 @@
 
 .dashboard_note {
     border: none;
-    margin: 6px;
-    padding: 10px;
-    display: block;
-    float: left;
-    height: 172px;
-    width: 172px;
-    /*color: #000000;*/
-    color: #ffffff;
+    padding: 8px;
+    line-height: 30px;
     font-size: 18px;
-    background-color: #1c7783;
+    background-color: #e4e7e7;
+    font-weight: 100;
+    cursor: pointer;
+    border-bottom: 1px #bebebe solid;
 }
 
-.dashboard_note a {
+.dashboard_note:hover {
+    background-color: #f3f7f7;
+}
+
+.dashboard_note .name_link {
     text-decoration: none;
-    /*color: #000000;*/
-    color: #ffffff;
+    color: #a1a1a1;
+    font-size: 15px;
+    display: inline-block;
+    width: 89px;
+}
+
+.dashboard_note .note_div_button {
+    display: block;
+    width: 16px;
+    height: 16px;
+    float: right;
+    margin: 6px;
+    background-repeat: no-repeat;
+    background-position: center;
+    padding: 3px;
+}
+
+.dashboard_note .delete_note_button {
+    background-image: url("/images/icons/cross.png");
+}
+
+.dashboard_note.normal .edit_note_button {
+    background-image: url("/images/icons/pencil.png");
+}
+
+.dashboard_note.edited .edit_note_button {
+    background-image: url("/images/icons/tick.png");
+}
+
+.dashboard_note.normal .display {
+    display: inline;
+}
+
+.dashboard_note.edited .display {
+    display: none;
+}
+
+.dashboard_note.normal .edition {
+    display: none;
+}
+
+.dashboard_note.edited .edition {
+    display: inline;
+}
+
+.edition input {
+    width: 100%;
+}
+
+.note_div_button:hover {
+    background-color: rgba(28, 119, 131, 0.15);
+    border-radius: 4px;
+}
+
+.name_link a {
+    color: #676969;
+    text-decoration: none;
+}
+
+.name_link a:active {
     font-size: 18px;
 }
 
-.dashboard_note a:active {
-    /*color: #000000;*/
-    color: #ffffff;
-    font-size: 18px;
-}
-
-.dashboard_note a:visited {
-    /*color: #000000;*/
-    color: #ffffff;
+.name_link a:visited {
     font-size: 18px;
 }
 
 .dashboard_note a:hover {
-    /*color: #000000;*/
     color: #ffffff;
     font-size: 18px;
 }
 
-.editNote {
-    width: 400px;
-    margin: auto;
-    background-color: #024053;
-    float: left;
+.ent_notes_edition {
+    background-color: rgba(2, 64, 83, 0.30);
+    left: 200px;
     position: absolute;
+    right: 0px;
+    padding: 5px;
+    bottom: 0px;
+    top: 0px;
+    overflow-y: scroll;
+}
+
+.content_container {
+    margin-left: 0px;
+    position: relative;
+}
+
+.notes_container {
+    float: left;
+    background-color: rgba(28, 119, 131, 0.45);
+    padding: 0px;
+    width: 200px;
+    height: 700px;
+    overflow-y: scroll;
+}
+
+.notes_container ul {
+    margin: 5px;
+}
+
+.ent_subnote_edition {
+    float: left;
+}
+
+.ent_subnote_edition .pencil {
+    float: right;
+    display: none;
+}
+
+.ent_subnote_edition.edited .pencil {
+    display: inline-block;
+}
+
+.ent_subnote_edition .lock {
+    float: right;
+    display: none;
+}
+
+.ent_subnote_edition.locked .lock {
+    display: inline-block;
+}
+
+.ent_subnote_edition.locked {
+    background-color: #a3242a;
+}
+
+.ent_subnote_edition.fullsize {
+    width: 100%;
+}
+
+.ent_subnote_edition.halfsize {
+    width: 50%;
+}
+
+.ent_subnote_edition iframe {
+    width: 100%;
+}
+
+.subnote_container {
     padding: 10px;
 }
 
-.closeButtonEditNote {
-    margin: 3px;
-    z-index: 11;
-    cursor: pointer;
-    display: inline-block;
+.editNote_add_subnote_button {
     float: right;
 }
 
-.editNoteContent {
-    display: inline-block;
+.ent_notes_np {
+    background-color: white;
+    width: 400px;
+    margin: auto;
+    position: relative;
+    top: 50px;
+    padding: 10px;
 }
+
+.ent_notes_np_form_container {
+    padding: 20px;
+}
+
+#ent_sch_cv_title {
+    font-style: italic;
+}
+
+.users_choice {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.user_search_result {
+    margin-top: 15px;
+}
+
+.user_search_result {
+    height: 150px;
+}
+
+.user_selection {
+    margin-top: 15px;
+    height: 150px;
+}
+
+.user_search_result a {
+    line-height: 25px;
+    height: 25px;
+    background-color: #f0f3f7;
+    display: block;
+    color: black;
+    padding: 5px;
+    float: left;
+    width: 123px;
+    text-align: center;
+    border: 1px solid #aaaaaa;
+    margin: 5px 5px 5px 5px;
+    text-decoration: none;
+    border-radius: 5px;
+    -moz-transition: all 100ms ease-in;
+    -webkit-transition: all 100ms ease-in;
+    -o-transition: all 100ms ease-in;
+    transition: all 100ms ease-in;
+}
+
+.search_results {
+    width: 308px;
+}
+
+.search_result {
+    width: 144px;
+}
+
+.editNote_add_users {
+    float: right;
+}
+
+.ent_note_title .title_display {
+
+}
+
+.ent_note_title .title_edition {
+    display: none;
+}
+
+.ent_note_title.edition .title_display {
+    display: none;
+}
+
+.ent_note_title.edition .title_edition {
+    display: block;
+}
+
+.ent_note_title.edition .title_edition input{
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+}
+

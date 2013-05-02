@@ -26,7 +26,6 @@
  */
 class User extends UserBase
 {
-
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
      */
@@ -53,7 +52,7 @@ class User extends UserBase
     private $jobs;
 
     /**
-     * @OneToOne(targetEntity="NotePreference", inversedBy="user")
+     * @OneToOne(targetEntity="\Enterprise\NotePreference", inversedBy="user")
      */
     private $note_preference;
 

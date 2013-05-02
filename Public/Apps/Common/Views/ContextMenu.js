@@ -5,16 +5,16 @@ define([
     'text!Apps/Common/Templates/context_menu.html'
 ], function ($, _, Backbone, ContextMenuTemplate) {
     var ContextMenu = Backbone.View.extend({
-        tagName: "div",
-        className: "context_menu",
-        shown: false,
-        initialize: function () {
+        tagName:"div",
+        className:"context_menu",
+        shown:false,
+        initialize:function () {
 
         },
-        init: function () {
+        init:function () {
 
         },
-        addButton: function (text, callback, icon) {
+        addButton:function (text, callback, icon) {
             var base = this;
             var button = $(document.createElement("div"));
             button.addClass("context_menu_button");
@@ -22,7 +22,6 @@ define([
             button.click(function () {
                 base.$el.hide();
                 callback();
-
             });
 
             var _text = $(document.createElement("div"));
@@ -38,10 +37,9 @@ define([
             base.$el.attr("oncontextmenu", "return false;");
             base.$el.append(button);
         },
-        show:function(e) {
+        show:function (e) {
             var base = this;
-            if (base.shown != true)
-            {
+            if (base.shown != true) {
                 base.shown = true;
                 $("body").append(base.$el);
 
@@ -76,7 +74,6 @@ define([
                     }, 500);
                 });
             }
-
 
             return false;
         }

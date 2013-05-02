@@ -1,7 +1,17 @@
 <?php
 
-class NotesController extends Controller
+namespace Enterprise;
+
+class NotesController extends \Controller
 {
+    public function security_check()
+    {
+        if (!\User::logged_in() || \User::current_user() == null)
+        {
+            $this->redirect("/Users/login_form");
+        }
+    }
+
     public function dashboard($params = array())
     {
         $this->set("app", "Enterprise/Apps/Notes/app");
@@ -12,18 +22,17 @@ class NotesController extends Controller
         $this->render = false;
         header("Content-Type: application/json");
         $response = array();
-        $em = Model::getEntityManager();
+        $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
 
-        if ((isset($_GET["all"]) && $_GET["all"] == "true"))
-        {
-            $qb->select("n")
-                ->from("Note", "n");
-        }
+        $qb->select("n")
+            ->from("Enterprise\\Note", "n")
+            ->leftJoin("n.users", "user")
+            ->andWhere("user = :user")
+            ->setParameter("user", \User::current_user());
+
         if (isset($_GET["importants"]) && $_GET["importants"] == "true")
         {
-            $qb->select("n")
-                ->from("Note", "n");
             $qb->andWhere("n.important = 1");
         }
         $notes = $qb->getQuery()->getResult();
@@ -53,6 +62,8 @@ class NotesController extends Controller
 
     public function create()
     {
+        $this->security_check();
+
         $this->render = false;
         header("Content-Type: application/json");
 
@@ -61,7 +72,9 @@ class NotesController extends Controller
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
         $note->setImportant($data["important"]);
-        $note->setDescription("");
+        $note->setDescription($data["description"]);
+
+        $note->addUser(\User::current_user());
         $note->save();
 
         if (is_object($note))
@@ -83,7 +96,16 @@ class NotesController extends Controller
         $data = $this->getRequestData();
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
-        $note->setImportant($data["importante"]);
+        $note->setImportant(isset($data["importante"]) ? $data["importante"] : $note->getImportant());
+        $note->getUsers()->clear();
+        foreach ($data["users"] as $p)
+        {
+            $user = \User::find($p["id"]);
+            if (is_object($user))
+            {
+                $note->addUser($user);
+            }
+        }
 
         $note->save();
 
@@ -99,5 +121,22 @@ class NotesController extends Controller
 
     public function destroy($params = array())
     {
+        $this->render = false;
+        header("Content-Type: application/json");
+
+        $note = Note::find($params["id"]);
+        if (is_object($note))
+        {
+            foreach ($note->getSubnotes() as $subnote)
+            {
+                $subnote->delete();
+            }
+            $note->delete();
+            echo json_encode(array("success"));
+        }
+        else
+        {
+            echo json_encode(array("error"));
+        }
     }
 }
