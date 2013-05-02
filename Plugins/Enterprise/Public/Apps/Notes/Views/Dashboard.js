@@ -65,9 +65,9 @@ define([
                 base.renderInterface();
             }
         },
-        renderEditNote:function (id) {
+        renderEditNote:function (id, elt) {
             var base = this;
-            var editNote = new EditNoteView();
+            var editNote = new EditNoteView(elt);
             base.editNote = editNote;
             base.editNote.init(base.AppEvents, base.SmartBlocks, id);
             base.$el.find(".ent_notes_edition").remove();
@@ -115,13 +115,13 @@ define([
             base.$el.delegate(".note_edition_button", "click", function () {
                 var elt = $(this);
                 var id = elt.attr("data-id");
-                base.renderEditNote(id);
+                base.renderEditNote(id, elt);
             });
 
             base.$el.delegate(".dashboard_note", "click", function () {
                 var elt = $(this);
                 var id = elt.attr("data-id");
-                base.renderEditNote(id);
+                base.renderEditNote(id, elt);
             });
 
             base.$el.delegate(".show_all_button", "click", function () {

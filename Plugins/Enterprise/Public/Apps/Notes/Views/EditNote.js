@@ -14,7 +14,9 @@ define([
         className: "ent_notes_edition",
         events: {
         },
-        initialize: function () {
+        initialize: function (elt) {
+            var base = this;
+            base.caller_button = elt;
         },
         init: function (AppEvents, SmartBlocks, note_id) {
             var base = this;
@@ -28,6 +30,7 @@ define([
             //show some loading here
             base.note.fetch({
                 success: function () {
+                    base.caller_button.find(".display").html(base.note.get("title"));
                     base.render();
                 }
             });
@@ -48,7 +51,6 @@ define([
                 var editSubnoteView = new EditSubnoteView();
                 base.$el.find(".editNoteContent").append(editSubnoteView.$el);
                 var subNoteId = subnote.get('id');
-                var suNoteText = subnote.get('content');
                 editSubnoteView.init(base.AppEvents, base.SmartBlocks, subnote);
 
                 base.subnotes_views_list[subNoteId] = editSubnoteView;
@@ -115,14 +117,62 @@ define([
                 noteParametersView.show();
             });
 
+            base.$el.delegate(".ent_note_title .title_button", "click", function () {
+                var elt = $(this);
+                var action = elt.attr("data-action");
+                var title = elt.closest(".ent_note_title");
+
+                if (action == "edit") {
+                    title.find(".note_title_input").val(base.note.get("title"));
+                    title.addClass("edition");
+                }
+
+                if (action == "cancel") {
+                    title.removeClass("edition");
+                }
+
+                if (action == "save") {
+
+                    var users = base.note.get("users").models;
+                    var user_sessions = [];
+                    for (var k in users) {
+                        user_sessions.push(users[k].get("session_id"));
+                    }
+
+                    base.note.set("title", title.find(".note_title_input").val());
+                    base.note.save({}, {
+                        success: function () {
+                            base.SmartBlocks.sendWs("ent_notes", {
+                                command: "change_title",
+                                note_id: base.note.get("id"),
+                                sender: base.SmartBlocks.current_session
+                            }, user_sessions);
+                        }
+                    });
+                    title.find(".title_display_text").html(base.note.get("title"));
+                    base.caller_button.find(".display").html(base.note.get("title"));
+                    title.removeClass("edition");
+
+                }
+
+            });
+
             base.SmartBlocks.events.on("ws_notification", function (message) {
-                console.log("RECEIVED MESSAGE");
                 if (message.app == "ent_notes") {
                     if (message.sender != base.SmartBlocks.current_session) {
                         if (message.note_id == base.note.get("id")) {
                             if (message.command == "retrieve_note") {
                                 base.retrieveSubnote(message.subnote_id);
-                                console.log("SUCCESSFUL TREATMENT");
+                            }
+
+                            if (message.command == "change_title") {
+                                base.note.fetch({
+                                    success: function () {
+                                        var title = base.$el.find(".ent_note_title");
+                                        title.find(".title_display_text").html(base.note.get("title"));
+                                        base.caller_button.find(".display").html(base.note.get("title"));
+                                    }
+                                });
                             }
                         }
 

@@ -97,7 +97,7 @@ class NotesController extends \Controller
         $note->setTitle($data["title"]);
         $note->setArchived($data["archived"]);
         $note->setImportant(isset($data["importante"]) ? $data["importante"] : $note->getImportant());
-
+        $note->getUsers()->clear();
         foreach ($data["users"] as $p)
         {
             $user = \User::find($p["id"]);

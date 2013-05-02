@@ -273,3 +273,26 @@
 .editNote_add_users {
     float: right;
 }
+
+.ent_note_title .title_display {
+
+}
+
+.ent_note_title .title_edition {
+    display: none;
+}
+
+.ent_note_title.edition .title_display {
+    display: none;
+}
+
+.ent_note_title.edition .title_edition {
+    display: block;
+}
+
+.ent_note_title.edition .title_edition input{
+    width: 200px;
+    height: 40px;
+    line-height: 40px;
+}
+

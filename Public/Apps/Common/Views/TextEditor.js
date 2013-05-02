@@ -189,11 +189,13 @@ define([
         },
         lock: function () {
             var base = this;
-            base.frameDoc.designMode = "off";
+            if (base.frameDoc)
+                base.frameDoc.designMode = "off";
         },
         unlock: function () {
             var base = this;
-            base.frameDoc.designMode = "on";
+            if (base.frameDoc)
+                base.frameDoc.designMode = "on";
         }
     });
 
