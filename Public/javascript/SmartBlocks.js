@@ -80,7 +80,7 @@ define([
                     user_id: user_id
                 },
                 success: function (data, status) {
-                    var  number = 0;
+                    var number = 0;
                     for (var d in data) {
                         if (data[d].notify) {
                             number++;
@@ -99,21 +99,38 @@ define([
 
         },
         sendWs: function (app, data, to) {
+            var base = this;
             data.app = app;
-
-            var array = [];
-            var sess = to;
-            for (var k in  sess) {
-                array[k] = sess[k];
+            array = undefined;
+            if (to != "all") {
+                var array = [];
+                var sess = to;
+                for (var k in  sess) {
+                    array[k] = sess[k];
+                }
             }
+
 
             var ob = {
+                data: data,
                 session_ids: array,
-                data: data
+                broadcast: to == "all"
             };
-            if (this.websocket) {
-                this.websocket.send(JSON.stringify(ob));
+            if (base.websocket) {
+                try {
+                    base.websocket.send(JSON.stringify(ob));
+                } catch (e) {
+
+                }
             }
+        },
+        heartBeat: function (user) {
+            var base = this;
+
+            base.sendWs("heartbeat", {
+                app: "heartbeat",
+                user: user.attributes
+            });
         }
     };
 

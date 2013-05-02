@@ -70,6 +70,17 @@ function start(route, handle) {
                             }
                         }
                     }
+                } else {
+                    if (pmessage.broadcast) {
+                        for (kk in connections) {
+                            if (connections[kk]) {
+                                for (var con in  connections[kk]) {
+                                    pmessage.data.origin = base.session;
+                                    connections[pmessage.session_ids[kk]][con].sendUTF(JSON.stringify(JSON.stringify(pmessage.data)));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         });
