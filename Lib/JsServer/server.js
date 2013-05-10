@@ -61,12 +61,23 @@ function start(route, handle) {
             else {
                 var pmessage = JSON.parse(message.utf8Data);
                 console.log(pmessage);
-                if (pmessage.session_ids) {
+                if (pmessage.session_ids !== undefined) {
                     for (kk in pmessage.session_ids) {
                         if (connections[pmessage.session_ids[kk]]) {
                             for (var con in  connections[pmessage.session_ids[kk]]) {
                                 pmessage.data.origin = base.session;
                                 connections[pmessage.session_ids[kk]][con].sendUTF(JSON.stringify(JSON.stringify(pmessage.data)));
+                            }
+                        }
+                    }
+                } else {
+                    if (pmessage.broadcast) {
+                        for (var kk in connections) {
+                            if (connections[kk]) {
+                                for (var con in  connections[kk]) {
+                                    pmessage.data.origin = base.session;
+                                    connections[kk][con].sendUTF(JSON.stringify(JSON.stringify(pmessage.data)));
+                                }
                             }
                         }
                     }

@@ -5,7 +5,7 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "UserModel"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "UserModel", "UsersCollection"];
 
 if (app !== undefined) {
     apps.push(app);
@@ -13,7 +13,7 @@ if (app !== undefined) {
 
 
 requirejs(apps,
-    function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, User,  App) {
+    function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, User, UsersCollection, App) {
         if ("WebSocket" in window) {
             var websocket = new WebSocket(socket_server, "muffin-protocol");
             SmartBlocks.websocket = websocket;
@@ -29,6 +29,11 @@ requirejs(apps,
             };
         }
         User.getCurrent(function (current_user) {
+            SmartBlocks.connected_users = new UsersCollection();
+            var timers = [];
+
+
+
             SmartBlocks.current_user = current_user;
             ChatApp.initialize(websocket);
             SmartBlocks.ChatApp = ChatApp;
@@ -36,6 +41,20 @@ requirejs(apps,
             SmartBlocks.FileSharingApp = FileSharingApp;
             if (App)
                 App.initialize(SmartBlocks);
+
+            //Hearbeats. If I'm living, my heart beats.
+            SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.app == "heartbeat") {
+                    SmartBlocks.connected_users.push(message.user);
+                    clearTimeout(timers[message.user.id]);
+                    timers[message.user.id] = setTimeout(function () {
+                        SmartBlocks.connected_users.remove(message.user);
+                    }, 2000);
+                }
+            });
+            setInterval(function (){
+                SmartBlocks.heartBeat(current_user);
+            }, 1000);
         });
 
     });
