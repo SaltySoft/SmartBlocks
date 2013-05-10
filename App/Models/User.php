@@ -52,7 +52,7 @@ class User extends UserBase
     private $jobs;
 
     /**
-     * @OneToOne(targetEntity="\Enterprise\NotePreference", inversedBy="user")
+     * @OneToOne(targetEntity="\Meetings\NotePreference", inversedBy="user")
      */
     private $note_preference;
 

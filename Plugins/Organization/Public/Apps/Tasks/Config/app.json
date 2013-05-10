@@ -1,0 +1,8 @@
+{
+    "name":"Tasks",
+    "token":"tasks",
+    "description":"This app allows users to manage their tasks.",
+    "link":"/Organization/Tasks/app",
+    "logo_url":"/Organization/Apps/Tasks/Resources/logo.png",
+    "block_token":"organization"
+}

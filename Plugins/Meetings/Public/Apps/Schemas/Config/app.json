@@ -1,0 +1,8 @@
+{
+    "name":"Schemas",
+    "token":"schemas",
+    "description":"This app allows users to share schemas and drawings.",
+    "link":"/Meetings/Schemas/app",
+    "logo_url":"/Meetings/Apps/Schemas/Resources/logo.png",
+    "block_token":"meetings"
+}

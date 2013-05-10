@@ -30,6 +30,7 @@ requirejs(apps,
         }
         User.getCurrent(function (current_user) {
             SmartBlocks.connected_users = new UsersCollection();
+            SmartBlocks.init_solution();
             var timers = [];
 
 

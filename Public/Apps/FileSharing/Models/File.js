@@ -20,7 +20,6 @@ define([
             }
 
             response.subfiles = subfiles_collection;
-            console.log(response);
             return response;
         }
     });

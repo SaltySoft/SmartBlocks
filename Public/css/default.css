@@ -125,9 +125,9 @@ li {
     right: -8em;
     bottom: -8em;
     padding: 15px;
-    width: 15em;
-    height: 15em;
-    border-radius: 15em;
+    width: 12em;
+    height: 10em;
+    border-radius: 3em;
     color: #ffffff;
     text-align: center;
     cursor: pointer;
@@ -175,10 +175,10 @@ h6 {
 
 
 #chat_text {
-    font-size: 1.3em;
+    font-size: 1em;
     text-align: left;
-    margin-top: 3em;
-    margin-left: 2em;
+    margin-top: 1em;
+    margin-left: 1em;
 }
 
 #chat_button:hover {
@@ -236,12 +236,12 @@ h6 {
 #file_sharing_button {
     position: fixed;
     background-color: #44cc67;
-    border-radius: 15em;
+    border-radius: 3em;
     left: -4em;
     bottom: -8em;
     padding: 15px;
-    width: 15em;
-    height: 15em;
+    width: 12em;
+    height: 10em;
     color: white;
     text-align: center;
     cursor: pointer;
@@ -258,10 +258,10 @@ h6 {
 }
 
 #file_sharing_text {
-    font-size: 1.3em;
+    font-size: 1em;
     text-align: right;
-    margin-top: 3em;
-    margin-right: 0.75em;
+    margin-top: 1em;
+    margin-right: 0.2em;
 }
 
 /*Pushing footer down*/
@@ -568,4 +568,16 @@ input[type=submit]:hover {
     -o-transition: all 50ms ease-in;
     /* Standard */
     transition: all 50ms ease-in;
+}
+
+#user_log {
+    position: absolute;
+    z-index: 10;
+    width: 200px;
+    padding: 20px;
+    left: 50px;
+    border: 1px black solid;
+    background-color: white;
+    color: black;
+    display: none;
 }

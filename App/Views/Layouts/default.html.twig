@@ -20,11 +20,23 @@
 
 <div id="loader"></div>
 <div id="container">
+
     <div id="left_menu">
         <a class="menu_button" href="/" title="Home">
             <img src="/images/icons/house.png"/>
-
         </a>
+        <div id="user_log">
+            {% if user_set %}
+                Logged in as {{ user.name }} <a href="/Users/logout">Log out</a>
+            {% else %}
+                <a href="/Users/login_form">Log in</a> - <a href="/Users/add">Register</a>
+            {% endif %}
+        </div>
+        <a class="menu_button log_button" href="javascript:void(0);" title="Login">
+            <img src="/images/icons/user.png"/>
+        </a>
+
+
         {% if user.is_admin() %}
             <a class="menu_button" href="/Users/user_management" title="User management">
                 <img src="/images/icons/user_edit.png">
@@ -36,14 +48,10 @@
             {{ _content_for_layout_|raw }}
         </div>
 
-        <div id="footer">
-            {% if user_set %}
-                Logged in as {{ user.name }} <a href="/Users/logout">Log out</a>
-            {% else %}
-                <a href="/Users/login_form">Log in</a> - <a href="/Users/add">Register</a>
-            {% endif %}
+        {#<div id="footer">#}
 
-        </div>
+
+        {#</div>#}
     </div>
     {% if user_set %}
         <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>
