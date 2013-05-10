@@ -1,6 +1,6 @@
 <?php
 
-namespace Enterprise;
+namespace Organization;
 
 class TasksController extends \Controller
 {
@@ -13,7 +13,7 @@ class TasksController extends \Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select("t")
-            ->from("\\Enterprise\\Task", "t")
+            ->from("\\Organization\\Task", "t")
             ->where("t.owner = :user")
             ->setParameter("user", \User::current_user())
             ->orderBy("t.order_index");
@@ -97,6 +97,6 @@ class TasksController extends \Controller
 
     public function app()
     {
-        $this->set("app", "/Enterprise/Apps/Tasks/app.js");
+        $this->set("app", "/Organization/Apps/Tasks/app.js");
     }
 }

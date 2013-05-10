@@ -4,5 +4,5 @@
     "description":"This app allows users to view the list of notes taken and classify them by categories.",
     "link":"/Meetings/Notes/dashboard",
     "logo_url":"/Meetings/Apps/Notes/Resources/logo.png",
-    "block_token":"enterprise"
+    "block_token":"meetings"
 }

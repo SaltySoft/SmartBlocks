@@ -21,7 +21,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Enterprise;
+namespace Organization;
 
 /**
  * @Entity @Table(name="tasks")

@@ -3,7 +3,7 @@ define([
     'backbone'
 ], function (_, Backbone) {
     var Task = Backbone.Model.extend({
-        urlRoot: "/Enterprise/Tasks"
+        urlRoot: "/Organization/Tasks"
     });
 
     return Task;

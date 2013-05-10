@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Enterprise/Apps/Tasks/Templates/task_item.html'
+    'text!Organization/Apps/Tasks/Templates/task_item.html'
 ], function ($, _, Backbone, TaskItemTemplate) {
     var TaskItemView = Backbone.View.extend({
         tagName: "li",

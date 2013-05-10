@@ -1,10 +1,10 @@
 define([
     'underscore',
     'backbone',
-    'Enterprise/Apps/Tasks/Models/Task'
+    'Organization/Apps/Tasks/Models/Task'
 ], function (_, Backbone, Task) {
     var TasksCollection = Backbone.Collection.extend({
-        url: "/Enterprise/Tasks",
+        url: "/Organization/Tasks",
         model: Task
     });
 

@@ -2,10 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Enterprise/Apps/Tasks/Models/Task',
-    'Enterprise/Apps/Tasks/Collections/Tasks',
-    'text!Enterprise/Apps/Tasks/Templates/main_view.html',
-    'Enterprise/Apps/Tasks/Views/TaskItem',
+    'Organization/Apps/Tasks/Models/Task',
+    'Organization/Apps/Tasks/Collections/Tasks',
+    'text!Organization/Apps/Tasks/Templates/main_view.html',
+    'Organization/Apps/Tasks/Views/TaskItem',
     'jqueryui'
 ], function ($, _, Backbone, Task, TasksCollection, MainViewTemplate, TaskItemView) {
     var MainView = Backbone.View.extend({
