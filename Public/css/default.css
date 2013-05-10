@@ -569,3 +569,15 @@ input[type=submit]:hover {
     /* Standard */
     transition: all 50ms ease-in;
 }
+
+#user_log {
+    position: absolute;
+    z-index: 10;
+    width: 200px;
+    padding: 20px;
+    left: 50px;
+    border: 1px black solid;
+    background-color: white;
+    color: black;
+    display: none;
+}

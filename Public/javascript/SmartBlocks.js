@@ -10,6 +10,16 @@ define([
         timer: 0,
         title_timer: 0,
         notif_sound: new Audio("/sounds/notif.wav"),
+        init_solution: function () {
+            $("body").delegate(".log_button", "click", function () {
+                var elt = $("#user_log");
+                if (elt.is(":visible")) {
+                    elt.hide(200);
+                } else {
+                    elt.show(200);
+                }
+            });
+        },
         show_message: function (message) {
             clearTimeout(this.timer);
             $("#flash_message").html(message);
