@@ -99,17 +99,17 @@ class SchemasController extends \Controller
 
         //if (\User::current_user() != null)
         //{
-            foreach ($schemas as $schema)
-            {
-                $response[] = $schema->toArray();
-            }
+        foreach ($schemas as $schema)
+        {
+            $response[] = $schema->toArray();
+        }
         //}
         //else
         //{
-            //foreach ($schemas as $schema)
-            //{
-                //$response[] = $schema->toArray(1);
-            //}
+        //foreach ($schemas as $schema)
+        //{
+        //$response[] = $schema->toArray(1);
+        //}
         //}
 
         $this->render = false;
@@ -192,7 +192,7 @@ class SchemasController extends \Controller
             if (isset($text["id"]))
                 $s_text = SchemaText::find($text["id"]);
             else
-                $s_text  = new SchemaText();
+                $s_text = new SchemaText();
             if (is_object($s_text))
             {
                 $s_text->setPosx($text["x"]);
@@ -243,8 +243,18 @@ class SchemasController extends \Controller
         header("Content-Type: application/json");
         $this->render = false;
 
+
         $schema = Schema::find($params["id"]);
-        $schema->delete();
+
+        if (is_object($schema))
+        {
+            foreach ($schema->getSchemaTexts() as $schema_text)
+            {
+                $schema_text->delete();
+            }
+            $schema->delete();
+        }
+
 
         echo json_encode(array("message" => "Job successfully deleted"));
     }
