@@ -1,7 +1,0 @@
-<% _.each(schemas, function (schema) {%>
-<a class="text_on_hover ent_sch_schema_button_tile" data-id="<%= schema.get('id') %>" data-text="<%= schema.get('name') %>">
-    <%= _s.truncate(schema.get('name'), 10) %>
-</a>
-<% }); %>
-<div style="clear: both"></div>
-<div id="informations"></div>

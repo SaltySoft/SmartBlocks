@@ -34,11 +34,11 @@
 }
 
 .ent_sch_drawview canvas {
-    cursor: url('/Enterprise/Apps/Schemas/Resources/brush2.png'),url('/Enterprise/Apps/Schemas/Resources/brush2.png'),default;
+    cursor: url('/Meetings/Apps/Schemas/Resources/brush2.png'),url('/Meetings/Apps/Schemas/Resources/brush2.png'),default;
 }
 
 .ent_sch_drawview canvas:active {
-    cursor: url('/Enterprise/Apps/Schemas/Resources/brush2.png'),url('/Enterprise/Apps/Schemas/Resources/brush2.png'),default;
+    cursor: url('/Meetings/Apps/Schemas/Resources/brush2.png'),url('/Meetings/Apps/Schemas/Resources/brush2.png'),default;
 }
 
 

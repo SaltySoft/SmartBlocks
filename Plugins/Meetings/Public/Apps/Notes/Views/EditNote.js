@@ -2,12 +2,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Enterprise/Apps/Notes/Models/Note',
-    'Enterprise/Apps/Notes/Models/Subnote',
-    'Enterprise/Apps/Notes/Views/EditSubnote',
+    'Meetings/Apps/Notes/Models/Note',
+    'Meetings/Apps/Notes/Models/Subnote',
+    'Meetings/Apps/Notes/Views/EditSubnote',
     'TextEditorView',
-    'text!Enterprise/Apps/Notes/Templates/edit_note.html',
-    'Enterprise/Apps/Notes/Views/NoteParameters'
+    'text!Meetings/Apps/Notes/Templates/edit_note.html',
+    'Meetings/Apps/Notes/Views/NoteParameters'
 ], function ($, _, Backbone, Note, Subnote, EditSubnoteView, TextEditorView, EditNoteTemplate, NoteParametersView) {
     var EditNoteView = Backbone.View.extend({
         tagName: "div",

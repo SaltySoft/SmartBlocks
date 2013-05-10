@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Enterprise/Apps/Notes/Models/Note',
-    'text!Enterprise/Apps/Notes/Templates/note_parameters.html',
+    'Meetings/Apps/Notes/Models/Note',
+    'text!Meetings/Apps/Notes/Templates/note_parameters.html',
     'UsersCollection',
     'text!SearchResultsTemplate',
     'text!SelectionTemplate'

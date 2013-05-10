@@ -1,11 +1,11 @@
 define([
     'underscore',
     'backbone',
-    'Enterprise/Apps/Schemas/Models/SchemaText',
-    'Enterprise/Apps/Schemas/Collections/SchemaTexts'
+    'Meetings/Apps/Schemas/Models/SchemaText',
+    'Meetings/Apps/Schemas/Collections/SchemaTexts'
 ], function (_, Backbone, SchemaText, SchemaTextsCollection) {
     var Schema = Backbone.Model.extend({
-        urlRoot: "/Enterprise/Schemas",
+        urlRoot: "/Meetings/Schemas",
         defaults: {
         },
         parse: function (response, option) {

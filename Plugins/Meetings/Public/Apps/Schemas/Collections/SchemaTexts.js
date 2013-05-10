@@ -1,11 +1,11 @@
 define([
     "underscore",
     "backbone",
-    "Enterprise/Apps/Schemas/Models/SchemaText"
+    "Meetings/Apps/Schemas/Models/SchemaText"
 ], function (_, Backbone, SchemaText) {
     var SchemaTextsColletion = Backbone.Collection.extend({
         model: SchemaText,
-        url: "/Enterprise/SchemaTexts"
+        url: "/Meetings/SchemaTexts"
     });
 
     return SchemaTextsColletion;

@@ -2,10 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Enterprise/Apps/Notes/Models/Note',
-    'Enterprise/Apps/Notes/Models/Subnote',
+    'Meetings/Apps/Notes/Models/Note',
+    'Meetings/Apps/Notes/Models/Subnote',
     'TextEditorView',
-    'text!Enterprise/Apps/Notes/Templates/subnote.html'
+    'text!Meetings/Apps/Notes/Templates/subnote.html'
 ], function ($, _, Backbone, Note, Subnote, TextEditorView, SubnoteTemplate) {
     var EditSubnoteView = Backbone.View.extend({
         tagName: "div",

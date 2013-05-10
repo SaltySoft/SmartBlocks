@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Enterprise/Apps/Notes/Templates/panel.html'
+    'text!Meetings/Apps/Notes/Templates/panel.html'
 ], function ($, _, Backbone, PanelTemplate) {
     var PanelView = Backbone.View.extend({
         tagName:"div",

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Enterprise/Apps/Schemas/Templates/text_overlay.html'
+    'text!Meetings/Apps/Schemas/Templates/text_overlay.html'
 ], function ($, _, Backbone, TextOverlayTemplate) {
     var TextOverlayView = Backbone.View.extend({
         tagName: "div",

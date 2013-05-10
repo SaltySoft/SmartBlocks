@@ -3,12 +3,12 @@ define([
     'underscore',
     'underscore_string',
     'backbone',
-    'Enterprise/Apps/Schemas/Collections/Schemas',
-    'Enterprise/Apps/Schemas/Models/Schema',
-    'text!Enterprise/Apps/Schemas/Templates/main_view.html',
-    'text!Enterprise/Apps/Schemas/Templates/schemas_list.html',
-    'Enterprise/Apps/Schemas/Views/DrawingView',
-    'Enterprise/Apps/Schemas/Views/CreationView',
+    'Meetings/Apps/Schemas/Collections/Schemas',
+    'Meetings/Apps/Schemas/Models/Schema',
+    'text!Meetings/Apps/Schemas/Templates/main_view.html',
+    'text!Meetings/Apps/Schemas/Templates/schemas_list.html',
+    'Meetings/Apps/Schemas/Views/DrawingView',
+    'Meetings/Apps/Schemas/Views/CreationView',
     'ContextMenuView'
 
 ], function ($, _, _s,Backbone, SchemasCollection, Schema, MainTemplate, SchemasListTemplate, DrawingView, CreationView, ContextMenu) {

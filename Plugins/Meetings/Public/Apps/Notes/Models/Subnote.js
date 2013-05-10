@@ -3,7 +3,7 @@ define([
     'backbone'
 ], function (_, Backbone) {
     var Subnote = Backbone.Model.extend({
-        urlRoot:"/Enterprise/Subnotes",
+        urlRoot:"/Meetings/Subnotes",
         defaults:{
         }
     });

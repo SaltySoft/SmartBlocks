@@ -3,9 +3,9 @@ define([
     'underscore',
     'backbone',
     'Class',
-    'Enterprise/Apps/Schemas/Models/Schema',
-    'Enterprise/Apps/Schemas/Models/SchemaText',
-    'Enterprise/Apps/Schemas/Collections/SchemaTexts',
+    'Meetings/Apps/Schemas/Models/Schema',
+    'Meetings/Apps/Schemas/Models/SchemaText',
+    'Meetings/Apps/Schemas/Collections/SchemaTexts',
     'jDeepCopy'
 ], function ($, _, Backbone, Class, Schema, TextOverlay, TextOverlaysCollection) {
     var State = new Class();

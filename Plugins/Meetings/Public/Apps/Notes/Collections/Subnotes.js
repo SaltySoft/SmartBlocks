@@ -1,10 +1,10 @@
 define([
     "underscore",
     "backbone",
-    'Enterprise/Apps/Notes/Models/Subnote'
+    'Meetings/Apps/Notes/Models/Subnote'
 ], function (_, Backbone, Subnote) {
     var SubnotesCollection = Backbone.Collection.extend({
-        url:"/Enterprise/Subnotes",
+        url:"/Meetings/Subnotes",
         model:Subnote
     });
 

@@ -1,6 +1,6 @@
 {
-    "name":"Enterprise",
-    "token":"enterprise",
-    "description":"This block contains usual enterprise apps.",
+    "name":"Meetings",
+    "token":"meetings",
+    "description":"This block contains usual meetings apps.",
     "color":"#f8403b"
 }

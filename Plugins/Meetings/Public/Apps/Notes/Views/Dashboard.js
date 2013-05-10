@@ -3,12 +3,12 @@ define([
     'underscore',
     'backbone',
     'jqueryflip',
-    'Enterprise/Apps/Notes/Models/Note',
-    'Enterprise/Apps/Notes/Views/EditNote',
-    'text!Enterprise/Apps/Notes/Templates/dashboard.html',
-    'text!Enterprise/Apps/Notes/Templates/main.html',
-    'text!Enterprise/Apps/Notes/Templates/panel.html',
-    'Enterprise/Apps/Notes/Collections/Notes'
+    'Meetings/Apps/Notes/Models/Note',
+    'Meetings/Apps/Notes/Views/EditNote',
+    'text!Meetings/Apps/Notes/Templates/dashboard.html',
+    'text!Meetings/Apps/Notes/Templates/main.html',
+    'text!Meetings/Apps/Notes/Templates/panel.html',
+    'Meetings/Apps/Notes/Collections/Notes'
 ], function ($, _, Backbone, JqueryFlip, Note, EditNoteView, DashboardTemplate, MainTemplate, PanelTemplate, NotesCollection) {
     var Dashboard = Backbone.View.extend({
             tagName: "div",

@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Enterprise/Apps/Schemas/Views/DrawingView',
-    'Enterprise/Apps/Schemas/Views/MainView'
+    'Meetings/Apps/Schemas/Views/DrawingView',
+    'Meetings/Apps/Schemas/Views/MainView'
 ], function ($, _, Backbone, DrawingView, MainView) {
     var initialize = function (SmartBlocks) {
 

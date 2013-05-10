@@ -2,12 +2,12 @@ define([
     'underscore',
     'backbone',
     'UserModel',
-    'Enterprise/Apps/Notes/Models/Subnote',
-    'Enterprise/Apps/Notes/Collections/Subnotes',
+    'Meetings/Apps/Notes/Models/Subnote',
+    'Meetings/Apps/Notes/Collections/Subnotes',
     'UsersCollection'
 ], function (_, Backbone, User, Subnote, SubnotesCollection, UsersCollection) {
     var Note = Backbone.Model.extend({
-        urlRoot:"/Enterprise/Notes",
+        urlRoot:"/Meetings/Notes",
         defaults:{
         },
         parse:function (response) {

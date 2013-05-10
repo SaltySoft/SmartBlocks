@@ -2,11 +2,11 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Enterprise/Apps/Schemas/Templates/creation.html',
+    'text!Meetings/Apps/Schemas/Templates/creation.html',
     'UsersCollection',
     'text!SearchResultsTemplate',
     'text!SelectionTemplate',
-    'Enterprise/Apps/Schemas/Models/Schema'
+    'Meetings/Apps/Schemas/Models/Schema'
 ], function ($, _, Backbone, creationTemplate, UsersCollection, SearchResultsTemplate, SelectionTemplate, Schema) {
     var CreationView = Backbone.View.extend({
         tagName: "div",

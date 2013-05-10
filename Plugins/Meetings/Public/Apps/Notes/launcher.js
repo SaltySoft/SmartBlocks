@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'UserModel',
-    'Enterprise/Apps/Notes/Views/Dashboard'
+    'Meetings/Apps/Notes/Views/Dashboard'
 ], function ($, _, Backbone, User, DashboardView) {
 
     var AppRouter = Backbone.Router.extend({
