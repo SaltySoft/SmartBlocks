@@ -41,7 +41,7 @@ requirejs(apps,
             SmartBlocks.FileSharingApp = FileSharingApp;
             if (App)
                 App.initialize(SmartBlocks);
-            
+
             //Hearbeats. If I'm living, my heart beats.
             SmartBlocks.events.on("ws_notification", function (message) {
                 if (message.app == "heartbeat") {
@@ -49,12 +49,12 @@ requirejs(apps,
                     clearTimeout(timers[message.user.id]);
                     timers[message.user.id] = setTimeout(function () {
                         SmartBlocks.connected_users.remove(message.user);
-                    }, 1000);
+                    }, 2000);
                 }
             });
             setInterval(function (){
                 SmartBlocks.heartBeat(current_user);
-            }, 500);
+            }, 1000);
         });
 
     });

@@ -4,3 +4,4 @@ Config/database.php
 .idea
 Data/Schemas/*
 Data/User_files/*
+Public/node_modules/*
