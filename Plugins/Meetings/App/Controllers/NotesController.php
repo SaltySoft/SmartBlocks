@@ -1,6 +1,6 @@
 <?php
 
-namespace Meetingss;
+namespace Meetings;
 
 class NotesController extends \Controller
 {
