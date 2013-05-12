@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Calendar/Templates/calendar_day.html'
-], function ($, _, Backbone, CalendarDayTemplate) {
+    'text!Organization/Apps/Calendar/Templates/calendar_day.html',
+    'text!Organization/Apps/Calendar/Templates/task_slot.html'
+], function ($, _, Backbone, CalendarDayTemplate, TaskSlotTemplate) {
     var CalendarDayView = Backbone.View.extend({
         tagName: "div",
         className: "box day",
@@ -29,6 +30,11 @@ define([
         setDay: function (day) {
             var base = this;
         },
+        addTask: function (task) {
+            var base = this;
+            var div = _.template(TaskSlotTemplate, { task: task });
+            base.$el.find(".tasks").append(div);
+        },
         registerEvents: function () {
             var base = this;
             base.$el.click(function () {
@@ -37,6 +43,7 @@ define([
                 if (!elt.hasClass("expanded")) {
                     base.calendar.$el.find(".day").removeClass("expanded");
                     elt.addClass("expanded");
+                    console.log(base.date);
                 }
                 else {
                     elt.removeClass("expanded");

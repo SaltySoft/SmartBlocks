@@ -70,6 +70,7 @@ class TasksController extends \Controller
             $task->setName($data["name"]);
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
+            $task->setDueDate($data["due_date"]);
             $task->save();
             echo json_encode($task->toArray());
         }

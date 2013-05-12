@@ -29,13 +29,13 @@
     text-align: center;
 }
 
-
 .calendar_view .box.day {
-    position:relative;
+    position: relative;
     cursor: pointer;
     background-color: #fdf5ce;
 
 }
+
 .calendar_view .box.day:hover {
     background-color: white;
 }
@@ -50,10 +50,12 @@
     z-index: 3;
     border: 1px black solid;
     box-shadow: 0px 0px 10px #5f5f5f;
+    padding: 6px;
 }
 
+
 .calendar_view .box.day .day_number {
-    position:absolute;
+    position: absolute;
     top: 5px;
     right: 5px;
     font-size: 1.5em;
@@ -61,4 +63,31 @@
 
 .calendar_view .calendar_days {
     width: 742px;
+}
+
+.calendar_view .day .task {
+    float: left;
+
+}
+
+.calendar_view .day .task .task_name {
+    display: none;
+}
+
+.calendar_view .day.expanded .task_name {
+    display: inline;
+}
+
+.calendar_view .day.expanded .task {
+    float: none;
+    height: 20px;
+}
+
+.calendar_view .day .task_square {
+
+    background-color: red;
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 1px;
 }
