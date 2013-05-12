@@ -1,5 +1,8 @@
 .calendar_view {
+
     margin: auto;
+    position: relative;
+    top: 30px;
     width: -moz-fit-content;
     width: -webkit-fit-content;
     width: fit-content;
@@ -54,11 +57,38 @@
 }
 
 
-.calendar_view .box.day .day_number {
+
+
+.calendar_view .day .day_number {
     position: absolute;
     top: 5px;
     right: 5px;
     font-size: 1.5em;
+}
+
+.calendar_view .day .close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+}
+
+.calendar_view .day .more {
+    display: none;
+}
+
+.calendar_view .day.expanded .more{
+    display: block;
+}
+
+.calendar_view .day.expanded .day_number {
+    left: 5px;
+    right: auto;
+    font-size: 2em;
+}
+
+.calendar_view .day.expanded .tasks {
+    margin-top: 30px;
 }
 
 .calendar_view .calendar_days {

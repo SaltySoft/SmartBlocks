@@ -39,21 +39,29 @@ define([
                 $(div).addClass("done");
             }
         },
+        expand: function (e) {
+            var base = this;
+            var elt = base.$el;
+            if (!elt.hasClass("expanded")) {
+                for (var k in base.calendar.days) {
+                    base.calendar.days[k].retract();
+                }
+                elt.addClass("expanded");
+
+                console.log(base.date);
+                base.$el.unbind("click.open");
+            }
+        },
+        retract: function () {
+            var base = this;
+            base.$el.removeClass("expanded");
+            base.$el.bind("click.open",$.proxy( base.expand, base));
+        },
         registerEvents: function () {
             var base = this;
-            base.$el.click(function () {
-                var elt = $(this);
+            base.$el.bind("click.open",$.proxy( base.expand, base ));
 
-                if (!elt.hasClass("expanded")) {
-                    base.calendar.$el.find(".day").removeClass("expanded");
-                    elt.addClass("expanded");
-                    console.log(base.date);
-                }
-                else {
-                    elt.removeClass("expanded");
-                }
-            });
-
+            base.$el.delegate(".close_button", "click", $.proxy( base.retract, base ));
         }
     });
 
