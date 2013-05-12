@@ -33,7 +33,11 @@ define([
         addTask: function (task) {
             var base = this;
             var div = _.template(TaskSlotTemplate, { task: task });
+
             base.$el.find(".tasks").append(div);
+            if (task.get("completion_date") != null) {
+                $(div).addClass("done");
+            }
         },
         registerEvents: function () {
             var base = this;

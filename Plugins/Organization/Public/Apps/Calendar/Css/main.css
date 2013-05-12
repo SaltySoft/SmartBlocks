@@ -84,10 +84,13 @@
 }
 
 .calendar_view .day .task_square {
-
-    background-color: red;
+    background-color: #b90005;
     float: left;
     width: 15px;
     height: 15px;
     margin: 1px;
+}
+
+.calendar_view .day .task.done .task_square {
+    background-color: #adadad;
 }

@@ -21,8 +21,9 @@ define([
         },
         render: function () {
             var base = this;
-            var creation = base.model.get("creation_date");
-            var template = _.template(TaskItemTemplate, { task:  base.model, time: creation !== undefined ?  new Date(creation * 1000) : undefined });
+            var due_date = base.model.getDueDate();
+            var today = new Date();
+            var template = _.template(TaskItemTemplate, { task: base.model, time: due_date, current_date: today });
             base.$el.html(template);
             if (base.model.get("completion_date") != null) {
                 base.$el.addClass("completed");
@@ -52,13 +53,29 @@ define([
                     base.model.set("name", name_input.val());
                     console.log(base.model);
                     base.SmartBlocks.startLoading("Saving task");
+                    base.$el.find(".task_name").html(base.model.get("name"));
+                    var due_date_str = base.$el.find(".task_due_date_input").val();
+                    var due_date = new Date();
+                    due_date.setMilliseconds(0);
+                    due_date.setSeconds(0);
+                    due_date.setMinutes(0);
+                    due_date.setHours(0);
+                    if (due_date_str != "") {
+                        console.log("entering ");
+                        var parts = due_date_str.match(/(\d+)/g);
+                        due_date.setDate(parts[2]);
+                        due_date.setMonth(parts[1] - 1);
+                        due_date.setFullYear(parts[0]);
+                    }
+                    base.model.setDueDate(due_date);
                     base.model.save({}, {
                         success: function () {
                             base.SmartBlocks.stopLoading();
                             base.render();
                         }
                     });
-                    base.$el.find(".task_name").html(base.model.get("name"));
+
+
                     base.leaveEditMode();
 
                 }

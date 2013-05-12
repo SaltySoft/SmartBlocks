@@ -85,7 +85,7 @@ define([
                 after.setMinutes(0);
                 after.setSeconds(0);
                 after.setMilliseconds(0);
-                if (task.getDueDate() > date && task.getDueDate() < after) {
+                if (task.getDueDate() >= date && task.getDueDate() < after) {
                     console.log("TESTED DATE", task.getDueDate());
                     console.log("DATE", date);
                     console.log("AFTER", after);

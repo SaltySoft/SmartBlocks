@@ -1,4 +1,4 @@
-<div class="task">
+<div class="task <% if (task.get('completion_date') != null) { %>done<% } %>">
     <div class="task_square"></div>
     <span class="task_name"><%= task.get("name") %></span>
 </div>

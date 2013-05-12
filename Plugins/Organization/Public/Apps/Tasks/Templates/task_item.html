@@ -9,11 +9,13 @@
 <span class="task_display">
 </div>
     <span class="task_name"><%= task.get("name") %></span>
-    <span class="date"><% if (time !== undefined) {%><%= time.getDate() %>/<%= time.getMonth() + 1 %>/<%= time.getFullYear() %><% } %></span>
+    <span class="date">To do on <% if (time !== undefined) {%><%= time.getMonth() + 1 %>/<%= time.getDate() %>/<%= time.getFullYear() %><% } %></span>
 
 </span>
 <span class="task_edition">
     <input type="text" class="task_edition_name_input"/>
+    <input type="date" class="task_due_date_input"
+           value="<%= current_date.getFullYear()%>-<%= current_date.getMonth() + 1 %>-<%= current_date.getDate() %>"/>
     <button class="task_item_button" data-action="cancel">Cancel</button>
         <button class="task_item_button" data-action="save">Save</button>
 </span>
