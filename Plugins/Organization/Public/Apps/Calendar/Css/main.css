@@ -8,6 +8,13 @@
     width: fit-content;
 }
 
+.calendar_view .current_month {
+    width: 300px;
+    text-align: center;
+    font-size: 2.5em;
+    margin: auto;
+}
+
 .calendar_line {
     clear: both;
     width: -moz-fit-content;
@@ -123,4 +130,16 @@
 
 .calendar_view .day .task.done .task_square {
     background-color: #adadad;
+}
+
+
+.calendar_view .calendar_month {
+    margin:auto;
+}
+
+.calendar_view .calendar_month .next_month_button {
+    float: right;
+}
+.calendar_view .calendar_month .prev_month_button {
+    float: left;
 }

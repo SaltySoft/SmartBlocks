@@ -8,11 +8,14 @@ define([
     var CalendarDayView = Backbone.View.extend({
         tagName: "div",
         className: "box day",
-        initialize: function (SmartBlocks, calendar) {
+        initialize: function () {
+
+        },
+        init: function (SmartBlocks, calendar, date) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.calendar = calendar;
-            base.date = new Date();
+            base.date = new Date(date);
             base.render();
         },
         setDate: function (date) {

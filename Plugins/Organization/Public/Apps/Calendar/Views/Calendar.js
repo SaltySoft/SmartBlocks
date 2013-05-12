@@ -25,25 +25,38 @@ define([
             base.days = [];
             base.$el.html(template);
             base.tasks_list = new TasksCollection();
-            base.setUpCalendar();
-
+            base.date = new Date();
+            base.tasks_list.fetch({
+                success: function () {
+                    base.setUpCalendar(base.date);
+                    base.registerEvents();
+                }
+            });
 
         },
-        setUpCalendar: function () {
+        setUpCalendar: function (date) {
             var base = this;
-            var today = new Date();
+
+            var calendar_days_div = base.$el.find(".calendar_days");
+            calendar_days_div.html("");
+
+            var monthNames = [ "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December" ];
+
+            var today = date;
             var first_day = new Date(today.getFullYear(), today.getMonth(), 1);
             var month_days = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            var last_month = new Date();
+            var last_month = new Date(today);
             last_month.setDate(first_day.getDate() - 1);
             console.log(last_month);
 
-            var next_month = new Date();
+            var next_month = new Date(today);
             next_month.setDate(month_days.getDate() + 1);
             //First week setup
-            var calendar_days_div = base.$el.find(".calendar_days");
+
             for (var i = first_day.getDay(); i > 0; i--) {
-                var day_box = new CalendarDayView(base.SmartBlocks, base);
+                var day_box = new CalendarDayView();
+                day_box.init(base.SmartBlocks, base, today);
                 base.days.push(day_box);
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(first_day.getDate() - i);
@@ -51,7 +64,8 @@ define([
             }
 
             for (var i = 1; i <= month_days.getDate(); i++) {
-                var day_box = new CalendarDayView(base.SmartBlocks, base);
+                var day_box = new CalendarDayView();
+                day_box.init(base.SmartBlocks, base, today);
                 base.days.push(day_box);
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(first_day.getDate() + i - 1);
@@ -59,14 +73,15 @@ define([
             }
             var j = 1;
             for (var i = next_month.getDay(); i <= 6; i++) {
-                var day_box = new CalendarDayView(base.SmartBlocks, base);
+                var day_box = new CalendarDayView();
+                day_box.init(base.SmartBlocks, base, today);
                 base.days.push(day_box);
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(month_days.getDate() + j++);
                 calendar_days_div.append(day_box.$el);
             }
+            base.$el.find(".current_month").html(monthNames[date.getMonth()] + " " + date.getFullYear());
             base.fillCalendar();
-            base.registerEvents();
 
         },
         addTask: function (task) {
@@ -86,27 +101,32 @@ define([
                 after.setSeconds(0);
                 after.setMilliseconds(0);
                 if (task.getDueDate() >= date && task.getDueDate() < after) {
-                    console.log("TESTED DATE", task.getDueDate());
-                    console.log("DATE", date);
-                    console.log("AFTER", after);
                     base.days[k].addTask(task);
                 }
             }
         },
         fillCalendar: function () {
             var base = this;
-            base.tasks_list.fetch({
-                success: function () {
-                    var tasks = base.tasks_list.models;
-                    for (var k in tasks) {
-                        console.log(tasks[k].getDueDate());
-                        base.addTask(tasks[k]);
-                    }
-                }
-            });
+            console.log("fetching calendar");
+            var tasks = base.tasks_list.models;
+            for (var k in tasks) {
+                base.addTask(tasks[k]);
+            }
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.delegate(".next_month_button", "click", function () {
+                console.log(base.date);
+                base.date.setMonth(base.date.getMonth() - 1);
+                base.setUpCalendar(base.date);
+            });
+
+            base.$el.delegate(".prev_month_button", "click", function () {
+                console.log(base.date);
+                base.date.setMonth(base.date.getMonth() + 1);
+                base.setUpCalendar(base.date);
+            });
         }
     });
 
