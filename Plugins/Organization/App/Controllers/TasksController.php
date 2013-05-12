@@ -99,4 +99,9 @@ class TasksController extends \Controller
     {
         $this->set("app", "/Organization/Apps/Tasks/app.js");
     }
+
+    public function calendar()
+    {
+        $this->set("app", "/Organization/Apps/Calendar/app.js");
+    }
 }
