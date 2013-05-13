@@ -1,4 +1,8 @@
-<div class="task <% if (task.get('completion_date') != null) { %>done<% } %>">
+<div class="task <% if (task.get('completion_date') != null) { %>done<% } %>" data-index="<%= index %>">
     <div class="task_square"></div>
     <span class="task_name"><%= task.get("name") %></span>
+    <span class="buttons">
+        <a href="javascript:void(0);" class="finished_button">Done</a>
+        <a href="javascript:void(0);" class="cancel_finish_button">Replan</a>
+    </span>
 </div>

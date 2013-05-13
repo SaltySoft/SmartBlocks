@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Calendar/Templates/calendar_day.html',
-    'text!Organization/Apps/Calendar/Templates/task_slot.html'
-], function ($, _, Backbone, CalendarDayTemplate, TaskSlotTemplate) {
+    'text!Organization/Apps/Calendar/Templates/task_slot.html',
+    'Organization/Apps/Common/Views/TaskPopup'
+], function ($, _, Backbone, CalendarDayTemplate, TaskSlotTemplate, TaskPopup) {
     var CalendarDayView = Backbone.View.extend({
         tagName: "div",
         className: "box day",
@@ -16,6 +17,7 @@ define([
             base.SmartBlocks = SmartBlocks;
             base.calendar = calendar;
             base.date = new Date(date);
+            base.tasks = [];
             base.render();
         },
         setDate: function (date) {
@@ -35,9 +37,12 @@ define([
         },
         addTask: function (task) {
             var base = this;
-            var div = _.template(TaskSlotTemplate, { task: task });
-
+            var div = _.template(TaskSlotTemplate, { task: task, index:base.tasks.length });
+            $(div).attr("data-index", base.tasks.length);
             base.$el.find(".tasks").append(div);
+            base.tasks.push(task);
+
+
             if (task.get("completion_date") != null) {
                 $(div).addClass("done");
             }
@@ -65,6 +70,44 @@ define([
             base.$el.bind("click.open",$.proxy( base.expand, base ));
 
             base.$el.delegate(".close_button", "click", $.proxy( base.retract, base ));
+
+            base.$el.delegate(".task_name", "click", function () {
+                var elt = $(this);
+                var task_elt = elt.closest(".task");
+                console.log(task_elt);
+                var task = base.tasks[task_elt.attr("data-index")];
+                var popup = new TaskPopup(task);
+                popup.init(base.SmartBlocks);
+                popup.events.on("task_updated", function () {
+                    task_elt.find(".task_name").html(task.get("name"));
+                });
+            });
+
+            base.$el.delegate(".finished_button", "click", function () {
+                var elt = $(this);
+                var task_elt = elt.closest(".task");
+                var task = base.tasks[task_elt.attr("data-index")];
+                task_elt.addClass("done");
+                task.set("completion_date", new Date().getTime() / 1000);
+                task.save({}, {
+                    success: function () {
+                        base.SmartBlocks.show_message("Task succesfully saved");
+                    }
+                });
+            });
+
+            base.$el.delegate(".cancel_finish_button", "click", function () {
+                var elt = $(this);
+                var task_elt = elt.closest(".task");
+                var task = base.tasks[task_elt.attr("data-index")];
+                task.set("completion_date", null);
+                task_elt.removeClass("done");
+                task.save({}, {
+                    success: function () {
+                        base.SmartBlocks.show_message("Task successfully replanned");
+                    }
+                });
+            });
         }
     });
 

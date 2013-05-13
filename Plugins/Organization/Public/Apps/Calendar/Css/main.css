@@ -26,7 +26,6 @@
     float: left;
     width: 100px;
     height: 100px;
-    border: 1px black solid;
     margin: 2px;
 }
 
@@ -34,8 +33,10 @@
     float: left;
     width: 100px;
     height: 30px;
-    border: 1px black solid;
-    margin: 2px;
+    background-color: #2bb8cb;
+    line-height: 30px;
+    color: #ffffff;
+    margin: 3px;
     text-align: center;
 }
 
@@ -43,7 +44,11 @@
     position: relative;
     cursor: pointer;
     background-color: #fdf5ce;
-
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 3px;
+    box-shadow: 0px 0px 3px orange;
 }
 
 .calendar_view .box.day:hover {
@@ -58,8 +63,7 @@
     background-color: #fffde3;
     position: absolute;
     z-index: 3;
-    border: 1px black solid;
-    box-shadow: 0px 0px 10px #5f5f5f;
+    box-shadow: 0px 0px 10px rgba(255, 166, 65, 0.47);
     padding: 6px;
 }
 
@@ -107,13 +111,7 @@
 
 }
 
-.calendar_view .day .task .task_name {
-    display: none;
-}
 
-.calendar_view .day.expanded .task_name {
-    display: inline;
-}
 
 .calendar_view .day.expanded .task {
     float: none;
@@ -132,14 +130,42 @@
     background-color: #adadad;
 }
 
+.calendar_view .finished_button {
+    display: inline;
+}
+
+.calendar_view .day .task.done .finished_button {
+    display: none;
+}
+
+.calendar_view .done .cancel_finish_button {
+    display: inline;
+}
+
+.calendar_view .cancel_finish_button {
+    display: none;
+}
+
+
+
+.calendar_view .day .task_name, .calendar_view .day .buttons  {
+    display: none;
+}
+
+.calendar_view .expanded .task_name, .calendar_view .day.expanded .buttons  {
+    display: inline;
+}
 
 .calendar_view .calendar_month {
     margin:auto;
+    width: 316px;
 }
 
 .calendar_view .calendar_month .next_month_button {
     float: right;
+    margin-top: 10px;
 }
 .calendar_view .calendar_month .prev_month_button {
     float: left;
+    margin-top: 10px;
 }
