@@ -10,7 +10,8 @@ define([
         tagName: "div",
         className: "box day",
         initialize: function () {
-
+            var base = this;
+            base.active = true;
         },
         init: function (SmartBlocks, calendar, date) {
             var base = this;
@@ -37,77 +38,101 @@ define([
         },
         addTask: function (task) {
             var base = this;
-            var div = _.template(TaskSlotTemplate, { task: task, index:base.tasks.length });
+            var div = _.template(TaskSlotTemplate, { task: task, index: base.tasks.length });
             $(div).attr("data-index", base.tasks.length);
+            var late_date = new Date(task.getDueDate());
+            if (task.get("completion_date") != null) {
+                $(div).addClass("done");
+            } else if (task.getDueDate().getDate() < new Date().getDate() && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {
+                $(div).addClass("late");
+            }
+
             base.$el.find(".tasks").append(div);
             base.tasks.push(task);
 
 
-            if (task.get("completion_date") != null) {
-                $(div).addClass("done");
-            }
         },
         expand: function (e) {
             var base = this;
-            var elt = base.$el;
-            if (!elt.hasClass("expanded")) {
-                for (var k in base.calendar.days) {
-                    base.calendar.days[k].retract();
-                }
-                elt.addClass("expanded");
+            if (base.active) {
+                var elt = base.$el;
+                if (!elt.hasClass("expanded")) {
+                    for (var k in base.calendar.days) {
+                        base.calendar.days[k].retract();
+                    }
+                    elt.addClass("expanded");
 
-                console.log(base.date);
-                base.$el.unbind("click.open");
+                    console.log(base.date);
+                    base.$el.unbind("click.open");
+                }
             }
         },
         retract: function () {
             var base = this;
             base.$el.removeClass("expanded");
-            base.$el.bind("click.open",$.proxy( base.expand, base));
+            base.$el.bind("click.open", $.proxy(base.expand, base));
         },
         registerEvents: function () {
             var base = this;
-            base.$el.bind("click.open",$.proxy( base.expand, base ));
+            base.$el.bind("click.open", $.proxy(base.expand, base));
 
-            base.$el.delegate(".close_button", "click", $.proxy( base.retract, base ));
+            base.$el.delegate(".close_button", "click", $.proxy(base.retract, base));
 
             base.$el.delegate(".task_name", "click", function () {
-                var elt = $(this);
-                var task_elt = elt.closest(".task");
-                console.log(task_elt);
-                var task = base.tasks[task_elt.attr("data-index")];
-                var popup = new TaskPopup(task);
-                popup.init(base.SmartBlocks);
-                popup.events.on("task_updated", function () {
-                    task_elt.find(".task_name").html(task.get("name"));
-                });
+                if (base.active) {
+                    var elt = $(this);
+                    var task_elt = elt.closest(".task");
+                    console.log(task_elt);
+                    var task = base.tasks[task_elt.attr("data-index")];
+                    var popup = new TaskPopup(task);
+                    popup.init(base.SmartBlocks);
+                    popup.events.on("task_updated", function () {
+                        task_elt.find(".task_name").html(task.get("name"));
+                    });
+                }
+
             });
 
             base.$el.delegate(".finished_button", "click", function () {
-                var elt = $(this);
-                var task_elt = elt.closest(".task");
-                var task = base.tasks[task_elt.attr("data-index")];
-                task_elt.addClass("done");
-                task.set("completion_date", new Date().getTime() / 1000);
-                task.save({}, {
-                    success: function () {
-                        base.SmartBlocks.show_message("Task succesfully saved");
-                    }
-                });
+                if (base.active) {
+                    var elt = $(this);
+                    var task_elt = elt.closest(".task");
+                    var task = base.tasks[task_elt.attr("data-index")];
+                    task_elt.addClass("done");
+                    task.set("completion_date", new Date().getTime() / 1000);
+                    task.save({}, {
+                        success: function () {
+                            base.SmartBlocks.show_message("Task succesfully saved");
+                        }
+                    });
+                }
+
             });
 
             base.$el.delegate(".cancel_finish_button", "click", function () {
-                var elt = $(this);
-                var task_elt = elt.closest(".task");
-                var task = base.tasks[task_elt.attr("data-index")];
-                task.set("completion_date", null);
-                task_elt.removeClass("done");
-                task.save({}, {
-                    success: function () {
-                        base.SmartBlocks.show_message("Task successfully replanned");
-                    }
-                });
+                if (base.active) {
+                    var elt = $(this);
+                    var task_elt = elt.closest(".task");
+                    var task = base.tasks[task_elt.attr("data-index")];
+                    task.set("completion_date", null);
+                    task_elt.removeClass("done");
+                    task.save({}, {
+                        success: function () {
+                            base.SmartBlocks.show_message("Task successfully replanned");
+                        }
+                    });
+                }
+
             });
+        },
+        setInactive: function () {
+            var base = this;
+            base.active = false;
+            base.$el.addClass("inactive");
+        },
+        setCurrentDay: function () {
+            var base = this;
+            base.$el.addClass("current_day");
         }
     });
 

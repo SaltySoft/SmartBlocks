@@ -53,16 +53,19 @@ define([
             var next_month = new Date(today);
             next_month.setDate(month_days.getDate() + 1);
             //First week setup
-
+            var total_count = 0;
             for (var i = first_day.getDay(); i > 0; i--) {
                 var day_box = new CalendarDayView();
                 day_box.init(base.SmartBlocks, base, today);
                 base.days.push(day_box);
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(first_day.getDate() - i);
-                calendar_days_div.append(day_box.$el);
-            }
 
+                day_box.setInactive();
+                calendar_days_div.append(day_box.$el);
+                total_count++;
+            }
+            var current_date = new Date();
             for (var i = 1; i <= month_days.getDate(); i++) {
                 var day_box = new CalendarDayView();
                 day_box.init(base.SmartBlocks, base, today);
@@ -70,15 +73,21 @@ define([
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(first_day.getDate() + i - 1);
                 calendar_days_div.append(day_box.$el);
+                if (day_box.date.getMonth() == current_date.getMonth() && day_box.date.getFullYear() == current_date.getFullYear() && day_box.date.getDate() == current_date.getDate()) {
+                    day_box.setCurrentDay();
+                }
+                total_count++;
             }
             var j = 1;
-            for (var i = next_month.getDay(); i <= 6; i++) {
+            for (var i = next_month.getDay(); i <= 6 || total_count < 42; i++) {
                 var day_box = new CalendarDayView();
                 day_box.init(base.SmartBlocks, base, today);
                 base.days.push(day_box);
                 day_box.$el.attr("attr-index", base.days.length - 1);
                 day_box.setDate(month_days.getDate() + j++);
+                day_box.setInactive();
                 calendar_days_div.append(day_box.$el);
+                total_count++;
             }
             base.$el.find(".current_month").html(monthNames[date.getMonth()] + " " + date.getFullYear());
             base.fillCalendar();
@@ -116,13 +125,13 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.delegate(".next_month_button", "click", function () {
+            base.$el.delegate(".prev_month_button", "click", function () {
                 console.log(base.date);
                 base.date.setMonth(base.date.getMonth() - 1);
                 base.setUpCalendar(base.date);
             });
 
-            base.$el.delegate(".prev_month_button", "click", function () {
+            base.$el.delegate(".next_month_button", "click", function () {
                 console.log(base.date);
                 base.date.setMonth(base.date.getMonth() + 1);
                 base.setUpCalendar(base.date);
