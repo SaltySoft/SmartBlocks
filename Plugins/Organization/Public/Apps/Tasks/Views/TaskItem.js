@@ -108,11 +108,13 @@ define([
             var base = this;
             base.$el.removeClass("normal");
             base.$el.addClass("edition");
+            base.$el.closest(".tasks_list").enableSelection();
         },
         leaveEditMode: function () {
             var base = this;
             base.$el.removeClass("edition");
             base.$el.addClass("normal");
+            base.$el.closest(".tasks_list").disableSelection();
         }
     });
 
