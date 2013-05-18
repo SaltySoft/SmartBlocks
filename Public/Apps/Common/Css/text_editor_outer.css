@@ -2,6 +2,10 @@
     /*margin: 1px 1px 2px 1px;*/
 }
 
+.text_editor {
+
+}
+
 .editor_button {
     width: 21px;
     height: 21px;
@@ -21,17 +25,23 @@
 }
 
 .editor_button_container {
-    display: none;
+
 }
 
 .text_editor .tool_box {
-    height: 48px;
+    padding: 5px;
+    background: white;
 }
 
 .richTextEditor {
-    background-color: white;
+
 }
 
 .richTextEditor.locked {
     background-color: #e5b6a7;
+}
+
+.editor_more_buttons {
+    float:right;
+    display: none;
 }
