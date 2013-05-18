@@ -40,8 +40,6 @@
     text-align: center;
 }
 
-
-
 .calendar_view .box.day {
     position: relative;
     cursor: pointer;
@@ -82,9 +80,6 @@
     padding: 6px;
 }
 
-
-
-
 .calendar_view .day .day_number {
     position: absolute;
     top: 5px;
@@ -103,7 +98,7 @@
     display: none;
 }
 
-.calendar_view .day.expanded .more{
+.calendar_view .day.expanded .more {
     display: block;
 }
 
@@ -125,8 +120,6 @@
     float: left;
 
 }
-
-
 
 .calendar_view .day.expanded .task {
     float: none;
@@ -153,8 +146,6 @@
     background-color: #adadad;
 }
 
-
-
 .calendar_view .finished_button {
     display: inline;
 }
@@ -171,18 +162,16 @@
     display: none;
 }
 
-
-
-.calendar_view .day .task_name, .calendar_view .day .buttons  {
+.calendar_view .day .task_name, .calendar_view .day .buttons {
     display: none;
 }
 
-.calendar_view .expanded .task_name, .calendar_view .day.expanded .buttons  {
+.calendar_view .expanded .task_name, .calendar_view .day.expanded .buttons {
     display: inline;
 }
 
 .calendar_view .calendar_month {
-    margin:auto;
+    margin: auto;
     width: 316px;
 }
 
@@ -190,7 +179,70 @@
     float: right;
     margin-top: 10px;
 }
+
 .calendar_view .calendar_month .prev_month_button {
     float: left;
     margin-top: 10px;
+}
+
+.calendar_view .add_button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+
+}
+
+.calendar_view .add_button a {
+    color: gray;
+    font-size: large;
+    text-decoration: none;
+}
+
+.calendar_view .add_button a:hover {
+    color: black;
+    font-size: large;
+    text-decoration: none;
+}
+
+.tasks {
+    height: 60px;
+}
+
+.task {
+    z-index: 2;
+    position: relative;
+}
+
+.task:hover {
+    z-index: auto;
+}
+
+.day.expanded .task:hover {
+    z-index: 2;
+    position: relative;
+}
+
+.day.expanded .task:hover .task_name {
+    display: inline;
+    background: none;
+    color: black;
+    position: static;
+    width: auto;
+    padding: 0;
+
+    box-shadow: none;
+}
+
+.task:hover .task_name {
+    display: block;
+    background: white;
+    box-shadow: 0px 0px 10px gray;
+    color: black;
+    position: absolute;
+    z-index: 10;
+    width: 150px;
+    left: -75px;
+    top: 25px;
+    padding: 5px;
+    text-align: center;
 }

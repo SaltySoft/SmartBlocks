@@ -1,4 +1,4 @@
-<div class="task <% if (task.get('completion_date') != null) { %>done<% } %> <% if (task.getDueDate().getDate() < new Date().getDate() + 1 && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {%>late<%}%>" data-index="<%= index %>">
+<div data-id="<%= task.get('id') %>" class="task <% if (task.get('completion_date') != null) { %>done<% } %> <% if (task.getDueDate().getDate() < new Date().getDate() + 1 && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {%>late<%}%>" data-index="<%= index %>">
     <div class="task_square"></div>
     <span class="task_name"><%= task.get("name") %></span>
     <span class="buttons">

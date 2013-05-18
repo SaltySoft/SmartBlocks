@@ -92,6 +92,8 @@ define([
             base.$el.find(".current_month").html(monthNames[date.getMonth()] + " " + date.getFullYear());
             base.fillCalendar();
 
+
+
         },
         addTask: function (task) {
             var base = this;

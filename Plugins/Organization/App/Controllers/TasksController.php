@@ -37,6 +37,7 @@ class TasksController extends \Controller
         $task = new Task;
 
         $task->setName($data["name"]);
+        $task->setDueDate($data["due_date"]);
         $task->save();
 
         $this->render = false;

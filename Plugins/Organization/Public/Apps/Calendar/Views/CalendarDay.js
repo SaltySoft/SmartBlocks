@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!Organization/Apps/Calendar/Templates/calendar_day.html',
     'text!Organization/Apps/Calendar/Templates/task_slot.html',
-    'Organization/Apps/Common/Views/TaskPopup'
-], function ($, _, Backbone, CalendarDayTemplate, TaskSlotTemplate, TaskPopup) {
+    'Organization/Apps/Common/Views/TaskPopup',
+    'Organization/Apps/Tasks/Models/Task'
+], function ($, _, Backbone, CalendarDayTemplate, TaskSlotTemplate, TaskPopup, Task) {
     var CalendarDayView = Backbone.View.extend({
         tagName: "div",
         className: "box day",
@@ -20,6 +21,7 @@ define([
             base.date = new Date(date);
             base.tasks = [];
             base.render();
+
         },
         setDate: function (date) {
             var base = this;
@@ -38,19 +40,24 @@ define([
         },
         addTask: function (task) {
             var base = this;
-            var div = _.template(TaskSlotTemplate, { task: task, index: base.tasks.length });
-            $(div).attr("data-index", base.tasks.length);
+            var div = $(document.createElement("li"));
+            div.html(_.template(TaskSlotTemplate, { task: task, index: base.tasks.length }));
+
+            div.attr("data-index", base.tasks.length);
+            div.attr("data-id", task.get('id'));
             var late_date = new Date(task.getDueDate());
             if (task.get("completion_date") != null) {
-                $(div).addClass("done");
+                div.addClass("done");
             } else if (task.getDueDate().getDate() < new Date().getDate() && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {
-                $(div).addClass("late");
+                div.addClass("late");
             }
+            div.draggable({
+                revert: "invalid"
+            });
 
             base.$el.find(".tasks").append(div);
+
             base.tasks.push(task);
-
-
         },
         expand: function (e) {
             var base = this;
@@ -71,6 +78,18 @@ define([
             var base = this;
             base.$el.removeClass("expanded");
             base.$el.bind("click.open", $.proxy(base.expand, base));
+        },
+        addNewTask: function () {
+            var base = this;
+            var task = new Task();
+            task.set("due_date", base.date.getTime() / 1000);
+
+            var task_popup = new TaskPopup(task);
+            task_popup.init(base.SmartBlocks);
+            task_popup.events.on("task_updated", function (task) {
+                base.addTask(task);
+            });
+
         },
         registerEvents: function () {
             var base = this;
@@ -123,6 +142,25 @@ define([
                     });
                 }
 
+            });
+
+            base.$el.delegate(".add_button", "click", function () {
+                base.addNewTask();
+            });
+
+            base.$el.find(".tasks").droppable({
+                drop: function (event, ui) {
+                    console.log(ui.draggable);
+                    var task = new Task({ id: ui.draggable.attr("data-id") });
+                    ui.draggable.remove();
+                    task.fetch({
+                        success: function () {
+                            task.set("due_date", base.date.getTime() / 1000);
+                            base.addTask(task);
+                            task.save();
+                        }
+                    });
+                }
             });
         },
         setInactive: function () {

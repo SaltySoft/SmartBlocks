@@ -34,25 +34,26 @@ define([
             var base = this;
             base.task.set("name", base.$el.find("#form_task_name").val());
 
-            var due_date = new Date();
-            due_date.setMilliseconds(0);
-            due_date.setSeconds(0);
-            due_date.setMinutes(0);
-            due_date.setHours(0);
-            var due_date_str = base.$el.find("#form_due_date").val();
-            if (due_date_str != "") {
-                console.log("entering ");
-                var parts = due_date_str.match(/(\d+)/g);
-                due_date.setDate(parts[2]);
-                due_date.setMonth(parts[1] - 1);
-                due_date.setFullYear(parts[0]);
-                base.task.setDueDate(due_date);
-            }
+//            var due_date = new Date();
+//            due_date.setMilliseconds(0);
+//            due_date.setSeconds(0);
+//            due_date.setMinutes(0);
+//            due_date.setHours(0);
+//            var due_date_str = base.$el.find("#form_due_date").val();
+//            if (due_date_str != "") {
+//                var parts = due_date_str.match(/(\d+)/g);
+//                due_date.setDate(parts[2]);
+//                due_date.setMonth(parts[1] - 1);
+//                due_date.setFullYear(parts[0]);
+//
+//                base.task.set("due_date", due_date.getTime() / 1000);
+//                console.log("Task created or edited : ", due_date.getTime() / 1000);
+//            }
 
             base.task.save({}, {
                 success: function () {
                     base.SmartBlocks.show_message("Task successfully updated");
-                    base.events.trigger("task_updated");
+                    base.events.trigger("task_updated", base.task);
                     base.hide();
                 }
             });
