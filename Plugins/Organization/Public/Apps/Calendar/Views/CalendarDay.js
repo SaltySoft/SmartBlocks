@@ -45,11 +45,15 @@ define([
 
             div.attr("data-index", base.tasks.length);
             div.attr("data-id", task.get('id'));
+            var now = new Date();
             var late_date = new Date(task.getDueDate());
             if (task.get("completion_date") != null) {
-                div.addClass("done");
-            } else if (task.getDueDate().getDate() < new Date().getDate() && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {
-                div.addClass("late");
+                div.find(".task_container").addClass("done");
+            }
+            if (task.getDueDate().getDate() <= now.getDate() && task.getDueDate().getFullYear() <= now.getFullYear() && task.getDueDate().getMonth() <= now.getMonth() ||
+                task.getDueDate().getFullYear() <= now.getFullYear() && task.getDueDate().getMonth() < now.getMonth() ||
+                task.getDueDate().getFullYear() < now.getFullYear()) {
+                div.find(".task_container").addClass("late");
             }
             div.draggable({
                 revert: "invalid"
@@ -160,7 +164,7 @@ define([
                             base.addTask(task);
                             task.save({}, {
                                 success: function () {
-//                                    base.SmartBlocks.stopLoading();
+                                    base.SmartBlocks.stopLoading();
                                 }
                             });
                         }
