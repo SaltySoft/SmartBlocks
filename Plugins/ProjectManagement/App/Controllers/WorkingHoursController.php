@@ -1,6 +1,6 @@
 <?php
 
-namespace WorkingHours;
+namespace ProjectManagement;
 
 class WorkingHoursController extends \Controller
 {
