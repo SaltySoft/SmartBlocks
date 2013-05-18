@@ -369,7 +369,7 @@ h6 {
     position: fixed;
     top: 50px;
     z-index: 1000;
-
+    display: none;
     text-align: center;
     line-height: 100px;
     width: 200px;
