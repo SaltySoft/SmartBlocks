@@ -50,7 +50,7 @@ define([
             if (task.get("completion_date") != null) {
                 div.find(".task_container").addClass("done");
             }
-            if (task.getDueDate().getDate() <= now.getDate() && task.getDueDate().getFullYear() <= now.getFullYear() && task.getDueDate().getMonth() <= now.getMonth() ||
+            if (task.getDueDate().getDate() < now.getDate() && task.getDueDate().getFullYear() <= now.getFullYear() && task.getDueDate().getMonth() <= now.getMonth() ||
                 task.getDueDate().getFullYear() <= now.getFullYear() && task.getDueDate().getMonth() < now.getMonth() ||
                 task.getDueDate().getFullYear() < now.getFullYear()) {
                 div.find(".task_container").addClass("late");
