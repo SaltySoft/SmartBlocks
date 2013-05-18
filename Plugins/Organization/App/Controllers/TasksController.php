@@ -37,6 +37,7 @@ class TasksController extends \Controller
         $task = new Task;
 
         $task->setName($data["name"]);
+        $task->setDueDate($data["due_date"]);
         $task->save();
 
         $this->render = false;
@@ -70,6 +71,7 @@ class TasksController extends \Controller
             $task->setName($data["name"]);
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
+            $task->setDueDate($data["due_date"]);
             $task->save();
             echo json_encode($task->toArray());
         }
@@ -98,5 +100,10 @@ class TasksController extends \Controller
     public function app()
     {
         $this->set("app", "/Organization/Apps/Tasks/app.js");
+    }
+
+    public function calendar()
+    {
+        $this->set("app", "/Organization/Apps/Calendar/app.js");
     }
 }

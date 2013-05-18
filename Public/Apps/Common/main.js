@@ -28,9 +28,10 @@ requirejs(apps,
                 SmartBlocks.events.trigger("ws_notification", message);
             };
         }
+        SmartBlocks.init_solution();
         User.getCurrent(function (current_user) {
             SmartBlocks.connected_users = new UsersCollection();
-            SmartBlocks.init_solution();
+
             var timers = [];
 
 

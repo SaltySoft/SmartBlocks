@@ -1,0 +1,14 @@
+<a href="javascript:void(0);" class="task_popup_close_button"><img src="/images/icons/cross_close.png" /></a>
+<h2>Task details</h2>
+<div>
+    <label for="form_task_name">Task name</label>
+    <input type="text" id="form_task_name" value="<%= task.get("name") %>" />
+
+    <!--<label for="form_due_date">Due date</label>-->
+    <!--<input type="text" id="form_due_date" value="<%= task.getDueDate().getFullYear() %>-<%= task.getDueDate().getMonth() + 1 %>-<%= task.getDueDate().getDate() %>" />-->
+
+    <div>
+        <button class="action_button" data-action="save">Save</button>
+        <button class="action_button" data-action="cancel">Cancel</button>
+    </div>
+</div>

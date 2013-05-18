@@ -54,6 +54,11 @@ class Task extends \Model
     private $completion_date;
 
     /**
+     * @Column(type="integer", nullable=true)
+     */
+    private $due_date;
+
+    /**
      * @Column(type="integer")
      */
     private $order_index;
@@ -121,6 +126,16 @@ class Task extends \Model
         return $this->order_index;
     }
 
+    public function setDueDate($due_date)
+    {
+        $this->due_date = $due_date;
+    }
+
+    public function getDueDate()
+    {
+        return $this->due_date;
+    }
+
     public function toArray()
     {
         $array = array(
@@ -129,7 +144,8 @@ class Task extends \Model
             "owner" => $this->owner->toArray(),
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
-            "order_index" => $this->order_index
+            "order_index" => $this->order_index,
+            "due_date" => $this->due_date
         );
         return $array;
     }
