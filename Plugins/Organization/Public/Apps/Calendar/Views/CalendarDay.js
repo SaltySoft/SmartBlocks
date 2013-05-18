@@ -153,11 +153,16 @@ define([
                     console.log(ui.draggable);
                     var task = new Task({ id: ui.draggable.attr("data-id") });
                     ui.draggable.remove();
+                    base.SmartBlocks.startLoading("Updating task date...");
                     task.fetch({
                         success: function () {
                             task.set("due_date", base.date.getTime() / 1000);
                             base.addTask(task);
-                            task.save();
+                            task.save({}, {
+                                success: function () {
+//                                    base.SmartBlocks.stopLoading();
+                                }
+                            });
                         }
                     });
                 }

@@ -26,12 +26,10 @@ define([
             base.$el.html(template);
             base.tasks_list = new TasksCollection();
             base.date = new Date();
-            base.tasks_list.fetch({
-                success: function () {
-                    base.setUpCalendar(base.date);
-                    base.registerEvents();
-                }
-            });
+
+            base.setUpCalendar(base.date);
+            base.registerEvents();
+
 
         },
         setUpCalendar: function (date) {
@@ -93,7 +91,6 @@ define([
             base.fillCalendar();
 
 
-
         },
         addTask: function (task) {
             var base = this;
@@ -119,10 +116,16 @@ define([
         fillCalendar: function () {
             var base = this;
             console.log("fetching calendar");
-            var tasks = base.tasks_list.models;
-            for (var k in tasks) {
-                base.addTask(tasks[k]);
-            }
+            base.SmartBlocks.startLoading("Loading month tasks...");
+            base.tasks_list.fetch({
+                success: function () {
+                    var tasks = base.tasks_list.models;
+                    for (var k in tasks) {
+                        base.addTask(tasks[k]);
+                    }
+                    base.SmartBlocks.stopLoading();
+                }
+            });
         },
         registerEvents: function () {
             var base = this;
