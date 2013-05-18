@@ -112,9 +112,9 @@ define([
 //                    text: textUpdate
 //                };
                 clearTimeout(hide_timer);
-                hide_timer = setTimeout(function () {
-                    base.$el.find(".editor_button_container").fadeOut();
-                }, 1000);
+//                hide_timer = setTimeout(function () {
+//                    base.$el.find(".editor_button_container").fadeOut();
+//                }, 1000);
                 clearTimeout(fire_blur_timer);
                 fire_blur_timer = setTimeout(function () {
                     base.events.trigger('blur');
@@ -124,26 +124,26 @@ define([
             base.$el.mouseover(function () {
                 clearTimeout(show_timer);
                 clearTimeout(hide_timer);
-                show_timer = setTimeout(function () {
-                    base.$el.find(".editor_button_container").fadeIn();
-                }, 100);
+//                show_timer = setTimeout(function () {
+//                    base.$el.find(".editor_button_container").fadeIn();
+//                }, 100);
 
             });
             var hide_timer = 0;
             base.$el.mouseout(function () {
                 clearTimeout(hide_timer);
-                hide_timer = setTimeout(function () {
-                    base.$el.find(".editor_button_container").fadeOut();
-                }, 1000);
+//                hide_timer = setTimeout(function () {
+//                    base.$el.find(".editor_button_container").fadeOut();
+//                }, 1000);
 
             });
 
             $('body', $(frame).contents()).focus(function (event) {
                 clearTimeout(show_timer);
                 clearTimeout(hide_timer);
-                show_timer = setTimeout(function () {
-                    base.$el.find(".editor_button_container").fadeIn();
-                }, 100);
+//                show_timer = setTimeout(function () {
+//                    base.$el.find(".editor_button_container").fadeIn();
+//                }, 100);
                 clearTimeout(fire_blur_timer);
                 base.events.trigger('focus');
             });
