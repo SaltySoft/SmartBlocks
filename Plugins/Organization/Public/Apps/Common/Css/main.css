@@ -22,6 +22,12 @@
     text-decoration: none;
     background: ghostwhite;
 }
+
+.control_bar a.selected {
+    background: #2bb8cb;
+    color: white;
+}
+
 .control_bar a:hover {
     background: #d3d3d3;
     color: ghostwhite;

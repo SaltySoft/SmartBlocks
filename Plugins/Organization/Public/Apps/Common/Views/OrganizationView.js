@@ -58,12 +58,16 @@ define([
             var base = this;
             base.current_view = new CalendarView();
             base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.month").addClass("selected");
             base.setContent(base.current_view.$el)
         },
         launchWeek: function () {
             var base = this;
             base.current_view = new WeekView();
             base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.week").addClass("selected");
             base.setContent(base.current_view.$el)
         }
     });
