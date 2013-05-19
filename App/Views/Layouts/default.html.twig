@@ -35,7 +35,12 @@
         <a class="menu_button log_button" href="javascript:void(0);" title="Login">
             <img src="/images/icons/user.png"/>
         </a>
+        <div id="notification_center_container">
 
+        </div>
+        <a class="menu_button notif_button" href="javascript:void(0);" title="Notifications">
+            <img src="/images/icons/newspaper.png"/>
+        </a>
 
         {% if user.is_admin() %}
             <a class="menu_button" href="/Users/user_management" title="User management">
@@ -47,11 +52,6 @@
         <div id="content">
             {{ _content_for_layout_|raw }}
         </div>
-
-        {#<div id="footer">#}
-
-
-        {#</div>#}
     </div>
     {% if user_set %}
         <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>

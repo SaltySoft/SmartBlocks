@@ -580,3 +580,15 @@ input[type=submit]:hover {
 .clearer {
     clear: both;
 }
+
+#notification_center_container {
+    position: absolute;
+    z-index: 10;
+    width: 200px;
+    padding: 20px;
+    left: 50px;
+    border: 1px black solid;
+    background-color: white;
+    color: black;
+    display: none;
+}

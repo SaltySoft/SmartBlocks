@@ -5,7 +5,7 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "UserModel", "UsersCollection"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "Apps/NotificationsCenter/app", "UserModel", "UsersCollection"];
 
 if (app !== undefined) {
     apps.push(app);
@@ -13,7 +13,7 @@ if (app !== undefined) {
 
 
 requirejs(apps,
-    function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, User, UsersCollection, App) {
+    function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, App) {
         if ("WebSocket" in window) {
             var websocket = new WebSocket(socket_server, "muffin-protocol");
             SmartBlocks.websocket = websocket;
@@ -41,6 +41,8 @@ requirejs(apps,
             SmartBlocks.ChatApp = ChatApp;
             FileSharingApp.initialize(SmartBlocks);
             SmartBlocks.FileSharingApp = FileSharingApp;
+            SmartBlocks.NotifCenterApp = NotifCenterApp;
+            NotifCenterApp.initialize(SmartBlocks);
             if (App)
                 App.initialize(SmartBlocks);
 
