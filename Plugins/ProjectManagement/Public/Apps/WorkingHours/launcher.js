@@ -7,7 +7,7 @@ define([
 
     var initialize = function (SmartBlocks) {
         var workingTime = new WorkingTimeView(SmartBlocks);
-        WorkingTimeView.init();
+        workingTime.init();
 
         $("#app_container").html(workingTime.$el);
 

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'ProjectManagement/Apps/Notes/Models/Project',
+    'ProjectManagement/Apps/WorkingHours/Models/Project',
     'text!ProjectManagement/Apps/WorkingHours/Templates/working_time.html',
     'ProjectManagement/Apps/WorkingHours/Collections/Projects'
 ], function ($, _, Backbone, Project, WorkingTimeTemplate, ProjectsCollection) {
@@ -33,5 +33,5 @@ define([
             var base = this;
         }
     });
-    return Dashboard;
+    return WorkingTime;
 });
