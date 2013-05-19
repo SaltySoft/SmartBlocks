@@ -16,7 +16,7 @@ class TasksController extends \Controller
             ->from("\\Organization\\Task", "t")
             ->where("t.owner = :user")
             ->setParameter("user", \User::current_user())
-            ->orderBy("t.order_index");
+            ->orderBy("t.due_date");
 
         $results = $qb->getQuery()->getResult();
 
