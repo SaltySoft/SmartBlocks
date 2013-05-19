@@ -99,7 +99,6 @@ define([
                     });
                     //faster interface
 
-
                     note.save({}, {
                         success: function () {
                             console.log("saved note");

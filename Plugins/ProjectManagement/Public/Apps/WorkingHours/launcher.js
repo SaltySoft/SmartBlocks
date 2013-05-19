@@ -2,21 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'UserModel',
-    'ProjectManagement/Apps/WorkingHours/Views/Dashboard'
-], function ($, _, Backbone, User, DashboardView) {
+    'ProjectManagement/Apps/WorkingHours/Views/WorkingTime'
+], function ($, _, Backbone, WorkingTimeView) {
 
     var initialize = function (SmartBlocks) {
-        var base = this;
-        base.SmartBlocks = SmartBlocks;
+        var workingTime = new WorkingTimeView(SmartBlocks);
+        WorkingTimeView.init();
 
-        //Init the events and the router
-        var AppEvents = _.extend({}, Backbone.Events);
-
-//        var dashboard = new DashboardView(base.SmartBlocks);
-//        dashboard.init(AppEvents);
-//
-//        $("#app_container").html(dashboard.$el);
+        $("#app_container").html(workingTime.$el);
 
         Backbone.history.start();
     };

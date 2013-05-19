@@ -23,10 +23,10 @@ class Project extends \Model
     private $users;
 
     /*
-     * @OneToMany(targetEntity="WorkingHour", mappedBy="project")
-     * @JoinTable(name="pm_project_user")
+     * @OneToMany(targetEntity="WorkingDuration", mappedBy="project")
+     * @JoinTable(name="pm_project_workingDuration")
      */
-    private $working_hours;
+    private $working_durations;
 
     public function addUser($user)
     {
@@ -38,14 +38,14 @@ class Project extends \Model
         return $this->users;
     }
 
-    public function addWorkingHours($working_hours)
+    public function addWorkingDurations($working_duration)
     {
-        $this->working_hours[] = $working_hours;
+        $this->working_durations[] = $working_duration;
     }
 
-    public function getWorkingHours()
+    public function getWorkingDurations()
     {
-        return $this->working_hours;
+        return $this->working_durations;
     }
 
     public function getId()
@@ -74,12 +74,12 @@ class Project extends \Model
             $users[] = $user->toArray();
         }
         $myArray["users"] = $users;
-        $workingHours = array();
-        foreach ($this->working_hours as $working_hour)
+        $workingDurations = array();
+        foreach ($this->working_durations as $working_duration)
         {
-            $workingHours[] = $working_hour->toArray();
+            $workingDurations[] = $working_duration->toArray();
         }
-        $myArray["working_hours"] = $workingHours;
+        $myArray["working_durations"] = $workingDurations;
 
         return $myArray;
     }
