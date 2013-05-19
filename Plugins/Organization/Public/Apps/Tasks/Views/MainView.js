@@ -28,15 +28,14 @@ define([
         tagName: "div",
         className: "ent_tsk",
 
-        initialize: function (SmartBlocks) {
+        initialize: function () {
             var base = this;
             base.current_date = new Date();
-            base.SmartBlocks = SmartBlocks;
-            base.init();
-        },
-        init: function () {
-            var base = this;
 
+        },
+        init: function (SmartBlocks) {
+            var base = this;
+            base.SmartBlocks = SmartBlocks;
             base.tasks_list = new TasksCollection();
 
             base.render();

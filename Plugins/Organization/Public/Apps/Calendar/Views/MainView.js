@@ -8,13 +8,14 @@ define([
     var MainView = Backbone.View.extend({
         tagName: "div",
         className: "calendar_main_view",
-        initialize: function (SmartBlocks) {
+        initialize: function () {
+            var base = this;
+
+
+        },
+        init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.init();
-        },
-        init: function () {
-            var base = this;
             base.render();
         },
         render: function () {
@@ -23,7 +24,8 @@ define([
             var template = _.template(MainViewTemplate, {});
 
             base.$el.html(template);
-            base.calendar_view = new CalendarView(base.SmartBlocks);
+            base.calendar_view = new CalendarView();
+            base.calendar_view.init(base.SmartBlocks);
             base.$el.find(".calendar_container").html(base.calendar_view.$el);
 
         },

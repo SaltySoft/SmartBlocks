@@ -99,8 +99,14 @@ class TasksController extends \Controller
 
     public function app()
     {
+        $this->set("app", "/Organization/Apps/Common/app.js");
+    }
+
+    public function appHA()
+    {
         $this->set("app", "/Organization/Apps/Tasks/app.js");
     }
+
 
     public function calendar()
     {

@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    './launcher'
+    'Organization/Apps/Common/launcher'
 ], function ($, _, Backbone, Launcher) {
 
     var init = function (SmartBlocks) {
