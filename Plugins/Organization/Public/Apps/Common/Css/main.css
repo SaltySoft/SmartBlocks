@@ -3,8 +3,8 @@
     margin: auto;
     border-top: 10px #1c7783 solid;
 }
-.control_bar {
-
+.control_bar h2 {
+    float:right
 }
 
 
