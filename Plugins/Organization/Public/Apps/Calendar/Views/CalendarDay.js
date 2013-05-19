@@ -56,7 +56,8 @@ define([
                 div.find(".task_container").addClass("late");
             }
             div.draggable({
-                revert: "invalid"
+                revert: "invalid",
+                distance: 30
             });
 
             base.$el.find(".tasks").append(div);
@@ -101,9 +102,9 @@ define([
 
             base.$el.delegate(".close_button", "click", $.proxy(base.retract, base));
 
-            base.$el.delegate(".task_name", "click", function () {
+            base.$el.delegate(".task_name a", "click", function () {
                 if (base.active) {
-                    var elt = $(this);
+                    var elt = $(this).parent();
                     var task_elt = elt.closest(".task");
                     console.log(task_elt);
                     var task = base.tasks[task_elt.attr("data-index")];

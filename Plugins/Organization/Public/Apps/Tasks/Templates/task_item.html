@@ -1,6 +1,6 @@
-<div class="handle">
+<!--<div class="handle">-->
 
-</div>
+<!--</div>-->
 <span class="checkbox_container">
     <div class="checkbox"></div>
     <input type="checkbox" class="task_complete_checkbox" <% if (task.get('completion_date') != null) { %>checked="true"<% } %> />
@@ -14,7 +14,7 @@
 </span>
 <span class="task_edition">
     <input type="text" class="task_edition_name_input"/>
-    <input type="date" class="task_due_date_input"
+    <input type="text" class="task_due_date_input"
            value="<%= current_date.getFullYear()%>-<%= current_date.getMonth() + 1 %>-<%= current_date.getDate() %>"/>
     <button class="task_item_button" data-action="cancel">Cancel</button>
         <button class="task_item_button" data-action="save">Save</button>

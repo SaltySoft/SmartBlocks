@@ -92,3 +92,6 @@
     background-image: url("/Organization/Apps/Tasks/Resources/handle.png");
 }
 
+.task_separator {
+    margin-top: 20px;
+}
