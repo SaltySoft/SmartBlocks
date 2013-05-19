@@ -12,10 +12,10 @@ define([
         initialize: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.init();
         },
-        init: function () {
+        init: function (SmartBlocks) {
             var base = this;
+            base.SmartBlocks = SmartBlocks;
             base.render();
         },
         render: function () {

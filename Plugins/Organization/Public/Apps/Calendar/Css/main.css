@@ -11,7 +11,7 @@
 .calendar_view .current_month {
     width: 300px;
     text-align: center;
-    font-size: 2.5em;
+    font-size: 1.5em;
     margin: auto;
 }
 
@@ -177,19 +177,18 @@
 
 .calendar_view .calendar_month .next_month_button {
     float: right;
-    margin-top: 10px;
+    margin-top: 3px;
 }
 
 .calendar_view .calendar_month .prev_month_button {
     float: left;
-    margin-top: 10px;
+    margin-top: 3px;
 }
 
 .calendar_view .add_button {
     position: absolute;
     bottom: 10px;
     left: 10px;
-
 }
 
 .calendar_view .add_button a {
