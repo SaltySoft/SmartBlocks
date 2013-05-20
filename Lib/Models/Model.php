@@ -41,6 +41,16 @@ class Model
         $this->_table = strtolower($this->_model) . "s";
     }
 
+    protected function before_save()
+    {
+
+    }
+
+    protected function after_save()
+    {
+
+    }
+
     /**
      *
      * @static
@@ -249,8 +259,10 @@ class Model
      */
     function save()
     {
+        $this->before_save();
         $GLOBALS["em"]->persist($this);
         $GLOBALS["em"]->flush();
+        $this->after_save();
     }
 
     /**
