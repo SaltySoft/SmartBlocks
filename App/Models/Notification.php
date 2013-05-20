@@ -117,8 +117,6 @@ class Notification extends Model
 
     public function toArray()
     {
-
-
         $array = array(
             "id" => $this->id,
             "content" => $this->content,
@@ -127,7 +125,6 @@ class Notification extends Model
             "seen" => $this->seen,
             "timestamp" => $this->timestamp * 1000
         );
-
 
         return $array;
     }
