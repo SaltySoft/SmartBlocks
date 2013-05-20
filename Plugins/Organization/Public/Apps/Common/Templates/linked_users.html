@@ -1,0 +1,6 @@
+<% _.each (users, function (user) { %>
+<div class="linked_user">
+    <div><%= user.get('username') %></div>
+    <div><a href="javascript:void(0);"><img src="/images/icons/door_out.png" /></a></div>
+</div>
+<% }); %>

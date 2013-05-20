@@ -44,6 +44,11 @@ class Task extends \Model
     private $owner;
 
     /**
+     * @OneToMany(targetEntity="\Organization\TaskUser", mappedBy="task")
+     */
+    private $linked_users;
+
+    /**
      * @Column(type="integer")
      */
     private $creation_date;
@@ -136,12 +141,31 @@ class Task extends \Model
         return $this->due_date;
     }
 
+    public function setLinkedUsers($linked_users)
+    {
+        $this->linked_users = $linked_users;
+    }
+
+    public function getLinkedUsers()
+    {
+        return $this->linked_users;
+    }
+
     public function toArray()
     {
+
+        $linked_users = array();
+
+        foreach ($this->linked_users as $task_user)
+        {
+            $linked_users[] = $task_user->getUser()->toArray();
+        }
+
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
             "owner" => $this->owner->toArray(),
+            "linked_users" => $linked_users,
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,

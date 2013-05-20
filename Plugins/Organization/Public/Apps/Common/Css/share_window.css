@@ -1,0 +1,33 @@
+.share_window {
+    width: 320px;
+    background: white;
+    padding: 15px;
+    box-shadow: 0px 0px 10px black;
+    margin: auto;
+    position: relative;
+    top: 200px;
+}
+
+.linked_user {
+    width: 140px;
+    height: 60px;
+    line-height: 30px;
+    box-shadow: 0px 0px 10px gray;
+    background: ghostwhite;
+    text-align: center;
+    padding: 5px;
+    float: left;
+}
+
+.server_response {
+    display: none;
+    position: absolute;
+    z-index: 5;
+    background: white;
+    padding: 5px;
+    box-shadow: 0px 0px 5px black;
+}
+
+.server_response.shown {
+    display: block;
+}

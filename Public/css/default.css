@@ -584,7 +584,7 @@ input[type=submit]:hover {
 #notification_center_container {
     position: absolute;
     z-index: 10;
-    width: 200px;
+    width: 500px;
     padding: 20px;
     left: 50px;
     border: 1px black solid;
