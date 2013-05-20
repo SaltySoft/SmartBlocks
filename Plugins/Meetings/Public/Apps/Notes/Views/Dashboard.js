@@ -15,14 +15,13 @@ define([
             className: "ent_notes_dashboard",
             events: {
             },
-            initialize: function (SmartBlocks) {
+            initialize: function () {
                 var base = this;
-                base.SmartBlocks = SmartBlocks;
             },
-            init: function (AppEvents) {
+            init: function (SmartBlocks, AppEvents) {
                 var base = this;
                 this.AppEvents = AppEvents;
-
+                base.SmartBlocks = SmartBlocks;
                 //Init templates
                 var template = _.template(MainTemplate, {});
                 base.$el.html(template);
