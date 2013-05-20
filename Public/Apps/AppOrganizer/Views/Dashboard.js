@@ -4,7 +4,8 @@ define([
     'backbone',
     'jqueryflip',
     'text!Apps/AppOrganizer/Templates/dashboard.html',
-    "Apps/AppOrganizer/Collections/Blocks"
+    "Apps/AppOrganizer/Collections/Blocks",
+    "amplify"
 ], function ($, _, Backbone, JqueryFlip, DashboardTemplate, BlocksCollection) {
     var Dashboard = Backbone.View.extend({
         tagName: "div",
@@ -20,17 +21,26 @@ define([
             this.AppEvents = AppEvents;
 
             base.blocks_collection = new BlocksCollection();
-            base.blocks_collection.fetch({
-                data: {
+            if (amplify.store("blocks_collection") === undefined) {
+                base.blocks_collection.fetch({
+                    data: {
 
-                },
-                success: function () {
-                    base.render();
-                }
-            });
+                    },
+                    success: function () {
+                        base.render();
+                        amplify.store("blocks_collection", base.blocks_collection)
+                    }
+                });
+            } else {
+                base.blocks_collection = new BlocksCollection(amplify.store("blocks_collection"));
+                base.blocks_collection.reparse();
+                base.render();
+            }
+
         },
         render: function () {
             var base = this;
+            console.log(base.blocks_collection);
             var template = _.template(DashboardTemplate, {
                 blocks: base.blocks_collection.models,
                 kernel: "kernel"

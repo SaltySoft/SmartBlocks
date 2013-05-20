@@ -40,11 +40,9 @@ define([
         },
         fetch: function () {
             var base = this;
-            base.SmartBlocks.startLoading("Fetching notifications...");
             base.notifications.fetch({
                 success: function () {
                     base.fillList();
-                    base.SmartBlocks.stopLoading();
                 }
             });
         },

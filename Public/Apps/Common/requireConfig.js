@@ -27,7 +27,9 @@ var sb_paths = {
     ColorPicker: '/javascript/colorpicker',
     TextEditorView : "/Apps/Common/Views/TextEditor",
 
-    jDeepCopy: "/javascript/jqueryDeepCopy"
+    jDeepCopy: "/javascript/jqueryDeepCopy",
+    amplify_lib: "/javascript/amplify.min",
+    amplify: "/javascript/amplify.min"
 
 };
 
@@ -46,5 +48,11 @@ var sb_shims = {
     },
     'jqueryflip': {
         deps: ['jquery']
+    },
+    amplify: {
+        "amplify": {
+            deps: ['jquery'],
+            exports: "amplify"
+        }
     }
 };
