@@ -7,7 +7,7 @@ define([
     'UsersCollection'
 ], function (_, Backbone, User, WorkingDuration, WorkingDurationsCollection, UsersCollection) {
     var Project = Backbone.Model.extend({
-        urlRoot:"/ProjectManagement/Project",
+        urlRoot:"/ProjectManagement/Projects",
         defaults:{
         },
         parse:function (response) {

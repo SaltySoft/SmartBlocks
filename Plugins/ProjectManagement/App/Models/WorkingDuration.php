@@ -27,7 +27,7 @@ class WorkingDuration extends \Model
     private $user;
 
     /**
-     * @ManyToOne(targetEntity="Project", inversedBy="working_durations")
+     * @ManyToOne(targetEntity="\ProjectManagement\Project")
      */
     private $project;
 
@@ -76,15 +76,17 @@ class WorkingDuration extends \Model
         return $this->project;
     }
 
-    public function toArray()
+    public function toArray($full = true)
     {
         $myArray = array();
         $myArray["id"] = $this->id;
         $myArray["hours_number"] = $this->hours_number;
         $myArray["date"] = $this->date;
-        $myArray["project"] = $this->project->toArray();
-        $myArray["user"] = $this->user->toArray();
-
+        if ($full)
+        {
+            $myArray["project"] = $this->project->toArray(false);
+            $myArray["user"] = $this->user->toArray();
+        }
         return $myArray;
     }
 }

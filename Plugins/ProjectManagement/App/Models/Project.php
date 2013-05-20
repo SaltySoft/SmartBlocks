@@ -22,11 +22,15 @@ class Project extends \Model
      */
     private $users;
 
-    /*
-     * @OneToMany(targetEntity="WorkingDuration", mappedBy="project")
-     * @JoinTable(name="pm_project_workingDuration")
+    /**
+     * @OneToMany(targetEntity="\ProjectManagement\WorkingDuration", mappedBy="project")
      */
     private $working_durations;
+
+    public function __construct()
+    {
+        $this->working_durations = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function addUser($user)
     {
@@ -63,7 +67,7 @@ class Project extends \Model
         return $this->name;
     }
 
-    public function toArray()
+    public function toArray($full = true)
     {
         $myArray = array();
         $myArray["id"] = $this->id;
@@ -75,11 +79,14 @@ class Project extends \Model
         }
         $myArray["users"] = $users;
         $workingDurations = array();
-        foreach ($this->working_durations as $working_duration)
+        if ($full)
         {
-            $workingDurations[] = $working_duration->toArray();
+            foreach ($this->working_durations as $working_duration)
+            {
+                $workingDurations[] = $working_duration->toArray(false);
+            }
+            $myArray["working_durations"] = $workingDurations;
         }
-        $myArray["working_durations"] = $workingDurations;
 
         return $myArray;
     }
