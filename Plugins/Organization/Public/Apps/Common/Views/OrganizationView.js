@@ -4,13 +4,15 @@ define([
     'backbone',
     'text!Organization/Apps/Common/Templates/organization.html',
     'Organization/Apps/Calendar/Views/MainView',
-    'Organization/Apps/Tasks/Views/MainView'
-], function ($, _, Backbone, Template, CalendarView, WeekView) {
+    'Organization/Apps/Tasks/Views/MainView',
+    'Organization/Apps/Common/Collections/TaskUsers'
+], function ($, _, Backbone, Template, CalendarView, WeekView, TaskUsersCollection) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
         initialize: function () {
             var base = this;
+            base.task_users = new TaskUsersCollection();
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -69,6 +71,16 @@ define([
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.week").addClass("selected");
             base.setContent(base.current_view.$el)
+        },
+        checkForNotifications: function () {
+            var base = this;
+            base.task_users.fetch({
+                success: function () {
+                    if (base.task_users.models.length > 0) {
+
+                    }
+                }
+            });
         }
     });
 

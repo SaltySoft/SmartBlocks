@@ -74,6 +74,7 @@ class Task extends \Model
         $this->name = "New task";
         $this->creation_date = time();
         $this->order_index = self::count() + 1;
+        $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
