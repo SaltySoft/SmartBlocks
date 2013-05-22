@@ -21,13 +21,15 @@
 </div >
 <div class="add_working_hours_container" >
     <table >
+        <div >Week <%= week_number %> from Monday <%= monday.getDate() %> <%= monday.getMonthName() %> to Sunday <%=
+              sunday.getDate() %> <%= sunday.getMonthName() %>
+        </div >
         <caption > Here you can declare the time you spent on each project :</caption >
 
-        <div >Semaine <%= week_number %> du lundi <%= monday.getDate() %> au mardi <%= sunday.getDate() %></div >
         <thead >
         <tr >
             <th scope="col" rowspan="2" >Projects</th >
-            <th scope="col" colspan="7" >Week 52</th >
+            <th scope="col" colspan="7" >Week <%= week_number %></th >
         </tr >
 
         <tr >
@@ -63,10 +65,10 @@
             </span >
             </th >
 
-            <td class="hours_display_td">
-                <span class="hours_display" href="javascript:void(0);" >1</span >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(monday) %></span >
                 <span class="hours_edition" href="javascript:void(0);" >
-                <input type="text" class="hours_input" >
+                <input type="text" class="hours_input" data-date="<%= monday.getTime() %> " data-pid="<%= project.get('id') %>">
                 </span >
             </td >
             <td >2</td >
@@ -80,4 +82,8 @@
         </tbody >
 
     </table >
+    <a class="save_working_hours_button wtButton green" href="javascript:void(0);" >
+        Save
+    </a >
+
 </div >

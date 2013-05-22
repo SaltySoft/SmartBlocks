@@ -32,6 +32,23 @@ define([
         },
         init:function () {
             var base = this;
+
+            Date.prototype.getMonthName = function (lang) {
+                lang = lang && (lang in Date.locale) ? lang : 'en';
+                return Date.locale[lang].month_names[this.getMonth()];
+            };
+
+            Date.prototype.getMonthNameShort = function (lang) {
+                lang = lang && (lang in Date.locale) ? lang : 'en';
+                return Date.locale[lang].month_names_short[this.getMonth()];
+            };
+
+            Date.locale = {
+                en:{
+                    month_names:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    month_names_short:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                }
+            };
             //Init notes collections
             base.projects_collection = new ProjectsCollection();
 
@@ -76,9 +93,6 @@ define([
         },
         initializeEvents:function () {
             var base = this;
-//            var workingDuration = new WorkingDuration({
-//                date:d.getTime()/1000
-//            });
 
             base.$el.delegate(".add_project", "click", function () {
                 var elt = $(this);
@@ -112,22 +126,62 @@ define([
                 var elt = $(this);
                 elt.addClass("editing");
                 var hours_display = elt.find(".hours_display");
-                console.log(hours_display);
                 var hours_edition = elt.find(".hours_edition");
                 var hours_input = elt.find(".hours_input");
                 hours_input.val(hours_display.html());
                 hours_display.hide();
                 hours_edition.show();
+                hours_input.focus();
             });
 
             base.$el.delegate(".hours_display_td", "blur", function () {
                 console.log("hours_display blur");
                 var elt = $(this);
+
                 elt.removeClass("editing");
                 var hours_display = elt.find(".hours_display");
                 var hours_edition = elt.find(".hours_edition");
+                var hours_input = elt.find(".hours_input");
+                var hours_number = hours_input.val();
+                hours_display.html(hours_number);
                 hours_display.show();
                 hours_edition.hide();
+
+                var working_duration = undefined;
+                var project = base.projects_collection.get(hours_input.attr("data-pid"));
+                var wd_date = new Date();
+                wd_date.setTime(hours_input.attr("data-date"));
+                if (project !== undefined) {
+                    var wd_id = project.getWorkingDurationIdAtDate(wd_date);
+                    if (wd_id != 0) {
+                        working_duration = base.working_durations.get(wd_id);
+                        if (hours_number <= 0) {
+                            working_duration.destroy();
+                        }
+                        else {
+                            working_duration.set("hours_number", hours_number);
+                        }
+                    }
+                    else {
+                        if (hours_number > 0) {
+                            working_duration = new WorkingDuration({
+                                hours_number:hours_number,
+                                date:wd_date.getTime() / 1000,
+                                project_id:project.id
+                            });
+                        }
+                    }
+                    if (working_duration !== undefined) {
+                        working_duration.save({
+                            success:function () {
+                                console.log("success working_duration save");
+                            },
+                            error:function () {
+                                console.log("error working_duration save");
+                            }
+                        })
+                    }
+                }
             });
 
             $('table tr td').hover(function () {

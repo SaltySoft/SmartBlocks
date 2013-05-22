@@ -7,7 +7,6 @@ table, caption, td, tr, th {
 table {
     border-collapse: collapse;
     margin-bottom: 15px;
-    width: 90%;
 }
 
 caption {
@@ -18,7 +17,7 @@ caption {
 
 table td,
 table th {
-    padding: 5px;
+    padding: 10px 15px;
     border: 1px solid #fff;
     border-width: 0 1px 1px 0;
     vertical-align: middle;
@@ -51,6 +50,7 @@ tbody td,
 tfoot td {
     text-align: center;
     background: #d5eaf0;
+    width: 85px;
 }
 
 tfoot th {

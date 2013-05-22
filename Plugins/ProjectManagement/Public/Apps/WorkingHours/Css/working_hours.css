@@ -6,6 +6,7 @@
     padding: 10px;
     margin: 10px;
     background-color: #ddd6ff;
+    display: inline-table;
 }
 
 .wtButton {
@@ -88,4 +89,5 @@ input[type=text].hours_input {
     padding: 0px;
     border-radius: 0px;
     border: none;
+    text-align: center;
 }

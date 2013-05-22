@@ -14,6 +14,10 @@ define([
 
             var project = new Project(response.project);
             response.project = project;
+
+            var wd_date = new Date();
+            wd_date.setTime(response.date * 1000);
+            response.date = wd_date;
         }
     });
 
