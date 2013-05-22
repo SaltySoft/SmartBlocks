@@ -5,7 +5,8 @@ define([
     var TaskUser = Backbone.Model.extend({
         urlRoot: "/Organization/TasksUsers",
         defaults: {
-
+            accepted: false,
+            pending: true
         }
     });
 

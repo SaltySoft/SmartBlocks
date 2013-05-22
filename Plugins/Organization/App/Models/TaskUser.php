@@ -138,14 +138,17 @@ class TaskUser extends \Model
         }
     }
 
-    public function toArray()
+    public function toArray($show_task = true)
     {
         $array = array(
+            "id" => $this->id,
             "user" => $this->user->toArray(),
-            "task" => $this->task->toArray(),
             "accepted" => $this->accepted,
             "pending" => $this->pending
         );
+        if ($show_task) {
+            $array["task"] = $this->task->toArray(false);
+        }
         return $array;
     }
 }

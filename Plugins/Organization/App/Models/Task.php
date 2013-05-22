@@ -152,26 +152,30 @@ class Task extends \Model
         return $this->linked_users;
     }
 
-    public function toArray()
+    public function toArray($show_task_users = true)
     {
 
-        $linked_users = array();
 
-        foreach ($this->linked_users as $task_user)
-        {
-            $linked_users[] = $task_user->getUser()->toArray();
-        }
 
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
             "owner" => $this->owner->toArray(),
-            "linked_users" => $linked_users,
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => $this->due_date
         );
+
+        if ($show_task_users)
+        {
+            $linked_users = array();
+            foreach ($this->linked_users as $task_user)
+            {
+                $linked_users[] = $task_user->toArray(false);
+            }
+            $array["task_users"] = $linked_users;
+        }
         return $array;
     }
 }

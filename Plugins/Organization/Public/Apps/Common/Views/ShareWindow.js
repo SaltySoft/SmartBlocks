@@ -6,8 +6,10 @@ define([
     'text!Organization/Apps/Common/Templates/linked_users.html',
     'text!Organization/Apps/Common/Templates/users_list.html',
     'UsersCollection',
-    'UserModel'
-], function ($, _, Backbone, ShareWindowTemplate, LinkedUsersTemplate, UsersListTemplate, UsersCollection, User) {
+    'UserModel',
+    'Organization/Apps/Common/Models/TaskUser',
+    'Organization/Apps/Common/Collections/TaskUsers'
+], function ($, _, Backbone, ShareWindowTemplate, LinkedUsersTemplate, UsersListTemplate, UsersCollection, User, TaskUser, TasksUsersCollection) {
     var ShareWindow = Backbone.View.extend({
         tagName: "div",
         className: "cache",
@@ -21,9 +23,14 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.users = new UsersCollection();
+            base.task_users = new TasksUsersCollection();
             base.users_response = new UsersCollection();
             base.render();
-            base.fillUsers();
+            base.task.fetch({
+                success: function () {
+                    base.fillUsers();
+                }
+            });
             base.registerEvents();
         },
         render: function () {
@@ -33,14 +40,9 @@ define([
         },
         fillUsers: function () {
             var base = this;
-            base.task.fetch({
-                success: function () {
-                    base.users = new UsersCollection(base.task.get('linked_users'));
-                    console.log(base.users);
-                    var template = _.template(LinkedUsersTemplate, { users: base.users.models });
-                    base.$el.find(".users").html(template);
-                }
-            });
+            base.task_users = new TasksUsersCollection(base.task.get('task_users'));
+            var template = _.template(LinkedUsersTemplate, { taskusers: base.task_users.models });
+            base.$el.find(".users").html(template);
         },
         registerEvents: function () {
             var base = this;
@@ -85,11 +87,35 @@ define([
 
             base.$el.delegate(".select_user", "click", function () {
                 var elt = $(this);
-                base.task.get('linked_users').push(new User({ id: elt.attr("data-id") }));
-                console.log(base.task.get('linked_users'));
-                base.task.save();
-                base.fillUsers();
-                elt.removeClass("shown");
+                var user = new User({id: elt.attr("data-id")});
+                console.log(user);
+
+                var task_user = new TaskUser();
+                task_user.set("task", base.task);
+                task_user.set("user", user);
+                task_user.save({}, {
+                    success: function () {
+                        base.task.get("task_users").push(task_user.attributes);
+                        base.fillUsers();
+                        elt.removeClass("shown");
+                    }
+                });
+            });
+
+            base.$el.delegate(".remove_user", "click", function () {
+                var elt = $(this);
+                var task_user = new TaskUser({ id:elt.attr("data-id") });
+                console.log(task_user);
+                task_user.destroy({
+                    success: function () {
+                        console.log("DESTROYED");
+                        base.task.fetch({
+                            success: function () {
+                                base.fillUsers();
+                            }
+                        });
+                    }
+                });
             });
         },
         show: function () {

@@ -51,10 +51,32 @@ class TasksUsersController extends \Controller
 
             $response = array();
 
-            foreach ($results as $tu) {
+            foreach ($results as $tu)
+            {
                 $response[] = $tu->toArray();
             }
             $this->return_json($response);
+        }
+        else
+        {
+            $this->json_error("You have to be connected");
+        }
+    }
+
+    public function create($params = array())
+    {
+        if ($this->security_check())
+        {
+            $task_user = new TaskUser();
+            $data = $this->getRequestData();
+            $task = Task::find($data["task"]["id"]);
+            $user = \User::find($data["user"]["id"]);
+            $task_user->setTask($task);
+            $task_user->setUser($user);
+            $task_user->setPending($data["pending"]);
+            $task_user->setAccepted($data["accepted"]);
+            $task_user->save();
+            $this->return_json($task_user->toArray());
         }
         else
         {
@@ -111,7 +133,16 @@ class TasksUsersController extends \Controller
     {
         if ($this->security_check())
         {
-
+            $task_user = TaskUser::find($params["id"]);
+            if (is_object($task_user))
+            {
+                $task_user->delete();
+                $this->json_message("The object was successfully deleted");
+            }
+            else
+            {
+                $this->json_error("The object could not be found");
+            }
         }
         else
         {
