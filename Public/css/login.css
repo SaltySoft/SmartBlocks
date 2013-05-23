@@ -1,0 +1,51 @@
+.block {
+    width: 400px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    border: 1px solid #cccccc;
+    background-color: #f0f3f7;
+}
+
+.block legend {
+    font-size: 1.2em;
+}
+
+form {
+    width: 236px;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+form input {
+    float: right;
+}
+
+.form_line {
+    margin-top: 15px;
+}
+
+#page_title {
+    width: 100%;
+    height: 50px;
+    margin: 0px;
+    padding: 0px;
+    background-color: #6e90fe;
+    border-bottom: 1px solid #aaaaaa;
+}
+
+#title {
+    font-style: italic;
+    padding-top: 7px;
+    margin-left: 30px;
+    color: #ffffff;
+}
+
+.logo {
+    text-align: center;
+}
+
+input[type="submit"] {
+    margin: 0;
+}

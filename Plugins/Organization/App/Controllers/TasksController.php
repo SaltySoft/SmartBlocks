@@ -15,7 +15,7 @@ class TasksController extends \Controller
         $qb->select("t")
             ->from("\\Organization\\Task", "t")
             ->leftJoin("t.linked_users", "tu")
-            ->where("t.owner = :user OR (tu.user = :user AND tu.accepted = true)")
+            ->where("t.owner = :user OR (tu.user = :user)")
             ->setParameter("user", \User::current_user())
             ->orderBy("t.due_date");
 
