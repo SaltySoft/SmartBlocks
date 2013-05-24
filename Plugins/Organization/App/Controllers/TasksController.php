@@ -14,7 +14,8 @@ class TasksController extends \Controller
 
         $qb->select("t")
             ->from("\\Organization\\Task", "t")
-            ->where("t.owner = :user")
+            ->leftJoin("t.linked_users", "tu")
+            ->where("t.owner = :user OR (tu.user = :user)")
             ->setParameter("user", \User::current_user())
             ->orderBy("t.due_date");
 
@@ -23,7 +24,7 @@ class TasksController extends \Controller
         $this->render = false;
         header("Content-Type: application/json");
         $render_array = array();
-        foreach($results as $result)
+        foreach ($results as $result)
         {
             $render_array[] = $result->toArray();
         }
@@ -72,6 +73,31 @@ class TasksController extends \Controller
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
             $task->setDueDate($data["due_date"]);
+
+//            foreach ($data["linked_users"] as $user_array)
+//            {
+//                $user = \User::find($user_array['id']);
+//                $add = true;
+//                if (is_object($user))
+//                {
+//                    foreach ($task->getLinkedUsers() as $task_user)
+//                    {
+//                        if ($task_user->getUser()->getId() == $user->getId())
+//                        {
+//                            $add = false;
+//                        }
+//                    }
+//                }
+//                if ($add)
+//                {
+//                    $task_user = new \Organization\TaskUser();
+//                    $task_user->setUser($user);
+//                    $task_user->setTask($task);
+//                    $task_user->setPending(true);
+//                    $task_user->save();
+//                }
+//            }
+
             $task->save();
             echo json_encode($task->toArray());
         }

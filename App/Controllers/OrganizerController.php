@@ -7,16 +7,17 @@
 
 class OrganizerController extends Controller
 {
-    private function security_check($user = null)
+    public function security_check()
     {
-        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        if (!User::logged_in())
         {
-            $this->redirect("/Organizer/organizer_error");
+            $this->redirect("/Users/login_form");
         }
     }
 
     public function organizer_error($params = array())
     {
+        $this->security_check();
         $this->render = false;
         header("Content-Type: application/json");
         $response = array(
@@ -31,6 +32,7 @@ class OrganizerController extends Controller
      */
     public function app_organizer($params = array())
     {
+        $this->security_check();
 //        $this->interface_security_check();
         $this->set("app", "Apps/AppOrganizer/app");
     }

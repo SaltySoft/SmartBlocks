@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Tasks/Templates/task_item.html'
-], function ($, _, Backbone, TaskItemTemplate) {
+    'text!Organization/Apps/Tasks/Templates/task_item.html',
+    'Organization/Apps/Common/Views/ShareWindow'
+], function ($, _, Backbone, TaskItemTemplate, ShareWindow) {
     var TaskItemView = Backbone.View.extend({
         tagName: "li",
         className: "task_item normal",
@@ -102,6 +103,12 @@ define([
                     base.model.save();
                     base.$el.removeClass("completed");
                 }
+            });
+
+            base.$el.delegate(".share_button", "click", function () {
+                var share_window = new ShareWindow({ model: base.model });
+                share_window.init(base.SmartBlocks);
+                share_window.show();
             });
         },
         enterEditMode: function () {

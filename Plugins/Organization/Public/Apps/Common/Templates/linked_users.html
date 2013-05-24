@@ -1,0 +1,6 @@
+<% _.each (taskusers, function (taskuser) { %>
+<div class="linked_user" data-id="<%= taskuser.get('id') %>">
+    <div><%= taskuser.get('user').username %></div>
+    <div><a href="javascript:void(0);" data-id="<%= taskuser.get('id') %>" class="remove_user"><img src="/images/icons/door_out.png" /></a></div>
+</div>
+<% }); %>
