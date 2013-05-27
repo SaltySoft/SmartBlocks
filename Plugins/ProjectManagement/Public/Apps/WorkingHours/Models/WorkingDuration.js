@@ -18,6 +18,8 @@ define([
             var wd_date = new Date();
             wd_date.setTime(response.date * 1000);
             response.date = wd_date;
+
+            return response;
         }
     });
 

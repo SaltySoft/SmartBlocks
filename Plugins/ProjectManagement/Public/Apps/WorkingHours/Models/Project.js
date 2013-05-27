@@ -31,61 +31,56 @@ define([
 
             return response;
         },
-        getWorkingDurationIdAtDate:function (date) {
-            var base = this;
-            for (var k in base.working_durations) {
-                if (k.date.getFullYear() == date.getFullYear()
-                    && k.date.getMonth() == date.getMonth()
-                    && k.date.getDate() == date.getDate())
-                {
-                    return k.id;
+        getWorkingDurationIdAtDate:function (project, date) {
+            var base = project;
+//            console.log("getWorkingDurationIdAtDate date", date);
+            _.each(base.get("working_durations").models, function (k) {
+                var wd_date = new Date();
+                wd_date.setTime(k.get("date") * 1000);
+//                console.log("-------------")
+//                console.log("wd_date full year", wd_date.getFullYear());
+//                console.log("wd_date month", wd_date.getMonth());
+//                console.log("wd_date date", wd_date.getDate());
+//                console.log("date year", date.getFullYear());
+//                console.log("date month", date.getMonth());
+//                console.log("date date", date.getDate());
+//                console.log("-------------")
+                if (wd_date.getFullYear() == date.getFullYear()
+                    && wd_date.getMonth() == date.getMonth()
+                    && wd_date.getDate() == date.getDate()) {
+//                    console.log("OKAY id?", k.get("id"));
+                    return k.get("id");
                 }
-            }
+            });
 
             return 0;
         },
-        getWorkingDurationHoursAtDate:function (date) {
-            var base = this;
-            console.log("getWorkingDurationHoursAtDate");
-            console.log("date", date);
-            console.log("base", base);
-            for (var k in base.working_durations) {
-                console.log("k", k);
-                if (k.date.getFullYear() == date.getFullYear()
-                    && k.date.getMonth() == date.getMonth()
-                    && k.date.getDate() == date.getDate())
-                {
-                    return k.get("hours_number");
+        getWorkingDurationHoursAtDate:function (project, date) {
+            var base = project;
+//            console.log("getWorkingDurationHoursAtDate", date);
+//            console.log("getWorkingDurationHoursAtDate getTime", date.getTime());
+            var wd_hours = 0;
+            _.each(base.get("working_durations").models, function (k) {
+                var wd_date = new Date();
+                wd_date.setTime(k.get("date") * 1000);
+//                console.log("-------------")
+//                console.log("wd_date full year", wd_date.getFullYear());
+//                console.log("wd_date month", wd_date.getMonth());
+//                console.log("wd_date date", wd_date.getDate());
+//                console.log("date year", date.getFullYear());
+//                console.log("date month", date.getMonth());
+//                console.log("date date", date.getDate());
+//                console.log("-------------")
+                if (wd_date.getFullYear() == date.getFullYear()
+                    && wd_date.getMonth() == date.getMonth()
+                    && wd_date.getDate() == date.getDate()) {
+//                    console.log("OKAY id?", k.get("id"));
+                    wd_hours = k.get("hours_number");
+//                    return k.get("hours_number");
                 }
-            }
-
-            return 0;
-        },
-        getWorkingDurationFromDate:function (date) {
-            var base = this;
-            var working_durations = array();
-            for (var k in base.working_durations) {
-//                var today = date;
-//                var tomorow = new Date();
-//                tomorow.setDate(date.getDate() + 1);
-//                var start_time = today.getTime() / 1000;
-//                var end_time = tomorow.getTime() / 1000;
-//                var wh_time = k.getDate();
-//                console.log(wh_time);
-//                if (wh_time < end_time && wh_time > start_time) {
-//                    working_durations.add(k);
-//                }
-                var wh_date = new Date();
-                wh_date.setDate(k.getDate());
-            }
-            console.log(working_durations);
-
-            if (working_durations.length > 0) {
-                return working_durations[0].id;
-            }
-            else {
-                return 0;
-            }
+            });
+//            console.log("wd_hours", wd_hours);
+            return wd_hours;
         }
     });
 

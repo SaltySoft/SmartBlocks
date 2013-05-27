@@ -38,6 +38,11 @@ define([
                 return Date.locale[lang].month_names[this.getMonth()];
             };
 
+            Date.prototype.getDayName = function (lang) {
+                lang = lang && (lang in Date.locale) ? lang : 'en';
+                return Date.locale[lang].day_names[this.getDay()];
+            };
+
             Date.prototype.getMonthNameShort = function (lang) {
                 lang = lang && (lang in Date.locale) ? lang : 'en';
                 return Date.locale[lang].month_names_short[this.getMonth()];
@@ -46,11 +51,14 @@ define([
             Date.locale = {
                 en:{
                     month_names:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    month_names_short:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                    month_names_short:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    day_names:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
                 }
             };
             //Init notes collections
             base.projects_collection = new ProjectsCollection();
+
+            base.actualDate = new Date();
 
             base.render(true);
         },
@@ -74,16 +82,38 @@ define([
                 base.loadProjects();
             }
             else {
-                var date = new Date();
+                var date = base.actualDate;
                 var week_nb = getWeekNumber(date)[1];
                 var monday = new Date();
-                monday.setDate(date.getDate() - date.getDay());
+                monday.setTime(date.getTime());
+                monday.setDate(date.getDate() - (date.getDay() - 1));
+                var tuesday = new Date();
+                tuesday.setTime(date.getTime());
+                tuesday.setDate(date.getDate() - (date.getDay() - 1) + 1);
+                var wednesday = new Date();
+                wednesday.setTime(date.getTime());
+                wednesday.setDate(date.getDate() - (date.getDay() - 1) + 2);
+                var thursday = new Date();
+                thursday.setTime(date.getTime());
+                thursday.setDate(date.getDate() - (date.getDay() - 1) + 3);
+                var friday = new Date();
+                friday.setTime(date.getTime());
+                friday.setDate(date.getDate() - (date.getDay() - 1) + 4);
+                var saturday = new Date();
+                saturday.setTime(date.getTime());
+                saturday.setDate(date.getDate() - (date.getDay() - 1) + 5);
                 var sunday = new Date();
-                sunday.setDate(date.getDate() - date.getDay() + 7);
+                sunday.setTime(date.getTime());
+                sunday.setDate(date.getDate() - (date.getDay() - 1) + 6);
                 var workingTimeTemplate = _.template(WorkingTimeTemplate, {
                     projects:base.projects_collection.models,
                     week_number:week_nb,
                     monday:monday,
+                    tuesday:tuesday,
+                    wednesday:wednesday,
+                    thursday:thursday,
+                    friday:friday,
+                    saturday:saturday,
                     sunday:sunday
                 });
                 base.$el.html(workingTimeTemplate);
@@ -134,6 +164,22 @@ define([
                 hours_input.focus();
             });
 
+            base.$el.delegate(".change_week_more", "click", function () {
+                var newDate = new Date();
+                newDate.setTime(base.actualDate.getTime());
+                newDate.setDate(base.actualDate.getDate() + 7);
+                base.actualDate = newDate;
+                base.render(false);
+            });
+
+            base.$el.delegate(".change_week_less", "click", function () {
+                var newDate = new Date();
+                newDate.setTime(base.actualDate.getTime());
+                newDate.setDate(base.actualDate.getDate() - 7);
+                base.actualDate = newDate;
+                base.render(false);
+            });
+
             base.$el.delegate(".hours_display_td", "blur", function () {
                 console.log("hours_display blur");
                 var elt = $(this);
@@ -148,12 +194,17 @@ define([
                 hours_edition.hide();
 
                 var working_duration = undefined;
+                console.log("base.projects_collection", base.projects_collection);
+                console.log("data-pid", hours_input.attr("data-pid"));
                 var project = base.projects_collection.get(hours_input.attr("data-pid"));
+                console.log("project", project);
                 var wd_date = new Date();
                 wd_date.setTime(hours_input.attr("data-date"));
                 if (project !== undefined) {
-                    var wd_id = project.getWorkingDurationIdAtDate(wd_date);
+                    var wd_id = project.getWorkingDurationIdAtDate(project, wd_date);
+                    console.log("wd_id", wd_id);
                     if (wd_id != 0) {
+                        console.log("wd FIND id: ", wd_id);
                         working_duration = base.working_durations.get(wd_id);
                         if (hours_number <= 0) {
                             working_duration.destroy();
@@ -163,7 +214,9 @@ define([
                         }
                     }
                     else {
+                        console.log("wd not found");
                         if (hours_number > 0) {
+                            console.log("hours_number : ", hours_number);
                             working_duration = new WorkingDuration({
                                 hours_number:hours_number,
                                 date:wd_date.getTime() / 1000,
@@ -171,6 +224,7 @@ define([
                             });
                         }
                     }
+                    console.log("working_duration", working_duration);
                     if (working_duration !== undefined) {
                         working_duration.save({
                             success:function () {
@@ -197,5 +251,6 @@ define([
             });
         }
     });
+
     return WorkingTime;
 });
