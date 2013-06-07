@@ -1,0 +1,95 @@
+.planning_view {
+    margin-top: 20px;
+}
+
+/* DATE CHOOSER */
+.date_chooser {
+    width: 200px;
+
+
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
+
+.date {
+    font-size: 20px;
+    text-decoration: none;
+    color: #d3d3d3;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+.prev_month_button {
+    float: left;
+}
+
+.next_month_button {
+    float: right;
+}
+
+input[type="text"].datepicker {
+    height:0px;
+    opacity: 0;
+}
+
+/* PANES */
+.pane_container .pane {
+    padding: 5px;
+    height: 496px;
+    width: 98%;
+    margin: auto;
+}
+.pane > div {
+
+    height: 100%;
+    width: 100%;
+}
+
+/* TASKS LIST */
+.tasks_container {
+    float: left;
+    border: 1px black solid;
+}
+
+/* DAY PLANNING */
+.daily_planning_container {
+    float: left;
+    border-bottom: 2px #b3b3b3 solid;
+    overflow: hidden;
+}
+
+.daily_planning_view {
+    top: -558px;
+}
+
+.hour_view {
+    height: 50px;
+    border-top: 2px #b3b3b3 solid;
+
+
+}
+
+.hour_view > div {
+    padding: 5px;
+}
+
+.daily_planning_view {
+    position: relative;
+}
+
+.hour_view .hour {
+    float: left;
+    font-size: larger;
+    width: 30px;
+    text-align: center;
+    height: 100%;
+    border-right: 1px black solid;
+
+}
+
+.hour_view .hour_content {
+    margin-left: 61px;
+}
