@@ -19,7 +19,7 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.render();
-            base.registereEvents();
+
             var Router = Backbone.Router.extend({
                 routes : {
                     "week" : "week",
@@ -33,6 +33,7 @@ define([
                     base.launchCalendar();
                 },
                 daily: function () {
+                    console.log("asdasd");
                     base.launchPlanning();
                 }
             });
@@ -84,6 +85,7 @@ define([
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.daily").addClass("selected");
             base.setContent(base.current_view.$el);
+
         },
         checkForNotifications: function () {
             var base = this;

@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Daily/Templates/main_planning.html',
-    'Organization/Apps/Daily/Views/DayPlanning'
-], function ($, _, Backbone, MainViewTemplate, DailyPlanningView) {
+    'Organization/Apps/Daily/Views/DayPlanning',
+    'Organization/Apps/Daily/Views/TasksList'
+], function ($, _, Backbone, MainViewTemplate, DailyPlanningView, TasksListView) {
 
     var monthNames = [ "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December" ];
@@ -28,7 +29,8 @@ define([
             base.today = new Date(base.current_date);
 
             base.render();
-            base.registerEvents();
+
+            base.dailyPlanning = undefined;
         },
         render: function () {
             var base = this;
@@ -39,7 +41,13 @@ define([
             base.$el.find(".datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
             base.$el.find(".date").html("Today (" + monthNames[base.current_date.getMonth()] + " " +base.current_date.getDate()  + ")");
 
-            base.updateDate();
+            base.tasks_list = new TasksListView();
+            base.tasks_list.init(base.SmartBlocks);
+
+            base.$el.find(".tasks_container").html(base.tasks_list.$el);
+
+
+            base.registerEvents();
         },
         updateDate: function () {
             var base = this;
@@ -52,17 +60,17 @@ define([
                 if (base.current_date.getFullYear() != base.today.getFullYear())
                     base.$el.find(".date").append( ", " + base.current_date.getFullYear());
             }
-
-            var dailyPlanning = new DailyPlanningView();
-            dailyPlanning.init(base.SmartBlocks, base.current_date);
-            base.$el.find(".daily_planning_container").html(dailyPlanning.$el);
-
+            if (base.dailyPlanning)
+                base.dailyPlanning.update_on = false;
+            base.dailyPlanning = new DailyPlanningView();
+            base.$el.find(".daily_planning_container").html(base.dailyPlanning.$el);
+            base.dailyPlanning.init(base.SmartBlocks, base.current_date);
         },
         registerEvents: function () {
             var base = this;
             base.$el.delegate(".date", "click", function () {
                 base.$el.find(".datepicker").focus();
-            });;
+            });
 
             base.$el.delegate(".datepicker", "change", function () {
                 var elt = $(this);
@@ -80,6 +88,8 @@ define([
                 base.current_date.setDate(base.current_date.getDate() + 1);
                 base.updateDate();
             });
+            base.updateDate();
+
         }
 
     });
