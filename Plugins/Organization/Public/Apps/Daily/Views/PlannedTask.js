@@ -38,7 +38,7 @@ define([
         updatePosition: function () {
             var base = this;
             base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.planned_task.getStart())));
-            base.$el.css("height", Math.round(base.DayPlanning.getHourHeight() / 2) - 14);
+            base.$el.css("height", base.planned_task.get("duration") / 60 / 60 / 1000 * base.DayPlanning.getHourHeight() - 14);
             console.log(base.planned_task.get("start"));
             console.log(new Date(base.planned_task.get("start")));
         },
@@ -80,13 +80,11 @@ define([
                     var newY = base.$el.position().top;
                     newY = newY - (newY % (base.DayPlanning.getHourHeight() / 2));
                     base.$el.css("top", newY);
-                    console.log("BEFORE CHANGE", base.planned_task.getStart());
                     var start = base.planned_task.getStart();
                     start.setHours(Math.round(base.$el.position().top / base.DayPlanning.getHourHeight()));
                     start.setMinutes(Math.round((base.$el.position().top / base.DayPlanning.getHourHeight() % 1) * 60));
                     base.planned_task.set("start", start.getTime());
                     base.planned_task.save();
-                    console.log("AFTER CHANGE", base.planned_task.getStart());
                     base.DayPlanning.$el.bind("click.create_task", function () {
                         base.DayPlanning.createTask();
                     });
@@ -98,8 +96,12 @@ define([
                 grid : base.DayPlanning.getHourHeight() / 2,
                 minWidth: 580,
                 maxWidth: 580,
-                resize: function(event, ui) {
-
+                stop: function(event, ui) {
+                    var duration = (ui.size.height + 4) / base.DayPlanning.getHourHeight() + 0.2;
+                    duration *= 60 * 60 * 1000;
+                    base.planned_task.set("duration", duration);
+                    console.log(duration);
+                    base.planned_task.save();
                 }
             });
 

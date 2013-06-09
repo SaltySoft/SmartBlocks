@@ -90,7 +90,7 @@ define([
         },
         getHourHeight: function () {
             var base = this;
-            return base.$el.height() > 0 ? base.$el.height() / 24 : 40;
+            return base.$el.find(".hour_view").height() + 2;
         },
         getStartPosition: function (date) {
             var base = this;
