@@ -54,6 +54,16 @@ input[type="text"].datepicker {
     border: 1px black solid;
 }
 
+.task_item {
+     padding: 5px;
+     background: rgba(43, 184, 203, 0.49);
+     margin: 1px;
+ }
+
+.task_item.ui-draggable-dragging {
+    z-index: 10;
+}
+
 /* DAY PLANNING */
 .daily_planning_container {
     float: left;

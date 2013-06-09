@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Daily/Templates/planned_task.html',
-    'Organization/Apps/Daily/Models/PlannedTask'
-], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask) {
+    'Organization/Apps/Daily/Models/PlannedTask',
+    'ContextMenuView'
+], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask, ContextMenu) {
     var PlannedTaskView = Backbone.View.extend({
         tagName: "div",
         className: "planned_task",
@@ -44,10 +45,26 @@ define([
         },
         registerEvents: function () {
             var base = this;
+            base.$el.attr("oncontextmenu", "return false;");
+            base.$el.mousedown(function (e) {
 
-            base.$el.click(function () {
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Delete", function () {
+                        base.planned_task.destroy({
+                            success: function () {
+                                base.$el.remove();
+                            }
+                        });
+
+                    });
+                    context_menu.show(e);
+                    return false;
+                }
+
                 return false;
             });
+
 
             base.$el.find(".handle").mousedown(function (e) {
                 $(document).disableSelection();
@@ -104,6 +121,8 @@ define([
                     base.planned_task.save();
                 }
             });
+
+
 
 
         }

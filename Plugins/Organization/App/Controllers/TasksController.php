@@ -21,9 +21,9 @@ class TasksController extends \Controller
 
         $data = $this->getRequestData();
         if (isset($data["date"])) {
-            $qb->andWhere("(t.due_date >= :start_date AND t.due_date <= :stop_date)")
-            ->setParameter("start_date", $data["date"] - + 60 * 60 * 24)
-            ->setParameter("stop_date", $data["date"] );
+            $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
+            ->setParameter("start_date", $data["date"])
+            ->setParameter("stop_date", $data["date"]  + 60 * 60 * 24);
         }
 
         $results = $qb->getQuery()->getResult();

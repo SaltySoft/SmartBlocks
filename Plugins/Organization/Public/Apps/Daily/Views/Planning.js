@@ -41,10 +41,7 @@ define([
             base.$el.find(".datepicker").datepicker("option", "dateFormat", "yy-mm-dd");
             base.$el.find(".date").html("Today (" + monthNames[base.current_date.getMonth()] + " " +base.current_date.getDate()  + ")");
 
-            base.tasks_list = new TasksListView();
-            base.tasks_list.init(base.SmartBlocks, base);
 
-            base.$el.find(".tasks_container").html(base.tasks_list.$el);
 
 
             base.registerEvents();
@@ -65,6 +62,11 @@ define([
             base.dailyPlanning = new DailyPlanningView();
             base.$el.find(".daily_planning_container").html(base.dailyPlanning.$el);
             base.dailyPlanning.init(base.SmartBlocks, base.current_date, base);
+
+            base.tasks_list = new TasksListView();
+            base.tasks_list.init(base.SmartBlocks, base);
+
+            base.$el.find(".tasks_container").html(base.tasks_list.$el);
         },
         registerEvents: function () {
             var base = this;
