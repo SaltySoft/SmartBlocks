@@ -39,12 +39,12 @@ class PlannedTask extends \Model
     private $task;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private $start;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private $duration;
 
@@ -95,8 +95,8 @@ class PlannedTask extends \Model
         $array = array(
             "id" => $this->id,
             "task" => $this->task->toArray(),
-            "start" => $this->start / 1000,
-            "duration" => $this->duration / 1000
+            "start" => $this->start,
+            "duration" => $this->duration
         );
 
         return $array;

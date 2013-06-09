@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Daily/Templates/planned_task.html'
-], function ($, _, Backbone, PlannedTaskTemplate) {
+    'text!Organization/Apps/Daily/Templates/planned_task.html',
+    'Organization/Apps/Daily/Models/PlannedTask'
+], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask) {
     var PlannedTaskView = Backbone.View.extend({
         tagName: "div",
         className: "planned_task",
@@ -13,21 +14,12 @@ define([
             base.moving = false;
             base.mouse_delta = 0;
             base.mousePreviousY = 0;
+            base.planned_task = base.model;
         },
-        init: function (SmartBlocks, DayPlanning, start, end, task) {
+        init: function (SmartBlocks, DayPlanning) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
-            base.task = task;
-            base.start = start;
-            base.start.setMinutes(0);
-            base.start.setSeconds(0);
-            base.end = end;
-            console.log("END", end);
             base.DayPlanning = DayPlanning;
-
-
-
 
             base.render();
             base.registerEvents();
@@ -36,7 +28,7 @@ define([
             var base = this;
 
             var template = _.template(PlannedTaskTemplate, {
-                task : base.task
+                task : base.planned_task.get("task")
             });
 
             base.$el.html(template);
@@ -45,9 +37,10 @@ define([
         },
         updatePosition: function () {
             var base = this;
-            base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.start)));
+            base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.planned_task.getStart())));
             base.$el.css("height", Math.round(base.DayPlanning.getHourHeight() / 2) - 14);
-
+            console.log(base.planned_task.get("start"));
+            console.log(new Date(base.planned_task.get("start")));
         },
         registerEvents: function () {
             var base = this;
@@ -66,7 +59,6 @@ define([
                 base.$el.parent().bind("mousemove.task", function (ee) {
 
                     var newY = base.$el.position().top + ee.pageY - base.mousePreviousY;
-                    console.log(newY);
                     if (newY > 0 && newY < base.DayPlanning.getHourHeight() * 24 - base.$el.height()) {
                         base.$el.css("top", newY);
                         base.mousePreviousY = ee.pageY;
@@ -88,9 +80,13 @@ define([
                     var newY = base.$el.position().top;
                     newY = newY - (newY % (base.DayPlanning.getHourHeight() / 2));
                     base.$el.css("top", newY);
-                    base.start.setHours(Math.round(base.$el.position().top / base.DayPlanning.getHourHeight()));
-                    base.start.setMinutes(Math.round((base.$el.position().top / base.DayPlanning.getHourHeight() % 1) * 60));
-                    console.log(base.start);
+                    console.log("BEFORE CHANGE", base.planned_task.getStart());
+                    var start = base.planned_task.getStart();
+                    start.setHours(Math.round(base.$el.position().top / base.DayPlanning.getHourHeight()));
+                    start.setMinutes(Math.round((base.$el.position().top / base.DayPlanning.getHourHeight() % 1) * 60));
+                    base.planned_task.set("start", start.getTime());
+                    base.planned_task.save();
+                    console.log("AFTER CHANGE", base.planned_task.getStart());
                     base.DayPlanning.$el.bind("click.create_task", function () {
                         base.DayPlanning.createTask();
                     });

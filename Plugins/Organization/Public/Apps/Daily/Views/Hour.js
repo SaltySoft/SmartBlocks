@@ -34,6 +34,7 @@ define([
                 drop: function( event, ui ) {
                     var task = base.dayPlanning.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
                     base.dayPlanning.createTask(task, base.time);
+
                 }
             });
         }

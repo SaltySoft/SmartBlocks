@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'Organization/Apps/Daily/Views/Hour',
-    'Organization/Apps/Daily/Views/PlannedTask'
-], function ($, _, Backbone, HourView, PlannedTaskView) {
+    'Organization/Apps/Daily/Views/PlannedTask',
+    'Organization/Apps/Daily/Models/PlannedTask',
+    'Organization/Apps/Daily/Collections/PlannedTasks'
+], function ($, _, Backbone, HourView, PlannedTaskView, PlannedTask, PlannedTaskCollection) {
     var DailyPlanningView = Backbone.View.extend({
         tagName: "div",
         className: "daily_planning_view",
@@ -26,6 +28,8 @@ define([
             base.planning = planning;
             base.render();
             base.registerEvents();
+            base.planned_tasks = new PlannedTaskCollection();
+
 
         },
         render: function () {
@@ -44,6 +48,7 @@ define([
                 base.$el.append(hour_holder.$el);
                 base.$el.append('<div class="clearer"></div>');
                 time.setHours(last_time.getHours() + 1);
+
                 last_time = time;
 
             }
@@ -93,15 +98,42 @@ define([
             var minute = date.getMinutes();
             return base.$el.height() / (24 * 60) * (hour * 60 + minute);
         },
+        addPlannedTask: function (planned_task) {
+            var base = this;
+            console.log("PLANNED", planned_task);
+            var planned_task_view = new PlannedTaskView({
+                model: planned_task
+            });
+            planned_task_view.init(base.SmartBlocks, base);
+            base.$el.append(planned_task_view.$el);
+        },
         createTask: function (task, start) {
             var base = this;
             var date = start;
-            date.setHours(date.getHours() - 1);
-            var planned_task = new PlannedTaskView(task);
-            var stop = new Date(date);
-            stop.setMinutes(date.getMinutes() + 30)
-            planned_task.init(base.SmartBlocks, base, date, stop, task);
-            base.$el.append(planned_task.$el);
+//            date.setHours(date.getHours() - 1);
+            var planned_task = new PlannedTask();
+            planned_task.set("start", date.getTime());
+            planned_task.set("duration", "1800000");
+            planned_task.set("task", task);
+            planned_task.save();
+            base.addPlannedTask(planned_task);
+        },
+        fetchPlannedTasks: function () {
+            var base = this;
+
+            base.planned_tasks = new PlannedTaskCollection();
+            base.planned_tasks.fetch({
+                data: {
+                    date: base.planning.current_date.getTime()
+                },
+                success: function (elt) {
+                    base.planned_tasks = elt;
+                    for (var k in elt.models) {
+                        var planned_task = elt.models[k];
+                        base.addPlannedTask(planned_task);
+                    }
+                }
+            });
         },
         registerEvents: function () {
             var base = this;
@@ -129,6 +161,7 @@ define([
 //            base.$el.bind("click.create_task", function () {
 //                base.createTask();
 //            });
+            base.fetchPlannedTasks();
         }
     });
 

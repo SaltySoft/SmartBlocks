@@ -15,6 +15,16 @@ class PlannedTasksController extends \Controller
          ->where("t.owner = :user")
          ->setParameter("user", \User::current_user());
 
+        $data = $this->getRequestData();
+
+        if (isset($data["date"]))
+        {
+            $qb->andWhere("pt.start >= :start AND pt.start <= :stop")
+                ->setParameter("start", $data["date"])
+                ->setParameter("stop", $data["date"] + 24 * 60 * 60 * 1000);
+        }
+
+
         $results = $qb->getQuery()->getResult();
 
         $response = array();
@@ -53,8 +63,8 @@ class PlannedTasksController extends \Controller
         if (is_object($task) && $task->getOwner()->getId() == \User::current_user()->getId())
         {
             $planned_task->setTask($task);
-            $planned_task->setDuration($data["duration"] * 1000);
-            $planned_task->setStart($data["start"] * 1000);
+            $planned_task->setDuration($data["duration"]);
+            $planned_task->setStart($data["start"]);
             $planned_task->save();
             $response = $planned_task->toArray();
         }
@@ -80,8 +90,8 @@ class PlannedTasksController extends \Controller
             if (is_object($task))
             {
                 $planned_task->setTask($task);
-                $planned_task->setDuration($data["duration"] * 1000);
-                $planned_task->setStart($data["start"] * 1000);
+                $planned_task->setDuration($data["duration"]);
+                $planned_task->setStart($data["start"]);
                 $planned_task->save();
                 $response = $planned_task->toArray();
             }
