@@ -5,12 +5,15 @@
     <div class="checkbox"></div>
     <input type="checkbox" class="task_complete_checkbox" <% if (task.get('completion_date') != null) { %>checked="true"<% } %> />
 </span>&nbsp;
-<a href="javascript:void(0);" class="task_item_button delete" data-action="delete"><img src="/images/icons/cross.png"/></a>
+<a href="javascript:void(0);" class="task_item_button delete pure-button" data-action="delete"><img src="/images/icons/cross.png"/></a>
+<a class="share_button pure-button">Share</a>
 <span class="task_display">
     <span class="task_name"><%= task.get("name") %></span>
-    <span class="date">To do on <% if (time !== undefined) {%><%= time.getMonth() + 1 %>/<%= time.getDate() %>/<%= time.getFullYear() %><% } %></span>
+    <!--<span class="date">To do on <% if (time !== undefined) {%><%= time.getMonth() + 1 %>/<%= time.getDate() %>/<%= time.getFullYear() %><% } %></span>-->
+<span class="due_on"><% if (time !== undefined) {%><%= days[time.getDay()] %> (<%= time.getMonth() + 1 %>/<%= time.getDate() %>/<%= time.getFullYear() %>)<% } %></span>&nbsp;
 </span>
-<button class="share_button">Share</button>
+
+
 <span class="task_edition">
     <input type="text" class="task_edition_name_input"/>
     <input type="text" class="task_due_date_input"
@@ -18,4 +21,4 @@
     <button class="task_item_button" data-action="cancel">Cancel</button>
         <button class="task_item_button" data-action="save">Save</button>
 </span>
-<span style="clear:both"></span>
+<div style="clear:both"></div>

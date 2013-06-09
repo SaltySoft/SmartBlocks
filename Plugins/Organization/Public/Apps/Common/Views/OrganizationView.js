@@ -5,8 +5,9 @@ define([
     'text!Organization/Apps/Common/Templates/organization.html',
     'Organization/Apps/Calendar/Views/MainView',
     'Organization/Apps/Tasks/Views/MainView',
+    'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers'
-], function ($, _, Backbone, Template, CalendarView, WeekView, TaskUsersCollection) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, TaskUsersCollection) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -18,17 +19,22 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.render();
-            base.registereEvents();
+
             var Router = Backbone.Router.extend({
                 routes : {
                     "week" : "week",
-                    "month" : "month"
+                    "month" : "month",
+                    "daily": "daily"
                 },
                 week: function () {
                     base.launchWeek();
                 },
                 month: function () {
                     base.launchCalendar();
+                },
+                daily: function () {
+                    console.log("asdasd");
+                    base.launchPlanning();
                 }
             });
 
@@ -71,6 +77,15 @@ define([
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.week").addClass("selected");
             base.setContent(base.current_view.$el)
+        },
+        launchPlanning: function () {
+            var base = this;
+            base.current_view = new DailyView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.daily").addClass("selected");
+            base.setContent(base.current_view.$el);
+
         },
         checkForNotifications: function () {
             var base = this;

@@ -5,7 +5,7 @@ var sb_paths = {
     backbone: "/javascript/backbone",
     text: "/javascript/text",
     default: "/javascript/default",
-    jqueryui: "/javascript/jquery-ui-1.10.1.min",
+    jqueryui: "/javascript/jquery-ui-1.10.3.custom.min",
     jqueryflip:"/javascript/jquery.flip.min",
     SmartBlocks: "/javascript/SmartBlocks",
 

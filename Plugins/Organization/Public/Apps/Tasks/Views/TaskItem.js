@@ -11,9 +11,20 @@ define([
         initialize: function (model) {
             var base = this;
             base.model = model;
+
+            base.days = [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
+            ];
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, main_view) {
             var base = this;
+            base.main_view = main_view;
             base.SmartBlocks = SmartBlocks;
             base.render();
             base.initalizeEvents();
@@ -23,8 +34,7 @@ define([
         render: function () {
             var base = this;
             var due_date = base.model.getDueDate();
-            var today = new Date();
-            var template = _.template(TaskItemTemplate, { task: base.model, time: due_date, current_date: today });
+            var template = _.template(TaskItemTemplate, { task: base.model, time: due_date, current_date: base.model.getDueDate(), days: base.days });
             base.$el.html(template);
             if (base.model.get("completion_date") != null) {
                 base.$el.addClass("completed");
@@ -38,7 +48,10 @@ define([
             base.$el.delegate(".task_display", "click", function () {
                 var name_input = base.$el.find(".task_edition_name_input");
                 name_input.val(base.$el.find(".task_name").html());
+                base.$el.find(".task_due_date_input").datepicker({ dateFormat: 'yy-mm-dd' });
+
                 base.enterEditMode();
+
             });
 
             base.$el.delegate(".task_item_button", "click", function () {
@@ -54,6 +67,7 @@ define([
                     base.model.set("name", name_input.val());
                     console.log(base.model);
                     base.SmartBlocks.startLoading("Saving task");
+                    base.$el.find(".task_name").html(base.model.get("name"));
                     base.$el.find(".task_name").html(base.model.get("name"));
                     var due_date_str = base.$el.find(".task_due_date_input").val();
                     var due_date = new Date();
@@ -72,7 +86,7 @@ define([
                     base.model.save({}, {
                         success: function () {
                             base.SmartBlocks.stopLoading();
-                            base.render();
+                            base.main_view.render();
                         }
                     });
 
@@ -90,6 +104,8 @@ define([
                     }
                 }
             });
+
+
 
             base.$el.delegate(".checkbox", "click", function () {
                 var elt = base.$el.find(".task_complete_checkbox");
