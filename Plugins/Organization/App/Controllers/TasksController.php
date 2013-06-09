@@ -19,6 +19,13 @@ class TasksController extends \Controller
             ->setParameter("user", \User::current_user())
             ->orderBy("t.due_date");
 
+        $data = $this->getRequestData();
+        if (isset($data["date"])) {
+            $qb->andWhere("(t.due_date >= :start_date AND t.due_date <= :stop_date)")
+            ->setParameter("start_date", $data["date"] - + 60 * 60 * 24)
+            ->setParameter("stop_date", $data["date"] );
+        }
+
         $results = $qb->getQuery()->getResult();
 
         $this->render = false;

@@ -23,7 +23,7 @@ define([
             base.start.setMinutes(0);
             base.start.setSeconds(0);
             base.end = end;
-
+            console.log("END", end);
             base.DayPlanning = DayPlanning;
 
 
@@ -35,7 +35,9 @@ define([
         render: function () {
             var base = this;
 
-            var template = _.template(PlannedTaskTemplate, {});
+            var template = _.template(PlannedTaskTemplate, {
+                task : base.task
+            });
 
             base.$el.html(template);
 
@@ -44,7 +46,7 @@ define([
         updatePosition: function () {
             var base = this;
             base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.start)));
-
+            base.$el.css("height", Math.round(base.DayPlanning.getHourHeight() / 2) - 14);
 
         },
         registerEvents: function () {
@@ -53,8 +55,8 @@ define([
             base.$el.click(function () {
                 return false;
             });
-            base.$el.css("height", Math.round(base.DayPlanning.getHourHeight()));
-            base.$el.mousedown(function (e) {
+
+            base.$el.find(".handle").mousedown(function (e) {
                 $(document).disableSelection();
                 base.DayPlanning.$el.unbind("click.create_task");
                 base.moving = true;
@@ -64,15 +66,20 @@ define([
                 base.$el.parent().bind("mousemove.task", function (ee) {
 
                     var newY = base.$el.position().top + ee.pageY - base.mousePreviousY;
+                    console.log(newY);
                     if (newY > 0 && newY < base.DayPlanning.getHourHeight() * 24 - base.$el.height()) {
                         base.$el.css("top", newY);
-                    }
-                    if ( - base.$el.position().top > base.$el.parent().position().top - 100) {
-                        base.$el.parent().css("top", base.$el.parent().position().top - 20);
+                        base.mousePreviousY = ee.pageY;
+                        if ( - base.$el.position().top > base.$el.parent().position().top - 100) {
+                            base.$el.parent().css("top", base.$el.parent().position().top - 20);
+                            base.mousePreviousY = ee.pageY;
+                            base.mouse_delta = 0;
+                        }
                     }
 
-                    base.mousePreviousY = ee.pageY;
-                    base.mouse_delta = 0;
+
+
+
                 });
                 base.DayPlanning.$el.bind("mouseup.droptask", function () {
                     $(document).enableSelection();
@@ -89,6 +96,15 @@ define([
                     });
                     base.DayPlanning.$el.unbind("mouseup.droptask");
                 });
+            });
+
+            base.$el.resizable({
+                grid : base.DayPlanning.getHourHeight() / 2,
+                minWidth: 580,
+                maxWidth: 580,
+                resize: function(event, ui) {
+
+                }
             });
 
 

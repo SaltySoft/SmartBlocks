@@ -42,7 +42,7 @@ define([
             base.$el.find(".date").html("Today (" + monthNames[base.current_date.getMonth()] + " " +base.current_date.getDate()  + ")");
 
             base.tasks_list = new TasksListView();
-            base.tasks_list.init(base.SmartBlocks);
+            base.tasks_list.init(base.SmartBlocks, base);
 
             base.$el.find(".tasks_container").html(base.tasks_list.$el);
 
@@ -64,7 +64,7 @@ define([
                 base.dailyPlanning.update_on = false;
             base.dailyPlanning = new DailyPlanningView();
             base.$el.find(".daily_planning_container").html(base.dailyPlanning.$el);
-            base.dailyPlanning.init(base.SmartBlocks, base.current_date);
+            base.dailyPlanning.init(base.SmartBlocks, base.current_date, base);
         },
         registerEvents: function () {
             var base = this;

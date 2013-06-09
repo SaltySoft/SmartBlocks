@@ -10,10 +10,10 @@ define([
         initialize: function () {
 
         },
-        init: function (SmartBlocks, time) {
+        init: function (SmartBlocks, time, dayPlanning) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
+            base.dayPlanning = dayPlanning;
             base.time = time;
             base.render();
             base.registerEvents();
@@ -28,6 +28,14 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.droppable({
+                hoverClass: "ui-state-active",
+                drop: function( event, ui ) {
+                    var task = base.dayPlanning.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
+                    base.dayPlanning.createTask(task, base.time);
+                }
+            });
         }
     });
 

@@ -12,7 +12,7 @@ define([
             var base = this;
             base.update_on = true;
         },
-        init: function (SmartBlocks, date) {
+        init: function (SmartBlocks, date, planning) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
 
@@ -23,7 +23,7 @@ define([
             base.date.setMinutes(0);
             base.date.setSeconds(0);
             base.date.setMilliseconds(0);
-
+            base.planning = planning;
             base.render();
             base.registerEvents();
 
@@ -38,7 +38,7 @@ define([
                 var hour_holder = new HourView();
                 var time = new Date(last_time);
 
-                hour_holder.init(base.SmartBlocks, time);
+                hour_holder.init(base.SmartBlocks, time, base);
 
                 base.hours_holders.push(hour_holder);
                 base.$el.append(hour_holder.$el);
@@ -74,17 +74,18 @@ define([
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
             if (delta < 0) {
-                if (base.pos > -base.getHourHeight() * 24 + base.$el.parent().height())
+                if (base.pos - base.getHourHeight() > -base.getHourHeight() * 24 + base.$el.parent().height())
                     base.pos -= base.getHourHeight();
             } else {
-                if (base.pos <= -base.getHourHeight())
+                if (base.pos + base.getHourHeight() <= 0)
                     base.pos += base.getHourHeight();
             }
+
             base.$el.css("top", base.pos);
         },
         getHourHeight: function () {
             var base = this;
-            return base.$el.height() > 0 ? base.$el.height() / 24 : 27;
+            return base.$el.height() > 0 ? base.$el.height() / 24 : 40;
         },
         getStartPosition: function (date) {
             var base = this;
@@ -92,10 +93,14 @@ define([
             var minute = date.getMinutes();
             return base.$el.height() / (24 * 60) * (hour * 60 + minute);
         },
-        createTask: function () {
+        createTask: function (task, start) {
             var base = this;
-            var planned_task = new PlannedTaskView();
-            planned_task.init(base.SmartBlocks, base, new Date(), new Date().setHours(new Date().getHours + 2), undefined);
+            var date = start;
+            date.setHours(date.getHours() - 1);
+            var planned_task = new PlannedTaskView(task);
+            var stop = new Date(date);
+            stop.setMinutes(date.getMinutes() + 30)
+            planned_task.init(base.SmartBlocks, base, date, stop, task);
             base.$el.append(planned_task.$el);
         },
         registerEvents: function () {
@@ -113,17 +118,17 @@ define([
             base.updateCurrentTime();
             var now = new Date();
 
-            if (now.getHours() > 12) {
-                base.pos = -12 * (base.getHourHeight());
+//            if (now.getHours() > 12) {
+                base.pos = -9 * (base.getHourHeight());
                 base.$el.css("top", base.pos);
-            }
+//            }
 
-            /**
-             * Tests
-             */
-            base.$el.bind("click.create_task", function () {
-                base.createTask();
-            });
+//            /**
+//             * Tests
+//             */
+//            base.$el.bind("click.create_task", function () {
+//                base.createTask();
+//            });
         }
     });
 

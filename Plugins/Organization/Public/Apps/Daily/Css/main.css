@@ -38,7 +38,7 @@ input[type="text"].datepicker {
 /* PANES */
 .pane_container .pane {
     padding: 5px;
-    height: 496px;
+    height: 688px;
     width: 98%;
     margin: auto;
 }
@@ -66,7 +66,7 @@ input[type="text"].datepicker {
 }
 
 .hour_view {
-    height: 25px;
+    height: 48px;
     border-top: 2px #b3b3b3 solid;
 
 
@@ -84,8 +84,8 @@ input[type="text"].datepicker {
     float: left;
     font-size: larger;
     width: 30px;
+    height: 38px;
     text-align: center;
-    height: 100%;
     border-right: 1px black solid;
 
 }
@@ -97,12 +97,15 @@ input[type="text"].datepicker {
 .planned_task {
     position: absolute;
     padding: 5px;
-    background-color: #ca625a;
+    /*background-color: #ca625a;*/
     border: 2px #b31616 solid;
     border-radius : 5px;
-    width: 90%;
+    width: 580px;
     margin-left: 50px;
     z-index: 2;
+    color: white;
+    background: url(/css/hot-sneaks/images/ui-bg_diagonals-small_40_db4865_40x40.png);
+    font-size: 12px;
 }
 
 .line {
