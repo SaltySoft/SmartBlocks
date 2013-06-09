@@ -128,3 +128,13 @@ input[type="text"].datepicker {
     display: none;
     z-index: 3;
 }
+
+.handle {
+    position: absolute;
+    right: 10px;
+    top:10px;
+    height: 13px;
+    width: 11px;
+    background:  url(/css/hot-sneaks/images/ui-icons_454545_256x240.png) -130px -50px;
+    cursor:pointer;
+}
