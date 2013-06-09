@@ -6,8 +6,9 @@ define([
     'Organization/Apps/Tasks/Collections/Tasks',
     'text!Organization/Apps/Tasks/Templates/main_view.html',
     'Organization/Apps/Tasks/Views/TaskItem',
+    'Organization/Apps/Common/Views/TaskPopup',
     'jqueryui'
-], function ($, _, Backbone, Task, TasksCollection, MainViewTemplate, TaskItemView) {
+], function ($, _, Backbone, Task, TasksCollection, MainViewTemplate, TaskItemView, TaskPopupView) {
 
     function getWeekNumber(d) {
         // Copy date so don't modify original
@@ -59,21 +60,6 @@ define([
                     base.renderList();
                 }
             });
-////            base.$el.find(".tasks_list").sortable({
-////                handle: '.handle',
-////                stop: function () {
-////                    //handle order
-////                    var i = 0;
-////                    base.$el.find(".task_item").each(function () {
-////                        var elt = $(this);
-////                        var model = base.tasks_list.get(elt.attr("data-id"));
-////                        model.set("order_index", i++);
-////                        model.save();
-////                    });
-////                }
-////            });
-//            base.$el.find(".tasks_list").disableSelection();
-
         },
         renderList: function () {
             var base = this;
@@ -96,10 +82,10 @@ define([
                 if (getWeekNumber(task.getDueDate())[0] == getWeekNumber(base.current_date)[0] && getWeekNumber(task.getDueDate())[1] == getWeekNumber(base.current_date)[1])  {
                     if (date.getTime() != task.getDueDate().getTime()) {
                         date = task.getDueDate();
-                        list_container.append('<div class="task_separator"><h4>' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + "</h4></div>");
+//                        list_container.append('<div class="task_separator"><h4>' + date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + "</h4></div>");
                     }
                     var taskItemView = new TaskItemView(tasks_list[k]);
-                    taskItemView.init(base.SmartBlocks);
+                    taskItemView.init(base.SmartBlocks, base);
                     list_container.append(taskItemView.$el);
                 }
             }
@@ -116,8 +102,14 @@ define([
                         name: "New task",
                         due_date: new Date().getTime() / 1000
                     });
-                    base.tasks_list.add(task);
-                    base.renderList();
+                    console.log(TaskPopupView);
+                    var popup_view = new TaskPopupView(task);
+                    popup_view.events.on("task_updated", function (task) {
+                        base.render();
+                    });
+                    popup_view.init(base.SmartBlocks);
+//                    base.tasks_list.add(task);
+//                    base.renderList();
                 }
             });
 
