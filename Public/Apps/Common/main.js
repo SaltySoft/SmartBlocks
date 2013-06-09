@@ -38,8 +38,8 @@ $(document).ready(function () {
                 SmartBlocks.current_user = current_user;
                 ChatApp.initialize(websocket);
                 SmartBlocks.ChatApp = ChatApp;
-                FileSharingApp.initialize(SmartBlocks);
-                SmartBlocks.FileSharingApp = FileSharingApp;
+//                FileSharingApp.initialize(SmartBlocks);
+//                SmartBlocks.FileSharingApp = FileSharingApp;
                 SmartBlocks.NotifCenterApp = NotifCenterApp;
                 NotifCenterApp.initialize(SmartBlocks);
                 if (App)
