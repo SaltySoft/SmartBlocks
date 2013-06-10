@@ -34,7 +34,6 @@ define([
                     base.launchCalendar();
                 },
                 daily: function () {
-                    console.log("asdasd");
                     base.launchPlanning();
                 }
             });
