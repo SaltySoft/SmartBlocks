@@ -40,3 +40,4 @@ Router::connect(array("url" => "/set_locale/:locale", "controller" => "Pages", "
 Router::connect(array("url" => "/Files/get_file/#id", "controller" => "Files", "action" => "get_file"));
 
 Router::connect(array("url" => "Users/Connect/:username/:password", "controller" => "Users", "action" => "connect"));
+Router::connect(array("url" => "/landing", "controller" => "Pages", "action" => "landing_page"));

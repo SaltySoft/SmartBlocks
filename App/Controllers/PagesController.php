@@ -101,4 +101,9 @@ class PagesController extends Controller
         $this->flash("sup");
         $this->redirect("/contact");
     }
+
+    function landing_page($params = array())
+    {
+        $this->render_layout = false;
+    }
 }

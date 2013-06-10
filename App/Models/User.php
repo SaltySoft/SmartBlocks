@@ -61,6 +61,11 @@ class User extends UserBase
      */
     private $token;
 
+    /**
+     * @ManyToMany(targetEntity="Application")
+     */
+    private $authorized_apps;
+
 
     public function __construct()
     {
@@ -151,6 +156,17 @@ class User extends UserBase
         return $this->token;
     }
 
+    public function setAuthorizedApps($authorized_apps)
+    {
+        $this->authorized_apps = $authorized_apps;
+    }
+
+    public function getAuthorizedApps()
+    {
+        return $this->authorized_apps;
+    }
+
+
     public function toArray($load_sub = 1)
     {
         $jobs = array();
@@ -165,6 +181,13 @@ class User extends UserBase
             $groups[] = $group->toArray();
         }
 
+        $authorized_apps = array();
+
+        foreach ($this->authorized_apps as $app)
+        {
+            $authorized_apps[] = $app->toArray();
+        }
+
         $array = array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
@@ -172,7 +195,8 @@ class User extends UserBase
             "username" => $this->getName(),
             "jobs" => $jobs,
             "groups" => $groups,
-            "session_id" => $this->getSessionId()
+            "session_id" => $this->getSessionId(),
+            "authorized_apps" => $authorized_apps
         );
 
         if ($load_sub == 1)

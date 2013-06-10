@@ -94,7 +94,15 @@ class UsersController extends Controller
             }
         }
 
-        $this->redirect("/");
+        if (isset($_POST["redirect"]))
+        {
+            $this->redirect($_POST["redirect"]);
+        }
+        else
+        {
+            $this->redirect("/");
+        }
+
     }
 
     function logout($params = array())

@@ -6,8 +6,9 @@ define([
     'Organization/Apps/Calendar/Views/MainView',
     'Organization/Apps/Tasks/Views/MainView',
     'Organization/Apps/Daily/Views/MainView',
-    'Organization/Apps/Common/Collections/TaskUsers'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, TaskUsersCollection) {
+    'Organization/Apps/Common/Collections/TaskUsers',
+    'Apps/Common/Useful/External'
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, TaskUsersCollection, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
