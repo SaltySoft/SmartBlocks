@@ -52,7 +52,7 @@ define([
                 en:{
                     month_names:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                     month_names_short:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                    day_names:['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                    day_names:['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
                 }
             };
             //Init notes collections
@@ -61,6 +61,7 @@ define([
             base.actualDate = new Date();
 
             base.render(true);
+            base.initializeEvents();
         },
         loadProjects:function () {
             var base = this;
@@ -118,7 +119,6 @@ define([
                 });
                 base.$el.html(workingTimeTemplate);
                 base.project_deleted = false;
-                base.initializeEvents();
             }
         },
         initializeEvents:function () {
@@ -145,11 +145,48 @@ define([
             base.$el.delegate(".manage_projects_viewer_button", "click", function () {
                 var elt = $(this);
                 var content = base.$el.find(".manage_projects_content");
-                if (content.css("display") == "none")
+                if (content.css("display") == "none") {
+                    base.$el.find(".manage_projects_viewer_button").html("Manage the projects you are working on (hide ↑)");
                     content.show();
-                else
+                }
+                else {
+                    base.$el.find(".manage_projects_viewer_button").html("Manage the projects you are working on (show ↓)");
                     content.hide();
+                }
             });
+
+            base.$el.delegate(".wh_project .project_button", "click", function () {
+                var elt = $(this);
+                var action = elt.attr("data-action");
+                var wh_project = elt.closest(".wh_project");
+                var project = base.projects_collection.get(wh_project.attr("data-pid"));
+//                var name = project.find(".name_display_text").html();
+
+                if (action == "edit") {
+                    wh_project.find(".project_name_input").val(project.get("name"));
+                    wh_project.addClass("edition");
+                }
+                if (action == "cancel") {
+                    wh_project.removeClass("edition");
+                }
+                if (action == "save") {
+                    project.set("name", wh_project.find(".project_name_input").val());
+                    project.save({}, {
+                        success:function () {
+                            base.render(true);
+                        }
+                    });
+
+                    wh_project.find(".name_display_text").html(project.get("name"));
+                    wh_project.removeClass("edition");
+                }
+                if (action == "delete") {
+                    if (confirm("Do you want to delete this project ?")) {
+                        project.destroy();
+                    }
+                }
+            });
+
 
             base.$el.delegate(".hours_display_td", "click", function () {
                 console.log("hours_display click");
@@ -226,6 +263,7 @@ define([
                     }
                     console.log("working_duration", working_duration);
                     if (working_duration !== undefined) {
+                        console.log("working_duration.save", working_duration);
                         working_duration.save({
                             success:function () {
                                 console.log("success working_duration save");
@@ -233,7 +271,8 @@ define([
                             error:function () {
                                 console.log("error working_duration save");
                             }
-                        })
+                        });
+                        base.render(true);
                     }
                 }
             });

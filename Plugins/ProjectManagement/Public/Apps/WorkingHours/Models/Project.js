@@ -12,23 +12,25 @@ define([
         },
         parse:function (response) {
             //Attach working_duration
-            var working_durations_array = response.working_durations;
-            var working_durations_collection = new WorkingDurationsCollection();
-            for (var k in working_durations_array) {
-                var working_duration = new WorkingDuration(working_durations_array[k]);
-                working_durations_collection.add(working_duration);
+            if (response.working_durations !== undefined) {
+                var working_durations_array = response.working_durations;
+                var working_durations_collection = new WorkingDurationsCollection();
+                for (var k in working_durations_array) {
+                    var working_duration = new WorkingDuration(working_durations_array[k]);
+                    working_durations_collection.add(working_duration);
+                }
+                response.working_durations = working_durations_collection;
             }
-            response.working_durations = working_durations_collection;
-
-            //Attach users
-            var users_array = response.users;
-            var users_collection = new UsersCollection();
-            for (var k in users_array) {
-                var user = new User(users_array[k]);
-                users_collection.add(user);
+            if (response.users !== undefined) {
+                //Attach users
+                var users_array = response.users;
+                var users_collection = new UsersCollection();
+                for (var k in users_array) {
+                    var user = new User(users_array[k]);
+                    users_collection.add(user);
+                }
+                response.users = users_collection;
             }
-            response.users = users_collection;
-
             return response;
         },
         getWorkingDurationIdAtDate:function (project, date) {
@@ -57,20 +59,10 @@ define([
         },
         getWorkingDurationHoursAtDate:function (project, date) {
             var base = project;
-//            console.log("getWorkingDurationHoursAtDate", date);
-//            console.log("getWorkingDurationHoursAtDate getTime", date.getTime());
             var wd_hours = 0;
             _.each(base.get("working_durations").models, function (k) {
                 var wd_date = new Date();
                 wd_date.setTime(k.get("date") * 1000);
-//                console.log("-------------")
-//                console.log("wd_date full year", wd_date.getFullYear());
-//                console.log("wd_date month", wd_date.getMonth());
-//                console.log("wd_date date", wd_date.getDate());
-//                console.log("date year", date.getFullYear());
-//                console.log("date month", date.getMonth());
-//                console.log("date date", date.getDate());
-//                console.log("-------------")
                 if (wd_date.getFullYear() == date.getFullYear()
                     && wd_date.getMonth() == date.getMonth()
                     && wd_date.getDate() == date.getDate()) {
