@@ -1,0 +1,139 @@
+<div class="manage_projects_container" >
+    <a class="manage_projects_viewer_button wtButton orange" href="javascript:void(0);" >
+        Manage the projects you are working on (hide ↑)
+    </a >
+
+    <div class="manage_projects_content" >
+        <a class="add_project wtButton blue" >
+            Add project
+        </a >
+        <% _.each(projects, function (project) {%>
+        <div class="wh_project" data-pid="<%= project.get('id') %>">
+        <span class="project_display">
+            <span class="name_display_text"><%= project.get('name') %></span>
+            <a href="javascript:void(0);" class="project_button" data-action="edit"><img src="/images/icons/pencil.png"/></a>
+        </span>
+        <span class="project_edition">
+            <input type="text" class="project_name_input" />
+            <button class="project_button" data-action="save">Save</button>
+                <button class="project_button" data-action="cancel">Cancel</button>
+            <button class="project_button" data-action="delete">Delete</button>
+        </span>
+        </div>
+        <% });%>
+    </div >
+</div >
+<div class="add_working_hours_container" >
+    <table >
+        <div class="week_info_container" >
+            <a class="change_week_less weekCalendarButton blue" href="javascript:void(0);" >
+                ◄
+            </a >
+            <span class="week_info_string" >
+            Week <%= week_number %> from <%= monday.getDayName() %> <%= monday.getDate() %> <%= monday.getMonthName() %>
+            to <%= sunday.getDayName() %> <%= sunday.getDate() %> <%= sunday.getMonthName() %> <%= sunday.getFullYear() %>
+            </span >
+            <a class="change_week_more weekCalendarButton blue" href="javascript:void(0);" >
+                ►
+            </a >
+        </div >
+        <caption > Here you can declare the time you spent on each project :</caption >
+
+        <thead >
+        <tr >
+            <th scope="col" rowspan="2" >Projects</th >
+            <th scope="col" colspan="7" >Week <%= week_number %></th >
+        </tr >
+
+        <tr >
+            <th scope="col" >Monday</th >
+            <th scope="col" >Tuesday</th >
+            <th scope="col" >Wednesday</th >
+            <th scope="col" >Thursday</th >
+            <th scope="col" >Friday</th >
+            <th scope="col" >Saturday</th >
+            <th scope="col" >Sunday</th >
+        </tr >
+        </thead >
+
+        <tfoot >
+        <tr >
+            <th scope="row" >Total</th >
+            <td >0</td >
+            <td >0</td >
+            <td >0</td >
+            <td >0</td >
+            <td >0</td >
+            <td >0</td >
+            <td >0</td >
+        </tr >
+        </tfoot >
+
+        <tbody >
+        <% _.each(projects, function (project) {%>
+        <tr >
+            <th scope="row" >
+                <span class="display" >
+                <%= project.get('name') %>
+            </span >
+            </th >
+
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, monday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= monday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, tuesday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= tuesday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, wednesday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= wednesday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, thursday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= thursday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, friday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= friday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, saturday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= saturday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+            <td class="hours_display_td" >
+                <span class="hours_display" href="javascript:void(0);" ><%= project.getWorkingDurationHoursAtDate(project, sunday) %></span >
+                <span class="hours_edition" href="javascript:void(0);" >
+                <input type="text" class="hours_input" data-date="<%= sunday.getTime() %> "
+                       data-pid="<%= project.get('id') %>" >
+                </span >
+            </td >
+        </tr >
+        <% });%>
+        </tbody >
+
+    </table >
+    <a class="save_working_hours_button wtButton green" href="javascript:void(0);" >
+        Save
+    </a >
+
+</div >

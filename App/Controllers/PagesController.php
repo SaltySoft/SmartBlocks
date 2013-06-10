@@ -21,8 +21,7 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-require_once (ROOT.DS."Config".DS."database.php");
-require_once(ROOT.DS."App".DS."BusinessManagement".DS."SmartBlocks.php");
+require_once (ROOT . DS . "Config" . DS . "database.php");
 class PagesController extends Controller
 {
     public function security_check()
@@ -47,11 +46,13 @@ class PagesController extends Controller
         $this->security_check();
 
         $db_config = new DbConfig;
-        $dsn='mysql:host='.$db_config->dev["host"].';port=3306;dbname='.$db_config->dev["database"].'';
+        $dsn = 'mysql:host=' . $db_config->dev["host"] . ';port=3306;dbname=' . $db_config->dev["database"] . '';
         $this->set("database_status", true);
-        try {
+        try
+        {
             $dbh = new PDO($dsn, $db_config->dev["user"], $db_config->dev["password"]);
-        } catch (PDOException $exception) {
+        } catch (PDOException $exception)
+        {
             $this->set("database_status", false);
         }
 

@@ -1,0 +1,8 @@
+{
+    "name":"WorkingHours",
+    "token":"workingHours",
+    "description":"This app allows staff to measure their working time.",
+    "link":"/ProjectManagement/WorkingHours/app",
+    "logo_url":"/ProjectManagement/Apps/WorkingHours/Resources/logoWorkingHours.png",
+    "block_token":"projectManagement"
+}

@@ -1,0 +1,171 @@
+.manage_projects_container {
+    padding: 10px;
+}
+
+.add_working_hours_container {
+    padding: 10px;
+    margin: 10px;
+    background-color: #ddd6ff;
+    display: inline-table;
+}
+
+.wtButton {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.wtButton:hover {
+    text-decoration: none;
+}
+
+.wtButton:active {
+    position: relative;
+    top: 1px;
+}
+
+.weekCalendarButton {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    font: 14px/100% Arial, Helvetica, sans-serif;
+    padding: .3em 0.6em 0.45em;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+    -webkit-border-radius: 1em;
+    -moz-border-radius: 1em;
+    border-radius: 1em;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+.weekCalendarButton:hover {
+    text-decoration: none;
+}
+
+.weekCalendarButton:active {
+    position: relative;
+    top: 1px;
+}
+
+.add_project {
+    margin: 5px;
+}
+
+.manage_projects_content {
+    margin: 5px 5px 5px 0px;
+    display: block;
+    background-color: #ddd6ff;
+}
+
+.manage_projects_content.project {
+}
+
+.manage_projects_content.project.normal .display {
+    display: inline;
+}
+
+.manage_projects_content.project.edited .display {
+    display: none;
+}
+
+.add_working_hours_container.project {
+    display: inline-block;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    font: 18px/100% Arial, Helvetica, sans-serif;
+    padding: .5em 2em .55em;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+    -webkit-border-radius: .2em;
+    -moz-border-radius: .2em;
+    border-radius: .2em;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+
+tbody tr td.editing {
+    background: #ffffff;
+    padding: 0px;
+    height: 25px;
+}
+
+.hours_edition {
+    display: none;
+    height: 100%;
+}
+
+input[type=text].hours_input {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    border-radius: 0px;
+    border: none;
+    text-align: center;
+}
+
+.week_info_container {
+    min-width: 60%;
+    max-width: 70%;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.change_week_less {
+    float: left;
+}
+
+.change_week_more {
+    float: right;
+}
+
+.week_info_string {
+    font-size: 18px;
+    line-height: 25px;
+}
+
+.display_input {
+    display: none;
+}
+
+.wh_project {
+    height: 30px;
+    line-height: 30px;
+}
+
+.wh_project .project_edition {
+    display: none;
+}
+
+.wh_project .project_display {
+    font-size: 20px;
+}
+
+.wh_project.edition .project_edition {
+    display: block;
+}
+
+.wh_project.edition .project_display {
+    display: none;
+}
+
+.wh_project.edition .project_edition input {
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+}
