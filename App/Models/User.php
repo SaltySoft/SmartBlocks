@@ -87,6 +87,7 @@ class User extends UserBase
         $this->token = "";
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -246,11 +247,14 @@ class User extends UserBase
             "groups" => $groups,
             "session_id" => $this->getSessionId(),
             "authorized_apps" => $authorized_apps,
-            "contacts" => $contacts
+
         );
+
+
 
         if ($load_sub == 1)
         {
+            $array["contacts"] = $contacts;
             $array["jobs"] = $jobs;
             $array["groups"] = $groups;
         }

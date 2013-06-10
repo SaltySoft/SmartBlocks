@@ -5,8 +5,10 @@ define([
     'text!Apps/Socials/Apps/Me/Templates/me.html',
     'Apps/Socials/Apps/Me/Views/ContactList',
     'UserModel',
-    'UsersCollection'
-], function ($, _, Backbone, MeTemplate, ContactListView, User, UsersCollection) {
+    'UsersCollection',
+    'Apps/Socials/Apps/Me/Views/UserSearch',
+    'Apps/Socials/Apps/Me/Views/ContactRequestsList'
+], function ($, _, Backbone, MeTemplate, ContactListView, User, UsersCollection, UserSearchView, ContactRequestsList) {
     var MeView = Backbone.View.extend({
         tagName: "div",
         className: "me_view_app",
@@ -42,23 +44,20 @@ define([
                 model: base.user
             });
             list.init(base.SmartBlocks);
-
             base.$el.find(".contact_list_container").html(list.$el);
-        },
-        launchSearch: function (username) {
-            var base = this;
+
+
+            var user_search = new UserSearchView();
+            user_search.init(base.SmartBlocks);
+            base.$el.find(".user_search_container").html(user_search.$el);
+
+            var contact_request_list = new ContactRequestsList();
+            contact_request_list.init(base.SmartBlocks);
+            base.$el.find(".contact_requests_list_container").html(contact_request_list.$el);
         },
         registerEvents: function () {
             var base = this;
-            var search_timer = 0;
-            base.$el.delegate(".user_finder_input", "keyup", function () {
-                var elt = $(this);
-                clearTimeout(search_timer);
 
-                setTimeout(function () {
-                    base.launchSearch(elt.val());
-                }, 500);
-            });
         }
     });
 

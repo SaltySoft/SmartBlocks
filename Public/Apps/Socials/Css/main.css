@@ -128,3 +128,20 @@ h3 {
     background: #00cc00;
 }
 
+.accept, .decline {
+    display: none;
+    position: absolute;
+    top: 0px;
+    right: 20px;
+}
+
+.accept {
+    right: 35px;
+}
+
+.add_button {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

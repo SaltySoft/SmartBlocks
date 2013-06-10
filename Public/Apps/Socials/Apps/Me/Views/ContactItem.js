@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Apps/Socials/Apps/Me/Templates/contact_item.html'
-], function ($, _, Backbone, ContactItem) {
+    'text!Apps/Socials/Apps/Me/Templates/contact_item.html',
+    'Apps/Socials/Models/ContactRequest'
+], function ($, _, Backbone, ContactItem, ContactRequest) {
     var ContactListItemView = Backbone.View.extend({
         tagName: "li",
         className: "contact_list_item",
@@ -28,32 +29,75 @@ define([
             });
 
             base.$el.html(template);
-
+            if (base.request && typeof base.request != "boolean") {
+                base.$el.find(".accept").show();
+                base.$el.find(".decline").show();
+            }
+            if (base.request && typeof base.request == "boolean") {
+                base.$el.find(".add_button").show();
+            }
         },
         registerEvents: function () {
             var base = this;
-            if (base.SmartBlocks.connected_users.get(base.user.get("id")))
-            {
+            if (base.SmartBlocks.connected_users.get(base.user.get("id"))) {
                 base.$el.find(".online").addClass("true");
             }
 
             base.SmartBlocks.connected_users.on("change", function () {
-                if (base.SmartBlocks.connected_users.get(base.user.get("id")))
-                {
+                if (base.SmartBlocks.connected_users.get(base.user.get("id"))) {
                     base.$el.find(".online").addClass("true");
                 }
-                else
-                {
+                else {
                     base.$el.find(".online").removeClass("true");
                 }
             });
 
             if (base.request) {
-                base.$el.delegate(".add_button", "click", function () {
+                if (typeof base.request == "boolean") {
+                    base.$el.delegate(".add_button", "click", function () {
+                        var contact_request = new ContactRequest();
 
-//                    base.SmartBlocks.current_user
-                });
+                        contact_request.set("sender", base.SmartBlocks.current_user);
+                        contact_request.set("target", base.user);
+                        contact_request.save({}, {
+                            success: function (model, response) {
+                                if (response.error !== true)
+                                    base.SmartBlocks.show_message("The request was successfully sent.");
+                                else
+                                    base.SmartBlocks.show_message(response.message);
+                            }
+                        });
+                    });
+                }
+                else {
+
+                    base.$el.delegate(".accept", "click", function () {
+                        var contact_request = base.request;
+                        var contacts = base.SmartBlocks.current_user.get("contacts");
+                        contacts.push(contact_request.get("sender"));
+                        base.SmartBlocks.current_user.set("contacts", contacts);
+                        console.log("ADDED CONTACT", base.SmartBlocks.current_user);
+                        base.SmartBlocks.current_user.save({}, {
+                            success: function () {
+                                base.request.destroy({
+                                    success: function () {
+                                        base.$el.remove();
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    base.$el.delegate(".decline", "click", function () {
+                        base.request.destroy({
+                            success: function () {
+                                base.$el.remove();
+                            }
+                        });
+                    });
+                }
             }
+
+
         }
     });
 

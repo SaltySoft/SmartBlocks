@@ -25,10 +25,11 @@ class UsersController extends Controller
 {
     private function security_check($user = null)
     {
-        if (!User::logged_in() || !(User::current_user()->is_admin() || User::current_user() == $user))
+        if (!User::logged_in() || !User::current_user()->is_admin() && User::current_user() != $user)
         {
             $this->redirect("/Users/user_error");
         }
+
     }
 
     private function interface_security_check($user = null)
@@ -205,13 +206,13 @@ class UsersController extends Controller
      */
     function update($params = array())
     {
-        $this->security_check();
+
         $this->render = false;
         header("Content-Type: application/json");
         $user = User::find($params["id"]);
+        $this->security_check($user);
         if (is_object($user))
         {
-            $this->security_check();
             $data = $this->getRequestData();
             //Direct data update
             $user->setName(isset($data["username"]) ? $data["username"] : $user->getName());
@@ -239,6 +240,19 @@ class UsersController extends Controller
                     $user->addGroup($group);
                 }
             }
+
+            if (isset($data["contacts"])) {
+                $user->getContacts()->clear();
+                foreach ($data["contacts"] as $contact_array)
+                {
+                    $contact = User::find($contact_array["id"]);
+                    if (is_object($contact) && !$user->getContacts()->contains($contact))
+                    {
+                        $user->getContacts()->add($contact);
+                    }
+                }
+            }
+
             //Saving data to db
             $user->save();
             $response = $user->toArray();
@@ -246,7 +260,7 @@ class UsersController extends Controller
         }
         else
         {
-            $this->redirect("/Users/user_error");
+//            $this->redirect("/Users/user_error");
         }
     }
 

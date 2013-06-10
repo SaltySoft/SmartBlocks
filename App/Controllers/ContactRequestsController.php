@@ -19,7 +19,7 @@ class ContactRequestsController extends \Controller
             ->where("cr.target = :user")
             ->setParameter("user", \User::current_user());
 
-        $results =  $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getResult();
         $response = array();
 
         foreach ($results as $cr)
@@ -52,14 +52,32 @@ class ContactRequestsController extends \Controller
         $sender = User::find($data["sender"]["id"]);
         $target = User::find($data["target"]["id"]);
 
+
         if (is_object($sender) && is_object($target))
         {
-            $contact_request->setSender($sender);
-            $contact_request->setTarget($target);
+            $em = \Model::getEntityManager();
 
-            $contact_request->save();
+            $qb = $em->createQueryBuilder();
 
-            $this->return_json($contact_request);
+            $qb->select("COUNT(cr)")
+                ->from("ContactRequest", "cr")
+                ->where("(cr.target = :target AND cr.sender = :sender) OR (cr.sender = :target AND cr.sender = :target)")
+                ->setParameter("sender", $sender)
+                ->setParameter("target", $target);
+
+            if ($qb->getQuery()->getSingleScalarResult() == 0)
+            {
+                $contact_request->setSender($sender);
+                $contact_request->setTarget($target);
+
+                $contact_request->save();
+
+                $this->return_json($contact_request);
+            }
+            else
+            {
+                $this->json_error("A request between you two has already been issued.");
+            }
         }
         else
         {
