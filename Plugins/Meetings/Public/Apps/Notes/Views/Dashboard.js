@@ -15,29 +15,37 @@ define([
             className: "ent_notes_dashboard",
             events: {
             },
-            initialize: function (SmartBlocks) {
+            initialize: function () {
                 var base = this;
-                base.SmartBlocks = SmartBlocks;
             },
-            init: function (AppEvents) {
+            init: function (SmartBlocks, AppEvents) {
                 var base = this;
                 this.AppEvents = AppEvents;
-
+                base.SmartBlocks = SmartBlocks;
                 //Init templates
                 var template = _.template(MainTemplate, {});
                 base.$el.html(template);
 
-                var panel_template = _.template(PanelTemplate, {});
-                base.$el.find(".quick_control_panel_container").html(panel_template);
+//                var panel_template = _.template(PanelTemplate, {});
+//                base.$el.find(".quick_control_panel_container").html(panel_template);
 
                 //Init notes collections
                 base.notes_list = new NotesCollection();
 
-                base.render();
+                base.render(function () {
+                    var elt = base.$el.find(".dashboard_note")[0];
+                    if (elt !== undefined) {
+                        elt  = $(elt);
+                        var id = elt.attr("data-id");
+                        base.renderEditNote(id, elt);
+                    }
+                });
+
+
             },
-            render: function () {
+            render: function (callback) {
                 var base = this;
-                base.renderAll();
+                base.renderAll(true, callback);
                 base.initializeEvents();
             },
             renderInterface: function () {
@@ -48,9 +56,10 @@ define([
                 });
                 base.$el.find(".notes_container").html(base.templateAllNotes);
             },
-            renderAll: function (refetch) {
+            renderAll: function (refetch, callback) {
                 var base = this;
                 if (refetch === undefined || refetch) {
+                    base.SmartBlocks.startLoading("Loading notes list...");
                     base.notes_list.fetch({
                         data: {
                             all: "true",
@@ -58,6 +67,10 @@ define([
                         },
                         success: function () {
                             base.renderInterface();
+                            base.SmartBlocks.stopLoading();
+                            if (callback !==undefined) {
+                                callback();
+                            }
                         }
                     });
                 }
@@ -118,7 +131,10 @@ define([
                     var elt = $(this);
                     if (!base.deleted) {
                         var id = elt.attr("data-id");
-                        base.renderEditNote(id, elt);
+                        if (id !== undefined) {
+                            base.renderEditNote(id, elt);
+                        }
+
                     }
 
                 });
@@ -195,7 +211,6 @@ define([
                 });
 
                 base.SmartBlocks.events.on("ws_notification", function (message) {
-                    console.log(message);
                     if (message.app == "ent_notes") {
                         if (message.sender != base.SmartBlocks.current_user.get("session_id")) {
                             if (message.command == "refetch_notes") {

@@ -44,6 +44,11 @@ class Task extends \Model
     private $owner;
 
     /**
+     * @OneToMany(targetEntity="\Organization\TaskUser", mappedBy="task")
+     */
+    private $linked_users;
+
+    /**
      * @Column(type="integer")
      */
     private $creation_date;
@@ -52,6 +57,11 @@ class Task extends \Model
      * @Column(type="integer", nullable=true)
      */
     private $completion_date;
+
+    /**
+     * @Column(type="integer", nullable=true)
+     */
+    private $due_date;
 
     /**
      * @Column(type="integer")
@@ -64,6 +74,7 @@ class Task extends \Model
         $this->name = "New task";
         $this->creation_date = time();
         $this->order_index = self::count() + 1;
+        $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -121,16 +132,50 @@ class Task extends \Model
         return $this->order_index;
     }
 
-    public function toArray()
+    public function setDueDate($due_date)
     {
+        $this->due_date = $due_date;
+    }
+
+    public function getDueDate()
+    {
+        return $this->due_date;
+    }
+
+    public function setLinkedUsers($linked_users)
+    {
+        $this->linked_users = $linked_users;
+    }
+
+    public function getLinkedUsers()
+    {
+        return $this->linked_users;
+    }
+
+    public function toArray($show_task_users = true)
+    {
+
+
+
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
             "owner" => $this->owner->toArray(),
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
-            "order_index" => $this->order_index
+            "order_index" => $this->order_index,
+            "due_date" => $this->due_date
         );
+
+        if ($show_task_users)
+        {
+            $linked_users = array();
+            foreach ($this->linked_users as $task_user)
+            {
+                $linked_users[] = $task_user->toArray(false);
+            }
+            $array["task_users"] = $linked_users;
+        }
         return $array;
     }
 }

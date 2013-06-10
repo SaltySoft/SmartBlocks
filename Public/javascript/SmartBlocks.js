@@ -19,6 +19,15 @@ define([
                     elt.show(200);
                 }
             });
+
+            $("body").delegate(".notif_button", "click", function () {
+                var elt = $("#notification_center_container");
+                if (elt.is(":visible")) {
+                    elt.hide(200);
+                } else {
+                    elt.show(200);
+                }
+            });
         },
         show_message: function (message) {
             clearTimeout(this.timer);

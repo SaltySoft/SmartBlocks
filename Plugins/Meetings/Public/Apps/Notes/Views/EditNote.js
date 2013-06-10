@@ -28,11 +28,13 @@ define([
             base.note = new Note({ id: note_id });
 
             //show some loading here
+            base.SmartBlocks.startLoading("Loading note content...");
             base.note.fetch({
                 success: function () {
                     base.caller_button.find(".display").html(base.note.get("title"));
                     base.id = base.note.get("id");
                     base.render();
+                    base.SmartBlocks.stopLoading();
                 }
             });
         },

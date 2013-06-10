@@ -24,8 +24,8 @@ define([
         var AppEvents = _.extend({}, Backbone.Events);
         var app_router = new AppRouter();
 
-        var dashboard = new DashboardView(base.SmartBlocks);
-        dashboard.init(AppEvents);
+        var dashboard = new DashboardView();
+        dashboard.init(base.SmartBlocks, AppEvents);
 
         $("#app_container").html(dashboard.$el);
 

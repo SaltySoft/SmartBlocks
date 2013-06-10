@@ -1,5 +1,5 @@
 .ent_notes_dashboard {
-    width: 1000px;
+    width: 1100px;
     margin: auto;
 }
 
@@ -8,7 +8,7 @@
     margin: 0px;
     padding: 0px;
     background-color: #eff2f6;
-    border-bottom: 1px #1f70b8 solid;
+    border-bottom: 10px #1f70b8 solid;
 }
 
 .quick_control_panel_container li {
@@ -52,6 +52,8 @@
     font-weight: 100;
     cursor: pointer;
     border-bottom: 1px #bebebe solid;
+    width: 176px;
+    margin-bottom: 5px;
 }
 
 .dashboard_note:hover {
@@ -133,14 +135,13 @@
 }
 
 .ent_notes_edition {
-    background-color: rgba(2, 64, 83, 0.30);
+    /*background-color: rgba(2, 64, 83, 0.30);*/
     left: 200px;
     position: absolute;
     right: 0px;
-    padding: 5px;
     bottom: 0px;
     top: 0px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .content_container {
@@ -150,19 +151,22 @@
 
 .notes_container {
     float: left;
-    background-color: rgba(28, 119, 131, 0.45);
+    /*background-color: rgba(28, 119, 131, 0.45);*/
     padding: 0px;
     width: 200px;
     height: 700px;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .notes_container ul {
-    margin: 5px;
+    /*margin: 5px;*/
+    width: 176px;
 }
 
 .ent_subnote_edition {
     float: left;
+    margin: 5px;
+    box-shadow: 0px 0px 10px grey;
 }
 
 .ent_subnote_edition .pencil {
@@ -184,11 +188,11 @@
 }
 
 .ent_subnote_edition.fullsize {
-    width: 100%;
+    width: 97%;
 }
 
 .ent_subnote_edition.halfsize {
-    width: 50%;
+    width: 48%;
 }
 
 .ent_subnote_edition iframe {
@@ -197,6 +201,7 @@
 
 .subnote_container {
     padding: 10px;
+    background: #fae393;
 }
 
 .editNote_add_subnote_button {
@@ -291,8 +296,8 @@
     float: right;
 }
 
-.ent_note_title .title_display {
-
+.ent_note_title {
+    margin-top: 5px;
 }
 
 .ent_note_title .title_edition {
@@ -309,7 +314,23 @@
 
 .ent_note_title.edition .title_edition input{
     width: 200px;
-    height: 40px;
-    line-height: 40px;
+    height: 33px;
+    line-height: 33px;
 }
 
+.create_note_button_container {
+    background: url("/images/icons/add.png") no-repeat 10px center;
+    text-align: align;
+    padding-left: 50px;
+    height: 30px;
+    line-height: 30px;
+    font-size: large;
+}
+
+.create_note_button_container a {
+    color: gray;
+    text-decoration: none;
+}
+.create_note_button_container a:hover {
+    color: black;
+}

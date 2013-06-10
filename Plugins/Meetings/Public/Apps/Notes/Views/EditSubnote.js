@@ -29,7 +29,7 @@ define([
             console.log(base.user_sessions);
 
             base.text_editor = new TextEditorView();
-            base.text_editor.init(subnote.get("content"), 75);
+            base.text_editor.init(subnote.get("content"), 200);
             base.buffer = [];
             base.render();
         },

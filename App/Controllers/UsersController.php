@@ -83,6 +83,7 @@ class UsersController extends Controller
 
     function login($params = array())
     {
+
         if (isset($_POST["name"]) && isset($_POST["password"]))
         {
             $users = User::where(array("name" => $_POST["name"], "hash" => sha1($_POST["password"])));
@@ -108,7 +109,7 @@ class UsersController extends Controller
 
     function login_form()
     {
-
+        $this->setLayout("login_layout");
     }
 
     public function show($params = array())

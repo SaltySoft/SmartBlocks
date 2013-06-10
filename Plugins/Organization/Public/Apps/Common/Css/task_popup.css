@@ -1,0 +1,25 @@
+.task_popup {
+    width: 250px;
+    background-color: white;
+    box-shadow: 0px 0px 5px black;
+    padding: 20px;
+    position: relative;
+    margin:auto;
+    top: 50px;
+    text-align: center;
+}
+
+.task_popup > div {
+    /*margin: 20px 20px 0px 0;*/
+    margin-top: 20px;
+}
+
+.task_popup > div input {
+    margin-bottom: 20px;
+}
+
+.task_popup_close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}

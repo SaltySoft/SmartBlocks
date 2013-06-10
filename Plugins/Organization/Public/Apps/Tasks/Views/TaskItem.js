@@ -2,17 +2,29 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Tasks/Templates/task_item.html'
-], function ($, _, Backbone, TaskItemTemplate) {
+    'text!Organization/Apps/Tasks/Templates/task_item.html',
+    'Organization/Apps/Common/Views/ShareWindow'
+], function ($, _, Backbone, TaskItemTemplate, ShareWindow) {
     var TaskItemView = Backbone.View.extend({
         tagName: "li",
         className: "task_item normal",
         initialize: function (model) {
             var base = this;
             base.model = model;
+
+            base.days = [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday'
+            ];
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, main_view) {
             var base = this;
+            base.main_view = main_view;
             base.SmartBlocks = SmartBlocks;
             base.render();
             base.initalizeEvents();
@@ -21,8 +33,8 @@ define([
         },
         render: function () {
             var base = this;
-            var creation = base.model.get("creation_date");
-            var template = _.template(TaskItemTemplate, { task:  base.model, time: creation !== undefined ?  new Date(creation * 1000) : undefined });
+            var due_date = base.model.getDueDate();
+            var template = _.template(TaskItemTemplate, { task: base.model, time: due_date, current_date: base.model.getDueDate(), days: base.days });
             base.$el.html(template);
             if (base.model.get("completion_date") != null) {
                 base.$el.addClass("completed");
@@ -36,7 +48,10 @@ define([
             base.$el.delegate(".task_display", "click", function () {
                 var name_input = base.$el.find(".task_edition_name_input");
                 name_input.val(base.$el.find(".task_name").html());
+                base.$el.find(".task_due_date_input").datepicker({ dateFormat: 'yy-mm-dd' });
+
                 base.enterEditMode();
+
             });
 
             base.$el.delegate(".task_item_button", "click", function () {
@@ -52,13 +67,30 @@ define([
                     base.model.set("name", name_input.val());
                     console.log(base.model);
                     base.SmartBlocks.startLoading("Saving task");
+                    base.$el.find(".task_name").html(base.model.get("name"));
+                    base.$el.find(".task_name").html(base.model.get("name"));
+                    var due_date_str = base.$el.find(".task_due_date_input").val();
+                    var due_date = new Date();
+                    due_date.setMilliseconds(0);
+                    due_date.setSeconds(0);
+                    due_date.setMinutes(0);
+                    due_date.setHours(0);
+                    if (due_date_str != "") {
+                        console.log("entering ");
+                        var parts = due_date_str.match(/(\d+)/g);
+                        due_date.setDate(parts[2]);
+                        due_date.setMonth(parts[1] - 1);
+                        due_date.setFullYear(parts[0]);
+                    }
+                    base.model.setDueDate(due_date);
                     base.model.save({}, {
                         success: function () {
                             base.SmartBlocks.stopLoading();
-                            base.render();
+                            base.main_view.render();
                         }
                     });
-                    base.$el.find(".task_name").html(base.model.get("name"));
+
+
                     base.leaveEditMode();
 
                 }
@@ -73,6 +105,8 @@ define([
                 }
             });
 
+
+
             base.$el.delegate(".checkbox", "click", function () {
                 var elt = base.$el.find(".task_complete_checkbox");
                 elt.prop("checked", !elt.prop("checked"));
@@ -86,16 +120,24 @@ define([
                     base.$el.removeClass("completed");
                 }
             });
+
+            base.$el.delegate(".share_button", "click", function () {
+                var share_window = new ShareWindow({ model: base.model });
+                share_window.init(base.SmartBlocks);
+                share_window.show();
+            });
         },
         enterEditMode: function () {
             var base = this;
             base.$el.removeClass("normal");
             base.$el.addClass("edition");
+            base.$el.closest(".tasks_list").enableSelection();
         },
         leaveEditMode: function () {
             var base = this;
             base.$el.removeClass("edition");
             base.$el.addClass("normal");
+            base.$el.closest(".tasks_list").disableSelection();
         }
     });
 

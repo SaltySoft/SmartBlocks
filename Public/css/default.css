@@ -366,27 +366,22 @@ h6 {
 }
 
 #loader {
-
     position: fixed;
-    right: 0px;
-    top: 0px;
+    top: 50px;
     z-index: 1000;
-
-}
-
-#loader img {
-    float: left;
-}
-
-#loader span {
-    line-height: 24px;
-    text-shadow: 2px 2px 2px white;
-    display: table-cell;
-    vertical-align: middle;
+    display: none;
+    text-align: center;
+    line-height: 100px;
+    width: 200px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    margin-top: -100px;
+    margin-left: -50px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 button {
-    /*margin-top: 20px;*/
     padding: 5px 5px 5px 5px;
     background-color: #6e90fe;
     border: 1px solid #dddddd;
@@ -574,6 +569,22 @@ input[type=submit]:hover {
     position: absolute;
     z-index: 10;
     width: 200px;
+    padding: 20px;
+    left: 50px;
+    border: 1px black solid;
+    background-color: white;
+    color: black;
+    display: none;
+}
+
+.clearer {
+    clear: both;
+}
+
+#notification_center_container {
+    position: absolute;
+    z-index: 10;
+    width: 500px;
     padding: 20px;
     left: 50px;
     border: 1px black solid;
