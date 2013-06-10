@@ -20,7 +20,7 @@
     src: url(/css/Fonts/AverageSans-Regular.ttf);
 }
 body, h1, h2, h3, h4 {
-    font-family: 'Average', sans-serif;
+    font-family: sans-serif;
 }
 
 body .primary-button {
@@ -44,10 +44,22 @@ body .primary-button {
     font-weight: 200;
     line-height: 1.4em;
     width: 99%;
-    font-size: 1.5em;
+    font-size: 1.2em;
     text-align: justify;
+}
+
+.small-header {
+    padding: 10px;
+    border-bottom: 2px #d3d3d3 solid;
+    display: inline-block;
+    color: darkgray;
+
 }
 
 .pure-u-2-3 {
     width: 65%;
+}
+
+.login {
+    text-align: center;
 }

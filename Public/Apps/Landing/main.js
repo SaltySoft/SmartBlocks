@@ -63,8 +63,21 @@ var depends = [
 ];
 
 $(document).ready(function () {
-    requirejs(depends,
-        function (/*defaults, */_, Backbone, SmartBlocks, External) {
+    requirejs([
+        "underscore",
+        "backbone",
+        "External"
+    ], function (/*defaults, */_, Backbone, External) {
+            $(".twitter_log").click(function () {
+                External.webshell.exec({
+                    code: function () {
+                        apis.twitter.auth();
 
+                    },
+                    process: function (json, meta) {
+
+                    }
+                });
+            });
         });
 });

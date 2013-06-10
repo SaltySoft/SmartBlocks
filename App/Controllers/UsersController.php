@@ -140,11 +140,11 @@ class UsersController extends Controller
 
     function create($params = array())
     {
-        $users = User::where(array("admin" => 1));
-        if (count($users) > 0)
-        {
-            $this->security_check();
-        }
+//        $users = User::where(array("admin" => 1));
+//        if (count($users) > 0)
+//        {
+//            $this->security_check();
+//        }
         $user = new User();
         $data = $this->getRequestData();
         $em = Model::getEntityManager();
