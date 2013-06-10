@@ -61,8 +61,16 @@ define([
                         contact_request.set("target", base.user);
                         contact_request.save({}, {
                             success: function (model, response) {
-                                if (response.error !== true)
+                                console.log("USER", base.user);
+                                if (response.error !== true) {
                                     base.SmartBlocks.show_message("The request was successfully sent.");
+                                    base.SmartBlocks.sendWs("socials", {
+                                        action: "contact_notif",
+                                        message: base.SmartBlocks.current_user.get("username") + " wants to add you."
+                                    }, [
+                                        base.user.get("session_id")
+                                    ]);
+                                }
                                 else
                                     base.SmartBlocks.show_message(response.message);
                             }
@@ -82,6 +90,13 @@ define([
                                 base.request.destroy({
                                     success: function () {
                                         base.$el.remove();
+                                        //Notifications
+                                        base.SmartBlocks.sendWs("socials", {
+                                            action: "contact_change",
+                                            message: base.SmartBlocks.current_user.get("username") + " has accepted your request"
+                                        }, [
+                                            contact_request.get("sender").get("session_id")
+                                        ]);
                                     }
                                 });
                             }
@@ -93,11 +108,18 @@ define([
                                 base.$el.remove();
                             }
                         });
+
                     });
                 }
             }
-
-
+            else
+            {
+                base.$el.mousedown(function (e) {
+                    if (e.which == 3) {
+                        
+                    }
+                });
+            }
         }
     });
 

@@ -60,7 +60,9 @@ define([
                 clearTimeout(search_timer);
 
                 search_timer = setTimeout(function () {
-                    base.launchSearch(elt.val());
+                    if (elt.val() != "") {
+                        base.launchSearch(elt.val());
+                    }
                 }, 500);
             });
         }

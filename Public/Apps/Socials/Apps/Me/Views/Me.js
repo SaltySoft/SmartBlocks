@@ -21,14 +21,18 @@ define([
 
             base.user_search_res = new UsersCollection();
 
-            base.fetchUser();
+            base.fetchUser(function () {
+                base.render();
+                base.renderList();
+            });
+            base.registerEvents();
         },
-        fetchUser: function () {
+        fetchUser: function (callback) {
             var base = this;
             User.getCurrent(function (current_user) {
                 base.user = current_user;
-                base.render();
-                base.renderList();
+                if (callback)
+                    callback();
             });
         },
         render: function () {
@@ -40,17 +44,25 @@ define([
         renderList: function () {
             var base = this;
 
-            var list = new ContactListView({
-                model: base.user
-            });
-            list.init(base.SmartBlocks);
-            base.$el.find(".contact_list_container").html(list.$el);
+            base.renderContacts();
 
 
             var user_search = new UserSearchView();
             user_search.init(base.SmartBlocks);
             base.$el.find(".user_search_container").html(user_search.$el);
 
+            base.renderNotifications();
+        },
+        renderContacts: function () {
+            var base = this;
+            var list = new ContactListView({
+                model: base.user
+            });
+            list.init(base.SmartBlocks);
+            base.$el.find(".contact_list_container").html(list.$el);
+        },
+        renderNotifications: function () {
+            var base = this;
             var contact_request_list = new ContactRequestsList();
             contact_request_list.init(base.SmartBlocks);
             base.$el.find(".contact_requests_list_container").html(contact_request_list.$el);
@@ -58,6 +70,22 @@ define([
         registerEvents: function () {
             var base = this;
 
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                console.log(message);
+                if (message.app == "socials") {
+                    if (message.action == "contact_change") {
+                        base.fetchUser(function () {
+                            base.renderContacts();
+                        });
+                        base.SmartBlocks.show_message(message.message);
+                    }
+                    if (message.action == "contact_notif") {
+                        base.renderNotifications();
+                        base.SmartBlocks.show_message(message.message);
+                    }
+                }
+
+            });
         }
     });
 
