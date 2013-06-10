@@ -28,7 +28,6 @@ define([
         className:"pm_workingHours_working_time",
         initialize:function () {
             var base = this;
-
         },
         init:function (SmartBlocks) {
             var base = this;
