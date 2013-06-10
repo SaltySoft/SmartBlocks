@@ -30,6 +30,15 @@ define([
             }
             response.groups = group_array;
 
+            var contacts_a = response.contacts;
+            var contacts = [];
+            for (var k in contacts_a)
+            {
+                var contact = new User(contacts_a[k]);
+                contacts.push(contact);
+            }
+            response.contacts = contacts;
+
             return response;
         }
     });

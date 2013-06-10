@@ -319,6 +319,15 @@ class UsersController extends Controller
         $this->set("app", "Apps/UserManagement/app");
     }
 
+    public function socials()
+    {
+        if (!User::logged_in())
+        {
+            $this->redirect("/");
+        }
+        $this->set("app", "Apps/Socials/app");
+    }
+
     public function connect($params = array())
     {
         $this->render = false;

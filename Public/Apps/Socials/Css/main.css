@@ -1,0 +1,90 @@
+.main_view {
+    width: 1000px;
+    margin: auto;
+    border-top: 10px #1c7783 solid;
+}
+.control_bar h2 {
+    float:right
+}
+
+
+.control_bar a {
+    display: block;
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    text-align: center;
+    font-size: 18px;
+    color: grey;
+    border-bottom: 2px #5f7f83 solid;
+    margin-right: 5px;
+    text-decoration: none;
+    background: ghostwhite;
+}
+
+.control_bar a.selected {
+    background: #2bb8cb;
+    color: white;
+}
+
+.control_bar a:hover {
+    background: #d3d3d3;
+    color: ghostwhite;
+}
+
+/**
+* Me page
+*/
+
+h3 {
+    padding-bottom: 5px;
+    border-bottom: 2px grey solid;
+    color: #fefefe;
+    display: inline-block;
+}
+
+.user_info > div {
+    /*text-align: center;*/
+    padding: 5px;
+}
+
+.contacts > div {
+    padding: 5px;
+}
+
+.user_info .username {
+    font-size: 23px;
+}
+
+
+.contacts_notifs {
+    background: #d3d3d3;
+    height: 200px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.contacts_viewer {
+    background: #d3d3d3;
+    height: 200px;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+.contact_finder {
+    padding: 5px;
+    background: #d3d3d3;
+}
+.contact_finder form {
+    text-align: center;
+}
+
+.user_finder_input {
+    width: 200px;
+}
+
+.user_finder_results {
+    min-height: 200px;
+    padding: 5px;
+}

@@ -66,6 +66,11 @@ class User extends UserBase
      */
     private $authorized_apps;
 
+    /**
+     * @ManyToMany(targetEntity="User")
+     */
+    private $contacts;
+
 
     public function __construct()
     {
@@ -166,6 +171,15 @@ class User extends UserBase
         return $this->authorized_apps;
     }
 
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+    }
+
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
 
     public function toArray($load_sub = 1)
     {
@@ -188,15 +202,27 @@ class User extends UserBase
             $authorized_apps[] = $app->toArray();
         }
 
+        $contacts = array();
+
+        if ($load_sub == 1)
+        {
+            foreach ($this->contacts as $contact)
+            {
+                $contacts[] = $contact->toArray(0);
+            }
+        }
+
         $array = array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname(),
             "username" => $this->getName(),
+            "email" => $this->getEmail(),
             "jobs" => $jobs,
             "groups" => $groups,
             "session_id" => $this->getSessionId(),
-            "authorized_apps" => $authorized_apps
+            "authorized_apps" => $authorized_apps,
+            "contacts" => $contacts
         );
 
         if ($load_sub == 1)
