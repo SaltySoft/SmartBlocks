@@ -6,8 +6,8 @@ define([
 ], function ($, _, Backbone, WorkingTimeView) {
 
     var initialize = function (SmartBlocks) {
-        var workingTime = new WorkingTimeView(SmartBlocks);
-        workingTime.init();
+        var workingTime = new WorkingTimeView();
+        workingTime.init(SmartBlocks);
 
         $("#app_container").html(workingTime.$el);
 

@@ -26,13 +26,13 @@ define([
     var WorkingTime = Backbone.View.extend({
         tagName:"div",
         className:"pm_workingHours_working_time",
-        initialize:function (SmartBlocks) {
-            var base = this;
-            base.SmartBlocks = SmartBlocks;
-        },
-        init:function () {
+        initialize:function () {
             var base = this;
 
+        },
+        init:function (SmartBlocks) {
+            var base = this;
+            base.SmartBlocks = SmartBlocks;
             Date.prototype.getMonthName = function (lang) {
                 lang = lang && (lang in Date.locale) ? lang : 'en';
                 return Date.locale[lang].month_names[this.getMonth()];
