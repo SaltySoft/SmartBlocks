@@ -37,8 +37,8 @@ define([
                 var contact = new User(contacts_a[k]);
                 contacts.push(contact);
             }
-            response.contacts = contacts;
 
+            response.contacts = contacts;
             return response;
         }
     });
@@ -49,7 +49,12 @@ define([
             success: function (data, status) {
                 if (!data.status || data.status != "error") {
                     var user = new User(data);
-                    callback(user);
+                    user.fetch({
+                        success: function () {
+                            callback(user);
+                        }
+                    });
+
                 }
             }
         });
