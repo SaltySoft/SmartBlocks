@@ -38,8 +38,8 @@ $(document).ready(function () {
                 SmartBlocks.current_user = current_user;
                 ChatApp.initialize(websocket);
                 SmartBlocks.ChatApp = ChatApp;
-                FileSharingApp.initialize(SmartBlocks);
-                SmartBlocks.FileSharingApp = FileSharingApp;
+//                FileSharingApp.initialize(SmartBlocks);
+//                SmartBlocks.FileSharingApp = FileSharingApp;
                 SmartBlocks.NotifCenterApp = NotifCenterApp;
                 NotifCenterApp.initialize(SmartBlocks);
                 if (App)
@@ -52,12 +52,21 @@ $(document).ready(function () {
                         clearTimeout(timers[message.user.id]);
                         timers[message.user.id] = setTimeout(function () {
                             SmartBlocks.connected_users.remove(message.user);
-                        }, 2000);
+                        }, 10000);
                     }
                 });
+
+                SmartBlocks.connected_users.on("add", function () {
+                    SmartBlocks.connected_users.trigger("change");
+                });
+
+                SmartBlocks.connected_users.on("remove", function () {
+                    SmartBlocks.connected_users.trigger("change");
+                });
+
                 setInterval(function () {
                     SmartBlocks.heartBeat(current_user);
-                }, 1000);
+                }, 5000);
             });
 
         });

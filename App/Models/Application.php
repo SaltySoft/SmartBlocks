@@ -115,6 +115,7 @@ class Application extends Model
     public function toArray()
     {
         $appArray = array();
+        $appArray["id"] = $this->id;
         $appArray["name"] = $this->name;
         $appArray["token"] = $this->token;
         $appArray["description"] = $this->description;

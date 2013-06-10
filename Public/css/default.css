@@ -526,44 +526,44 @@ button:hover {
     background-color: #d3d3d3;
 }
 
-input[type=text], input[type=password] {
-    padding: 0px 0px 0px 5px;
-    height: 18px;
-    border-radius: 4px;
-    border: 1px solid #cccccc;
-}
+/*input[type=text], input[type=password] {*/
+    /*padding: 0px 0px 0px 5px;*/
+    /*height: 18px;*/
+    /*border-radius: 4px;*/
+    /*border: 1px solid #cccccc;*/
+/*}*/
 
-input[type=submit] {
-    margin-top: 20px;
-    padding: 10px 10px 10px 10px;
-    background-color: #6e90fe;
-    border: 1px solid #dddddd;
-    color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
+/*input[type=submit] {*/
+    /*margin-top: 20px;*/
+    /*padding: 10px 10px 10px 10px;*/
+    /*background-color: #6e90fe;*/
+    /*border: 1px solid #dddddd;*/
+    /*color: #fff;*/
+    /*border-radius: 3px;*/
+    /*cursor: pointer;*/
 
     /* Firefox */
-    -moz-transition: all 50ms ease-in;
+    /*-moz-transition: all 50ms ease-in;*/
     /* WebKit */
-    -webkit-transition: all 50ms ease-in;
+    /*-webkit-transition: all 50ms ease-in;*/
     /* Opera */
-    -o-transition: all 50ms ease-in;
+    /*-o-transition: all 50ms ease-in;*/
     /* Standard */
-    transition: all 50ms ease-in;
-}
+    /*transition: all 50ms ease-in;*/
+/*}*/
 
-input[type=submit]:hover {
-    background-color: #ffffff;
-    color: #6e90fe;
+/*input[type=submit]:hover {*/
+    /*background-color: #ffffff;*/
+    /*color: #6e90fe;*/
     /* Firefox */
-    -moz-transition: all 50ms ease-in;
+    /*-moz-transition: all 50ms ease-in;*/
     /* WebKit */
-    -webkit-transition: all 50ms ease-in;
+    /*-webkit-transition: all 50ms ease-in;*/
     /* Opera */
-    -o-transition: all 50ms ease-in;
+    /*-o-transition: all 50ms ease-in;*/
     /* Standard */
-    transition: all 50ms ease-in;
-}
+    /*transition: all 50ms ease-in;*/
+/*}*/
 
 #user_log {
     position: absolute;

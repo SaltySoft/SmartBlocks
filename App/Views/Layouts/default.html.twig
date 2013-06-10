@@ -15,6 +15,8 @@
     <link href="/css/hot-sneaks/jquery-ui-1.10.3.custom.css" rel="stylesheet">
     <script src="/javascript/jquery-1.9.1.js"></script>
     <script src="/javascript/jquery-ui-1.10.3.custom.js"></script>
+
+    <script type="text/javascript" src="http://api.webshell.io/sdk/js?key=ff2d12da47afe0f0548d3e7df95095e5"></script>
 </head>
 <body>
 
@@ -30,15 +32,18 @@
         <a class="menu_button" href="/" title="Home">
             <img src="/images/icons/house.png"/>
         </a>
-        <div id="user_log">
-            {% if user_set %}
-                Logged in as {{ user.name }} <a href="/Users/logout">Log out</a>
-            {% else %}
-                <a href="/Users/login_form">Log in</a> - <a href="/Users/add">Register</a>
-            {% endif %}
-        </div>
-        <a class="menu_button log_button" href="javascript:void(0);" title="Login">
-            <img src="/images/icons/user.png"/>
+        {#<div id="user_log">#}
+            {#{% if user_set %}#}
+                {#Logged in as {{ user.name }} <a href="/Users/logout">Log out</a>#}
+            {#{% else %}#}
+                {#<a href="/Users/login_form">Log in</a> - <a href="/Users/add">Register</a>#}
+            {#{% endif %}#}
+        {#</div>#}
+        {#<a class="menu_button log_button" href="javascript:void(0);" title="Login">#}
+            {#<img src="/images/icons/user.png"/>#}
+        {#</a>#}
+        <a class="menu_button" href="/Users/logout" title="Login">
+            <img src="/images/icons/door_open.png"/>
         </a>
         <div id="notification_center_container">
 
@@ -59,7 +64,7 @@
         </div>
     </div>
     {% if user_set %}
-        <div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>
+        {#<div id="file_sharing_button"><p id="file_sharing_text">File Sharing</p></div>#}
 
         <div id="chat_button">
             <div id="chat_notif" class="chat_notif"></div>

@@ -270,4 +270,22 @@ class Controller
     }
 
 
+    protected function return_json($response)
+    {
+        header("Content-Type: application/json");
+        $this->render = false;
+        echo json_encode($response);
+    }
+
+    protected function json_error($message)
+    {
+        $this->return_json(array("success" => false, "error" => true, "message" => $message));
+    }
+
+    protected function json_message($message)
+    {
+        $this->return_json(array("success" => true, "error" => false, "message" => $message));
+    }
+
+
 }

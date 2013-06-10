@@ -61,6 +61,24 @@ class User extends UserBase
      */
     private $token;
 
+    /**
+     * @ManyToMany(targetEntity="Application")
+     */
+    private $authorized_apps;
+
+    /**
+     * @ManyToMany(targetEntity="User", inversedBy="contacts_with_me")
+     *  @JoinTable(name="user_contacts",
+     *      joinColumns={@JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="contact_id", referencedColumnName="id")})
+     */
+    private $contacts;
+
+    /**
+     * @ManyToMany(targetEntity="User", mappedBy="contacts")
+     */
+    private $contact_with_me;
+
 
     public function __construct()
     {
@@ -69,6 +87,7 @@ class User extends UserBase
         $this->token = "";
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -151,6 +170,38 @@ class User extends UserBase
         return $this->token;
     }
 
+    public function setAuthorizedApps($authorized_apps)
+    {
+        $this->authorized_apps = $authorized_apps;
+    }
+
+    public function getAuthorizedApps()
+    {
+        return $this->authorized_apps;
+    }
+
+    public function setContacts($contacts)
+    {
+        $this->contacts = $contacts;
+    }
+
+    public function getContacts()
+    {
+        return $this->contacts;
+    }
+
+    public function setContactWithMe($contact_with_me)
+    {
+        $this->contact_with_me = $contact_with_me;
+    }
+
+    public function getContactWithMe()
+    {
+        return $this->contact_with_me;
+    }
+
+
+
     public function toArray($load_sub = 1)
     {
         $jobs = array();
@@ -165,18 +216,45 @@ class User extends UserBase
             $groups[] = $group->toArray();
         }
 
+        $authorized_apps = array();
+
+        foreach ($this->authorized_apps as $app)
+        {
+            $authorized_apps[] = $app->toArray();
+        }
+
+        $contacts = array();
+
+        if ($load_sub == 1)
+        {
+            foreach ($this->contacts as $contact)
+            {
+                $contacts[] = $contact->toArray(0);
+            }
+            foreach ($this->contact_with_me as $contact)
+            {
+                $contacts[] = $contact->toArray(0);
+            }
+        }
+
         $array = array(
             "id" => $this->getId(),
             "firstname" => $this->getFirstname(),
             "lastname" => $this->getLastname(),
             "username" => $this->getName(),
+            "email" => $this->getEmail(),
             "jobs" => $jobs,
             "groups" => $groups,
-            "session_id" => $this->getSessionId()
+            "session_id" => $this->getSessionId(),
+            "authorized_apps" => $authorized_apps,
+
         );
+
+
 
         if ($load_sub == 1)
         {
+            $array["contacts"] = $contacts;
             $array["jobs"] = $jobs;
             $array["groups"] = $groups;
         }
