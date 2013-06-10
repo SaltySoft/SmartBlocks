@@ -63,8 +63,9 @@ class UsersController extends Controller
 
         if (isset($_GET["filter"]) && $_GET["filter"] != "")
         {
-            $qb->andWhere("u.name LIKE :username")
-                ->setParameter("username", '%' . $_GET["filter"] . '%');
+            $qb->andWhere("u.name LIKE :username OR u.email LIKE :email")
+                ->setParameter("username", '%' . $_GET["filter"] . '%')
+                ->setParameter("email", '%' . $_GET["filter"] . '%');
         }
 
         $users = $qb->getQuery()->getResult();

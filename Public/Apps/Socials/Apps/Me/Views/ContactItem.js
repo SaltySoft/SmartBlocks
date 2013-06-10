@@ -11,9 +11,11 @@ define([
             var base = this;
             base.user = base.model;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, request) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+
+            base.request = request;
 
             base.render();
             base.registerEvents();
@@ -45,6 +47,13 @@ define([
                     base.$el.find(".online").removeClass("true");
                 }
             });
+
+            if (base.request) {
+                base.$el.delegate(".add_button", "click", function () {
+
+//                    base.SmartBlocks.current_user
+                });
+            }
         }
     });
 
