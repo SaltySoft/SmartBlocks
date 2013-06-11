@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Apps/Socials/Apps/Me/Views/ContactItem'
+    'Apps/Socials/Views/ContactItem'
 ], function ($, _, Backbone, ContactItemView) {
     var ContactListView = Backbone.View.extend({
         tagName: "ul",
