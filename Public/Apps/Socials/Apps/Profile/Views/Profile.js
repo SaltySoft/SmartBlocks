@@ -31,12 +31,15 @@ define([
             var contacts = base.user.get("contacts");
 
             base.$el.find(".contact_list").html("");
+
+
             for (var k in contacts) {
                 var contact = contacts[k];
-
+                console.log("USER", contact);
                 var contact_item = new ContactItem({
                     model: contact
                 });
+                contact_item.init(base.SmartBlocks);
                 base.$el.find(".contact_list").append(contact_item.$el);
 
             }
