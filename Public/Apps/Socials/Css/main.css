@@ -40,7 +40,7 @@
 h3 {
     padding-bottom: 5px;
     border-bottom: 2px grey solid;
-    color: #fefefe;
+    color: #9a9a9a;
     display: inline-block;
 }
 
@@ -59,14 +59,14 @@ h3 {
 
 
 .contacts_notifs {
-    background: #d3d3d3;
+    background: #ebebeb;
     height: 200px;
     margin-bottom: 5px;
     padding: 5px;
 }
 
 .contacts_viewer {
-    background: #d3d3d3;
+    background: #ebebeb;
     height: 250px;
     margin-bottom: 5px;
     padding: 5px;
@@ -75,7 +75,7 @@ h3 {
 
 .contact_finder {
     padding: 5px;
-    background: #d3d3d3;
+    background: #ebebeb;
 }
 .contact_finder form {
     /*text-align: center;*/
