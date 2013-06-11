@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'underscore',
+    '../../.',
     'backbone',
     'text!Apps/Socials/Apps/Me/Templates/contact_item.html',
     'Apps/Socials/Models/ContactRequest'
