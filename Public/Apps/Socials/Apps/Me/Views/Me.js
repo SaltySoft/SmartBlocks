@@ -21,10 +21,9 @@ define([
 
             base.user_search_res = new UsersCollection();
 
-            base.fetchUser(function () {
-                base.render();
-                base.renderList();
-            });
+            base.user = base.SmartBlocks.current_user;
+            base.render();
+            base.renderList();
             base.registerEvents();
         },
         fetchUser: function (callback) {

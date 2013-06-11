@@ -3,19 +3,19 @@ define([
     'underscore',
     'backbone',
     'JobModel',
-    'GroupModel'
+    'GroupModel',
+    'amplify'
 ], function ($, _, Backbone, Job, Group) {
     var User = Backbone.Model.extend({
         urlRoot: "/Users",
         defaults: {
             username: "unregistered"
         },
-        parse : function (response, option) {
+        parse: function (response, option) {
 
             var jobs = response.jobs;
             var job_array = new Array();
-            for (var key in jobs)
-            {
+            for (var key in jobs) {
                 var job = new Job(jobs[key]);
                 job_array.push(job);
             }
@@ -23,8 +23,7 @@ define([
 
             var groups = response.groups;
             var group_array = new Array();
-            for (var key in groups)
-            {
+            for (var key in groups) {
                 var group = new Group(groups[key]);
                 group_array.push(group);
             }
@@ -32,8 +31,7 @@ define([
 
             var contacts_a = response.contacts;
             var contacts = [];
-            for (var k in contacts_a)
-            {
+            for (var k in contacts_a) {
                 var contact = new User(contacts_a[k]);
                 contacts.push(contact);
             }
@@ -42,8 +40,15 @@ define([
             return response;
         }
     });
-    User.getCurrent = function(callback) {
+    User.getCurrent = function (callback) {
         console.log("trying to get current user");
+//        if (amplify.store("current_user")) {
+//            console.log(amplify.store("current_user"));
+//            var user = new User(amplify.store("current_user"));
+//            console.log(user);
+//            callback(user);
+//
+//        } else {
         $.ajax({
             url: "/Users/current_user",
             success: function (data, status) {
@@ -52,12 +57,15 @@ define([
                     user.fetch({
                         success: function () {
                             callback(user);
+                            amplify.store("current_user", user, { expires: 5000});
                         }
                     });
 
                 }
             }
         });
+//        }
+
     }
 
     return User;

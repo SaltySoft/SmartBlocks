@@ -125,7 +125,7 @@ class UsersController extends Controller
     public function show($params = array())
     {
         $this->render = false;
-        header("Content-Type: application/json");
+//        header("Content-Type: application/json");
 
         $user = User::find($params["id"]);
         if (is_object($user))
@@ -252,7 +252,7 @@ class UsersController extends Controller
                     }
                 }
             }
-
+            $user->setLastUpdated(time());
             //Saving data to db
             $user->save();
             $response = $user->toArray();
@@ -319,6 +319,18 @@ class UsersController extends Controller
         $user = User::current_user();
         if (is_object($user)) {
             echo json_encode($user->toArray());
+        } else {
+            echo json_encode(array("status" => "error", "message" => "Not logged on"));
+        }
+    }
+
+    public function last_update()
+    {
+        $this->render = false;
+        header('Content-Type: application/json');
+        $user = User::current_user();
+        if (is_object($user)) {
+            echo json_encode(array("last_update" => $user->getLastUpdated()));
         } else {
             echo json_encode(array("status" => "error", "message" => "Not logged on"));
         }

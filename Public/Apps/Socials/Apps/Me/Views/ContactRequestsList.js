@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'Apps/Socials/Collections/ContactRequests',
-    'Apps/Socials/Apps/Me/Views/ContactItem'
+    'Apps/Socials/Views/ContactItem'
 ], function ($, _, Backbone, ContactRequestsCollection, ContactItem) {
     var ContactRequestsListView = Backbone.View.extend({
         tagName: "ul",

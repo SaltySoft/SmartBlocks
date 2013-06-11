@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'UsersCollection',
-    'Apps/Socials/Apps/Me/Views/ContactItem',
+    'Apps/Socials/Views/ContactItem',
     'text!Apps/Socials/Apps/Me/Templates/user_search.html'
 ], function ($, _, Backbone, UsersCollection, ContactItem, UserSearchTemplate){
     var UserSearchView = Backbone.View.extend({

@@ -79,6 +79,11 @@ class User extends UserBase
      */
     private $contact_with_me;
 
+    /**
+     * @Column(type="integer")
+     */
+    private $last_updated;
+
 
     public function __construct()
     {
@@ -88,6 +93,7 @@ class User extends UserBase
         $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
         $this->jobs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contacts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->last_updated = time();
     }
 
     public function getId()
@@ -118,6 +124,7 @@ class User extends UserBase
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+        $this->last_updated = time();
     }
 
     public function getLastname()
@@ -182,11 +189,13 @@ class User extends UserBase
 
     public function setContacts($contacts)
     {
-        $this->contacts = $contacts;
+
+        $this->last_updated = time();
     }
 
     public function getContacts()
     {
+
         return $this->contacts;
     }
 
@@ -200,42 +209,21 @@ class User extends UserBase
         return $this->contact_with_me;
     }
 
+    public function setLastUpdated($last_updated)
+    {
+        $this->last_updated = $last_updated;
+    }
+
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
 
 
     public function toArray($load_sub = 1)
     {
-        $jobs = array();
-        foreach ($this->jobs as $job)
-        {
-            $jobs[] = $job->toArray();
-        }
 
-        $groups = array();
-        foreach ($this->groups as $group)
-        {
-            $groups[] = $group->toArray();
-        }
-
-        $authorized_apps = array();
-
-        foreach ($this->authorized_apps as $app)
-        {
-            $authorized_apps[] = $app->toArray();
-        }
-
-        $contacts = array();
-
-        if ($load_sub == 1)
-        {
-            foreach ($this->contacts as $contact)
-            {
-                $contacts[] = $contact->toArray(0);
-            }
-            foreach ($this->contact_with_me as $contact)
-            {
-                $contacts[] = $contact->toArray(0);
-            }
-        }
 
         $array = array(
             "id" => $this->getId(),
@@ -243,20 +231,35 @@ class User extends UserBase
             "lastname" => $this->getLastname(),
             "username" => $this->getName(),
             "email" => $this->getEmail(),
-            "jobs" => $jobs,
-            "groups" => $groups,
             "session_id" => $this->getSessionId(),
-            "authorized_apps" => $authorized_apps,
-
+            "last_updated" => $this->last_updated
         );
 
 
 
         if ($load_sub == 1)
         {
+            $authorized_apps = array();
+            foreach ($this->authorized_apps as $app)
+            {
+                $authorized_apps[] = $app->toArray();
+            }
+
+            $contacts = array();
+            if ($load_sub == 1)
+            {
+                foreach ($this->contacts as $contact)
+                {
+                    $contacts[] = $contact->toArray(0);
+                }
+                foreach ($this->contact_with_me as $contact)
+                {
+                    $contacts[] = $contact->toArray(0);
+                }
+            }
+
+            $array["authorized_apps"] = $authorized_apps;
             $array["contacts"] = $contacts;
-            $array["jobs"] = $jobs;
-            $array["groups"] = $groups;
         }
 
         return $array;
