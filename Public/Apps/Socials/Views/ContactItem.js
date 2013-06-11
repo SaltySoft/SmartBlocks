@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Apps/Socials/Templates/contact_item.html',
-    'Apps/Socials/Models/ContactRequest'
-], function ($, _, Backbone, ContactItem, ContactRequest) {
+    'Apps/Socials/Models/ContactRequest',
+    'ContextMenuView'
+], function ($, _, Backbone, ContactItem, ContactRequest, ContextMenu) {
     var ContactListItemView = Backbone.View.extend({
         tagName: "li",
         className: "contact_list_item",
@@ -39,6 +40,8 @@ define([
         },
         registerEvents: function () {
             var base = this;
+            base.$el.attr("oncontextmenu", "return false;");
+
             if (base.SmartBlocks.connected_users.get(base.user.get("id"))) {
                 base.$el.find(".online").addClass("true");
             }
@@ -112,14 +115,20 @@ define([
                     });
                 }
             }
-            else
-            {
-                base.$el.mousedown(function (e) {
-                    if (e.which == 3) {
-                        
-                    }
-                });
-            }
+            base.$el.mousedown(function (e) {
+
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.init(base.SmartBlocks);
+                    context_menu.addButton("View profile", function () {
+                        window.location = "/Users/socials#profile/" + base.user.get('id')
+                    });
+
+                    context_menu.show(e);
+
+                    return false;
+                }
+            });
         }
     });
 
