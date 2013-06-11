@@ -1,0 +1,58 @@
+.chat_contact_list {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    width: 200px;
+}
+
+.contact_list_container {
+    padding: 5px;
+    background: white;
+    height: 400px;
+    display: none;
+    border: 1px #d3d3d3 solid;
+}
+
+.contact_list_button {
+    width: 200px;
+    background: #d3d3d3;
+}
+
+/**
+* contact item
+*/
+
+.chat_contact_item {
+    height: 20px;
+
+
+}
+
+
+.chat_contact_item a {
+    color: white;
+    background: #d3d3d3;
+    line-height: 20px;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+    display: block;
+}
+
+.chat_contact_item a:hover {
+    color: #b8b8b8;
+    background: #ededed;
+}
+
+.chat_contact_item .status {
+    width: 20px;
+    height: 20px;
+    background: darkgray;
+    float: left;
+    margin-right: 15px;
+    display: block;
+}
+
+.chat_contact_item .status.online {
+    background: #00c90b;
+}
