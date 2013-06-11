@@ -11,11 +11,11 @@ define([
         initialize: function () {
 
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, main_view) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.main_view = main_view;
 
-            $("body").append(base.$el);
             base.render();
             base.registerEvents();
 
@@ -31,7 +31,7 @@ define([
                 var contact_item = new ContactItem({
                     model: contacts[k]
                 });
-                contact_item.init(base.SmartBlocks);
+                contact_item.init(base.SmartBlocks, base);
                 base.$el.find(".contact_list_container").html(contact_item.$el);
             }
         },

@@ -22,10 +22,10 @@ define([
         var app_router = new AppRouter();
 
         //Append a tabView to app_container
-        var app_view = new TabView();
-        app_view.init(AppEvents);
-        $("#app_container").html(app_view.$el);
-        $("#inner_container").addClass("backgroundThem1");
+//        var app_view = new TabView();
+//        app_view.init(AppEvents);
+//        $("#app_container").html(app_view.$el);
+//        $("#inner_container").addClass("backgroundThem1");
 
         //Home view: 1
 //        var home_view = new AoHomeView();
@@ -39,15 +39,14 @@ define([
         //Dashboard view: 1
         var dashboard = new DashboardView();
         dashboard.init(AppEvents);
-        app_view.addTab("Dashboard", dashboard.$el, "show_dashboard");
-
-        app_router.on('route:dashboard', function () {
-            app_view.show(1);
-        });
-        app_router.on('route:home', function () {
-            app_view.show(1);
-        });
-
+//        app_view.addTab("Dashboard", dashboard.$el, "show_dashboard");
+        $("#app_container").html(dashboard.$el);
+//        app_router.on('route:dashboard', function () {
+//            app_view.show(1);
+//        });
+//        app_router.on('route:home', function () {
+//            app_view.show(1);
+//        });
         Backbone.history.start();
     };
 

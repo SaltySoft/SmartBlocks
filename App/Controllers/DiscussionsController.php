@@ -119,7 +119,6 @@ class DiscussionsController extends Controller
         $discussion = new Discussion();
         $data = $this->getRequestData();
         $discussion->setCreator(User::current_user());
-        $discussion->addParticipant(User::current_user());
 
         foreach ($data["participants"] as $part_array)
         {
@@ -130,7 +129,7 @@ class DiscussionsController extends Controller
             }
         }
 
-        $discussion->setName($data["name"]);
+        $discussion->setName(isset($data["name"]) ? $data["name"] : "Discussion");
 
         $discussion->save();
 

@@ -65,7 +65,7 @@ $(document).ready(function () {
                 });
 
                 setInterval(function () {
-                    SmartBlocks.heartBeat(current_user);
+//                    SmartBlocks.heartBeat(current_user);
                 }, 5000);
             });
 

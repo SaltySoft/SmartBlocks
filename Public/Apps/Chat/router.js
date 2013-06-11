@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Apps/Chat/Views/ContactList',
+    'Apps/Chat/Views/MainView',
     'SmartBlocks',
     'TabView',
     'Apps/Chat/Models/Discussion',
@@ -10,15 +10,17 @@ define([
     'Apps/Chat/Views/DiscussionView',
     'Apps/Chat/Views/DiscussionCreationView',
     'UserModel'
-], function ($, _, Backbone, ContactList, SmartBlocks, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
+], function ($, _, Backbone, MainView, SmartBlocks, TabView, Discussion, HomeView, DiscussionView, DiscussionCreationView, User) {
 
         var initialize = function (SmartBlocks, websocket) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
 
+            var chat_view = new MainView();
+            chat_view.init(SmartBlocks);
 
-            var contact_list = new ContactList();
-            contact_list.init(SmartBlocks);
+//            var contact_list = new ContactList();
+//            contact_list.init(SmartBlocks);
 
 
 //            var ChatApplication = {

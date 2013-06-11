@@ -11,10 +11,10 @@ define([
             var base = this;
             base.user = base.model;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, contact_list) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
+            base.contact_list = contact_list;
             base.render();
             base.registerEvents();
         },
@@ -30,7 +30,12 @@ define([
         registerEvents: function () {
             var base = this;
 
+            base.$el.click(function () {
 
+                base.contact_list.main_view.discussion_list.createDiscussion([
+                    base.user
+                ]);
+            });
         }
     });
 
