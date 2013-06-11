@@ -35,27 +35,31 @@ define([
         },
         getWorkingDurationIdAtDate:function (project, date) {
             var base = project;
-//            console.log("getWorkingDurationIdAtDate date", date);
+            var returned_id = 0;
+            console.log("getWorkingDurationIdAtDate date", date);
             _.each(base.get("working_durations").models, function (k) {
-                var wd_date = new Date();
-                wd_date.setTime(k.get("date") * 1000);
-//                console.log("-------------")
-//                console.log("wd_date full year", wd_date.getFullYear());
-//                console.log("wd_date month", wd_date.getMonth());
-//                console.log("wd_date date", wd_date.getDate());
-//                console.log("date year", date.getFullYear());
-//                console.log("date month", date.getMonth());
-//                console.log("date date", date.getDate());
-//                console.log("-------------")
+                var wd_date = k.get("date");
+//                var wd_date = new Date();
+//                console.log("k.get(date)", k.get("date"));
+//                wd_date.setTime(k.get("date") * 1000);
+                console.log("-------------")
+                console.log("wd_date full year", wd_date.getFullYear());
+                console.log("wd_date month", wd_date.getMonth());
+                console.log("wd_date date", wd_date.getDate());
+                console.log("date year", date.getFullYear());
+                console.log("date month", date.getMonth());
+                console.log("date date", date.getDate());
+                console.log("-------------")
                 if (wd_date.getFullYear() == date.getFullYear()
                     && wd_date.getMonth() == date.getMonth()
                     && wd_date.getDate() == date.getDate()) {
-//                    console.log("OKAY id?", k.get("id"));
-                    return k.get("id");
+                    console.log("OKAY id?", k.get("id"));
+                    returned_id = k.get("id");
+                    return returned_id;
                 }
             });
 
-            return 0;
+            return returned_id;
         },
         getWorkingDurationHoursAtDate:function (project, date) {
             var base = project;

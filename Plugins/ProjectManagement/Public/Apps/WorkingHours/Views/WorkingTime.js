@@ -23,6 +23,12 @@ define([
         return [d.getFullYear(), weekNo];
     }
 
+    function isNormalInteger(str) {
+        var intRegex = /^\d+$/;
+        return (intRegex.test(str));
+//        return /^\+?(0|[1-9]\d*)$/.test(str);
+    }
+
     var WorkingTime = Backbone.View.extend({
         tagName:"div",
         className:"pm_workingHours_working_time",
@@ -122,25 +128,11 @@ define([
         },
         initializeEvents:function () {
             var base = this;
-
-            base.$el.delegate(".add_project", "click", function () {
-                var elt = $(this);
-                var project = new Project({
-                    name:"New project"
-                });
-                project.save({}, {
-                    success:function () {
-                        console.log("success creating project");
-                        base.projects_collection.add(project);
-                        base.render(false);
-                    },
-                    error:function () {
-                        console.log("error creating project");
-                        base.SmartBlocks.show_message("There was an error creating the project. Please try again later.");
-                    }
-                })
-            });
-
+            base.initializeEventsProjectManagement();
+            base.initializeEventsWorkingHours();
+        },
+        initializeEventsProjectManagement:function () {
+            var base = this;
             base.$el.delegate(".manage_projects_viewer_button", "click", function () {
                 var elt = $(this);
                 var content = base.$el.find(".manage_projects_content");
@@ -154,12 +146,28 @@ define([
                 }
             });
 
+            base.$el.delegate(".add_project", "click", function () {
+                var elt = $(this);
+                var project = new Project({
+                    name:"New project"
+                });
+
+                project.save({}, {
+                    success:function () {
+                        base.projects_collection.add(project);
+                        base.render(false);
+                    },
+                    error:function () {
+                        base.SmartBlocks.show_message("There was an error creating the project. Please try again later.");
+                    }
+                });
+            });
+
             base.$el.delegate(".wh_project .project_button", "click", function () {
                 var elt = $(this);
                 var action = elt.attr("data-action");
                 var wh_project = elt.closest(".wh_project");
                 var project = base.projects_collection.get(wh_project.attr("data-pid"));
-//                var name = project.find(".name_display_text").html();
 
                 if (action == "edit") {
                     wh_project.find(".project_name_input").val(project.get("name"));
@@ -172,34 +180,25 @@ define([
                     project.set("name", wh_project.find(".project_name_input").val());
                     project.save({}, {
                         success:function () {
-                            base.render(true);
+                            base.render(false);
                         }
                     });
-
                     wh_project.find(".name_display_text").html(project.get("name"));
                     wh_project.removeClass("edition");
                 }
                 if (action == "delete") {
                     if (confirm("Do you want to delete this project ?")) {
-                        project.destroy();
+                        project.destroy({
+                            success:function () {
+                                wh_project.remove();
+                            }
+                        });
                     }
                 }
             });
-
-
-            base.$el.delegate(".hours_display_td", "click", function () {
-                console.log("hours_display click");
-                var elt = $(this);
-                elt.addClass("editing");
-                var hours_display = elt.find(".hours_display");
-                var hours_edition = elt.find(".hours_edition");
-                var hours_input = elt.find(".hours_input");
-                hours_input.val(hours_display.html());
-                hours_display.hide();
-                hours_edition.show();
-                hours_input.focus();
-            });
-
+        },
+        initializeEventsWorkingHours:function () {
+            var base = this;
             base.$el.delegate(".change_week_more", "click", function () {
                 var newDate = new Date();
                 newDate.setTime(base.actualDate.getTime());
@@ -216,22 +215,66 @@ define([
                 base.render(false);
             });
 
-            base.$el.delegate(".hours_display_td", "blur", function () {
-                console.log("hours_display blur");
+            base.$el.delegate(".hours_display_td", "click", function (event) {
+                event.stopPropagation();
                 var elt = $(this);
-
-                elt.removeClass("editing");
+                elt.addClass("editing");
                 var hours_display = elt.find(".hours_display");
                 var hours_edition = elt.find(".hours_edition");
                 var hours_input = elt.find(".hours_input");
+                var hours_nb = hours_display.html();
+                if (hours_nb > 0)
+                    hours_input.val(hours_display.html());
+                else
+                    hours_input.val("");
+                hours_display.hide();
+                hours_edition.show();
+                hours_input.focus();
+            });
+
+            base.$el.delegate(".hours_display_td", "keydown", function (event) {
+                var currentInput = event.target;
+                event.stopPropagation();
+                if (event.keyCode == 9) {
+                    var nextInput = $(currentInput).parents(".hours_display_td").next(".hours_display_td");
+                    if (nextInput !== undefined) {
+                        nextInput.click();
+                    }
+                    else {
+                        var nextInput = $(currentInput).parents("tr").next("tr").next(".hours_display_td");
+                        if (nextInput !== undefined) {
+                            nextInput.click();
+                        }
+                    }
+                    event.stopPropagation();
+                    return false;
+                }
+                if (event.keyCode == 13) {
+                    $(currentInput).focusout();
+                    event.stopPropagation();
+                }
+            });
+
+            base.$el.delegate(".hours_input", "blur", function (event) {
+                event.stopPropagation();
+                console.log("hours_display blur ---------------------------");
+                var elt = $(this);
+                var hours_display_td = elt.parents(".hours_display_td");
+
+                hours_display_td.removeClass("editing");
+                var hours_display = hours_display_td.find(".hours_display");
+                var hours_edition = hours_display_td.find(".hours_edition");
+                var hours_input = hours_display_td.find(".hours_input");
                 var hours_number = hours_input.val();
+                if (!isNormalInteger(hours_number))
+                    hours_number = 0;
                 hours_display.html(hours_number);
                 hours_display.show();
                 hours_edition.hide();
 
                 var working_duration = undefined;
-                console.log("base.projects_collection", base.projects_collection);
-                console.log("data-pid", hours_input.attr("data-pid"));
+//                console.log("base.projects_collection", base.projects_collection);
+//                console.log("data-pid", hours_input.attr("data-pid"));
                 var project = base.projects_collection.get(hours_input.attr("data-pid"));
                 console.log("project", project);
                 var wd_date = new Date();
@@ -241,7 +284,8 @@ define([
                     console.log("wd_id", wd_id);
                     if (wd_id != 0) {
                         console.log("wd FIND id: ", wd_id);
-                        working_duration = base.working_durations.get(wd_id);
+                        working_duration = project.get("working_durations").get(wd_id);
+                        console.log("working_duration", working_duration);
                         if (hours_number <= 0) {
                             working_duration.destroy();
                         }
@@ -260,18 +304,18 @@ define([
                             });
                         }
                     }
-                    console.log("working_duration", working_duration);
                     if (working_duration !== undefined) {
                         console.log("working_duration.save", working_duration);
-                        working_duration.save({
+                        working_duration.save({}, {
                             success:function () {
+                                project.get("working_durations").push(working_duration);
+                                base.render(false);
                                 console.log("success working_duration save");
                             },
                             error:function () {
                                 console.log("error working_duration save");
                             }
                         });
-                        base.render(true);
                     }
                 }
             });
