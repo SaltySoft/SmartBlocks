@@ -204,7 +204,7 @@ define([
                 newDate.setTime(base.actualDate.getTime());
                 newDate.setDate(base.actualDate.getDate() + 7);
                 base.actualDate = newDate;
-                base.render(false);
+                base.render(true);
             });
 
             base.$el.delegate(".change_week_less", "click", function () {
@@ -212,7 +212,7 @@ define([
                 newDate.setTime(base.actualDate.getTime());
                 newDate.setDate(base.actualDate.getDate() - 7);
                 base.actualDate = newDate;
-                base.render(false);
+                base.render(true);
             });
 
             base.$el.delegate(".hours_display_td", "click", function (event) {
@@ -253,6 +253,11 @@ define([
                     $(currentInput).focusout();
                     event.stopPropagation();
                 }
+            });
+
+
+            base.$el.delegate(".save_working_hours_button", "click", function (event) {
+                base.render(true);
             });
 
             base.$el.delegate(".hours_input", "blur", function (event) {
@@ -306,10 +311,11 @@ define([
                     }
                     if (working_duration !== undefined) {
                         console.log("working_duration.save", working_duration);
+
                         working_duration.save({}, {
                             success:function () {
                                 project.get("working_durations").push(working_duration);
-                                base.render(false);
+//                                base.render(false);
                                 console.log("success working_duration save");
                             },
                             error:function () {

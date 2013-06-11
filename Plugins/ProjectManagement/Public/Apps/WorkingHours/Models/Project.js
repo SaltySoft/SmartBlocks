@@ -39,9 +39,9 @@ define([
             console.log("getWorkingDurationIdAtDate date", date);
             _.each(base.get("working_durations").models, function (k) {
                 var wd_date = k.get("date");
-//                var wd_date = new Date();
-//                console.log("k.get(date)", k.get("date"));
-//                wd_date.setTime(k.get("date") * 1000);
+                var wd_date = new Date();
+                console.log("k.get(date)", k.get("date"));
+                wd_date.setTime(k.get("date") * 1000);
                 console.log("-------------")
                 console.log("wd_date full year", wd_date.getFullYear());
                 console.log("wd_date month", wd_date.getMonth());
