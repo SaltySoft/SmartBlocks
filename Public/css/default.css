@@ -1,9 +1,26 @@
+@font-face
+{
+    font-family: railway_thin;
+    src: url(/css/Fonts/Raleway_Thin.otf);
+}
+@font-face
+{
+    font-family: hero;
+    src: url(/css/Fonts/Hero.otf);
+}
+@font-face
+{
+    font-family: casper;
+    src: url(/css/Fonts/Casper.ttf);
+}
+
 html {
     height: 100%;
 }
 
 body {
-    font-family: segoe, arial;
+    font-family: casper;
+    font-size: 0.9em;
     margin: 0px;
     background-color: rgb(255, 255, 255);
     height: 100%;

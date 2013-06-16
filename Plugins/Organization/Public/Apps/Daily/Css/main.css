@@ -6,7 +6,6 @@
 .date_chooser {
     width: 200px;
 
-
     margin: auto;
     padding: 10px;
     text-align: center;
@@ -31,7 +30,7 @@
 }
 
 input[type="text"].datepicker {
-    height:0px;
+    height: 0px;
     opacity: 0;
 }
 
@@ -42,6 +41,7 @@ input[type="text"].datepicker {
     width: 98%;
     margin: auto;
 }
+
 .pane > div {
 
     height: 100%;
@@ -51,17 +51,22 @@ input[type="text"].datepicker {
 /* TASKS LIST */
 .tasks_container {
     float: left;
-    border: 1px black solid;
+    position: relative;
 }
 
 .task_item {
-     padding: 5px;
-     background: rgba(43, 184, 203, 0.49);
-     margin: 1px;
- }
+    padding: 10px;
+    background: rgba(43, 184, 203, 0.8);
+}
 
 .task_item.ui-draggable-dragging {
     z-index: 10;
+}
+
+.action {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
 }
 
 /* DAY PLANNING */
@@ -78,7 +83,6 @@ input[type="text"].datepicker {
 .hour_view {
     height: 48px;
     border-top: 2px #b3b3b3 solid;
-
 
 }
 
@@ -108,13 +112,13 @@ input[type="text"].datepicker {
     position: absolute;
     padding: 5px;
     /*background-color: #ca625a;*/
-    border: 2px #b31616 solid;
-    border-radius : 5px;
-    width: 580px;
-    margin-left: 50px;
+
+    border-radius: 5px;
+    left: 50px;
+    right: 10px;
     z-index: 2;
     color: white;
-    background: url(/css/hot-sneaks/images/ui-bg_diagonals-small_40_db4865_40x40.png);
+    background: rgba(43, 184, 203, 0.8);
     font-size: 12px;
 }
 
@@ -124,7 +128,7 @@ input[type="text"].datepicker {
     background-color: #6a0000;
     position: absolute;
     left: 0px;
-    top:0px;
+    top: 0px;
     display: none;
     z-index: 3;
 }
@@ -132,9 +136,10 @@ input[type="text"].datepicker {
 .handle {
     position: absolute;
     right: 10px;
-    top:10px;
+    top: 10px;
     height: 13px;
     width: 11px;
-    background:  url(/css/hot-sneaks/images/ui-icons_454545_256x240.png) -130px -50px;
-    cursor:pointer;
+    background: url(/css/hot-sneaks/images/ui-icons_454545_256x240.png) -130px -50px;
+    cursor: pointer;
 }
+
