@@ -46,6 +46,13 @@ define([
 
             var template = _.template(DiscussionTemplate, {});
             base.$el.html(template);
+
+            var participants = base.discussion.get("participants");
+            for (var k in participants) {
+                if (base.SmartBlocks.current_user.get("id") != participants[k].id) {
+                    base.$el.find(".participants").append(participants[k].get("username"));
+                }
+            }
         },
         registerEvents: function () {
             var base = this;
@@ -55,6 +62,9 @@ define([
             });
 
             base.$el.find(".remove_button").click(function () {
+                console.log(base.main_view.discussions);
+                base.main_view.discussions.remove(base.discussion);
+                console.log(base.main_view.discussions);
                 base.$el.remove();
             });
 

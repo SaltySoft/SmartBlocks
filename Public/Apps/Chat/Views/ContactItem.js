@@ -41,7 +41,8 @@ define([
                     },
                     success: function (discussions) {
                         if (discussions.models.length > 0) {
-                            base.contact_list.main_view.discussion_list.addDiscussion(discussions.models[0]);
+                            if (!base.contact_list.main_view.discussions.get(discussions.models[0]))
+                                base.contact_list.main_view.discussion_list.addDiscussion(discussions.models[0]);
                         }
                         else {
                             base.contact_list.main_view.discussion_list.createDiscussion([
@@ -50,6 +51,20 @@ define([
                         }
                     }
                 });
+
+            });
+            if (base.SmartBlocks.connected_users.get(base.user.get('id'))) {
+                base.$el.find(".status").addClass("online");
+
+            } else {
+                base.$el.find(".status").removeClass("online");
+            }
+            base.SmartBlocks.connected_users.on("change", function () {
+                if (base.SmartBlocks.connected_users.get(base.user.get('id'))) {
+                    base.$el.find(".status").addClass("online");
+                } else {
+                    base.$el.find(".status").removeClass("online");
+                }
 
             });
         }
