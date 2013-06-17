@@ -77,13 +77,15 @@ define([
 
             var e = window.event || e; // old IE support
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-
+            var change =  base.getHourHeight() / 2;
+            var day_height = base.getHourHeight() * 25;
+            var parent_height = base.$el.parent().height();
             if (delta < 0) {
-                if (base.pos - base.getHourHeight() > -base.getHourHeight() * 24 + base.$el.parent().height())
-                    base.pos -= base.getHourHeight();
+                if (base.pos - change > - day_height + parent_height)
+                    base.pos -= change;
             } else {
-                if (base.pos + base.getHourHeight() <= 0)
-                    base.pos += base.getHourHeight();
+                if (base.pos + change <= change    )
+                    base.pos += change;
             }
 
             base.$el.css("top", base.pos);
