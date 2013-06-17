@@ -2,8 +2,9 @@
     position: fixed;
     right: 0px;
     bottom: 0px;
-    width: 100%;
+    /*width: 100%;*/
     height: 35px;
+    z-index: 100;
 
 }
 
@@ -96,7 +97,7 @@
 .discussion {
     height: 300px;
     position: absolute;
-    bottom: 35px;
+    bottom: 30px;
     display: none;
 
     background: white;

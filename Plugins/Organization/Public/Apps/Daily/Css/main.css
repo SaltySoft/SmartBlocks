@@ -1,5 +1,18 @@
+.planning_main_view {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
 .planning_view {
     margin-top: 20px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
 }
 
 /* DATE CHOOSER */
@@ -34,18 +47,34 @@ input[type="text"].datepicker {
     opacity: 0;
 }
 
+.pane_container {
+    position: absolute;
+    left: 0px;
+    bottom: 11px;
+    top: 57px;
+    right: 0px;
+}
+
+.pane_inner_container {
+    height:100%;
+}
+
 /* PANES */
 .pane_container .pane {
     padding: 5px;
-    height: 688px;
+    height: 100%;
     width: 98%;
     margin: auto;
+    position: relative;
 }
 
 .pane > div {
 
-    height: 100%;
-    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    top: 0px;
+    right: 0px;
 }
 
 /* TASKS LIST */

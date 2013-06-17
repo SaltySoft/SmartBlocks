@@ -1,15 +1,14 @@
-@font-face
-{
+@font-face {
     font-family: railway_thin;
     src: url(/css/Fonts/Raleway_Thin.otf);
 }
-@font-face
-{
+
+@font-face {
     font-family: hero;
     src: url(/css/Fonts/Hero.otf);
 }
-@font-face
-{
+
+@font-face {
     font-family: casper;
     src: url(/css/Fonts/Casper.ttf);
 }
@@ -72,10 +71,11 @@ li {
 }
 
 #content {
-    min-height: 500px;
-    margin-bottom: 50px;
-    border-radius: 2px;
-    border-radius: 2px 2px 2px 2px;
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    top: 0px;
 }
 
 #footer {
@@ -135,7 +135,6 @@ li {
     transition: all 100ms ease-in;
 }
 
-
 #chat_button {
     position: fixed;
     background-color: #44cc67;
@@ -159,11 +158,10 @@ li {
     /* Standard */
     transition: all 100ms ease-in;
 }
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0px;
 }
-
-
 
 h1 {
     font-size: 30px;
@@ -189,7 +187,6 @@ h5 {
 h6 {
     font-size: 19px;
 }
-
 
 #chat_text {
     font-size: 1em;
@@ -291,11 +288,6 @@ h6 {
     min-height: 100%;
     position: relative;
 }
-
-#content {
-    padding-bottom: 50px;
-}
-
 #footer {
     position: fixed;
     bottom: 0;
@@ -544,42 +536,42 @@ button:hover {
 }
 
 /*input[type=text], input[type=password] {*/
-    /*padding: 0px 0px 0px 5px;*/
-    /*height: 18px;*/
-    /*border-radius: 4px;*/
-    /*border: 1px solid #cccccc;*/
+/*padding: 0px 0px 0px 5px;*/
+/*height: 18px;*/
+/*border-radius: 4px;*/
+/*border: 1px solid #cccccc;*/
 /*}*/
 
 /*input[type=submit] {*/
-    /*margin-top: 20px;*/
-    /*padding: 10px 10px 10px 10px;*/
-    /*background-color: #6e90fe;*/
-    /*border: 1px solid #dddddd;*/
-    /*color: #fff;*/
-    /*border-radius: 3px;*/
-    /*cursor: pointer;*/
+/*margin-top: 20px;*/
+/*padding: 10px 10px 10px 10px;*/
+/*background-color: #6e90fe;*/
+/*border: 1px solid #dddddd;*/
+/*color: #fff;*/
+/*border-radius: 3px;*/
+/*cursor: pointer;*/
 
-    /* Firefox */
-    /*-moz-transition: all 50ms ease-in;*/
-    /* WebKit */
-    /*-webkit-transition: all 50ms ease-in;*/
-    /* Opera */
-    /*-o-transition: all 50ms ease-in;*/
-    /* Standard */
-    /*transition: all 50ms ease-in;*/
+/* Firefox */
+/*-moz-transition: all 50ms ease-in;*/
+/* WebKit */
+/*-webkit-transition: all 50ms ease-in;*/
+/* Opera */
+/*-o-transition: all 50ms ease-in;*/
+/* Standard */
+/*transition: all 50ms ease-in;*/
 /*}*/
 
 /*input[type=submit]:hover {*/
-    /*background-color: #ffffff;*/
-    /*color: #6e90fe;*/
-    /* Firefox */
-    /*-moz-transition: all 50ms ease-in;*/
-    /* WebKit */
-    /*-webkit-transition: all 50ms ease-in;*/
-    /* Opera */
-    /*-o-transition: all 50ms ease-in;*/
-    /* Standard */
-    /*transition: all 50ms ease-in;*/
+/*background-color: #ffffff;*/
+/*color: #6e90fe;*/
+/* Firefox */
+/*-moz-transition: all 50ms ease-in;*/
+/* WebKit */
+/*-webkit-transition: all 50ms ease-in;*/
+/* Opera */
+/*-o-transition: all 50ms ease-in;*/
+/* Standard */
+/*transition: all 50ms ease-in;*/
 /*}*/
 
 #user_log {
@@ -608,4 +600,12 @@ button:hover {
     background-color: white;
     color: black;
     display: none;
+}
+
+#app_container {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
 }

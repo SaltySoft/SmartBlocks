@@ -1,6 +1,11 @@
 .organization_view {
     margin: auto;
     border-top: 10px #1c7783 solid;
+    bottom: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
 }
 .control_bar h2 {
     float:right
@@ -30,4 +35,12 @@
 .control_bar a:hover {
     background: #d3d3d3;
     color: ghostwhite;
+}
+
+.sub_app_holder {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 33px;
+    bottom: 0px;
 }
