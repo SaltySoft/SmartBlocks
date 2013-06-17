@@ -7,9 +7,6 @@ define([
         defaults: {
         },
         parse: function (response, options) {
-            console.log(response);
-            console.log(" HAAHA");
-
             return response;
         }
     });

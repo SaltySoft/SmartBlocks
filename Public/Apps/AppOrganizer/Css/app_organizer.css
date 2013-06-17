@@ -1,6 +1,44 @@
+.k_ao_dashboard {
+    width: 900px;
+    margin: auto;
+}
+
+.control_bar {
+    border-top: 5px #0076a3 solid;
+}
+
+.control_bar a {
+    display: block;
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    text-align: center;
+    font-size: 18px;
+    color: grey;
+    border-bottom: 2px #5f7f83 solid;
+    margin-right: 5px;
+    text-decoration: none;
+    background: ghostwhite;
+}
+
+.control_bar a.selected {
+    background: #2bb8cb;
+    color: white;
+}
+
+.control_bar h2 {
+    float: right;
+}
+
+.control_bar a:hover {
+    background: #d3d3d3;
+    color: ghostwhite;
+}
+
 .blocks_container {
     padding: 15px;
-    width: 900px;
+
     margin: auto;
 }
 
@@ -13,8 +51,8 @@
     /*box-shadow: 1px 1px 4px 0px #c7c7c7;*/
 }
 
-.appBlock_name {
-
+.block_name {
+    border-bottom: 2px #0076a3 solid;
 }
 
 .appBlock_description {
@@ -111,7 +149,6 @@
     background-color: rgba(255, 255, 255, 1);
 }
 
-
 .bg1 {
     background-color: #2a83ec;
 }
@@ -141,7 +178,10 @@
 }
 
 .block_section {
+    margin-top: 20px;
     margin-bottom: 30px;
     padding: 20px;
-    background-color: #d3d3d3;
+    background: rgba(182, 199, 213, 0.44 );
+    border-radius: 3px;
+    /*border: 2px #00678e solid;*/
 }

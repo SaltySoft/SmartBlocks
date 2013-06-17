@@ -111,8 +111,7 @@ define([
 
             base.$el.resizable({
                 grid : base.DayPlanning.getHourHeight() / 2,
-                minWidth: 580,
-                maxWidth: 580,
+                handles: 'n, s',
                 stop: function(event, ui) {
                     var duration = (ui.size.height + 4) / base.DayPlanning.getHourHeight() + 0.2;
                     duration *= 60 * 60 * 1000;

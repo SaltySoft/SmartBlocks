@@ -27,7 +27,6 @@ define([
                     base.initializeEvents();
                 }
             });
-
         },
         initializeEvents:function () {
             var base = this;

@@ -69,11 +69,25 @@ class DiscussionsController extends Controller
 
         if (isset($_GET["user_id"]))
         {
+            if (isset($_GET["user2"]))
+            {
 
-            $qb->join("d.participants", "p")
-                ->andWhere("p.id = :user_id")
-                ->setParameter("user_id", $_GET["user_id"]);
+
+                $user2 = \User::find($_GET["user2"]);
+                $qb->join("d.participants", "p")
+                    ->andWhere("p = :user2 OR p.id = :user_id")
+                    ->setParameter("user_id", $_GET["user_id"])
+                    ->setParameter("user2", $user2);
+            }
+            else
+            {
+                $qb->join("d.participants", "p")
+                    ->andWhere("p.id = :user_id")
+                    ->setParameter("user_id", $_GET["user_id"]);
+            }
         }
+
+
         $discussion = array();
         if (isset($_GET["user_id"]) || User::current_user()->is_admin())
         {
@@ -119,7 +133,6 @@ class DiscussionsController extends Controller
         $discussion = new Discussion();
         $data = $this->getRequestData();
         $discussion->setCreator(User::current_user());
-        $discussion->addParticipant(User::current_user());
 
         foreach ($data["participants"] as $part_array)
         {
@@ -130,7 +143,7 @@ class DiscussionsController extends Controller
             }
         }
 
-        $discussion->setName($data["name"]);
+        $discussion->setName(isset($data["name"]) ? $data["name"] : "Discussion");
 
         $discussion->save();
 

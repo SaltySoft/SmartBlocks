@@ -60,6 +60,7 @@ define([
 
 
             base.render(callback);
+
         },
         getDiscussions: function (callback) {
             var base = this;

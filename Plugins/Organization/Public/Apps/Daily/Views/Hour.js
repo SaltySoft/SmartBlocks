@@ -14,7 +14,9 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.dayPlanning = dayPlanning;
-            base.time = time;
+            var time2 = new Date(time);
+//            time2.setHours(time.getHours());
+            base.time = time2;
             base.render();
             base.registerEvents();
         },
