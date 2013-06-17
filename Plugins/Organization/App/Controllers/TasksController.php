@@ -35,6 +35,9 @@ class TasksController extends \Controller
         else
             $this->security_check();
 
+
+        $todoist_diplomat = new TodoistDiplomat();
+
         $em = \Model::getEntityManager();
 
         $qb = $em->createQueryBuilder();
@@ -59,10 +62,11 @@ class TasksController extends \Controller
         }
 
         $data = $this->getRequestData();
-        if (isset($data["date"])) {
+        if (isset($data["date"]))
+        {
             $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
-            ->setParameter("start_date", $data["date"])
-            ->setParameter("stop_date", $data["date"]  + 60 * 60 * 24);
+                ->setParameter("start_date", $data["date"])
+                ->setParameter("stop_date", $data["date"] + 60 * 60 * 24);
         }
 
         $results = $qb->getQuery()->getResult();
@@ -189,7 +193,8 @@ class TasksController extends \Controller
 
         if (is_object($task))
         {
-            foreach ($task->getPlannedTasks() as $planned_task) {
+            foreach ($task->getPlannedTasks() as $planned_task)
+            {
                 $planned_task->delete();
             }
 

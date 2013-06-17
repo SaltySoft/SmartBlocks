@@ -1,0 +1,9 @@
+.user_request_notification {
+    position: fixed;
+    top: 20px;
+    right:20px;
+    z-index: 200;
+    width: 300px;
+    padding: 10px;
+    background: #f2d859;
+}

@@ -178,6 +178,10 @@ function system_autoload($className)
     {
         require_once(ROOT . DS . "App" . DS . "BusinessManagement" . DS . $className . ".php");
     }
+    else if (file_exists(ROOT . DS . "App" . DS . "Exceptions" . DS . $className . ".php"))
+    {
+        require_once(ROOT . DS . "App" . DS . "Exceptions" . DS . $className . ".php");
+    }
     else
     {
 
