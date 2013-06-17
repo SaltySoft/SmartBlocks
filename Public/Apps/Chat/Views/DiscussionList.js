@@ -4,7 +4,8 @@ define([
     'backbone',
     'Apps/Chat/Models/Discussion',
     'Apps/Chat/Views/Discussion',
-    'text!Apps/Chat/Templates/message_template.html'
+    'text!Apps/Chat/Templates/message_template.html',
+    "amplify"
 ], function ($, _, Backbone, Discussion, DiscussionView) {
     var DiscussionListView = Backbone.View.extend({
         tagName: "ul",
@@ -43,10 +44,24 @@ define([
         },
         addDiscussion: function (discussion) {
             var base = this;
-            var discussion_view = new DiscussionView({
-                model: discussion
-            });
-            base.render(discussion_view);
+            if (discussion.messages) {
+                var discussion_view = new DiscussionView({
+                    model: discussion
+                });
+                base.render(discussion_view);
+            } else {
+                discussion.fetch({
+                    success: function () {
+                        var discussion_view = new DiscussionView({
+                            model: discussion
+                        });
+
+                        base.render(discussion_view);
+                    }
+                });
+            }
+            base.main_view.discussions.add(discussion);
+            amplify.store("discussions", base.main_view.discussions);
         },
         registerEvents: function () {
             var base = this;

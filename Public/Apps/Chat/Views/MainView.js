@@ -6,8 +6,9 @@ define([
     'Apps/Chat/Views/ContactList',
     'Apps/Chat/Views/DiscussionList',
     'Apps/Chat/Collections/Discussions',
-    'Apps/Chat/Models/Discussion'
-], function ($, _, Backbone, MainViewTemplate, ContactListView, DiscussionListView,DiscussionsCollection, Discussion) {
+    'Apps/Chat/Models/Discussion',
+    "amplify"
+], function ($, _, Backbone, MainViewTemplate, ContactListView, DiscussionListView, DiscussionsCollection, Discussion) {
     var MainView = Backbone.View.extend({
         tagName: "div",
         className: "chat_main_view",
@@ -24,6 +25,17 @@ define([
 
             base.render();
             base.registerEvents();
+            var discussions = amplify.store("discussions");
+            for (var k in discussions) {
+                var discussion = new Discussion({id: discussions[k].id });
+                discussion.fetch({
+                    success: function () {
+                        base.discussion_list.addDiscussion(discussion);
+                    }
+                });
+            }
+
+
         },
         render: function () {
             var base = this;
@@ -38,8 +50,17 @@ define([
             var contact_list = new ContactListView();
             base.$el.find(".chat_contact_list_container").html(contact_list.$el);
             contact_list.init(base.SmartBlocks, base);
-
-
+            var opened_discussions = amplify.store("opened_discussions");
+            for (var k in opened_discussions) {
+                var discussion = new Discussion({
+                    id: opened_discussions[k]
+                });
+                discussion.fetch({
+                    success: function () {
+                        base.discussion_list.addDiscussion(discussion, false);
+                    }
+                });
+            }
         },
         registerEvents: function () {
             var base = this;
@@ -54,7 +75,6 @@ define([
                                 success: function () {
                                     base.discussion_list.addDiscussion(discussion);
                                     base.events.trigger("message", message);
-                                    base.discussions.add(discussion);
                                 }
                             });
                         }

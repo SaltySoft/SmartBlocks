@@ -118,10 +118,6 @@ class MessagesController extends Controller
                 $message->save();
             }
         }
-
-
-
-
         echo json_encode($message->toArray());
 
     }
