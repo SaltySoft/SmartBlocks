@@ -89,7 +89,7 @@ input[type="text"].datepicker {
 }
 
 .task_item.over {
-    background: rgba(51, 219, 242, 0.80);
+    background: rgba(185, 183, 177, 0.80);
 }
 
 .task_item.ui-draggable-dragging {
@@ -147,7 +147,7 @@ input[type="text"].datepicker {
 
 .planned_task {
     position: absolute;
-    padding: 5px;
+
     /*background-color: #ca625a;*/
 
     border-radius: 5px;
@@ -159,8 +159,12 @@ input[type="text"].datepicker {
     font-size: 12px;
 }
 
+.planned_task > div {
+    padding: 5px;
+}
+
 .planned_task.over {
-    background: rgba(51, 219, 242, 0.80);
+    background: rgba(185, 183, 177, 0.80);
 }
 
 .line {
@@ -177,10 +181,23 @@ input[type="text"].datepicker {
 .handle {
     position: absolute;
     right: 10px;
-    top: 10px;
-    height: 13px;
-    width: 11px;
-    background: url(/css/hot-sneaks/images/ui-icons_454545_256x240.png) -130px -50px;
+    top: 5px;
+    bottom: 5px;
+    width: 20px;
+    background: url(/images/handle_repeat_vert.png) repeat-y top center;
     cursor: pointer;
 }
 
+@media (min-width: 1000px) {
+    .planning_main_view {
+        margin: auto;
+        width:1000px;
+    }
+}
+
+@media (max-width: 800px) {
+    /*.tasks_container {*/
+        /*width: 200px;*/
+        /*display: none;*/
+    /*}*/
+}

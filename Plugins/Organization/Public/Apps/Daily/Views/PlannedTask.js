@@ -43,7 +43,7 @@ define([
         updatePosition: function () {
             var base = this;
             base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.planned_task.getStart())));
-            base.$el.css("height", base.planned_task.get("duration") / 60 / 60 / 1000 * base.DayPlanning.getHourHeight() - 14);
+            base.$el.css("height", base.planned_task.get("duration") / 60 / 60 / 1000 * base.DayPlanning.getHourHeight());
             console.log(base.planned_task.get("start"));
             console.log(new Date(base.planned_task.get("start")));
         },
