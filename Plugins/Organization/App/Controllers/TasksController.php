@@ -217,4 +217,11 @@ class TasksController extends \Controller
     {
         $this->set("app", "/Organization/Apps/Calendar/app.js");
     }
+
+    public function todoist()
+    {
+        $this->render = false;
+        header("Content-type: application/json");
+        Task::fetch_todoist();
+    }
 }

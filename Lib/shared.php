@@ -26,7 +26,7 @@
  * checks environment. Deactivate errors display in production.
  */
 
-require_once (ROOT.DS."Lib".DS."MuffinApplication.php");
+require_once (ROOT . DS . "Lib" . DS . "MuffinApplication.php");
 function setReporting()
 {
     if (ENV == 0)
@@ -39,7 +39,7 @@ function setReporting()
         error_reporting(E_ALL);
         ini_set("display_errors", "Off");
         ini_set("log_errors", "On");
-        ini_set("error_log", ROOT.DS."App".DS."Logs".DS."errors.log");
+        ini_set("error_log", ROOT . DS . "App" . DS . "Logs" . DS . "errors.log");
     }
 }
 
@@ -73,7 +73,7 @@ function unregisterGlobals()
         {
             if ($var === $GLOBALS[$key])
             {
-             //  unset ($GLOBALS[$key]);
+                //  unset ($GLOBALS[$key]);
             }
         }
     }
@@ -100,18 +100,18 @@ function callHook()
         {
             //Revision 0.5 for webservices
 
-/*
-            $action = $urlArray[0];
-            echo $action;
-            array_shift($urlArray);
-            $queryString = $urlArray;
+            /*
+                        $action = $urlArray[0];
+                        echo $action;
+                        array_shift($urlArray);
+                        $queryString = $urlArray;
 
-            $controllerName = $controller;
-            $controller = ucwords($controller);
-            $options = array();
-            $options["controller"] = $controller;
-            $options["action"] = $action;
-*/
+                        $controllerName = $controller;
+                        $controller = ucwords($controller);
+                        $options = array();
+                        $options["controller"] = $controller;
+                        $options["action"] = $action;
+            */
 
             $options = Router::parse($url);
             //print_r($options);
@@ -146,33 +146,37 @@ function callHook()
 function system_autoload($className)
 {
     $plugins = MuffinApplication::getPlugins();
-    if (file_exists(ROOT.DS."App".DS."Controllers".DS.$className.".php"))
+    if (file_exists(ROOT . DS . "App" . DS . "Controllers" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."App".DS."Controllers".DS.$className.".php");
+        require_once(ROOT . DS . "App" . DS . "Controllers" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."Lib".DS."Models".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "Lib" . DS . "Models" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."Lib".DS."Models".DS.$className.".php");
+        require_once(ROOT . DS . "Lib" . DS . "Models" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."Lib".DS."Controllers".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "Lib" . DS . "Controllers" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."Lib".DS."Controllers".DS.$className.".php");
+        require_once(ROOT . DS . "Lib" . DS . "Controllers" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."App".DS."Models".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "App" . DS . "Models" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."App".DS."Models".DS.$className.".php");
+        require_once(ROOT . DS . "App" . DS . "Models" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."Lib".DS."Views".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "Lib" . DS . "Views" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."Lib".DS."Views".DS.$className.".php");
+        require_once(ROOT . DS . "Lib" . DS . "Views" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."Lib".DS."Views".DS."Helpers".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "Lib" . DS . "Views" . DS . "Helpers" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."Lib".DS."Views".DS."Helpers".DS.$className.".php");
+        require_once(ROOT . DS . "Lib" . DS . "Views" . DS . "Helpers" . DS . $className . ".php");
     }
-    else if (file_exists(ROOT.DS."Lib".DS."Routing".DS.$className.".php"))
+    else if (file_exists(ROOT . DS . "Lib" . DS . "Routing" . DS . $className . ".php"))
     {
-        require_once(ROOT.DS."Lib".DS."Routing".DS.$className.".php");
+        require_once(ROOT . DS . "Lib" . DS . "Routing" . DS . $className . ".php");
+    }
+    else if (file_exists(ROOT . DS . "App" . DS . "BusinessManagement" . DS . $className . ".php"))
+    {
+        require_once(ROOT . DS . "App" . DS . "BusinessManagement" . DS . $className . ".php");
     }
     else
     {
@@ -182,16 +186,22 @@ function system_autoload($className)
 
             $classNameArray = explode("\\", $className);
             $className = $classNameArray[count($classNameArray) - 1];
-            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Models".DS.$className.".php")){
-                require_once(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Models".DS.$className.".php");
+            if (file_exists(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "Models" . DS . $className . ".php"))
+            {
+                require_once(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "Models" . DS . $className . ".php");
             }
-            if (file_exists(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Controllers".DS.$className.".php")){
-                require_once(ROOT.DS."Plugins".DS.$plugin.DS."App".DS."Controllers".DS.$className.".php");
+            if (file_exists(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "Controllers" . DS . $className . ".php"))
+            {
+                require_once(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "Controllers" . DS . $className . ".php");
             }
-
+            if (file_exists(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "BusinessManagement" . DS . $className . ".php"))
+            {
+                require_once(ROOT . DS . "Plugins" . DS . $plugin . DS . "App" . DS . "BusinessManagement" . DS . $className . ".php");
+            }
         }
     }
 
 }
+
 spl_autoload_register("system_autoload");
 

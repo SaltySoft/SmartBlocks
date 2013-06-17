@@ -23,6 +23,8 @@
 
 namespace Organization;
 
+use BusinessManagement\ApiDiplomat;
+
 /**
  * @Entity @Table(name="tasks")
  */
@@ -72,6 +74,11 @@ class Task extends \Model
      * @OneToMany(targetEntity="\Organization\PlannedTask", mappedBy="task")
      */
     private $planned_tasks;
+
+    /**
+     * @Column(type="string")
+     */
+    private $todoist_id;
 
     public function __construct()
     {
@@ -162,11 +169,54 @@ class Task extends \Model
         return $this->planned_tasks;
     }
 
+    public function setTodoistId($todoist_id)
+    {
+        $this->todoist_id = $todoist_id;
+    }
+
+    public function getTodoistId()
+    {
+        return $this->todoist_id;
+    }
+
+    public static function fetch_todoist()
+    {
+        $todoistDiplomat = new \ApiDiplomat("https://api.todoist.com");
+
+        $user = $todoistDiplomat->post2json("/API/login", array(
+            'email' => 'a.j.william26@gmail.com',
+            'password' => 'william90'
+        ));
+        $data = $todoistDiplomat->post2json("/TodoistSync/v2/get", array(
+            'api_token' => $user["api_token"]
+        ));
+
+        $tasks_list = array();
+        $em = \Model::getEntityManager();
+        foreach ($data["Projects"] as $project)
+        {
+            foreach ($project["items"] as $item)
+            {
+                if ($item["due_date"] != null) {
+                    $task = new Task();
+                    $date = new \DateTime($item["due_date"]);
+                    $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                    $task->setName($item["content"]);
+                    $task->setOwner(\User::current_user());
+                    $task->setTodoistId($item["id"]);
+                    $tasks_list[] = $task->toArray();
+                    $em->persist($task);
+                }
+            }
+        }
+
+//        $em->flush();
+        echo json_encode($tasks_list);
+    }
 
 
     public function toArray($show_task_users = true)
     {
-
 
 
         $array = array(
