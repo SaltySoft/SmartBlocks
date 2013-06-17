@@ -68,6 +68,11 @@ class Task extends \Model
      */
     private $order_index;
 
+    /**
+     * @OneToMany(targetEntity="\Organization\PlannedTask", mappedBy="task")
+     */
+    private $planned_tasks;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -151,6 +156,13 @@ class Task extends \Model
     {
         return $this->linked_users;
     }
+
+    public function getPlannedTasks()
+    {
+        return $this->planned_tasks;
+    }
+
+
 
     public function toArray($show_task_users = true)
     {

@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Daily/Templates/task_item.html'
-], function ($, _, Backbone, TaskItemTemplate) {
+    'text!Organization/Apps/Daily/Templates/task_item.html',
+    'ContextMenuView'
+], function ($, _, Backbone, TaskItemTemplate, ContextMenu) {
     var TaskItemView = Backbone.View.extend({
         tagName: "li",
         className: "task_item",
@@ -32,6 +33,39 @@ define([
             base.$el.draggable({
                 revert: true
             });
+
+            base.$el.attr("oncontextmenu", "return false;");
+            base.$el.mousedown(function (e) {
+                var id = base.task.get("id");
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Delete this task", function () {
+                        base.task.destroy({
+                            success: function () {
+                                base.planning.events.trigger("deleted_task", id);
+                                base.$el.remove();
+                            }
+                        });
+
+                    });
+                    context_menu.show(e);
+                    return false;
+                }
+
+                return false;
+            });
+
+            base.$el.mouseover(function () {
+                base.planning.events.trigger("over_task", base.task.id);
+            });
+
+            base.planning.events.on("over_task", function (id) {
+                if (base.task.id == id)
+                    base.$el.addClass("over");
+                else
+                    base.$el.removeClass("over");
+            });
+
         }
     });
 

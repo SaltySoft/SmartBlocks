@@ -6,6 +6,7 @@ define([
     'Organization/Apps/Daily/Models/PlannedTask',
     'ContextMenuView'
 ], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask, ContextMenu) {
+
     var PlannedTaskView = Backbone.View.extend({
         tagName: "div",
         className: "planned_task",
@@ -17,11 +18,11 @@ define([
             base.mousePreviousY = 0;
             base.planned_task = base.model;
         },
-        init: function (SmartBlocks, DayPlanning) {
+        init: function (SmartBlocks, DayPlanning, planning) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.DayPlanning = DayPlanning;
-
+            base.planning = planning;
             base.render();
             base.registerEvents();
         },
@@ -35,6 +36,9 @@ define([
             base.$el.html(template);
 
             base.updatePosition();
+
+//
+
         },
         updatePosition: function () {
             var base = this;
@@ -47,7 +51,6 @@ define([
             var base = this;
             base.$el.attr("oncontextmenu", "return false;");
             base.$el.mousedown(function (e) {
-
                 if (e.which == 3) {
                     var context_menu = new ContextMenu();
                     context_menu.addButton("Delete", function () {
@@ -79,11 +82,11 @@ define([
                     if (newY > 0 && newY < base.DayPlanning.getHourHeight() * 24 - base.$el.height()) {
                         base.$el.css("top", newY);
                         base.mousePreviousY = ee.pageY;
-                        if ( - base.$el.position().top > base.$el.parent().position().top - 100) {
-                            base.$el.parent().css("top", base.$el.parent().position().top - 20);
-                            base.mousePreviousY = ee.pageY;
-                            base.mouse_delta = 0;
-                        }
+//                        if ( - base.$el.position().top > base.$el.parent().position().top - 100) {
+//                            base.$el.parent().css("top", base.$el.parent().position().top - 20);
+//                            base.mousePreviousY = ee.pageY;
+//                            base.mouse_delta = 0;
+//                        }
                     }
 
 
@@ -122,7 +125,22 @@ define([
             });
 
 
+            base.planning.events.on("deleted_task", function (id) {
+                if (base.planned_task.get("task").id == id) {
+                    base.$el.remove();
+                }
+            });
 
+            base.$el.mouseover(function () {
+                base.planning.events.trigger("over_task", base.planned_task.get("task").id);
+            });
+
+            base.planning.events.on("over_task", function (id) {
+                if (base.planned_task.get("task").id == id)
+                    base.$el.addClass("over");
+                else
+                    base.$el.removeClass("over");
+            });
 
         }
     });

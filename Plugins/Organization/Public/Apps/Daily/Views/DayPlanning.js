@@ -104,7 +104,7 @@ define([
             var planned_task_view = new PlannedTaskView({
                 model: planned_task
             });
-            planned_task_view.init(base.SmartBlocks, base);
+            planned_task_view.init(base.SmartBlocks, base, base.planning);
             base.$el.append(planned_task_view.$el);
         },
         createTask: function (task, start) {

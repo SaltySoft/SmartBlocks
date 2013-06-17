@@ -13,7 +13,8 @@ define([
         tagName: "div",
         className: "planning_view",
         initialize: function () {
-
+            var base = this;
+            base.events = $.extend({}, Backbone.Events);
         },
         init: function (SmartBlocks) {
             var base = this;

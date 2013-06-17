@@ -45,15 +45,19 @@ define([
                     date: Math.round(base.date.getTime() / 1000)
                 },
                 success: function () {
-                    base.$el.find(".tasks_list").html("");
+                    base.$el.find(".tasks_list").find(".task_item").remove();
                     for (var k in base.tasks_list.models) {
                         var task = base.tasks_list.models[k];
                         var task_item_view = new TaskItemView({
                             model: task
                         });
                         task_item_view.init(base.SmartBlocks, base.planning);
-                        base.$el.find(".tasks_list").append(task_item_view.$el);
+                        base.$el.find(".tasks_list").prepend(task_item_view.$el);
                     }
+//                    if (base.tasks_list.models.length == 0) {
+//                        base.$el.find(".tasks_list").html('<div style="text-align: center">No task due today</div>');
+//                    }
+
                     base.SmartBlocks.stopLoading();
                 }
             });

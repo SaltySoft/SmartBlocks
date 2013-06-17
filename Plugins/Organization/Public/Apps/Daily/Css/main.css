@@ -88,14 +88,22 @@ input[type="text"].datepicker {
     background: rgba(43, 184, 203, 0.8);
 }
 
+.task_item.over {
+    background: rgba(51, 219, 242, 0.80);
+}
+
 .task_item.ui-draggable-dragging {
     z-index: 10;
+}
+
+.tasks_list_controls {
+    position:relative;
 }
 
 .action {
     position: absolute;
     left: 0px;
-    bottom: 0px;
+    right: 0px;
 }
 
 /* DAY PLANNING */
@@ -149,6 +157,10 @@ input[type="text"].datepicker {
     color: white;
     background: rgba(43, 184, 203, 0.8);
     font-size: 12px;
+}
+
+.planned_task.over {
+    background: rgba(51, 219, 242, 0.80);
 }
 
 .line {

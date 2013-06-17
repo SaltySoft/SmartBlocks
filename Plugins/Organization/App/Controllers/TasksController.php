@@ -186,8 +186,13 @@ class TasksController extends \Controller
         $this->render = false;
         header("Content-Type: application/json");
         $task = Task::find($params["id"]);
+
         if (is_object($task))
         {
+            foreach ($task->getPlannedTasks() as $planned_task) {
+                $planned_task->delete();
+            }
+
             $task->delete();
             echo json_encode(array("success" => true));
         }
