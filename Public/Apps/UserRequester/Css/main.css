@@ -12,3 +12,12 @@
     z-index: 200;
     width: 300px;
 }
+
+.user_r_form_container {
+    width: 500px;
+    background: white;
+    padding: 20px;
+    margin:auto;
+    margin-top: 10%;
+    text-align: center;
+}

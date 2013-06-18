@@ -35,10 +35,33 @@ class TasksController extends \Controller
         else
             $this->security_check();
 
-
-        $todoist_diplomat = new TodoistDiplomat();
-
         $em = \Model::getEntityManager();
+        $todoist_diplomat = new TodoistDiplomat();
+        if ($todoist_diplomat->isReady()) {
+            $todoist_data = $todoist_diplomat->get();
+            foreach ($todoist_data["Projects"] as $project)
+            {
+                foreach ($project["items"] as $item)
+                {
+                    if ($item["due_date"] != null)
+                    {
+                        $task = new Task();
+                        $date = new \DateTime($item["due_date"]);
+                        $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                        $task->setName($item["content"]);
+                        $task->setOwner(\User::current_user());
+                        $task->setTodoistId($item["id"]);
+                        $tasks_list[] = $task->toArray();
+                        $already_existing = Task::where(array("todoist_id" => $item["id"]));
+                        if (!isset($already_existing[0]))
+                            $em->persist($task);
+                    }
+                }
+            }
+            $em->flush();
+        }
+
+
 
         $qb = $em->createQueryBuilder();
 
@@ -189,7 +212,7 @@ class TasksController extends \Controller
 
         $this->render = false;
         header("Content-Type: application/json");
-        $task = Task::find($params["id"]);
+        $task = \Organization\Task::find($params["id"]);
 
         if (is_object($task))
         {
@@ -221,6 +244,21 @@ class TasksController extends \Controller
     public function calendar()
     {
         $this->set("app", "/Organization/Apps/Calendar/app.js");
+    }
+
+    public function todoist_link()
+    {
+        $this->render = false;
+        $api_key = TodoistDiplomat::authenticate($_POST["email"], $_POST["password"]);
+        if (is_object($api_key))
+        {
+            $this->json_message("Your account has been linked");
+        }
+        else
+        {
+            $this->json_error("Your account could not be linked");
+        }
+
     }
 
     public function todoist()

@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Apps/UserRequester/Templates/notification.html'
-], function ($, _, Backbone, NotificationTemplate) {
+    'text!Apps/UserRequester/Templates/notification.html',
+    'Apps/UserRequester/Views/Form'
+], function ($, _, Backbone, NotificationTemplate, FormView) {
     var NotificationView = Backbone.View.extend({
         tagName: "div",
         className: 'user_request_notification',
@@ -44,8 +45,9 @@ define([
             var base = this;
 
             base.$el.delegate(".answer_button", "click", function (e) {
-                //create a form view with data
-                console.log("Implement form view");
+                var form_view = new FormView();
+                form_view.init(base.SmartBlocks, base.data);
+                base.$el.remove();
             });
 
             base.$el.delegate(".decline_button", "click", function (e) {

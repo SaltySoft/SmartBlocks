@@ -162,11 +162,11 @@
     display: none;
 }
 
-.calendar_view .day .task_name, .calendar_view .day .buttons {
+.calendar_view .day .cal_task_name, .calendar_view .day .buttons {
     display: none;
 }
 
-.calendar_view .expanded .task_name, .calendar_view .day.expanded .buttons {
+.calendar_view .expanded .cal_task_name, .calendar_view .day.expanded .buttons {
     display: inline;
 }
 
@@ -221,7 +221,7 @@
     position: relative;
 }
 
-.day.expanded .task_container:hover .task_name {
+.day.expanded .task_container:hover .cal_task_name {
     display: inline;
     background: none;
     color: black;
@@ -232,7 +232,7 @@
     box-shadow: none;
 }
 
-.task_container:hover .task_name {
+.task_container:hover .cal_task_name {
     display: block;
     background: white;
     box-shadow: 0px 0px 10px gray;
