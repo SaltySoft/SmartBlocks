@@ -1,9 +1,14 @@
 .user_request_notification {
+
+    padding: 10px;
+    background: #f2d859;
+    margin-bottom: 10px;
+}
+
+.user_request_notif_container {
     position: fixed;
     top: 20px;
     right:20px;
     z-index: 200;
     width: 300px;
-    padding: 10px;
-    background: #f2d859;
 }

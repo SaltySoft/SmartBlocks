@@ -61,6 +61,7 @@ class TodoistDiplomat
                 "data" => array(
                     "notification_text" => "Would you like to link your todoist account with this account ?",
                     "action" => "/Organization/todoist_link",
+                    "class" => "todoist_request",
                     "fields" => array(
                         array(
                             "label" => "email",

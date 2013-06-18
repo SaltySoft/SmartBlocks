@@ -76,7 +76,7 @@ class Task extends \Model
     private $planned_tasks;
 
     /**
-     * @Column(type="string")
+     * @Column(type="string", nullable=true)
      */
     private $todoist_id;
 

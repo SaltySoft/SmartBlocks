@@ -15,12 +15,25 @@ define([
 
             base.SmartBlocks = SmartBlocks;
             base.data = data;
+            base.$el.addClass(base.data.class);
             base.render();
         },
         render: function () {
             var base = this;
 
-            $("body").append(base.$el);
+            if ($(document).find(".user_request_notif_container").length > 0) {
+                $(document).find(".user_request_notif_container").append(base.$el);
+            } else {
+                var div = $(document.createElement("div"));
+                div.addClass("user_request_notif_container");
+                $("body").append(div);
+                div.append(base.$el);
+            }
+
+
+
+
+
             var template = _.template(NotificationTemplate, {
                 text: base.data.notification_text
             });
@@ -36,7 +49,12 @@ define([
             });
 
             base.$el.delegate(".decline_button", "click", function (e) {
-                base.$el.remove();
+                base.$el.slideUp(200, function () {
+                    base.$el.remove();
+                    if ($(document).find(".user_request_notification").length <= 0) {
+                        $(document).find(".user_request_notif_container");
+                    }
+                });
             });
         }
 
