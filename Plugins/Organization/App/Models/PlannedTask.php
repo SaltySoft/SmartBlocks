@@ -35,6 +35,7 @@ class PlannedTask extends \Model
 
     /**
      * @ManyToOne(targetEntity="\Organization\Task")
+     * @JoinColumn(name="task_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $task;
 

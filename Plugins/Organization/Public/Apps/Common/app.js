@@ -7,9 +7,23 @@ define([
 
     var init = function (SmartBlocks) {
         Launcher.init(SmartBlocks);
+
+
+    };
+
+    var sync = function () {
+
+
+            $.ajax({
+                url: "/Organization/Tasks/todoist_sync",
+                success: function (data, status) {
+//                    console.log("todoist_synced", data);
+                }
+            });
     };
 
     return {
-        initialize: init
+        initialize: init,
+        sync: sync
     };
 });

@@ -11,6 +11,8 @@ if (app !== undefined) {
     apps.push(app);
 }
 
+
+
 $(document).ready(function () {
     requirejs(apps,
         function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, UserRequester, App) {
@@ -45,8 +47,24 @@ $(document).ready(function () {
                 NotifCenterApp.initialize(SmartBlocks);
                 UserRequester.initialize(SmartBlocks);
 
-                if (App)
+                if (App) {
                     App.initialize(SmartBlocks);
+                    if (App.sync) {
+//                        setInterval(function () {
+//                            App.sync();
+//                        }, 2500);
+
+                        $(document).keyup(function (e) {
+                            if (e.keyCode == 107) {
+                                console.log("Syncing");
+                                App.sync();
+                            }
+                        });
+                    }
+
+
+                }
+
 
                 //Hearbeats. If I'm living, my heart beats.
                 SmartBlocks.events.on("ws_notification", function (message) {

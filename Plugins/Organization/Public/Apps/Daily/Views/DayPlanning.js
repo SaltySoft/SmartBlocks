@@ -51,9 +51,10 @@ define([
 
                 last_time = time;
 
+
             }
 
-
+//            base.$el.css("top", -2 * base.getHourHeight());
         },
         updateCurrentTime: function () {
             var base = this;
@@ -92,7 +93,7 @@ define([
         },
         getHourHeight: function () {
             var base = this;
-            return base.$el.find(".hour_view").height() + 2;
+            return base.$el.find(".hour_view").height() > 0 ? base.$el.find(".hour_view").height() + 2 : 50;
         },
         getStartPosition: function (date) {
             var base = this;
@@ -153,7 +154,7 @@ define([
             var now = new Date();
 
 //            if (now.getHours() > 12) {
-                base.pos = -9 * (base.getHourHeight());
+                base.pos = -8 * (base.getHourHeight());
                 base.$el.css("top", base.pos);
 //            }
 

@@ -16,6 +16,9 @@ define([
             base.dayPlanning = dayPlanning;
             var time2 = new Date(time);
 //            time2.setHours(time.getHours());
+            if (time2.getHours() < 8 || time2.getHours() >= 19) {
+                base.$el.addClass("night");
+            }
             base.time = time2;
             base.render();
             base.registerEvents();
@@ -33,7 +36,7 @@ define([
 
             base.$el.droppable({
                 hoverClass: "ui-state-active",
-                drop: function( event, ui ) {
+                drop: function (event, ui) {
                     var task = base.dayPlanning.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
                     base.dayPlanning.createTask(task, base.time);
 

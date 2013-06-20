@@ -53,6 +53,7 @@ input[type="text"].datepicker {
     bottom: 11px;
     top: 57px;
     right: 0px;
+    border-top: 5px #1c7783 solid;
 }
 
 .pane_inner_container {
@@ -121,6 +122,10 @@ input[type="text"].datepicker {
     height: 48px;
     border-top: 2px #b3b3b3 solid;
 
+}
+
+.hour_view.night {
+    background: #dbdbdb;
 }
 
 .hour_view > div {

@@ -36,31 +36,6 @@ class TasksController extends \Controller
             $this->security_check();
 
         $em = \Model::getEntityManager();
-        $todoist_diplomat = new TodoistDiplomat();
-        if ($todoist_diplomat->isReady()) {
-            $todoist_data = $todoist_diplomat->get();
-            foreach ($todoist_data["Projects"] as $project)
-            {
-                foreach ($project["items"] as $item)
-                {
-                    if ($item["due_date"] != null)
-                    {
-                        $task = new Task();
-                        $date = new \DateTime($item["due_date"]);
-                        $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
-                        $task->setName($item["content"]);
-                        $task->setOwner(\User::current_user());
-                        $task->setTodoistId($item["id"]);
-                        $tasks_list[] = $task->toArray();
-                        $already_existing = Task::where(array("todoist_id" => $item["id"]));
-                        if (!isset($already_existing[0]))
-                            $em->persist($task);
-                    }
-                }
-            }
-            $em->flush();
-        }
-
 
 
         $qb = $em->createQueryBuilder();
@@ -261,10 +236,93 @@ class TasksController extends \Controller
 
     }
 
-    public function todoist()
+    public function todoist_sync()
     {
         $this->render = false;
-        header("Content-type: application/json");
-        Task::fetch_todoist();
+        $em = \Model::getEntityManager();
+        $todoist_diplomat = new TodoistDiplomat();
+        $ids = array();
+        if ($todoist_diplomat->isReady())
+        {
+            $todoist_data = $todoist_diplomat->get();
+            $updates = array();
+            foreach ($todoist_data["Projects"] as $project)
+            {
+                foreach ($project["items"] as $item)
+                {
+                    $ids[] = $item["id"];
+                    if ($item["due_date"] != null)
+                    {
+                        $task = new Task();
+                        $date = new \DateTime($item["due_date"]);
+                        $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                        $task->setName($item["content"]);
+                        $task->setOwner(\User::current_user());
+                        $task->setTodoistId($item["id"]);
+                        $tasks_list[] = $task->toArray();
+                        $already_existing = Task::where(array("todoist_id" => $item["id"]));
+
+                        if (!isset($already_existing[0]))
+                        {
+                            $em->persist($task);
+                            $task->setLastUpdated(time());
+                            $task->updateNotif();
+                            $updates[] = $task;
+                        }
+                        else
+                        {
+                            if ($project["last_updated"] > $already_existing[0]->getLastUpdated())
+                            {
+                                $task = $already_existing[0];
+                                $date = new \DateTime($item["due_date"]);
+
+                                if (abs($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59 - $task->getDueDate()) > 23 * 3600 + 59 * 60 + 59)
+                                {
+                                    foreach ($task->getPlannedTasks() as $planned_task)
+                                    {
+                                        $planned_task->delete();
+                                    }
+                                }
+
+                                $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                                $task->setName($item["content"]);
+                                $task->setLastUpdated(time());
+                                $em->persist($task);
+
+                                $updates[] = $task;
+                            }
+                        }
+                    }
+                }
+            }
+            $em->flush();
+
+            //Update notifications
+            foreach ($updates as $task)
+            {
+                $task->updateNotif();
+            }
+
+            $qb = $em->createQueryBuilder();
+            $qb->select("t")
+                ->from("\\Organization\\Task", "t")
+                ->andWhere("t.todoist_id is not NULL");
+            $i = 0;
+            foreach ($ids as $id)
+            {
+                $qb->andWhere("t.todoist_id <> :id" . $i)
+                    ->setParameter("id" . $i++, $id);
+            }
+            $qb->andWhere("t.due_date > :yesterday")
+                ->setParameter("yesterday", time() - 3600 * 24);
+            $tasks_ = $qb->getQuery()->getResult();
+            echo "\n<br/>\n" . count($tasks_);
+            foreach ($tasks_ as $task)
+            {
+                $task->delete();
+            }
+
+            echo json_encode($todoist_data);
+        }
     }
 }

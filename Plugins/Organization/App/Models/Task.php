@@ -80,6 +80,11 @@ class Task extends \Model
      */
     private $todoist_id;
 
+    /**
+     * @Column(type="bigint")
+     */
+    private $last_updated;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -87,6 +92,7 @@ class Task extends \Model
         $this->creation_date = time();
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->last_updated = time();
     }
 
     public function getId()
@@ -179,6 +185,16 @@ class Task extends \Model
         return $this->todoist_id;
     }
 
+    public function setLastUpdated($last_updated)
+    {
+        $this->last_updated = $last_updated;
+    }
+
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
     public static function fetch_todoist()
     {
         $todoistDiplomat = new \ApiDiplomat("https://api.todoist.com");
@@ -214,11 +230,39 @@ class Task extends \Model
         echo json_encode($tasks_list);
     }
 
+    public function updateNotif()
+    {
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_saved",
+            "task" => $this->toArray()
+        ));
+    }
+
+    function save()
+    {
+        parent::save();
+        $this->setLastUpdated(time());
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_saved",
+            "task" => $this->toArray()
+        ));
+    }
+
+    function delete()
+    {
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_deleted",
+            "task" => $this->toArray()
+        ));
+        parent::delete();
+    }
+
 
     public function toArray($show_task_users = true)
     {
-
-
         $array = array(
             "id" => $this->id,
             "name" => $this->name,

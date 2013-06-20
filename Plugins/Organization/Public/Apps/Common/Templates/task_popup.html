@@ -1,12 +1,12 @@
-<a href="javascript:void(0);" class="task_popup_close_button"><img src="/images/icons/cross_close.png" /></a>
+<a href="javascript:void(0);" class="task_popup_close_button"><img src="/images/icons/cross_close.png"/></a>
 <h2>Task details</h2>
-<div>
-    <label for="form_task_name">Task name :</label>
-    <div>
-    <input type="text" id="form_task_name" value="<%= task.get("name") %>" />
+<form action="javascript:void(0);" class="pure-form">
+    <div class="pure-control-group">
+        <label for="form_task_name">Task name :</label>
+        <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here" />
     </div>
-    <div>
-        <button class="action_button" data-action="save">Save</button>
-        <button class="action_button" data-action="cancel">Cancel</button>
+    <div class="pure-controls">
+        <button class="action_button pure-button pure-button-primary" data-action="save">Save</button>
+        <button class="action_button pure-button" data-action="cancel">Cancel</button>
     </div>
-</div>
+</form>

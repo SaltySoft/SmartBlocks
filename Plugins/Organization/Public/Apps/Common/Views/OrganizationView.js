@@ -40,6 +40,7 @@ define([
 
             var app_router = new Router();
             Backbone.history.start();
+
         },
         render: function () {
             var base = this;

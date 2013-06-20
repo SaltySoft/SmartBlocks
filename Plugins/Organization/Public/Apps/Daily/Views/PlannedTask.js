@@ -142,6 +142,26 @@ define([
                     base.$el.removeClass("over");
             });
 
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.app == "organizer") {
+                    if (message.action == "task_saved") {
+                        var date = new Date(message.task.due_date * 1000);
+
+                        base.model.fetch({
+                            success: function () {
+                                base.render();
+                            }
+                        });
+
+                        if (Math.abs(date.getTime() - base.planning.current_date.getTime()) > 24 * 3600 * 1000) {
+                            base.$el.remove();
+                            base.model.destroy();
+                        }
+
+                    }
+                }
+            });
+
         }
     });
 
