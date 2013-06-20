@@ -241,8 +241,9 @@ class Task extends \Model
 
     function save()
     {
-        parent::save();
         $this->setLastUpdated(time());
+        parent::save();
+
         \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
             "app" => "organizer",
             "action" => "task_saved",

@@ -244,6 +244,9 @@ class TasksController extends \Controller
         $ids = array();
         if ($todoist_diplomat->isReady())
         {
+
+
+
             $todoist_data = $todoist_diplomat->get();
             $updates = array();
             foreach ($todoist_data["Projects"] as $project)
@@ -316,13 +319,22 @@ class TasksController extends \Controller
             $qb->andWhere("t.due_date > :yesterday")
                 ->setParameter("yesterday", time() - 3600 * 24);
             $tasks_ = $qb->getQuery()->getResult();
-            echo "\n<br/>\n" . count($tasks_);
             foreach ($tasks_ as $task)
             {
                 $task->delete();
             }
 
-            echo json_encode($todoist_data);
+            $qb = $em->createQueryBuilder();
+
+            $qb->select("t")
+                ->from("\\Organization\\Task", "t")
+                ->where("t.owner = :user")
+                ->setParameter("user", \User::current_user());
+
+            $results = $qb->getQuery()->getResult();
+
+//            $todoist_diplomat->setLastSynced();
+            echo json_encode($todoist_diplomat->addItems($results));
         }
     }
 }

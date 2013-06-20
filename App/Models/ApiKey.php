@@ -31,6 +31,15 @@ class ApiKey extends \Model
      */
     private $token;
 
+    /**
+     * @Column(type="bigint")
+     */
+    private $last_sync;
+
+    public function __construct()
+    {
+    }
+
     public function getId()
     {
         return $this->id;
@@ -64,5 +73,15 @@ class ApiKey extends \Model
     public function getUser()
     {
         return $this->user;
+    }
+
+    public function setLastSync($last_sync)
+    {
+        $this->last_sync = $last_sync;
+    }
+
+    public function getLastSync()
+    {
+        return $this->last_sync;
     }
 }
