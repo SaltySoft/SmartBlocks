@@ -52,16 +52,18 @@ li {
 
 #flash_shower {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    left: 60px;
+    bottom: 10px;
     width: 300px;
     background-color: rgba(230, 230, 230, 0.8);
+    border: 1px #888888 dashed;
+    border-radius: 7px;
     padding: 20px;
     padding-left: 50px;
     display: none;
-    background-image: url('/images/icons/information.png');
-    background-repeat: no-repeat;
-    background-position: 20px 50%;
+    /*background-image: url('/images/icons/information.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 20px 50%;*/
     z-index: 3000;
 }
 

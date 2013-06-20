@@ -58,6 +58,7 @@ $(document).ready(function () {
                             if (e.keyCode == 107) {
                                 console.log("Syncing");
                                 App.sync();
+
                             }
                         });
                     }

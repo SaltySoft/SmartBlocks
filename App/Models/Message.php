@@ -87,6 +87,10 @@ class Message extends Model
         return $this->date;
     }
 
+    protected function before_save()
+    {
+        $this->content = htmlentities($this->content);
+    }
 
 
     public function toArray()

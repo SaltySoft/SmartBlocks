@@ -73,7 +73,7 @@ input[type="text"].datepicker {
 
     position: absolute;
     left: 0px;
-    bottom: 0px;
+    bottom: 37px;
     top: 0px;
     right: 0px;
 }
@@ -90,7 +90,7 @@ input[type="text"].datepicker {
 }
 
 .task_item.over {
-    background: rgba(185, 183, 177, 0.80);
+    background: rgba(43, 184, 203, 0.5);
 }
 
 .task_item.ui-draggable-dragging {
@@ -169,7 +169,8 @@ input[type="text"].datepicker {
 }
 
 .planned_task.over {
-    background: rgba(185, 183, 177, 0.80);
+    /*background: rgba(185, 183, 177, 0.80);*/
+    background: rgba(43, 184, 203, 0.5);
 }
 
 .line {
@@ -189,8 +190,8 @@ input[type="text"].datepicker {
     top: 5px;
     bottom: 5px;
     width: 20px;
-    background: url(/images/handle_repeat_vert.png) repeat-y top center;
-    cursor: pointer;
+    /*background: url(/images/handle_repeat_vert.png) repeat-y top center;*/
+    cursor: move;
 }
 
 @media (min-width: 1000px) {

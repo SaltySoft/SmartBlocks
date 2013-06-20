@@ -95,7 +95,9 @@ define([
 
             });
             base.SmartBlocks.events.on("ws_notification", function (message) {
+
                 if (message.app == "organizer") {
+
                     if (message.action == "task_saved") {
 
                         var message_task = message.task;
@@ -122,7 +124,9 @@ define([
                         var message_task = message.task;
                         base.tasks_list.remove(message_task.id);
                         console.log("deleted ", message_task);
+
                     }
+                    base.SmartBlocks.show_message("Sync resulted in local changes");
                     base.renderList();
                 }
             });
