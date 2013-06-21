@@ -236,6 +236,28 @@ class TasksController extends \Controller
 
     }
 
+    public function gcal_sync()
+    {
+        $this->render = false;
+        $gcal_diplomat = new GoogleCalDiplomat();
+
+        $em = \Model::getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select("pt")
+            ->from("\\Organization\\PlannedTask", "pt")
+            ->join("pt.task", "task")
+            ->where("task.owner = :user")
+            ->setParameter("user", \User::current_user());
+
+        $planned_tasks = $qb->getQuery()->getResult();
+
+        $gcal_diplomat->addEvents($planned_tasks);
+
+        $gcal_diplomat->getEvents();
+
+        $gcal_diplomat->setLastSync();
+    }
+
     public function todoist_sync()
     {
         $this->render = false;

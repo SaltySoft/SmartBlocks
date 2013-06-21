@@ -41,14 +41,14 @@ class TodoistDiplomat
     public function __construct()
     {
         $this->api_diplomat = new \ApiDiplomat("https://api.todoist.com");
-        $api_keys = \ApiKey::where(array("api_name" => "todoist", "user" => \User::current_user()));
+            $api_keys = \ApiKey::where(array("api_name" => "todoist", "user" => \User::current_user()));
 
-        if (isset($api_keys[0]))
-        {
-            $this->api_key = $api_keys[0];
-            $this->is_ready = true;
+            if (isset($api_keys[0]))
+            {
+                $this->api_key = $api_keys[0];
+                $this->is_ready = true;
 
-        }
+            }
         else
         {
             \NodeDiplomat::sendMessage(\User::current_user()->getSessionId(), array(
