@@ -40,6 +40,11 @@ class PlannedTask extends \Model
     private $task;
 
     /**
+     * @Column(type="string", nullable=true)
+     */
+    private $content;
+
+    /**
      * @Column(type="bigint")
      */
     private $start;
@@ -49,11 +54,27 @@ class PlannedTask extends \Model
      */
     private $duration;
 
+    /**
+     * @Column(type="bigint")
+     */
+    private $last_updated;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $gcal_id;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $active;
+
 
     public function __construct()
     {
-        $this->start= time();
+        $this->start = time();
         $this->duration = 30 * 60;
+        $this->active = true;
     }
 
     public function getId()
@@ -89,6 +110,58 @@ class PlannedTask extends \Model
     public function getTask()
     {
         return $this->task;
+    }
+
+    public function setLastUpdated($last_updated)
+    {
+        $this->last_updated = $last_updated;
+    }
+
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
+    public function setGcalId($gcal_id)
+    {
+        $this->gcal_id = $gcal_id;
+    }
+
+    public function getGcalId()
+    {
+        return $this->gcal_id;
+    }
+
+    public function before_save()
+    {
+        $this->last_updated = time();
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public function getContent($force = false)
+    {
+        if (is_object($this->task) && !$force)
+        {
+            return $this->task->getName();
+        }
+        else
+        {
+            return $this->content;
+        }
     }
 
     public function toArray($show_task_users = true)

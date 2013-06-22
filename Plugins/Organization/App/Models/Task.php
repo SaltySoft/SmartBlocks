@@ -85,6 +85,11 @@ class Task extends \Model
      */
     private $last_updated;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $active;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -93,6 +98,7 @@ class Task extends \Model
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->last_updated = time();
+        $this->active = true;
     }
 
     public function getId()
@@ -193,6 +199,16 @@ class Task extends \Model
     public function getLastUpdated()
     {
         return $this->last_updated;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
     }
 
     public static function fetch_todoist()

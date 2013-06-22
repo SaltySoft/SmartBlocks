@@ -10,10 +10,11 @@ class PlannedTasksController extends \Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select("pt")
-         ->from("\\Organization\\PlannedTask", "pt")
-         ->join("pt.task", "t")
-         ->where("t.owner = :user")
-         ->setParameter("user", \User::current_user());
+            ->from("\\Organization\\PlannedTask", "pt")
+            ->join("pt.task", "t")
+            ->where("t.owner = :user")
+            ->andWhere('pt.active = true')
+            ->setParameter("user", \User::current_user());
 
         $data = $this->getRequestData();
 
@@ -114,7 +115,8 @@ class PlannedTasksController extends \Controller
         $planned_task = PlannedTask::find($params["id"]);
         if (is_object($planned_task) && $planned_task->getTask()->getOwner()->getId() == \User::current_user()->getId())
         {
-            $planned_task->delete();
+            $planned_task->setActive(false);
+            $planned_task->save();
             $response = array("status" => "success", "message" => "Planned task successfully destroyed");
         }
         else
