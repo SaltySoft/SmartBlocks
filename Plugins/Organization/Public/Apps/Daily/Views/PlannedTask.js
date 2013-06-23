@@ -116,7 +116,7 @@ define([
                 grid : base.DayPlanning.getHourHeight() / 2,
                 handles: 'n, s',
                 stop: function(event, ui) {
-                    var duration = (ui.size.height + 4) / base.DayPlanning.getHourHeight() + 0.2;
+                    var duration = (ui.size.height) / base.DayPlanning.getHourHeight();
                     duration *= 60 * 60 * 1000;
                     base.planned_task.set("duration", duration);
                     console.log(duration);

@@ -10,6 +10,7 @@ define([
         initialize: function (task) {
             var base = this;
             base.task = task;
+            console.log("ACTUAL DATE", base.task.getDueDate());
             base.events =_.extend({}, Backbone.Events);
         },
         init: function (SmartBlocks) {
@@ -28,35 +29,29 @@ define([
             base.$el.html(popup);
 
             $("body").prepend(base.$el);
-
         },
         saveTask: function () {
             var base = this;
             base.task.set("name", base.$el.find("#form_task_name").val());
+            var date = new Date(base.$el.find("#form_task_date").val());
 
-//            var due_date = new Date();
-//            due_date.setMilliseconds(0);
-//            due_date.setSeconds(0);
-//            due_date.setMinutes(0);
-//            due_date.setHours(0);
-//            var due_date_str = base.$el.find("#form_due_date").val();
-//            if (due_date_str != "") {
-//                var parts = due_date_str.match(/(\d+)/g);
-//                due_date.setDate(parts[2]);
-//                due_date.setMonth(parts[1] - 1);
-//                due_date.setFullYear(parts[0]);
-//
-//                base.task.set("due_date", due_date.getTime() / 1000);
-//                console.log("Task created or edited : ", due_date.getTime() / 1000);
-//            }
+            date.setHours(base.$el.find(".hour").val());
+            date.setMinutes(base.$el.find(".minute").val());
+            date.setSeconds(0);
+            date.setMilliseconds(0);
+            base.task.setDueDate(date);
+            if (base.task.get("name") != "") {
+                base.task.save({}, {
+                    success: function () {
+                        base.SmartBlocks.show_message("Task successfully updated");
+                        base.events.trigger("task_updated", base.task);
+                        base.hide();
+                    }
+                });
+            } else {
+                alert("You must provide a name");
+            }
 
-            base.task.save({}, {
-                success: function () {
-                    base.SmartBlocks.show_message("Task successfully updated");
-                    base.events.trigger("task_updated", base.task);
-                    base.hide();
-                }
-            });
         },
         registerEvents: function () {
             var base = this;
@@ -75,6 +70,17 @@ define([
                 if (action == 'cancel')
                     base.hide();
             });
+
+            base.$el.find("#form_task_date").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+
+            var today = base.task.getDueDate();
+            var date = (today.getFullYear()+'-'+((today.getMonth()+1) < 10 ? '0' : '')+(today.getMonth()+1)+'-'+(today.getDate() < 10 ? '0' : '')+today.getDate());
+            base.$el.find("#form_task_date").val(date);
+            base.$el.find(".hour").val(today.getHours());
+            base.$el.find(".minute").val(today.getMinutes());
+
         },
         hide: function () {
             var base = this;

@@ -65,9 +65,13 @@ class TasksController extends \Controller
         $data = $this->getRequestData();
         if (isset($data["date"]))
         {
+            $start = new \DateTime();
+            $start->setTimestamp($data["date"]);
+            $end = new \DateTime();
+            $end->setTimestamp($data["date"] + 3600 * 24);
             $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
-                ->setParameter("start_date", $data["date"])
-                ->setParameter("stop_date", $data["date"] + 60 * 60 * 24);
+                ->setParameter("start_date", $start)
+                ->setParameter("stop_date", $end);
         }
 
         $results = $qb->getQuery()->getResult();
@@ -94,7 +98,9 @@ class TasksController extends \Controller
         $task = new Task;
 
         $task->setName($data["name"]);
-        $task->setDueDate($data["due_date"]);
+        $due_date = new \DateTime();
+        $due_date->setTimestamp($data["due_date"]);
+        $task->setDueDate($due_date);
 
         if (isset($_GET["token"]) && $_GET["token"] != "")
         {
@@ -146,7 +152,9 @@ class TasksController extends \Controller
             $task->setName($data["name"]);
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
-            $task->setDueDate($data["due_date"]);
+            $due_date = new \DateTime();
+            $due_date->setTimestamp($data["due_date"]);
+            $task->setDueDate($due_date);
 
 //            foreach ($data["linked_users"] as $user_array)
 //            {
@@ -286,13 +294,14 @@ class TasksController extends \Controller
                 }
                 $em = \Model::getEntityManager();
                 $qb = $em->createQueryBuilder();
+                $stop = clone $date;
+                $stop->add(new \DateInterval(($planned_task->getDuration() / 1000)." seconds"));
                 $qb->select("task")
                     ->from('\Organization\Task', 'task')
-                    ->where('task.due_date >= :date AND task.due_date <= :end')
+                    ->where('task.due_date >= :date')
                     ->andWhere('task.owner = :user')
                     ->andWhere('task.name = :name')
-                    ->setParameter("date", $date->getTimestamp() - ($date->getTimestamp() % (24 * 3600) + 2 * 3600 + 2))
-                    ->setParameter('end', $date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600)
+                    ->setParameter("date", $stop)
                     ->setParameter('user', \User::current_user())
                     ->setParameter('name', $event->getSummary());
                 $tasks = $qb->getQuery()->getResult();
@@ -306,13 +315,16 @@ class TasksController extends \Controller
                 {
                     $task = new Task();
                 }
+                if (is_object($stop))
+                {
+                    $task->setDueDate($stop);
+                }
 
-                $task->setDueDate($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)));
                 $task->setName($event->getSummary());
                 $task->setOwner(\User::current_user());
                 $task->save();
                 $planned_task->setTask($task);
-                $planned_task->setStart($date->getTimestamp() * 1000);
+                $planned_task->setStart($date);
                 $planned_task->setGcalId($event->getId());
 
                 \Model::persist($planned_task);
@@ -372,7 +384,11 @@ class TasksController extends \Controller
                     {
                         $task = new Task();
                         $date = new \DateTime($item["due_date"]);
-                        $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                        $stop = clone $date;
+                        $stop->modify("- 23 hours");
+                        $stop->modify("- 59 minutes");
+                        $stop->modify("- 59 seconds");
+                        $task->setDueDate($stop);
                         $task->setName($item["content"]);
                         $task->setOwner(\User::current_user());
                         $task->setTodoistId($item["id"]);
@@ -401,7 +417,7 @@ class TasksController extends \Controller
                                     }
                                 }
 
-                                $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                                $task->setDueDate($stop);
                                 $task->setName($item["content"]);
                                 $task->setLastUpdated(time());
                                 $em->persist($task);
@@ -420,6 +436,9 @@ class TasksController extends \Controller
                 $task->updateNotif();
             }
 
+            $yesterday = new \DateTime();
+            $yesterday->modify("- 1 day");
+
             $qb = $em->createQueryBuilder();
             $qb->select("t")
                 ->from("\\Organization\\Task", "t")
@@ -431,7 +450,7 @@ class TasksController extends \Controller
                     ->setParameter("id" . $i++, $id);
             }
             $qb->andWhere("t.due_date > :yesterday")
-                ->setParameter("yesterday", time() - 3600 * 24);
+                ->setParameter("yesterday", $yesterday);
             $tasks_ = $qb->getQuery()->getResult();
             foreach ($tasks_ as $task)
             {

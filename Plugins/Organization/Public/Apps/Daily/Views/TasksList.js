@@ -71,7 +71,7 @@ define([
             var base = this;
 
             base.$el.sortable({
-
+                items: "li:not(.li-state-disabled)"
             });
 
             base.$el.delegate(".action", "click", function () {
@@ -82,7 +82,7 @@ define([
                 {
                     case "add":
                         var task = new Task();
-                        task.setDueDate(base.date);
+//                        task.setDueDate(base.date);
                         var tsk_popup = new TaskPopupView(task);
                         tsk_popup.events.on("task_updated", function () {
                             base.fetchList();

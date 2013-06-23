@@ -20,9 +20,14 @@ class PlannedTasksController extends \Controller
 
         if (isset($data["date"]))
         {
+            $start = new \DateTime();
+            $start->setTimestamp($data["date"] / 1000);
+            $stop = new \DateTime();
+            $stop->setTimestamp($data["date"] / 1000 + 24 * 60 * 60);
+
             $qb->andWhere("pt.start >= :start AND pt.start <= :stop")
-                ->setParameter("start", $data["date"])
-                ->setParameter("stop", $data["date"] + 24 * 60 * 60 * 1000);
+                ->setParameter("start", $start)
+                ->setParameter("stop",  $stop);
         }
 
 
@@ -65,7 +70,9 @@ class PlannedTasksController extends \Controller
         {
             $planned_task->setTask($task);
             $planned_task->setDuration($data["duration"]);
-            $planned_task->setStart($data["start"]);
+            $date = new \DateTime();
+            $date->setTimestamp($data["start"] / 1000);
+            $planned_task->setStart($date);
             $planned_task->save();
             $response = $planned_task->toArray();
         }
@@ -92,7 +99,9 @@ class PlannedTasksController extends \Controller
             {
                 $planned_task->setTask($task);
                 $planned_task->setDuration($data["duration"]);
-                $planned_task->setStart($data["start"]);
+                $date = new \DateTime();
+                $date->setTimestamp($data["start"] / 1000);
+                $planned_task->setStart($date);
                 $planned_task->save();
                 $response = $planned_task->toArray();
             }

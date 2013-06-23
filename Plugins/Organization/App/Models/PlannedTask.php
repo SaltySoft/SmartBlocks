@@ -45,7 +45,7 @@ class PlannedTask extends \Model
     private $content;
 
     /**
-     * @Column(type="bigint")
+     * @Column(type="datetime")
      */
     private $start;
 
@@ -169,7 +169,7 @@ class PlannedTask extends \Model
         $array = array(
             "id" => $this->id,
             "task" => $this->task->toArray(),
-            "start" => $this->start,
+            "start" => $this->start->getTimeStamp() * 1000,
             "duration" => $this->duration
         );
 

@@ -46,5 +46,5 @@
 }
 
 #ui-datepicker-div {
-    z-index: 2  !important;
+    z-index: 150  !important;
 }

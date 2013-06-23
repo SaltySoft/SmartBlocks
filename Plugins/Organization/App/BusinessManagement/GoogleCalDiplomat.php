@@ -119,7 +119,7 @@ class GoogleCalDiplomat
             if (is_object($date))
             {
                 $date = new \DateTime($date->getDateTime());
-                $planned_task->setStart($date->getTimestamp() * 1000);
+                $planned_task->setStart($date);
                 $stop = $event->getEnd();
                 if (is_object($stop))
                 {
@@ -144,21 +144,24 @@ class GoogleCalDiplomat
             {
                 $task = $planned_task->getTask();
                 $event = new \Google_Event();
-                $date = $planned_task->getStart() / 1000;
-                $date2 = $planned_task->getStart() / 1000 + $planned_task->getDuration() / 1000;
+                $date = $planned_task->getStart();
+
+                $date2 = clone $planned_task->getStart();
+                $date2->modify('+ '. ($planned_task->getDuration() / 1000). 'seconds');
+                echo $date->format(DATE_RFC2822) + " " + $date2->format(DATE_RFC2822);
                 $event->setSummary($task->getName());
                 $start = new \Google_EventDateTime();
-                $start->setDateTime(gmdate("Y-m-d\\TH:i:s\\Z", $date));
+                $start->setDateTime($date->format(DATE_RFC3339));
                 $event->setStart($start);
                 $end = new \Google_EventDateTime();
-                $end->setDateTime(gmdate("Y-m-d\\TH:i:s\\Z", $date2));
+                $end->setDateTime($date2->format(DATE_RFC3339));
                 $event->setEnd($end);
                 //To be modified to the user's calendar
                 //We need to handle several calendars... or not destroy the primary calendar
                 $event = $this->service->events->insert('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $event);
                 $planned_task->setGcalId($event->getId());
                 \Model::persist($planned_task);
-
+                echo "\n";
             }
         }
 
@@ -178,14 +181,15 @@ class GoogleCalDiplomat
             if ($planned_task->getLastUpdated() > $updated->getTimestamp())
             {
                 $task = $planned_task->getTask();
-                $date = $planned_task->getStart() / 1000;
-                $date2 = $planned_task->getStart() / 1000 + $planned_task->getDuration() / 1000;
+                $date = $planned_task->getStart();
+                $date2 = clone $date;
+                $date2->modify('+'.($planned_task->getDuration() / 1000).' seconds');
                 $event->setSummary($task->getName());
                 $start = new \Google_EventDateTime();
-                $start->setDateTime(gmdate("Y-m-d\\TH:i:s\\Z", $date));
+                $start->setDateTime($date->format(DATE_RFC3339));
                 $event->setStart($start);
                 $end = new \Google_EventDateTime();
-                $end->setDateTime(gmdate("Y-m-d\\TH:i:s\\Z", $date2));
+                $end->setDateTime($date2->format(DATE_RFC3339));
                 $event->setEnd($end);
                 //To be modified to the user's calendar
                 //We need to handle several calendars... or not destroy the primary calendar
@@ -201,7 +205,7 @@ class GoogleCalDiplomat
                 if (is_object($date))
                 {
                     $date = new \DateTime($date->getDateTime());
-                    $planned_task->setStart($date->getTimestamp() * 1000);
+                    $planned_task->setStart($date);
                     $stop = $event->getEnd();
                     if (is_object($stop))
                     {

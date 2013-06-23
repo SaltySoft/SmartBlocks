@@ -53,8 +53,7 @@ define([
 
             base.tasks_list.fetch({
                 success: function () {
-
-
+                    console.log(base.tasks_list.models);
                     base.SmartBlocks.stopLoading();
                     console.log(base.tasks_list);
                     base.renderList();

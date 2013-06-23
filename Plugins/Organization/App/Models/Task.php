@@ -61,7 +61,7 @@ class Task extends \Model
     private $completion_date;
 
     /**
-     * @Column(type="integer", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
     private $due_date;
 
@@ -158,6 +158,13 @@ class Task extends \Model
 
     public function setDueDate($due_date)
     {
+
+        if (is_integer($due_date))
+        {
+            $date = new \DateTime();
+            $date->setTimestamp($due_date);
+            $due_date = $date;
+        }
         $this->due_date = $due_date;
     }
 
@@ -287,7 +294,7 @@ class Task extends \Model
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
-            "due_date" => $this->due_date
+            "due_date" => $this->due_date->getTimeStamp()
         );
 
         if ($show_task_users)
