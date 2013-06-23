@@ -45,7 +45,7 @@ define([
                     model: task
                 });
                 task_item_view.init(base.SmartBlocks, base.planning);
-                base.$el.find(".tasks_list").prepend(task_item_view.$el);
+                base.$el.find(".tasks_list").append(task_item_view.$el);
                 base.view_list.push(task_item_view);
             }
         },
@@ -58,7 +58,7 @@ define([
 
             base.tasks_list.fetch({
                 data: {
-                    date: Math.round(base.date.getTime() / 1000)
+                    filter: "undone"
                 },
                 success: function () {
 

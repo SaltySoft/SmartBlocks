@@ -74,6 +74,11 @@ class TasksController extends \Controller
                 ->setParameter("stop_date", $end);
         }
 
+        if (isset($data["filter"]) && $data["filter"] = "undone")
+        {
+            $qb->andWhere("t.completion_date is NULL");
+        }
+
         $results = $qb->getQuery()->getResult();
 
         $this->render = false;

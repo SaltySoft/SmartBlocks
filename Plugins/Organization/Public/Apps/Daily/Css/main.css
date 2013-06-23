@@ -97,14 +97,33 @@ input[type="text"].datepicker {
     z-index: 10;
 }
 
+.tasks_list .title_container {
+    float: left;
+    height: 38px;
+}
+
+.tasks_list .title {
+    padding: 10px 0 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.tasks_list .li-state-disabled {
+    min-height: 38px;
+}
+
 .tasks_list_controls {
     position:relative;
 }
 
 .action {
     position: absolute;
-    left: 0px;
     right: 0px;
+    line-height: 24px;
+}
+
+.task_item .name {
+    font-weight: bold;
 }
 
 /* DAY PLANNING */
