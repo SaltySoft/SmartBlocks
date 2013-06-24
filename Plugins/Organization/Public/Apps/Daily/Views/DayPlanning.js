@@ -85,6 +85,9 @@ define([
                         div.css("top", top);
                         div.html(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + task.get("name"));
                         base.$el.append(div);
+                        if (task.get("completion_date")) {
+                            div.addClass("done");
+                        }
                     }
                 }
             });

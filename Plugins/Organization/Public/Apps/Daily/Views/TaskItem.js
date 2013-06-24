@@ -132,6 +132,7 @@ define([
                             success: function () {
                                 base.planning.events.trigger("deleted_task", id);
                                 base.$el.remove();
+                                base.SmartBlocks.events.trigger("org.task_modified", base.task);
                             }
                         });
 

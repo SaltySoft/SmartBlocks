@@ -248,7 +248,9 @@ TODAY'S PLANNED
     z-index: 3;
     font-size: 0.7em;
 }
-
+.deadline.done {
+    border-bottom: 3px rgba(46, 144, 38, 0.70) solid;
+}
 
 @media (min-width: 1000px) {
     .planning_main_view {
