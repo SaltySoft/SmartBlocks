@@ -22,12 +22,13 @@ class PlannedTasksController extends \Controller
         {
             $start = new \DateTime();
             $start->setTimestamp($data["date"] / 1000);
+            $start->setTime(0, 0, 0);
             $stop = new \DateTime();
-            $stop->setTimestamp($data["date"] / 1000 + 24 * 60 * 60);
-
+            $stop->setTimestamp($data["date"] / 1000);
+            $stop->setTime(23, 59, 59);
             $qb->andWhere("pt.start >= :start AND pt.start <= :stop")
                 ->setParameter("start", $start)
-                ->setParameter("stop",  $stop);
+                ->setParameter("stop", $stop);
         }
 
 
