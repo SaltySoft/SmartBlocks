@@ -22,6 +22,7 @@ define([
                 base.render();
             }, 500);
             base.registerEvents();
+            base.$el.show();
         },
         render: function () {
             var base = this;

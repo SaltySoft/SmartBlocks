@@ -179,11 +179,11 @@ h3 {
 }
 
 h4 {
-    font-size: 21px;
+    font-size: 18px;
 }
 
 h5 {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 h6 {
@@ -610,4 +610,8 @@ button:hover {
     top: 0px;
     right: 0px;
     bottom: 0px;
+}
+
+.pure-button-disabled {
+    cursor: auto;
 }

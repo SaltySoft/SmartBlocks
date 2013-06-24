@@ -155,11 +155,6 @@ define([
                             }
                         });
 
-                        if (Math.abs(date.getTime() - base.planning.current_date.getTime()) > 24 * 3600 * 1000) {
-                            base.$el.remove();
-                            base.model.destroy();
-                        }
-
                     }
                 }
             });

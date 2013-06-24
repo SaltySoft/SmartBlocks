@@ -46,7 +46,7 @@ define([
                         }
 
                         var seconds = (minutes - Math.floor(minutes)) * 60;
-                        if (seconds >= 1 && minutes < 30) {
+                        if (seconds >= 1 && milliseconds < 15 * 60 * 1000) {
                             display += " " + Math.floor(seconds) + "s";
                         }
 
@@ -61,9 +61,12 @@ define([
                     base.$el.find(".current_work_name").html("nothing");
                 }
                 if (next_task) {
+                    base.$el.find(".next_work_container").show();
                     var start_time = next_task.getStart();
                     base.$el.find(".next_work_name").html(next_task.get("task").get("name"));
                     base.$el.find(".next_work_start_time").html(start_time.getHours() + "h" + (start_time.getMinutes() < 10 ? "0" : "") + start_time.getMinutes());
+                } else {
+                    base.$el.find(".next_work_container").hide();
                 }
             }, 500);
         },

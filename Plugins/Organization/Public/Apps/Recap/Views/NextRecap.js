@@ -17,7 +17,8 @@ define([
             base.SmartBlocks = SmartBlocks;
 
             base.deadlines = new TasksCollection();
-
+            base.page = 0;
+            base.page_count = 4;
             base.render();
             base.registerEvents();
             base.fetchTasks(function () {
@@ -29,19 +30,39 @@ define([
 
             var template = _.template(NextRecapTemplate);
             base.$el.html(template);
+
+            if (base.page <= 0) {
+                base.$el.find(".prev").addClass("pure-button-disabled");
+            } else {
+                base.$el.find(".prev").removeClass("pure-button-disabled");
+            }
         },
         updateView: function () {
             var base = this;
             var deadline_list_dom = base.$el.find(".deadline_list");
-            deadline_list_dom.html("");
+            deadline_list_dom.find(".deadline_item").remove();
+            var i = 0;
             for (var k in base.deadlines.models) {
-                var deadline = base.deadlines.models[k];
+                if (i >= base.page * base.page_count && i < base.page * base.page_count + base.page_count) {
+                    var deadline = base.deadlines.models[k];
+                    var deadline_view = new DeadlineItem({
+                        model: deadline
+                    });
+                    deadline_list_dom.prepend(deadline_view.$el);
+                    deadline_view.init(base.SmartBlocks);
+                }
+                i++;
+            }
+            if ((base.page + 1) * base.page_count >= i) {
+                base.$el.find(".next").addClass("pure-button-disabled");
+            } else {
+                base.$el.find(".next").removeClass("pure-button-disabled");
+            }
 
-                var deadline_view = new DeadlineItem({
-                    model: deadline
-                });
-                deadline_list_dom.append(deadline_view.$el);
-                deadline_view.init(base.SmartBlocks);
+            if (base.page <= 0) {
+                base.$el.find(".prev").addClass("pure-button-disabled");
+            } else {
+                base.$el.find(".prev").removeClass("pure-button-disabled");
             }
         },
         fetchTasks: function (callback) {
@@ -59,6 +80,20 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.delegate(".prev", 'click', function () {
+                if (base.page > 0) {
+                    base.page -= 1;
+                    base.updateView();
+                }
+            });
+
+            base.$el.delegate(".next", 'click', function () {
+                if ((base.page + 1) * base.page_count < base.deadlines.models.length) {
+                    base.page += 1;
+                    base.updateView();
+                }
+            });
         }
     });
 
