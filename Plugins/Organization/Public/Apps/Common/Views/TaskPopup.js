@@ -46,6 +46,7 @@ define([
                         base.SmartBlocks.show_message("Task successfully updated");
                         base.events.trigger("task_updated", base.task);
                         base.hide();
+                        base.SmartBlocks.events.trigger("org.task_modified", base.task);
                     }
                 });
             } else {

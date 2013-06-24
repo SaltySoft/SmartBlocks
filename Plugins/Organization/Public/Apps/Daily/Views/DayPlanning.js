@@ -27,11 +27,14 @@ define([
             base.date.setSeconds(0);
             base.date.setMilliseconds(0);
             base.planning = planning;
+
+            base.due_tasks = new TasksCollection();
+            console.log("DUE TASKS", base.due_tasks);
+
             base.render();
             base.registerEvents();
             base.planned_tasks = new PlannedTaskCollection();
 
-            base.due_tasks = new TasksCollection();
 
 
         },
@@ -57,7 +60,7 @@ define([
 
             }
 
-//            base.updateDueTasks();
+            base.updateDueTasks();
 //            base.$el.css("top", -2 * base.getHourHeight());
         },
         updateDueTasks: function () {
@@ -65,10 +68,24 @@ define([
 
             base.due_tasks.fetch({
                 data: {
-
+                    "date": base.planning.current_date.getTime() / 1000
                 },
                 success: function () {
+                    base.$el.find(".deadline").remove();
+                    console.log("DUE TASks", base.due_tasks);
+                    for (var k in base.due_tasks.models) {
 
+                        var task = base.due_tasks.models[k];
+                        var div = $(document.createElement("div"));
+                        div.addClass("deadline");
+                        var date = task.getDueDate();
+                        var top = 0;
+                        top += date.getHours() * base.getHourHeight();
+                        top += date.getMinutes() / 60 * base.getHourHeight();
+                        div.css("top", top);
+                        div.html(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + task.get("name"));
+                        base.$el.append(div);
+                    }
                 }
             });
         },
@@ -94,14 +111,14 @@ define([
 
             var e = window.event || e; // old IE support
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            var change =  base.getHourHeight() / 2;
+            var change = base.getHourHeight() / 2;
             var day_height = base.getHourHeight() * 24;
             var parent_height = base.$el.parent().height();
             if (delta < 0) {
                 if (base.pos - change > -day_height + parent_height)
                     base.pos -= change;
                 else
-                    base.pos =  -day_height + parent_height;
+                    base.pos = -day_height + parent_height;
             } else {
                 if (base.pos < 0)
                     base.pos += change;
@@ -174,8 +191,8 @@ define([
             var now = new Date();
 
 //            if (now.getHours() > 12) {
-                base.pos = -8 * (base.getHourHeight());
-                base.$el.css("top", base.pos);
+            base.pos = -8 * (base.getHourHeight());
+            base.$el.css("top", base.pos);
 //            }
 
 //            /**
@@ -185,6 +202,10 @@ define([
 //                base.createTask();
 //            });
             base.fetchPlannedTasks();
+
+            base.SmartBlocks.events.on("org.task_modified", function (task) {
+                base.updateDueTasks();
+            });
         }
     });
 
