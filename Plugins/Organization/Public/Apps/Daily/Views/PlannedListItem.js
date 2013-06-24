@@ -1,12 +1,11 @@
 define([
     'jquery',
     'underscore',
-    'backbone',
-    'text!Organization/Apps/Daily/Templates/planned_list.html'
-], function ($, _, Backbone, PlannedListTemplate) {
+    'backbone'
+], function ($, _, Backbone) {
     var PlannedList = Backbone.View.extend({
-        tagName: "ul",
-        className: "planned_list",
+        tagName: "li",
+        className: "planned_list_item",
         initialize: function () {
 
         },
@@ -18,9 +17,7 @@ define([
         },
         render: function () {
             var base = this;
-            var template = _.template(PlannedListTemplate, {});
 
-            base.$el.html(template);
         },
         registerEvents: function () {
             var base = this;

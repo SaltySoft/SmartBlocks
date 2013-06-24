@@ -68,13 +68,19 @@ define([
             }
 
             var hours = (days - Math.floor(days)) * 24;
-            display += Math.floor(hours) + " h ";
+            if (hours >= 1 && days <= 3)
+                display += Math.floor(hours) + " h ";
 
             var minutes = (hours - Math.floor(hours)) * 60;
-            display += Math.floor(minutes) + " m ";
+            if (milliseconds < 1000 * 3600 * 24)
+                display += Math.floor(minutes) + " m ";
 
             var seconds = (minutes - Math.floor(minutes)) * 60;
-            display += Math.floor(seconds) + " s ";
+            if (milliseconds < 1000 * 3600 * 5) {
+                display += Math.floor(seconds) + " s ";
+
+            }
+
 
 
             base.$el.find(".ti_due_on").html(display);

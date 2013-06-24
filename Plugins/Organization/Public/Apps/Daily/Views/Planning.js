@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!Organization/Apps/Daily/Templates/main_planning.html',
     'Organization/Apps/Daily/Views/DayPlanning',
-    'Organization/Apps/Daily/Views/TasksList'
-], function ($, _, Backbone, MainViewTemplate, DailyPlanningView, TasksListView) {
+    'Organization/Apps/Daily/Views/TasksList',
+    'Organization/Apps/Daily/Views/PlannedList'
+], function ($, _, Backbone, MainViewTemplate, DailyPlanningView, TasksListView, PlannedListView) {
 
     var monthNames = [ "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December" ];
@@ -68,6 +69,12 @@ define([
             base.tasks_list.init(base.SmartBlocks, base);
 
             base.$el.find(".tasks_container").html(base.tasks_list.$el);
+
+
+            base.planned_list_view = new PlannedListView();
+            base.planned_list_view.init(base.SmartBlocks, base);
+
+            base.$el.find(".planned_list_container").html(base.planned_list_view.$el);
         },
         registerEvents: function () {
             var base = this;

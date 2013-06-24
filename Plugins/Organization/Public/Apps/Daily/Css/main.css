@@ -82,6 +82,7 @@ input[type="text"].datepicker {
 .tasks_container {
     float: left;
     position: relative;
+    width: 100%;
 }
 
 .task_item {
@@ -97,18 +98,18 @@ input[type="text"].datepicker {
     z-index: 10;
 }
 
-.tasks_list .title_container {
+.daily_list .title_container {
     float: left;
     height: 38px;
 }
 
-.tasks_list .title {
+.daily_list .title {
     padding: 10px 0 10px 0;
     font-size: 1.2em;
     font-weight: bold;
 }
 
-.tasks_list .li-state-disabled {
+.daily_list .li-state-disabled {
     min-height: 38px;
 }
 
