@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Recap/Templates/recap_template.html',
-    'Organization/Apps/Recap/Views/TodayRecap'
-], function ($, _, Backbone, RecapTemplate, TodayRecapView) {
+    'Organization/Apps/Recap/Views/TodayRecap',
+    'Organization/Apps/Recap/Views/NextRecap'
+], function ($, _, Backbone, RecapTemplate, TodayRecapView, NextRecapView) {
     var MainView = Backbone.View.extend({
         tagName: 'div',
         className: 'recap_main_view',
@@ -14,7 +15,6 @@ define([
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
             base.render();
             base.registerEvents();
         },
@@ -33,6 +33,10 @@ define([
             var today_view = new TodayRecapView();
             base.$el.find(".today_info").html(today_view.$el);
             today_view.init(base.SmartBlocks);
+
+            var next_view = new NextRecapView();
+            base.$el.find(".next_info").html(next_view.$el);
+            next_view.init(base.SmartBlocks);
 
         },
         registerEvents: function () {

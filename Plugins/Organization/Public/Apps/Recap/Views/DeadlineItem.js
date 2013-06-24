@@ -3,27 +3,23 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Daily/Templates/task_item.html',
-    'ContextMenuView',
-    'Organization/Apps/Common/Views/TaskPopup',
     'underscore_string'
-], function ($, _, Backbone, TaskItemTemplate, ContextMenu, TaskPopup, _s) {
-    var TaskItemView = Backbone.View.extend({
+], function ($, _, Backbone, TaskItemTemplate, _s) {
+    var DeadlineItemView = Backbone.View.extend({
         tagName: "li",
-        className: "task_item",
+        className: "deadline_item",
         initialize: function () {
             var base = this;
-            base.task = base.model;
+            base.task = this.model;
         },
-        init: function (SmartBlocks, planning) {
+        init: function (SmartBlocks) {
             var base = this;
+
             base.SmartBlocks = SmartBlocks;
 
-            base.planning = planning;
-            base.$el.attr("data-id", base.task.get('id'));
             base.render();
             setInterval(function () {
                 base.render();
-
             }, 500);
             base.registerEvents();
         },
@@ -33,8 +29,11 @@ define([
             var template = _.template(TaskItemTemplate, { task: base.task, _s: _s });
             base.$el.html(template);
             var now = new Date();
+
             var date = base.task.getDueDate();
+
             if (date < now) {
+
                 base.$el.addClass("overdue");
 
                 var display = "Overdue by ";
@@ -84,54 +83,12 @@ define([
             }
 
             base.$el.find(".ti_due_on").html(display);
+
         },
         registerEvents: function () {
             var base = this;
-
-            base.$el.draggable({
-                revert: true
-            });
-
-            base.$el.attr("oncontextmenu", "return false;");
-            base.$el.mousedown(function (e) {
-                var id = base.task.get("id");
-                if (e.which == 3) {
-                    var context_menu = new ContextMenu();
-                    context_menu.addButton("Edit this task", function () {
-                        var task_popup = new TaskPopup(base.task);
-                        task_popup.init(base.SmartBlocks);
-                    });
-                    context_menu.addButton("Delete this task", function () {
-                        base.task.destroy({
-                            success: function () {
-                                base.planning.events.trigger("deleted_task", id);
-                                base.$el.remove();
-                                base.SmartBlocks.events.trigger("org.task_modified", base.task);
-                            }
-                        });
-
-                    });
-                    context_menu.show(e);
-                    return false;
-                }
-
-                return false;
-            });
-
-            base.$el.mouseover(function () {
-                base.planning.events.trigger("over_task", base.task.id);
-            });
-
-            base.planning.events.on("over_task", function (id) {
-                if (base.task.id == id)
-                    base.$el.addClass("over");
-                else
-                    base.$el.removeClass("over");
-            });
-
-
         }
     });
 
-    return TaskItemView;
+    return DeadlineItemView;
 });
