@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Daily/Templates/task_item.html',
-    'ContextMenuView'
-], function ($, _, Backbone, TaskItemTemplate, ContextMenu) {
+    'ContextMenuView',
+    'Organization/Apps/Common/Views/TaskPopup',
+    'underscore_string'
+], function ($, _, Backbone, TaskItemTemplate, ContextMenu, TaskPopup, _s) {
 
     var days = [
         'Monday',
@@ -54,34 +56,58 @@ define([
         render: function () {
             var base = this;
 
-            var template = _.template(TaskItemTemplate, { task: base.task });
+            var template = _.template(TaskItemTemplate, { task: base.task, _s: _s });
             base.$el.html(template);
-
+            var now = new Date();
             var date = base.task.getDueDate();
-            var today = new Date();
-            var display = "";
-            var milliseconds = date.getTime() - today.getTime();
+            if (date < now) {
+                base.$el.addClass("overdue");
 
-            var days = (date.getTime() - today.getTime()) / ( 24 * 3600 * 1000);
-            if (days >= 1) {
-                display += Math.floor(days) + "d ";
+                var display = "Overdue by ";
+                var milliseconds = now.getTime() - date.getTime();
+
+                var days = milliseconds / ( 24 * 3600 * 1000);
+                if (days >= 1) {
+                    display += Math.floor(days) + "d ";
+                }
+
+                var hours = (days - Math.floor(days)) * 24;
+                if (hours >= 1 && days <= 3)
+                    display += Math.floor(hours) + " h ";
+
+                var minutes = (hours - Math.floor(hours)) * 60;
+                if (milliseconds < 1000 * 3600 * 24 && milliseconds > 60000)
+                    display += Math.floor(minutes) + " m ";
+
+                var seconds = (minutes - Math.floor(minutes)) * 60;
+                if (milliseconds < 1000 * 3600 * 0.5 && milliseconds < 60000) {
+                    display += Math.floor(seconds) + " s ";
+                }
+
+            } else {
+                base.$el.removeClass("overdue");
+
+                var display = "Due in ";
+                var milliseconds = date.getTime() - now.getTime();
+
+                var days = milliseconds / ( 24 * 3600 * 1000);
+                if (days >= 1) {
+                    display += Math.floor(days) + "d ";
+                }
+
+                var hours = (days - Math.floor(days)) * 24;
+                if (hours >= 1 && days <= 3)
+                    display += Math.floor(hours) + " h ";
+
+                var minutes = (hours - Math.floor(hours)) * 60;
+                if (milliseconds < 1000 * 3600 * 24)
+                    display += Math.floor(minutes) + " m ";
+
+                var seconds = (minutes - Math.floor(minutes)) * 60;
+                if (milliseconds < 1000 * 3600 * 5) {
+                    display += Math.floor(seconds) + " s ";
+                }
             }
-
-            var hours = (days - Math.floor(days)) * 24;
-            if (hours >= 1 && days <= 3)
-                display += Math.floor(hours) + " h ";
-
-            var minutes = (hours - Math.floor(hours)) * 60;
-            if (milliseconds < 1000 * 3600 * 24)
-                display += Math.floor(minutes) + " m ";
-
-            var seconds = (minutes - Math.floor(minutes)) * 60;
-            if (milliseconds < 1000 * 3600 * 5) {
-                display += Math.floor(seconds) + " s ";
-
-            }
-
-
 
             base.$el.find(".ti_due_on").html(display);
         },
@@ -97,6 +123,10 @@ define([
                 var id = base.task.get("id");
                 if (e.which == 3) {
                     var context_menu = new ContextMenu();
+                    context_menu.addButton("Edit this task", function () {
+                        var task_popup = new TaskPopup(base.task);
+                        task_popup.init(base.SmartBlocks);
+                    });
                     context_menu.addButton("Delete this task", function () {
                         base.task.destroy({
                             success: function () {

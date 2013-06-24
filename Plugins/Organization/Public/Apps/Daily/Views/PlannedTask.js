@@ -25,6 +25,7 @@ define([
             base.planning = planning;
             base.render();
             base.registerEvents();
+            base.planning.events.trigger("planning_modified");
         },
         render: function () {
             var base = this;
@@ -57,6 +58,7 @@ define([
                         base.planned_task.destroy({
                             success: function () {
                                 base.$el.remove();
+                                base.planning.events.trigger("planning_modified");
                             }
                         });
 

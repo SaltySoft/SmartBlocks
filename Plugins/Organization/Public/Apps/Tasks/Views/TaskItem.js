@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Tasks/Templates/task_item.html',
-    'Organization/Apps/Common/Views/ShareWindow'
-], function ($, _, Backbone, TaskItemTemplate, ShareWindow) {
+    'Organization/Apps/Common/Views/ShareWindow',
+    'ContextMenuView',
+    'Organization/Apps/Common/Views/TaskPopup'
+], function ($, _, Backbone, TaskItemTemplate, ShareWindow, ContextMenu, TaskPopup) {
     var TaskItemView = Backbone.View.extend({
         tagName: "li",
         className: "task_item normal",
@@ -21,6 +23,7 @@ define([
                 'Friday',
                 'Saturday'
             ];
+            base.task = base.model;
         },
         init: function (SmartBlocks, main_view) {
             var base = this;
@@ -125,6 +128,30 @@ define([
                 var share_window = new ShareWindow({ model: base.model });
                 share_window.init(base.SmartBlocks);
                 share_window.show();
+            });
+
+            base.$el.attr("oncontextmenu", "return false;");
+            base.$el.mousedown(function (e) {
+                var id = base.task.get("id");
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Edit this task", function () {
+                        var task_popup = new TaskPopup(base.task);
+                        task_popup.init(base.SmartBlocks);
+                    });
+                    context_menu.addButton("Delete this task", function () {
+                        base.task.destroy({
+                            success: function () {
+                                base.$el.remove();
+                            }
+                        });
+
+                    });
+                    context_menu.show(e);
+                    return false;
+                }
+
+                return false;
             });
         },
         enterEditMode: function () {

@@ -5,8 +5,9 @@ define([
     'Organization/Apps/Daily/Views/Hour',
     'Organization/Apps/Daily/Views/PlannedTask',
     'Organization/Apps/Daily/Models/PlannedTask',
-    'Organization/Apps/Daily/Collections/PlannedTasks'
-], function ($, _, Backbone, HourView, PlannedTaskView, PlannedTask, PlannedTaskCollection) {
+    'Organization/Apps/Daily/Collections/PlannedTasks',
+    'Organization/Apps/Tasks/Collections/Tasks'
+], function ($, _, Backbone, HourView, PlannedTaskView, PlannedTask, PlannedTaskCollection, TasksCollection) {
     var DailyPlanningView = Backbone.View.extend({
         tagName: "div",
         className: "daily_planning_view",
@@ -29,6 +30,8 @@ define([
             base.render();
             base.registerEvents();
             base.planned_tasks = new PlannedTaskCollection();
+
+            base.due_tasks = new TasksCollection();
 
 
         },
@@ -54,7 +57,20 @@ define([
 
             }
 
+//            base.updateDueTasks();
 //            base.$el.css("top", -2 * base.getHourHeight());
+        },
+        updateDueTasks: function () {
+            var base = this;
+
+            base.due_tasks.fetch({
+                data: {
+
+                },
+                success: function () {
+
+                }
+            });
         },
         updateCurrentTime: function () {
             var base = this;
