@@ -61,8 +61,9 @@ define([
                     } else {
                         time_worked += now.getTime() - (start.getTime());
                     }
-                    total_work += planned_task.get("duration");
+
                 }
+                total_work += planned_task.get("duration");
             }
             base.$el.find(".today_worked_amount").html(getTimeString(time_worked));
             base.$el.find(".today_work_amount").html(getTimeString(total_work));
