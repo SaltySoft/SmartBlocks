@@ -48,7 +48,7 @@ define([
             base.$el.mousedown(function (e) {
                 if (e.which == 1) {
                     var planned_task = new PlannedTask({
-                        content: "New planned task",
+//                        content: "New planned task",
                         start: base.time.getTime(),
                         duration: 3600000
                     });

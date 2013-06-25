@@ -59,8 +59,10 @@ define([
         },
         showPopup: function () {
             var base = this;
+            base.planning.events.trigger("planned_task_popsremove");
             var popup = new PlannedTaskPopup();
             popup.init(base.SmartBlocks, base);
+
         },
         registerEvents: function () {
             var base = this;

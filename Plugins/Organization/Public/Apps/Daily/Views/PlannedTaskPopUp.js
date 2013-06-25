@@ -15,6 +15,7 @@ define([
             base.SmartBlocks = SmartBlocks;
 
             base.planned_task_view = planned_task_view;
+            base.planning = base.planned_task_view.planning;
 
             base.planned_task = base.planned_task_view.planned_task;
 
@@ -39,6 +40,15 @@ define([
             base.$el.css("top", base.planned_task_view.$el.offset().top - base.$el.height() - 25);
             base.$el.css("left", base.planned_task_view.$el.offset().left);
         },
+        cancel: function () {
+            var base = this;
+            if (!base.planned_task.get("id")) {
+                base.planned_task_view.$el.remove();
+                base.$el.remove();
+            } else {
+                base.$el.remove();
+            }
+        },
         registerEvents: function () {
             var base = this;
 
@@ -59,28 +69,29 @@ define([
                 base.planned_task.setStart(date);
                 base.planned_task.set("duration", base.$el.find(".duration_input").val() * 60000);
                 base.planned_task.set("content", base.$el.find(".content").val());
-                base.planned_task.save({}, {
-                    success: function () {
+                if (base.planned_task.get("content") != "") {
+                    base.planned_task.save({}, {
+                        success: function () {
 
-                        base.planned_task_view.update();
-                        console.log("Succesfully updated planned task");
-                        base.$el.remove();
-                    }
-                });
+                            base.planned_task_view.update();
+                            console.log("Succesfully updated planned task");
+                            base.$el.remove();
+                        }
+                    });
+                } else {
+                    alert("You must provide a content");
+                }
             });
 
             base.$el.find(".cancel_button").click(function () {
-                if (!base.planned_task.get("id")) {
-                    base.planned_task_view.$el.remove();
-                } else {
-                    base.$el.remove();
-                }
+               base.cancel();
             });
 
             base.$el.find(".delete_button").click(function () {
                 base.planned_task.destroy({
                     success: function () {
                         base.planned_task_view.$el.remove();
+                        base.$el.remove();
                     }
                 });
             });
@@ -94,6 +105,10 @@ define([
 
             base.planned_task_view.events.on("moving", function () {
                 base.updatePosition();
+            });
+
+            base.planning.events.on("planned_task_popsremove", function () {
+                base.cancel();
             });
 
         }

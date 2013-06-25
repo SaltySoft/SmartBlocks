@@ -53,10 +53,10 @@ define([
                     for (var k in base.planned_tasks.models)
                     {
                         var planned_task = base.planned_tasks.models[k];
-                        if (!contained_tasks[ planned_task.get("task").get("id")]) {
+                        if (!contained_tasks[planned_task.getName()]) {
 
-                            planned_list.append('<li class="todays_planned">' + planned_task.get("task").get("name") + '</li>');
-                            contained_tasks[ planned_task.get("task").get("id")] = true;
+                            planned_list.append('<li class="todays_planned">' + planned_task.getName() + '</li>');
+                            contained_tasks[ planned_task.getName()] = true;
                         }
                     }
                     base.stopLoading();
