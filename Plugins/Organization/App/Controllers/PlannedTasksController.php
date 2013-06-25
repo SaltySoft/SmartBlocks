@@ -82,6 +82,7 @@ class PlannedTasksController extends \Controller
         $date->setTimestamp($data["start"] / 1000);
         $planned_task->setStart($date);
         $planned_task->setOwner(\User::current_user());
+        $planned_task->setContent($data["content"]);
         $planned_task->save();
         $response = $planned_task->toArray();
 

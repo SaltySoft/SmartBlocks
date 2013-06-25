@@ -4,14 +4,15 @@
 
 .recap_main_view {
   .recap_today {
-    .current_work , .next_work {
+    .current_work , .next_work, .current_work_none_inner {
       text-align: center;
-      padding: 18px;
+
+      padding: 11.5px;
       background: #6c92b8;
       color: white;
       font-size: 1em;
       .work_name {
-        font-weight: bold;
+//        font-weight: bold;
       }
     }
     .next_work_container {
@@ -19,7 +20,7 @@
     }
 
     .right_now {
-      .no_work_now {
+      .current_work_none {
         display: none;
       }
       .current_work_container {
@@ -28,7 +29,7 @@
     }
 
     .right_now.nothing_to_do {
-      .no_work_now {
+      .current_work_none {
         display: block;
       }
       .current_work_container {
@@ -44,10 +45,9 @@
   .next_recap {
     height: 200px;
     .deadline_list {
-      height: 150px;
+      height: 160px;
       .deadline_item {
-        padding: 10px;
-        padding-bottom: 12px;
+        padding: 12px;
         background: #6c92b8;
         color: white;
         margin-bottom: 1px;

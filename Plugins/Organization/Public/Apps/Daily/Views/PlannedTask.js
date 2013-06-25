@@ -121,11 +121,14 @@ define([
                     start.setHours(Math.round(base.$el.position().top / base.DayPlanning.getHourHeight()));
                     start.setMinutes(Math.round((base.$el.position().top / base.DayPlanning.getHourHeight() % 1) * 60));
                     base.planned_task.set("start", start.getTime());
-                    base.planned_task.save();
+                    base.planned_task.save({}, {
+
+                    });
                     base.DayPlanning.$el.bind("click.create_task", function () {
                         base.DayPlanning.createTask();
                     });
                     base.DayPlanning.$el.unbind("mouseup.droptask");
+                    base.update();
                 });
             });
 
@@ -143,7 +146,6 @@ define([
 
             base.$el.droppable({
                 drop: function (event, ui) {
-                    alert("dropped deadline");
                     var task = base.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
                     base.planned_task.set("task", task);
                     base.planned_task.save({}, {

@@ -72,7 +72,6 @@ define([
                 if (base.planned_task.get("content") != "") {
                     base.planned_task.save({}, {
                         success: function () {
-
                             base.planned_task_view.update();
                             console.log("Succesfully updated planned task");
                             base.$el.remove();

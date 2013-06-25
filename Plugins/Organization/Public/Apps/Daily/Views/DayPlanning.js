@@ -114,7 +114,7 @@ define([
 
             var e = window.event || e; // old IE support
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-            var change = base.getHourHeight() / 2;
+            var change = base.getHourHeight() * 2;
             var day_height = base.getHourHeight() * 24;
             var parent_height = base.$el.parent().height();
             if (delta < 0) {
@@ -128,6 +128,9 @@ define([
                 else
                     base.pos = 0;
             }
+
+            if (base.pos > 0)
+                base.pos = 0;
 
             base.$el.css("top", base.pos);
         },

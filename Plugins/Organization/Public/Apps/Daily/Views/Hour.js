@@ -17,7 +17,7 @@ define([
             base.dayPlanning = dayPlanning;
             var time2 = new Date(time);
 //            time2.setHours(time.getHours());
-            if (time2.getHours() < 8 || time2.getHours() >= 19) {
+            if (time2.getHours() < 7 || time2.getHours() > 20) {
                 base.$el.addClass("night");
             }
             base.time = time2;
