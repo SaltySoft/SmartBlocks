@@ -35,14 +35,14 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.droppable({
-                hoverClass: "ui-state-active",
-                drop: function (event, ui) {
-                    var task = base.dayPlanning.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
-                    base.dayPlanning.createTask(task, base.time);
-
-                }
-            });
+//            base.$el.droppable({
+//                hoverClass: "ui-state-active",
+//                drop: function (event, ui) {
+//                    var task = base.dayPlanning.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
+//                    base.dayPlanning.createTask(task, base.time);
+//
+//                }
+//            });
 
 //            base.$el.attr("oncontextmenu", "return false;");
             base.$el.mousedown(function (e) {

@@ -46,9 +46,10 @@ define([
         update: function () {
             var base = this;
             base.updatePosition();
-            base.$el.find(".name").html(base.planned_task.getName());
+            base.$el.find(".name").html(base.planned_task.get("content"));
             var date = base.planned_task.getStart();
             base.$el.find(".start_time").html(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes());
+            base.$el.find(".linked_task").html((base.planned_task.get("task")) ? "Deadline : " + base.planned_task.get("task").get("name") : "Not linked with a deadline");
         },
         updatePosition: function () {
             var base = this;
@@ -94,6 +95,7 @@ define([
 
             base.$el.find(".handle").mousedown(function (e) {
                 $(document).disableSelection();
+                e.stopPropagation();
                 base.DayPlanning.$el.unbind("click.create_task");
                 base.moving = true;
                 base.mouse_delta = 0;
@@ -105,11 +107,6 @@ define([
                     if (newY > 0 && newY < base.DayPlanning.getHourHeight() * 24 - base.$el.height()) {
                         base.$el.css("top", newY);
                         base.mousePreviousY = ee.pageY;
-//                        if ( - base.$el.position().top > base.$el.parent().position().top - 100) {
-//                            base.$el.parent().css("top", base.$el.parent().position().top - 20);
-//                            base.mousePreviousY = ee.pageY;
-//                            base.mouse_delta = 0;
-//                        }
                     }
                     base.events.trigger("moving", base.$el);
                 });
@@ -141,6 +138,19 @@ define([
                     base.planned_task.set("duration", duration);
                     console.log(duration);
                     base.planned_task.save();
+                }
+            });
+
+            base.$el.droppable({
+                drop: function (event, ui) {
+                    alert("dropped deadline");
+                    var task = base.planning.tasks_list.tasks_list.get(ui.draggable.attr("data-id"));
+                    base.planned_task.set("task", task);
+                    base.planned_task.save({}, {
+                        success: function () {
+                            base.update();
+                        }
+                    });
                 }
             });
 

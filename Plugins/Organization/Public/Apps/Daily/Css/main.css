@@ -99,7 +99,7 @@ input[type="text"].datepicker {
 }
 
 .task_item.overdue {
-    background: rgba(203, 0, 4, 0.49);
+    background: #f3a487;
 }
 
 .task_item.ui-draggable-dragging {
