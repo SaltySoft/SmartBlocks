@@ -16,11 +16,11 @@ define([
         },
         getName: function () {
             var base = this;
-            if (base.get("task")) {
-                return base.get("task").get("name");
-            } else {
-                return base.get("content") ? base.get("content") : "No name";
-            }
+            return base.get("content") ? base.get("content") : "No name";
+        },
+        getDeadlineName: function () {
+            var base = this;
+            return base.get("task") ? base.get("task").get("name") : "Not linked with a deadline";
         },
         parse: function (response) {
             var task_array = response.task;

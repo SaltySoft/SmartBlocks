@@ -48,12 +48,15 @@ define([
                 var now = new Date();
                 var found_task = false;
                 var next_task = undefined;
+                var ptask = undefined;
                 for (var k in base.today_planned.models) {
                     var planned_task = base.today_planned.models[k];
                     var task_start = planned_task.getStart();
                     var task_end = new Date(task_start.getTime() + planned_task.get("duration"));
+
                     if (task_start <= now && now <= task_end) {
-                        base.$el.find(".current_work_name").html(planned_task.getName());
+
+                        ptask = planned_task;
                         var milliseconds = task_end.getTime() - now.getTime();
 
                         var display = "";
@@ -79,6 +82,8 @@ define([
 
                         found_task = true;
                     }
+
+
                     if (task_start > now && (!next_task || next_task.getStart() > task_start)) {
                         next_task = planned_task;
                     }
@@ -87,15 +92,18 @@ define([
                     base.$el.find(".right_now").addClass("nothing_to_do");
                 } else {
                     base.$el.find(".right_now").removeClass("nothing_to_do");
+                    base.$el.find(".current_work_name").html(ptask.getName());
+                    base.$el.find(".deadline_name").html(ptask.getDeadlineName());
                 }
                 if (next_task) {
                     base.$el.find(".next_work_container").show();
                     var start_time = next_task.getStart();
                     base.$el.find(".next_work_name").html(next_task.getName());
                     var time_left = start_time.getTime() - new Date().getTime();
-                    base.$el.find(".next_work_start_time").html(start_time.getHours() + "h" +
+                    base.$el.find(".next_work_start_time").html(" in " + getTimeString(time_left) + " (at " + start_time.getHours() + "h" +
                         (start_time.getMinutes() < 10 ? "0" : "") +
-                        start_time.getMinutes() + " in " + getTimeString(time_left));
+                        start_time.getMinutes() + ")");
+                    base.$el.find(".deadline_name_nxt").html(next_task.getDeadlineName());
                 } else {
                     base.$el.find(".next_work_container").hide();
                 }
