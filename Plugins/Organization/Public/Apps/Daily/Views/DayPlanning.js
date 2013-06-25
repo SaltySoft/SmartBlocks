@@ -149,6 +149,7 @@ define([
             });
             planned_task_view.init(base.SmartBlocks, base, base.planning);
             base.$el.append(planned_task_view.$el);
+            return planned_task_view;
         },
         createTask: function (task, start) {
             var base = this;

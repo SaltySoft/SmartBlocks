@@ -11,8 +11,7 @@ class PlannedTasksController extends \Controller
 
         $qb->select("pt")
             ->from("\\Organization\\PlannedTask", "pt")
-            ->join("pt.task", "t")
-            ->where("t.owner = :user")
+            ->where("pt.owner = :user")
             ->andWhere('pt.active = true')
             ->setParameter("user", \User::current_user());
 
@@ -65,22 +64,26 @@ class PlannedTasksController extends \Controller
     {
         $data = $this->getRequestData();
         $planned_task = new PlannedTask();
+        if (isset($data["task"]))
+        {
+            $task = Task::find($data["task"]["id"]);
+            if (is_object($task) && $task->getOwner()->getId() == \User::current_user()->getId())
+            {
+                $planned_task->setTask($task);
 
-        $task = Task::find($data["task"]["id"]);
-        if (is_object($task) && $task->getOwner()->getId() == \User::current_user()->getId())
-        {
-            $planned_task->setTask($task);
-            $planned_task->setDuration($data["duration"]);
-            $date = new \DateTime();
-            $date->setTimestamp($data["start"] / 1000);
-            $planned_task->setStart($date);
-            $planned_task->save();
-            $response = $planned_task->toArray();
+            }
+            else
+            {
+                $response = array("status" => "error", "message" => "Task not found");
+            }
         }
-        else
-        {
-            $response = array("status" => "error", "message" => "Task not found");
-        }
+        $planned_task->setDuration($data["duration"]);
+        $date = new \DateTime();
+        $date->setTimestamp($data["start"] / 1000);
+        $planned_task->setStart($date);
+        $planned_task->setOwner(\User::current_user());
+        $planned_task->save();
+        $response = $planned_task->toArray();
 
 
         $this->render = false;
@@ -91,25 +94,35 @@ class PlannedTasksController extends \Controller
     public function update($params = array())
     {
         $planned_task = PlannedTask::find($params["id"]);
-        if (is_object($planned_task) && $planned_task->getTask()->getOwner()->getId() == \User::current_user()->getId())
+        if (is_object($planned_task) && $planned_task->getOwner()->getId() == \User::current_user()->getId())
         {
             $data = $this->getRequestData();
 
-            $task = Task::find($data["task"]["id"]);
-            if (is_object($task))
+            if (isset($data["task"]) && isset($data["task"]["id"]))
             {
-                $planned_task->setTask($task);
-                $planned_task->setDuration($data["duration"]);
-                $date = new \DateTime();
-                $date->setTimestamp($data["start"] / 1000);
-                $planned_task->setStart($date);
-                $planned_task->save();
-                $response = $planned_task->toArray();
+                $task = Task::find($data["task"]["id"]);
+                if (is_object($task))
+                {
+                    $planned_task->setTask($task);
+                }
+                else
+                {
+                    $planned_task->setTask(null);
+                }
             }
             else
             {
-                $response = array("status" => "error", "message" => "Task not found");
+                $planned_task->setTask(null);
             }
+
+            $planned_task->setDuration($data["duration"]);
+            $date = new \DateTime();
+            $date->setTimestamp($data["start"] / 1000);
+            $planned_task->setStart($date);
+            $planned_task->setCompleted($data["completed"]);
+            $planned_task->setContent($data["content"]);
+            $planned_task->save();
+            $response = $planned_task->toArray();
         }
         else
         {
@@ -123,7 +136,7 @@ class PlannedTasksController extends \Controller
     public function destroy($params = array())
     {
         $planned_task = PlannedTask::find($params["id"]);
-        if (is_object($planned_task) && $planned_task->getTask()->getOwner()->getId() == \User::current_user()->getId())
+        if (is_object($planned_task) && $planned_task->getOwner()->getId() == \User::current_user()->getId())
         {
             $planned_task->setActive(false);
             $planned_task->save();

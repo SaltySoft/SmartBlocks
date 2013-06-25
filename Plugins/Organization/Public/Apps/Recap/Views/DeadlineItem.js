@@ -18,8 +18,11 @@ define([
             base.SmartBlocks = SmartBlocks;
 
             base.render();
-            setInterval(function () {
+            base.interval = setInterval(function () {
                 base.render();
+                if (base.$el.height() <= 0) {
+                    clearInterval(base.interval);
+                }
             }, 500);
             base.registerEvents();
             base.$el.show();

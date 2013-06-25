@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Daily/Templates/hour.html'
-], function ($, _, Backbone, HourTemplate) {
+    'text!Organization/Apps/Daily/Templates/hour.html',
+    'Organization/Apps/Daily/Models/PlannedTask'
+], function ($, _, Backbone, HourTemplate, PlannedTask) {
     var HourView = Backbone.View.extend({
         tagName: "div",
         className: "hour_view",
@@ -41,6 +42,20 @@ define([
                     base.dayPlanning.createTask(task, base.time);
 
                 }
+            });
+
+//            base.$el.attr("oncontextmenu", "return false;");
+            base.$el.mousedown(function (e) {
+                if (e.which == 1) {
+                    var planned_task = new PlannedTask({
+                        content: "New planned task",
+                        start: base.time.getTime(),
+                        duration: 3600000
+                    });
+                    var planned_view = base.dayPlanning.addPlannedTask(planned_task);
+                    planned_view.showPopup();
+                }
+                return false;
             });
         }
     });

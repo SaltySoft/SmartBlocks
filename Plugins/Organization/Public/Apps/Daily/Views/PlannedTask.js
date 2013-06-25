@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!Organization/Apps/Daily/Templates/planned_task.html',
     'Organization/Apps/Daily/Models/PlannedTask',
-    'ContextMenuView'
-], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask, ContextMenu) {
+    'ContextMenuView',
+    'Organization/Apps/Daily/Views/PlannedTaskPopup'
+], function ($, _, Backbone, PlannedTaskTemplate, PlannedTask, ContextMenu, PlannedTaskPopup) {
 
     var PlannedTaskView = Backbone.View.extend({
         tagName: "div",
@@ -17,6 +18,7 @@ define([
             base.mouse_delta = 0;
             base.mousePreviousY = 0;
             base.planned_task = base.model;
+            base.events = $.extend({}, Backbone.Events);
         },
         init: function (SmartBlocks, DayPlanning, planning) {
             var base = this;
@@ -31,22 +33,34 @@ define([
             var base = this;
 
             var template = _.template(PlannedTaskTemplate, {
-                task : base.planned_task.get("task")
+                planned_task : base.planned_task
             });
 
             base.$el.html(template);
 
-            base.updatePosition();
+            base.update();
 
 //
 
+        },
+        update: function () {
+            var base = this;
+            base.updatePosition();
+            base.$el.find(".name").html(base.planned_task.getName());
+            var date = base.planned_task.getStart();
+            base.$el.find(".start_time").html(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes());
         },
         updatePosition: function () {
             var base = this;
             base.$el.css("top", Math.round(base.DayPlanning.getStartPosition(base.planned_task.getStart())));
             base.$el.css("height", base.planned_task.get("duration") / 60 / 60 / 1000 * base.DayPlanning.getHourHeight());
-            console.log(base.planned_task.get("start"));
-            console.log(new Date(base.planned_task.get("start")));
+//            console.log(base.planned_task.get("start"));
+//            console.log(new Date(base.planned_task.get("start")));
+        },
+        showPopup: function () {
+            var base = this;
+            var popup = new PlannedTaskPopup();
+            popup.init(base.SmartBlocks, base);
         },
         registerEvents: function () {
             var base = this;
@@ -54,6 +68,9 @@ define([
             base.$el.mousedown(function (e) {
                 if (e.which == 3) {
                     var context_menu = new ContextMenu();
+                    context_menu.addButton("Edit", function () {
+                       base.showPopup();
+                    });
                     context_menu.addButton("Delete", function () {
                         base.planned_task.destroy({
                             success: function () {
@@ -63,12 +80,14 @@ define([
                         });
 
                     });
-                    context_menu.show(e);
-                    return false;
-                }
 
-                return false;
+                    context_menu.show(e);
+//                    return false;
+                }
+//
+//                return false;
             });
+
 
 
             base.$el.find(".handle").mousedown(function (e) {
@@ -90,10 +109,7 @@ define([
 //                            base.mouse_delta = 0;
 //                        }
                     }
-
-
-
-
+                    base.events.trigger("moving", base.$el);
                 });
                 base.DayPlanning.$el.bind("mouseup.droptask", function () {
                     $(document).enableSelection();
@@ -128,17 +144,20 @@ define([
 
 
             base.planning.events.on("deleted_task", function (id) {
-                if (base.planned_task.get("task").id == id) {
+
+                if (base.planned_task.get("task") && base.planned_task.get("task").id == id) {
                     base.$el.remove();
                 }
             });
 
             base.$el.mouseover(function () {
-                base.planning.events.trigger("over_task", base.planned_task.get("task").id);
+                if (base.planned_task.get("task")) {
+                    base.planning.events.trigger("over_task", base.planned_task.get("task").id);
+                }
             });
 
             base.planning.events.on("over_task", function (id) {
-                if (base.planned_task.get("task").id == id)
+                if (base.planned_task.get("task") && base.planned_task.get("task").id == id)
                     base.$el.addClass("over");
                 else
                     base.$el.removeClass("over");

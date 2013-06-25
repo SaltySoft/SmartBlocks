@@ -48,7 +48,7 @@ define([
                     var deadline_view = new DeadlineItem({
                         model: deadline
                     });
-                    deadline_list_dom.prepend(deadline_view.$el);
+                    deadline_list_dom.append(deadline_view.$el);
                     deadline_view.init(base.SmartBlocks);
                 }
                 i++;

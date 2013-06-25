@@ -8,15 +8,37 @@
       padding: 5px;
       background: #00678e;
       color: white;
-
+      font-size: 1.3em;
       .work_name, .work_time {
-        font-size: 1.3em;
+//
       }
     }
     .next_work_container {
       display: none;
     }
+
+    .right_now {
+      .no_work_now {
+        display: none;
+      }
+      .current_work_container {
+        display: block;
+      }
+    }
+
+    .right_now.nothing_to_do {
+      .no_work_now {
+        display: block;
+      }
+      .current_work_container {
+        display: none;
+      }
+    }
   }
+
+
+
+
 
   .next_recap {
     height: 200px;
@@ -29,6 +51,10 @@
         margin-bottom: 1px;
         cursor: pointer;
         display: none;
+      }
+
+      .deadline_item.overdue {
+        background: #f3a487;
       }
 
     }

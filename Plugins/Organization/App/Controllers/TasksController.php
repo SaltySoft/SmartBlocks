@@ -300,7 +300,7 @@ class TasksController extends \Controller
                 $em = \Model::getEntityManager();
                 $qb = $em->createQueryBuilder();
                 $stop = clone $date;
-                $stop->add(new \DateInterval(($planned_task->getDuration() / 1000)." seconds"));
+                $stop->modify("+".($planned_task->getDuration() / 1000)." seconds");
                 $qb->select("task")
                     ->from('\Organization\Task', 'task')
                     ->where('task.due_date >= :date')

@@ -69,12 +69,23 @@ class PlannedTask extends \Model
      */
     private $active;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $completed;
+
+    /**
+     * @ManyToOne(targetEntity="\User")
+     */
+    private $owner;
+
 
     public function __construct()
     {
         $this->start = time();
         $this->duration = 30 * 60;
         $this->active = true;
+        $this->completed = false;
     }
 
     public function getId()
@@ -152,6 +163,26 @@ class PlannedTask extends \Model
         return $this->active;
     }
 
+    public function setCompleted($completed)
+    {
+        $this->completed = $completed;
+    }
+
+    public function getCompleted()
+    {
+        return $this->completed;
+    }
+
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
     public function getContent($force = false)
     {
         if (is_object($this->task) && !$force)
@@ -168,9 +199,11 @@ class PlannedTask extends \Model
     {
         $array = array(
             "id" => $this->id,
-            "task" => $this->task->toArray(),
+            "task" => is_object($this->task) ? $this->task->toArray() : null,
             "start" => $this->start->getTimeStamp() * 1000,
-            "duration" => $this->duration
+            "duration" => $this->duration,
+            "completed" => $this->completed,
+            "content" => $this->content
         );
 
         return $array;
