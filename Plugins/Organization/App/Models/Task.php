@@ -90,6 +90,11 @@ class Task extends \Model
      */
     private $active;
 
+    /**
+     * @ManyToOne(targetEntity="TaskType")
+     */
+    private $type;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -218,6 +223,30 @@ class Task extends \Model
         return $this->active;
     }
 
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public static function getTypes()
+    {
+        if (file_exists(ROOT.DS."Plugins".DS."Organization".DS."Config".DS."task_types.json"))
+        {
+            $contents = file_get_contents(ROOT.DS."Plugins".DS."Organization".DS."Config".DS."task_types.json");
+            return json_decode($contents, true);
+        }
+        else
+        {
+            return array();
+        }
+    }
+
+
     public static function fetch_todoist()
     {
         $todoistDiplomat = new \ApiDiplomat("https://api.todoist.com");
@@ -294,7 +323,8 @@ class Task extends \Model
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
-            "due_date" => $this->due_date->getTimeStamp()
+            "due_date" => $this->due_date->getTimeStamp(),
+            "type" => $this->type->toArray()
         );
 
         if ($show_task_users)
