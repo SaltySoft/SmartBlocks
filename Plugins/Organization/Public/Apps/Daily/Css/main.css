@@ -53,6 +53,7 @@ input[type="text"].datepicker {
     bottom: 11px;
     top: 57px;
     right: 0px;
+    border-top: 5px #1c7783 solid;
 }
 
 .pane_inner_container {
@@ -72,7 +73,7 @@ input[type="text"].datepicker {
 
     position: absolute;
     left: 0px;
-    bottom: 0px;
+    bottom: 37px;
     top: 0px;
     right: 0px;
 }
@@ -81,19 +82,43 @@ input[type="text"].datepicker {
 .tasks_container {
     float: left;
     position: relative;
+    width: 100%;
 }
 
 .task_item {
     padding: 10px;
     background: rgba(43, 184, 203, 0.8);
+    margin-bottom: 1px;
+    cursor: pointer;
 }
 
+
+
 .task_item.over {
-    background: rgba(51, 219, 242, 0.80);
+    background: rgba(43, 184, 203, 0.5);
+}
+
+.task_item.overdue {
+    background: #f3a487;
 }
 
 .task_item.ui-draggable-dragging {
     z-index: 10;
+}
+
+.daily_list .title_container {
+    float: left;
+    height: 38px;
+}
+
+.daily_list .title {
+    padding: 10px 0 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.daily_list .li-state-disabled {
+    min-height: 38px;
 }
 
 .tasks_list_controls {
@@ -102,9 +127,27 @@ input[type="text"].datepicker {
 
 .action {
     position: absolute;
-    left: 0px;
     right: 0px;
+    line-height: 24px;
 }
+
+.task_item .name {
+    font-weight: bold;
+}
+
+/**
+TODAY'S PLANNED
+*/
+.planned_list .todays_planned {
+    padding: 10px;
+    background: rgba(93, 203, 98, 0.80);
+    margin-bottom: 1px;
+}
+.planned_list .todays_planned:hover {
+    padding: 10px;
+    background: rgba(43, 184, 203, 0.5);
+}
+
 
 /* DAY PLANNING */
 .daily_planning_container {
@@ -121,6 +164,10 @@ input[type="text"].datepicker {
     height: 48px;
     border-top: 2px #b3b3b3 solid;
 
+}
+
+.hour_view.night {
+    background: #dbdbdb;
 }
 
 .hour_view > div {
@@ -147,7 +194,7 @@ input[type="text"].datepicker {
 
 .planned_task {
     position: absolute;
-    padding: 5px;
+
     /*background-color: #ca625a;*/
 
     border-radius: 5px;
@@ -159,8 +206,13 @@ input[type="text"].datepicker {
     font-size: 12px;
 }
 
+.planned_task > div {
+    padding: 5px;
+}
+
 .planned_task.over {
-    background: rgba(51, 219, 242, 0.80);
+    /*background: rgba(185, 183, 177, 0.80);*/
+    background: rgba(43, 184, 203, 0.5);
 }
 
 .line {
@@ -177,10 +229,39 @@ input[type="text"].datepicker {
 .handle {
     position: absolute;
     right: 10px;
-    top: 10px;
-    height: 13px;
-    width: 11px;
-    background: url(/css/hot-sneaks/images/ui-icons_454545_256x240.png) -130px -50px;
-    cursor: pointer;
+    top: 5px;
+    bottom: 5px;
+    width: 20px;
+    /*background: url(/images/handle_repeat_vert.png) repeat-y top center;*/
+    cursor: move;
 }
 
+/** TODAY'S DEADLINES */
+.deadline {
+    height: 10px;
+    margin-top: -11px;
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 3px red solid;
+    position: absolute;
+    left: 41px;
+    right: 0px;
+    z-index: 3;
+    font-size: 0.7em;
+}
+.deadline.done {
+    border-bottom: 3px rgba(46, 144, 38, 0.70) solid;
+}
+
+@media (min-width: 1000px) {
+    .planning_main_view {
+        margin: auto;
+        width:1000px;
+    }
+}
+
+@media (max-width: 800px) {
+    /*.tasks_container {*/
+        /*width: 200px;*/
+        /*display: none;*/
+    /*}*/
+}

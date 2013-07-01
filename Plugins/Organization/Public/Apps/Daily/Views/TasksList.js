@@ -22,6 +22,8 @@ define([
 
             base.planning = planning;
 
+            base.view_list = [];
+
             base.date = base.planning.current_date;
             base.render();
             base.registerEvents();
@@ -33,6 +35,20 @@ define([
             base.$el.html(template);
             base.fetchList();
         },
+        renderList: function () {
+            var base = this;
+            base.$el.find(".tasks_list").find(".task_item").remove();
+            base.view_list = [];
+            for (var k in base.tasks_list.models) {
+                var task = base.tasks_list.models[k];
+                var task_item_view = new TaskItemView({
+                    model: task
+                });
+                task_item_view.init(base.SmartBlocks, base.planning);
+                base.$el.find(".tasks_list").append(task_item_view.$el);
+                base.view_list.push(task_item_view);
+            }
+        },
         fetchList: function () {
             var base = this;
             base.date.setHours(0);
@@ -42,22 +58,11 @@ define([
 
             base.tasks_list.fetch({
                 data: {
-                    date: Math.round(base.date.getTime() / 1000)
+                    filter: "undone"
                 },
                 success: function () {
-                    base.$el.find(".tasks_list").find(".task_item").remove();
-                    for (var k in base.tasks_list.models) {
-                        var task = base.tasks_list.models[k];
-                        var task_item_view = new TaskItemView({
-                            model: task
-                        });
-                        task_item_view.init(base.SmartBlocks, base.planning);
-                        base.$el.find(".tasks_list").prepend(task_item_view.$el);
-                    }
-//                    if (base.tasks_list.models.length == 0) {
-//                        base.$el.find(".tasks_list").html('<div style="text-align: center">No task due today</div>');
-//                    }
 
+                    base.renderList();
                     base.SmartBlocks.stopLoading();
                 }
             });
@@ -66,7 +71,7 @@ define([
             var base = this;
 
             base.$el.sortable({
-
+                items: "li:not(.li-state-disabled)"
             });
 
             base.$el.delegate(".action", "click", function () {
@@ -77,7 +82,7 @@ define([
                 {
                     case "add":
                         var task = new Task();
-                        task.setDueDate(base.date);
+//                        task.setDueDate(base.date);
                         var tsk_popup = new TaskPopupView(task);
                         tsk_popup.events.on("task_updated", function () {
                             base.fetchList();
@@ -89,7 +94,42 @@ define([
                 }
 
             });
+            base.SmartBlocks.events.on("ws_notification", function (message) {
 
+                if (message.app == "organizer") {
+
+                    if (message.action == "task_saved") {
+
+                        var message_task = message.task;
+                        var remove_list = [];
+                        for (var k in base.view_list) {
+                            var view = base.view_list[k];
+                            var date = new Date(message_task.due_date * 1000);
+                            if (message_task.id == view.task.id) {
+                                view.task.attributes = message_task;
+                                view.$el.find(".name").html(view.task.get("name"));
+
+                                if (Math.abs(date.getTime() - base.planning.current_date.getTime()) > 24 * 3600 * 1000) {
+                                    base.tasks_list.remove(message_task.id);
+                                }
+                            }
+                        }
+                        if (message_task.id && base.tasks_list.get(message_task.id) === undefined && Math.abs(date.getTime() - base.planning.current_date.getTime()) < (12 * 3600) * 1000) {
+                            var task = new Task(message_task);
+                            base.tasks_list.add(task);
+                        }
+                        console.log("ADDED ", task);
+                    }
+                    if (message.action == "task_deleted") {
+                        var message_task = message.task;
+                        base.tasks_list.remove(message_task.id);
+                        console.log("deleted ", message_task);
+
+                    }
+                    base.SmartBlocks.show_message("Sync resulted in local changes");
+                    base.renderList();
+                }
+            });
         }
     });
 

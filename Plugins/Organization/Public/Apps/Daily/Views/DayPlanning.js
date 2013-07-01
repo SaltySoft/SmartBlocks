@@ -5,8 +5,9 @@ define([
     'Organization/Apps/Daily/Views/Hour',
     'Organization/Apps/Daily/Views/PlannedTask',
     'Organization/Apps/Daily/Models/PlannedTask',
-    'Organization/Apps/Daily/Collections/PlannedTasks'
-], function ($, _, Backbone, HourView, PlannedTaskView, PlannedTask, PlannedTaskCollection) {
+    'Organization/Apps/Daily/Collections/PlannedTasks',
+    'Organization/Apps/Tasks/Collections/Tasks'
+], function ($, _, Backbone, HourView, PlannedTaskView, PlannedTask, PlannedTaskCollection, TasksCollection) {
     var DailyPlanningView = Backbone.View.extend({
         tagName: "div",
         className: "daily_planning_view",
@@ -26,9 +27,14 @@ define([
             base.date.setSeconds(0);
             base.date.setMilliseconds(0);
             base.planning = planning;
+
+            base.due_tasks = new TasksCollection();
+            console.log("DUE TASKS", base.due_tasks);
+
             base.render();
             base.registerEvents();
             base.planned_tasks = new PlannedTaskCollection();
+
 
 
         },
@@ -51,9 +57,40 @@ define([
 
                 last_time = time;
 
+
             }
 
+            base.updateDueTasks();
+//            base.$el.css("top", -2 * base.getHourHeight());
+        },
+        updateDueTasks: function () {
+            var base = this;
 
+            base.due_tasks.fetch({
+                data: {
+                    "date": base.planning.current_date.getTime() / 1000
+                },
+                success: function () {
+                    base.$el.find(".deadline").remove();
+                    console.log("DUE TASks", base.due_tasks);
+                    for (var k in base.due_tasks.models) {
+
+                        var task = base.due_tasks.models[k];
+                        var div = $(document.createElement("div"));
+                        div.addClass("deadline");
+                        var date = task.getDueDate();
+                        var top = 0;
+                        top += date.getHours() * base.getHourHeight();
+                        top += date.getMinutes() / 60 * base.getHourHeight();
+                        div.css("top", top);
+                        div.html(date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() + " " + task.get("name"));
+                        base.$el.append(div);
+                        if (task.get("completion_date")) {
+                            div.addClass("done");
+                        }
+                    }
+                }
+            });
         },
         updateCurrentTime: function () {
             var base = this;
@@ -77,20 +114,29 @@ define([
 
             var e = window.event || e; // old IE support
             var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-
+            var change = base.getHourHeight() * 2;
+            var day_height = base.getHourHeight() * 24;
+            var parent_height = base.$el.parent().height();
             if (delta < 0) {
-                if (base.pos - base.getHourHeight() > -base.getHourHeight() * 24 + base.$el.parent().height())
-                    base.pos -= base.getHourHeight();
+                if (base.pos - change > -day_height + parent_height)
+                    base.pos -= change;
+                else
+                    base.pos = -day_height + parent_height;
             } else {
-                if (base.pos + base.getHourHeight() <= 0)
-                    base.pos += base.getHourHeight();
+                if (base.pos < 0)
+                    base.pos += change;
+                else
+                    base.pos = 0;
             }
+
+            if (base.pos > 0)
+                base.pos = 0;
 
             base.$el.css("top", base.pos);
         },
         getHourHeight: function () {
             var base = this;
-            return base.$el.find(".hour_view").height() + 2;
+            return base.$el.find(".hour_view").height() > 0 ? base.$el.find(".hour_view").height() + 2 : 50;
         },
         getStartPosition: function (date) {
             var base = this;
@@ -106,6 +152,7 @@ define([
             });
             planned_task_view.init(base.SmartBlocks, base, base.planning);
             base.$el.append(planned_task_view.$el);
+            return planned_task_view;
         },
         createTask: function (task, start) {
             var base = this;
@@ -151,8 +198,8 @@ define([
             var now = new Date();
 
 //            if (now.getHours() > 12) {
-                base.pos = -9 * (base.getHourHeight());
-                base.$el.css("top", base.pos);
+            base.pos = -8 * (base.getHourHeight());
+            base.$el.css("top", base.pos);
 //            }
 
 //            /**
@@ -162,6 +209,10 @@ define([
 //                base.createTask();
 //            });
             base.fetchPlannedTasks();
+
+            base.SmartBlocks.events.on("org.task_modified", function (task) {
+                base.updateDueTasks();
+            });
         }
     });
 

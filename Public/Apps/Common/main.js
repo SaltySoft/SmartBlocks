@@ -5,15 +5,17 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "Apps/NotificationsCenter/app", "UserModel", "UsersCollection"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "Apps/NotificationsCenter/app", "UserModel", "UsersCollection", "Apps/UserRequester/app"];
 
 if (app !== undefined) {
     apps.push(app);
 }
 
+
+
 $(document).ready(function () {
     requirejs(apps,
-        function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, App) {
+        function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, UserRequester, App) {
             if ("WebSocket" in window) {
                 var websocket = new WebSocket(socket_server, "muffin-protocol");
                 SmartBlocks.websocket = websocket;
@@ -29,6 +31,7 @@ $(document).ready(function () {
                 };
             }
             SmartBlocks.init_solution();
+
             User.getCurrent(function (current_user) {
                 SmartBlocks.connected_users = new UsersCollection();
 
@@ -42,8 +45,27 @@ $(document).ready(function () {
 //                SmartBlocks.FileSharingApp = FileSharingApp;
                 SmartBlocks.NotifCenterApp = NotifCenterApp;
                 NotifCenterApp.initialize(SmartBlocks);
-                if (App)
+                UserRequester.initialize(SmartBlocks);
+
+                if (App) {
                     App.initialize(SmartBlocks);
+                    if (App.sync) {
+//                        setInterval(function () {
+//                            App.sync();
+//                        }, 2500);
+
+                        $(document).keyup(function (e) {
+                            if (e.keyCode == 107) {
+                                console.log("Syncing");
+                                App.sync();
+
+                            }
+                        });
+                    }
+
+
+                }
+
 
                 //Hearbeats. If I'm living, my heart beats.
                 SmartBlocks.events.on("ws_notification", function (message) {

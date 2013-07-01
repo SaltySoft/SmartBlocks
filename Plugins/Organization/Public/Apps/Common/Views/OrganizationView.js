@@ -6,9 +6,10 @@ define([
     'Organization/Apps/Calendar/Views/MainView',
     'Organization/Apps/Tasks/Views/MainView',
     'Organization/Apps/Daily/Views/MainView',
+    'Organization/Apps/Recap/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, TaskUsersCollection, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, TaskUsersCollection, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -25,7 +26,8 @@ define([
                 routes : {
                     "week" : "week",
                     "month" : "month",
-                    "daily": "daily"
+                    "daily": "daily",
+                    "recap": "recap"
                 },
                 week: function () {
                     base.launchWeek();
@@ -35,11 +37,15 @@ define([
                 },
                 daily: function () {
                     base.launchPlanning();
+                },
+                recap: function () {
+                    base.launchRecap();
                 }
             });
 
             var app_router = new Router();
             Backbone.history.start();
+
         },
         render: function () {
             var base = this;
@@ -86,6 +92,14 @@ define([
             base.$el.find(".control_bar a.daily").addClass("selected");
             base.setContent(base.current_view.$el);
 
+        },
+        launchRecap: function () {
+            var base = this;
+            base.current_view = new RecapView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.recap").addClass("selected");
+            base.setContent(base.current_view.$el);
         },
         checkForNotifications: function () {
             var base = this;

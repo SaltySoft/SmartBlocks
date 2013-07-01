@@ -23,6 +23,8 @@
 
 namespace Organization;
 
+use BusinessManagement\ApiDiplomat;
+
 /**
  * @Entity @Table(name="tasks")
  */
@@ -59,7 +61,7 @@ class Task extends \Model
     private $completion_date;
 
     /**
-     * @Column(type="integer", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
     private $due_date;
 
@@ -73,6 +75,21 @@ class Task extends \Model
      */
     private $planned_tasks;
 
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $todoist_id;
+
+    /**
+     * @Column(type="bigint")
+     */
+    private $last_updated;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $active;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -80,6 +97,8 @@ class Task extends \Model
         $this->creation_date = time();
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->last_updated = time();
+        $this->active = true;
     }
 
     public function getId()
@@ -139,6 +158,13 @@ class Task extends \Model
 
     public function setDueDate($due_date)
     {
+
+        if (is_integer($due_date))
+        {
+            $date = new \DateTime();
+            $date->setTimestamp($due_date);
+            $due_date = $date;
+        }
         $this->due_date = $due_date;
     }
 
@@ -162,13 +188,105 @@ class Task extends \Model
         return $this->planned_tasks;
     }
 
+    public function setTodoistId($todoist_id)
+    {
+        $this->todoist_id = $todoist_id;
+    }
+
+    public function getTodoistId()
+    {
+        return $this->todoist_id;
+    }
+
+    public function setLastUpdated($last_updated)
+    {
+        $this->last_updated = $last_updated;
+    }
+
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public static function fetch_todoist()
+    {
+        $todoistDiplomat = new \ApiDiplomat("https://api.todoist.com");
+
+        $user = $todoistDiplomat->post2json("/API/login", array(
+            'email' => 'a.j.william26@gmail.com',
+            'password' => 'william90'
+        ));
+        $data = $todoistDiplomat->post2json("/TodoistSync/v2/get", array(
+            'api_token' => $user["api_token"]
+        ));
+
+        $tasks_list = array();
+        $em = \Model::getEntityManager();
+        foreach ($data["Projects"] as $project)
+        {
+            foreach ($project["items"] as $item)
+            {
+                if ($item["due_date"] != null) {
+                    $task = new Task();
+                    $date = new \DateTime($item["due_date"]);
+                    $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
+                    $task->setName($item["content"]);
+                    $task->setOwner(\User::current_user());
+                    $task->setTodoistId($item["id"]);
+                    $tasks_list[] = $task->toArray();
+                    $em->persist($task);
+                }
+            }
+        }
+
+//        $em->flush();
+        echo json_encode($tasks_list);
+    }
+
+    public function updateNotif()
+    {
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_saved",
+            "task" => $this->toArray()
+        ));
+    }
+
+    function save()
+    {
+        $this->setLastUpdated(time());
+        parent::save();
+
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_saved",
+            "task" => $this->toArray()
+        ));
+    }
+
+    function delete()
+    {
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "app" => "organizer",
+            "action" => "task_deleted",
+            "task" => $this->toArray()
+        ));
+        parent::delete();
+    }
 
 
     public function toArray($show_task_users = true)
     {
-
-
-
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
@@ -176,7 +294,7 @@ class Task extends \Model
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
-            "due_date" => $this->due_date
+            "due_date" => $this->due_date->getTimeStamp()
         );
 
         if ($show_task_users)

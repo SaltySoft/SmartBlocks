@@ -35,11 +35,17 @@ class PlannedTask extends \Model
 
     /**
      * @ManyToOne(targetEntity="\Organization\Task")
+     * @JoinColumn(name="task_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $task;
 
     /**
-     * @Column(type="bigint")
+     * @Column(type="string", nullable=true)
+     */
+    private $content;
+
+    /**
+     * @Column(type="datetime")
      */
     private $start;
 
@@ -48,11 +54,38 @@ class PlannedTask extends \Model
      */
     private $duration;
 
+    /**
+     * @Column(type="bigint")
+     */
+    private $last_updated;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $gcal_id;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $active;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $completed;
+
+    /**
+     * @ManyToOne(targetEntity="\User")
+     */
+    private $owner;
+
 
     public function __construct()
     {
-        $this->start= time();
+        $this->start = time();
         $this->duration = 30 * 60;
+        $this->active = true;
+        $this->completed = false;
     }
 
     public function getId()
@@ -90,13 +123,87 @@ class PlannedTask extends \Model
         return $this->task;
     }
 
+    public function setLastUpdated($last_updated)
+    {
+        $this->last_updated = $last_updated;
+    }
+
+    public function getLastUpdated()
+    {
+        return $this->last_updated;
+    }
+
+    public function setGcalId($gcal_id)
+    {
+        $this->gcal_id = $gcal_id;
+    }
+
+    public function getGcalId()
+    {
+        return $this->gcal_id;
+    }
+
+    public function before_save()
+    {
+        $this->last_updated = time();
+    }
+
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
+
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    public function setCompleted($completed)
+    {
+        $this->completed = $completed;
+    }
+
+    public function getCompleted()
+    {
+        return $this->completed;
+    }
+
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    public function getContent($force = false)
+    {
+        if (is_object($this->task) && !$force)
+        {
+            return $this->task->getName();
+        }
+        else
+        {
+            return $this->content;
+        }
+    }
+
     public function toArray($show_task_users = true)
     {
         $array = array(
             "id" => $this->id,
-            "task" => $this->task->toArray(),
-            "start" => $this->start,
-            "duration" => $this->duration
+            "task" => is_object($this->task) ? $this->task->toArray() : null,
+            "start" => $this->start->getTimeStamp() * 1000,
+            "duration" => $this->duration,
+            "completed" => $this->completed,
+            "content" => $this->content
         );
 
         return $array;

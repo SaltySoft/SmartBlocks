@@ -14,11 +14,21 @@ define([
             this.set("start", date.getTime());
             console.log(this);
         },
+        getName: function () {
+            var base = this;
+            return base.get("content") ? base.get("content") : "No name";
+        },
+        getDeadlineName: function () {
+            var base = this;
+            return base.get("task") ? base.get("task").get("name") : "Not linked with a deadline";
+        },
         parse: function (response) {
             var task_array = response.task;
+            if (task_array != null) {
+                var task = new Task(task_array);
+                response.task = task;
+            }
 
-            var task = new Task(task_array);
-            response.task = task;
 
             response.start = parseInt(response.start);
             response.duration = parseInt(response.duration);

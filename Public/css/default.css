@@ -52,16 +52,18 @@ li {
 
 #flash_shower {
     position: fixed;
-    right: 20px;
-    bottom: 20px;
+    left: 60px;
+    bottom: 10px;
     width: 300px;
     background-color: rgba(230, 230, 230, 0.8);
+    border: 1px #888888 dashed;
+    border-radius: 7px;
     padding: 20px;
     padding-left: 50px;
     display: none;
-    background-image: url('/images/icons/information.png');
-    background-repeat: no-repeat;
-    background-position: 20px 50%;
+    /*background-image: url('/images/icons/information.png');*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 20px 50%;*/
     z-index: 3000;
 }
 
@@ -177,11 +179,11 @@ h3 {
 }
 
 h4 {
-    font-size: 21px;
+    font-size: 18px;
 }
 
 h5 {
-    font-size: 20px;
+    font-size: 15px;
 }
 
 h6 {
@@ -390,24 +392,24 @@ h6 {
     background-color: rgba(255, 255, 255, 0.8);
 }
 
-button {
-    padding: 5px 5px 5px 5px;
-    background-color: #6e90fe;
-    border: 1px solid #dddddd;
-    color: #fff;
-    border-radius: 3px;
-    cursor: pointer;
+/*button {*/
+    /*padding: 5px 5px 5px 5px;*/
+    /*background-color: #6e90fe;*/
+    /*border: 1px solid #dddddd;*/
+    /*color: #fff;*/
+    /*border-radius: 3px;*/
+    /*cursor: pointer;*/
 
     /* Firefox */
-    -moz-transition: all 50ms ease-in;
+    /*-moz-transition: all 50ms ease-in;*/
     /* WebKit */
-    -webkit-transition: all 50ms ease-in;
+    /*-webkit-transition: all 50ms ease-in;*/
     /* Opera */
-    -o-transition: all 50ms ease-in;
+    /*-o-transition: all 50ms ease-in;*/
     /* Standard */
-    transition: all 50ms ease-in;
-    margin: 0px;
-}
+    /*transition: all 50ms ease-in;*/
+    /*margin: 0px;*/
+/*}*/
 
 button:hover {
     background-color: #ffffff;
@@ -608,4 +610,8 @@ button:hover {
     top: 0px;
     right: 0px;
     bottom: 0px;
+}
+
+.pure-button-disabled {
+    cursor: auto;
 }

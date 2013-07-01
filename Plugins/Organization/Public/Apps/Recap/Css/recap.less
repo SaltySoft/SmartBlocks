@@ -1,0 +1,85 @@
+.recap_main_view {
+  height: 100%;
+}
+
+.recap_main_view {
+  .recap_today {
+    .current_work , .next_work, .current_work_none_inner {
+      text-align: center;
+
+      padding: 11.5px;
+      background: #6c92b8;
+      color: white;
+      font-size: 1em;
+      .work_name {
+//        font-weight: bold;
+      }
+    }
+    .next_work_container {
+      display: none;
+    }
+
+    .right_now {
+      .current_work_none {
+        display: none;
+      }
+      .current_work_container {
+        display: block;
+      }
+    }
+
+    .right_now.nothing_to_do {
+      .current_work_none {
+        display: block;
+      }
+      .current_work_container {
+        display: none;
+      }
+    }
+  }
+
+
+
+
+
+  .next_recap {
+    height: 200px;
+    .deadline_list {
+      height: 160px;
+      .deadline_item {
+        padding: 12px;
+        background: #6c92b8;
+        color: white;
+        margin-bottom: 1px;
+        cursor: pointer;
+        display: none;
+      }
+
+      .deadline_item.overdue {
+        background: #f3a487;
+      }
+
+    }
+    .pure-paginator {
+      width: 89px;
+      margin: auto;
+    }
+  }
+
+  .past_recap {
+    .work_time {
+      font-size: 1.3em;
+    }
+  }
+
+  .recap_square {
+    padding: 10px;
+  }
+}
+
+@media (min-width: 1000px) {
+  .recap_main_view {
+    width: 1000px;
+    margin: auto;
+  }
+}

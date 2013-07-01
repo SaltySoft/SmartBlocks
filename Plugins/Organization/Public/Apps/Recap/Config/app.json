@@ -1,0 +1,8 @@
+{
+    "name":"Organization Summary",
+    "token":"organization_summary",
+    "description":"Get a recap of your organization.",
+    "link":"/Organization/Tasks/app#recap",
+    "logo_url":"/Organization/Apps/Tasks/Resources/logo.png",
+    "block_token":"organization"
+}
