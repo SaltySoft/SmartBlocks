@@ -107,4 +107,114 @@ class PagesController extends Controller
     {
         $this->render_layout = false;
     }
+
+    private function _formatOauthReq($OAuthParams, $scope)
+    {
+        $uri = $OAuthParams['oauth_uri'];
+        $uri .= "?client_id=" . $OAuthParams['client_id'];
+        $uri .= "&redirect_uri=" . $OAuthParams['redirect_uri'];
+        $uri .= "&scope=" . $scope;
+        $uri .= "&response_type=code";
+        $uri .= "&access_type=offline";
+
+        return $uri;
+    }
+
+    private function _get_url_param($url, $name)
+    {
+        parse_str(parse_url($url, PHP_URL_QUERY), $params);
+        return isset($params[$name]) ? $params[$name] : null;
+    }
+
+    private function _get_auth_token($params, $code)
+    {
+        $url = $params['oauth_token_uri'];
+
+        $fields = array(
+            'code' => $code,
+            'client_id' => $params['client_id'],
+            'client_secret' => $params['client_secret'],
+            'redirect_uri' => $params['redirect_uri'],
+            'grant_type' => 'authorization_code'
+        );
+        $response = $this->_do_post($url, $fields);
+        echo " heeyy " . $response . " heeyy ";
+        return $response;
+    }
+
+    private function _do_post($url, $fields)
+    {
+//        $fields_string = '';
+//
+//        foreach ($fields as $key => $value)
+//        {
+//            $fields_string .= $key . '=' . $value . '&';
+//        }
+//        $fields_string = rtrim($fields_string, '&');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $response;
+    }
+
+    public function googleoauth($params = array())
+    {
+        $this->render = false;
+        $OAuth = array(
+            'oauth_uri' => 'https://accounts.google.com/o/oauth2/auth',
+            'client_id' => '850249449787-ord751rqtpuc7nkoj4gid81n8j3589cn.apps.googleusercontent.com',
+            'redirect_uri' => 'http://localhost:8080/Pages/googleoauth', //insert your redirect uri here
+            'client_secret' => 'q7bWo_lAEVJvxLXd7oLwkLnB',
+            'oauth_token_uri' => 'https://accounts.google.com/o/oauth2/token'
+        );
+
+        $token = array(
+            'access_token' => '',
+            'token_type' => '',
+            'expires_in' => '',
+            'refresh_token' => ''
+        );
+
+
+        $error = $this->_get_url_param($_SERVER['REQUEST_URI'], 'error');
+        if ($error != NULL)
+        { // this means the user denied api access to GWMTs
+            echo $error;
+        }
+        else
+        {
+            $AuthCode = $this->_get_url_param($_SERVER['REQUEST_URI'], 'code');
+            if ($AuthCode == NULL)
+            { // get authorization code
+                $OAuth_request = $this->_formatOAuthReq($OAuth,
+                    "https://www.google.com/calendar/feeds/");
+
+                header('Location: ' . $OAuth_request);
+                exit; // the redirect will come back to this page and $code will have a value
+            }
+            else
+            {
+                echo 'Got Authorization Code : ' . $AuthCode;
+                $token_response = $this->_get_auth_token($OAuth, $AuthCode);
+                $json_obj = json_decode($token_response);
+                $token['access_token'] = $json_obj->access_token;
+                $token['token_type'] = $json_obj->token_type;
+                $token['expires_in'] = $json_obj->expires_in;
+                $token['refresh_token'] = isset($json_obj->refresh_token) ? $json_obj->refresh_token : "none";
+                echo 'access_token = ' . $json_obj->access_token;
+                echo "<br/>refresh" . $token['refresh_token'];
+                echo "<br/>expires" . $token['expires_in'];
+                echo "<br/>token_type" .   $token['token_type'];
+            }
+        }
+
+    }
 }

@@ -341,6 +341,11 @@ class Model
         return $xml;
     }
 
+    public function setLastUpdated($time)
+    {
+        //Override
+    }
+
     /**
      * @return array
      * Gets an array of the object, to ease webservices creation.
@@ -372,5 +377,18 @@ class Model
     public static function getEntityManager()
     {
         return ($GLOBALS["em"]);
+    }
+
+    public static function persist(Model $object)
+    {
+        $em = $GLOBALS["em"];
+        $object->setLastUpdated(time());
+        $em->persist($object);
+    }
+
+    public static function flush()
+    {
+        $em = $GLOBALS["em"];
+        $em->flush();
     }
 }
