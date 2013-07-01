@@ -5,8 +5,9 @@ define([
     'text!Organization/Apps/Recap/Templates/recap_template.html',
     'Organization/Apps/Recap/Views/TodayRecap',
     'Organization/Apps/Recap/Views/NextRecap',
-    'Organization/Apps/Recap/Views/PastRecap'
-], function ($, _, Backbone, RecapTemplate, TodayRecapView, NextRecapView, PastRecapView) {
+    'Organization/Apps/Recap/Views/PastRecap',
+    'Organization/Apps/Recap/Views/Timeline'
+], function ($, _, Backbone, RecapTemplate, TodayRecapView, NextRecapView, PastRecapView, TimelineView) {
     var MainView = Backbone.View.extend({
         tagName: 'div',
         className: 'recap_main_view',
@@ -31,9 +32,13 @@ define([
         renderToday: function () {
             var base = this;
 
-            var today_view = new TodayRecapView();
-            base.$el.find(".today_info").html(today_view.$el);
-            today_view.init(base.SmartBlocks);
+//            var today_view = new TodayRecapView();
+//            base.$el.find(".today_info").html(today_view.$el);
+//            today_view.init(base.SmartBlocks);
+
+            var timeline = new TimelineView();
+            base.$el.find(".today_info").html(timeline.$el);
+            timeline.init(base.SmartBlocks);
 
             var next_view = new NextRecapView();
             base.$el.find(".next_info").html(next_view.$el);
@@ -42,7 +47,7 @@ define([
 
             var past_view = new PastRecapView();
             base.$el.find(".past_info").html(past_view.$el);
-            past_view.init(base.SmartBlocks);
+            past_view.init(base.SmartBlocks, base);
 
         },
         registerEvents: function () {

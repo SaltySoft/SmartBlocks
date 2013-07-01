@@ -324,7 +324,7 @@ class Task extends \Model
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => $this->due_date->getTimeStamp(),
-            "type" => $this->type->toArray()
+            "type" => $this->type != null ? $this->type->toArray() : null
         );
 
         if ($show_task_users)
