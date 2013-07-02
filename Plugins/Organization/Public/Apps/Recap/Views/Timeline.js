@@ -42,9 +42,15 @@ define([
                 }
             });
 
+            base.registerEvents();
+
         },
         registerEvents: function () {
             var base = this;
+
+            $(window).resize(function () {
+                base.canvas.width = base.$el.width();
+            });
         }
     });
 
