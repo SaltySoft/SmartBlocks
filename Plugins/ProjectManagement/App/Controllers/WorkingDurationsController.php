@@ -60,9 +60,28 @@ class WorkingDurationsController extends \Controller
 
         $this->render = false;
         header("Content-Type: application/json");
+        $data = $this->getRequestData();
+
+//        $timestamp = $data["date"];
+//        $day = date('j', $timestamp);
+//        $month = date('n', $timestamp);
+//        $year = date('Y', $timestamp);
+//
+//        $em = \Model::getEntityManager();
+//        $qb = $em->createQueryBuilder();
+//
+//        $qb->select("wd")
+//            ->from("ProjectManagement\\WorkingDuration", "wd");
+//
+//        if (isset($_GET["current_user_only"]) && $_GET["current_user_only"] == "true")
+//        {
+//            $qb->andWhere("user = :user")
+//                ->setParameter("user", \User::current_user());
+//        }
+//        $models = $qb->getQuery()->getResult();
+
 
         $model = new WorkingDuration();
-        $data = $this->getRequestData();
         $model->setHoursNumber($data["hours_number"]);
         $model->setDate($data["date"]);
         $model->setProject(Project::find($data["project_id"]));
