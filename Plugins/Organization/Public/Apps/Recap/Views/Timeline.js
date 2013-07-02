@@ -27,38 +27,22 @@ define([
             var template = _.template(TimelineTemplate, {});
             base.$el.html(template);
 
+            base.$el.disableSelection();
+
             base.$canvas = base.$el.find("canvas");
             base.canvas = base.$canvas[0];
             base.timeline_app = new TimelineApp();
 
 
-            base.timeline_app.init(base.SmartBlocks, base.canvas, base);
+
 
             base.planned_tasks.fetch({
-
+                success: function () {
+                    base.timeline_app.init(base.SmartBlocks, base.canvas, base);
+                }
             });
 
         },
-//        render: function () {
-//            var base = this;
-//
-//            base.draw();
-//            requestAnimationFrame(base.render, base.canvas);
-//
-//
-//        },
-//        drawQuad: function () {
-//            var base = this;
-//            base.context.lineWidth = 1;
-//            base.context.lineStyle = 'rgba(200,200,200,1)';
-//
-//            for (var i = 0; i < )
-//        },
-//        draw: function () {
-//            var base = this;
-//
-//
-//        },
         registerEvents: function () {
             var base = this;
         }
