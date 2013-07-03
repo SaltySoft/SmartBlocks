@@ -45,7 +45,7 @@ define([
 
                 base.ctx.fillStyle = 'black';
 
-                base.ctx.font = "15px normal";
+                base.ctx.font = "normal 15px arial";
 
 
                 var angle = i * Math.PI / 12 - Math.PI / 2;
@@ -72,7 +72,7 @@ define([
                 (now.getSeconds() < 10 ? '0' : '') +
                 now.getSeconds();
 
-            base.ctx.font = "20px bold";
+            base.ctx.font = "bold 20px arial";
             var metrics = base.ctx.measureText(time);
             base.ctx.fillText(time, base.cv.width / 2 - metrics.width / 2, base.cv.height / 2 - 10);
             base.ctx.closePath();
