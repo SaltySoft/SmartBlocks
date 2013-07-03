@@ -9,6 +9,7 @@
 }
 .control_bar h2 {
     float:right
+
 }
 
 
@@ -25,6 +26,29 @@
     margin-right: 5px;
     text-decoration: none;
     background: ghostwhite;
+}
+
+.control_bar a .small_title {
+    display: none;
+}
+
+@media (max-width : 800px) {
+
+
+    .control_bar a {
+        width: 30px;
+    }
+    .control_bar a .small_title {
+        display: inline;
+    }
+    .control_bar a .big_title {
+        display: none;
+    }
+
+    .control_bar h2 {
+        font-size: small;
+        font-weight: bold;
+    }
 }
 
 .control_bar a.selected {

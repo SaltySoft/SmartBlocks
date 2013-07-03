@@ -10,7 +10,7 @@
         <input min="0" max="59"  step="5" type="number" value="<%= planned_task.getStart().getMinutes() %>" class="start_minute time_input"/>
     </div>
     <div class="pure-control-group">
-        <label for="form_duration">Start</label>
+        <label for="form_duration">Duration</label>
         <input min="0" max="<%= 24 * 60 %>" step="5" type="number" id="form_duration" value="<%= Math.round(planned_task.get("duration") / 60000) %>" class="duration_input time_input"/> minutes
     </div>
     <div class="pure-control-group">

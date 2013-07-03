@@ -4,15 +4,14 @@
 
 .recap_main_view {
   .recap_today {
-    .current_work , .next_work, .current_work_none_inner {
+    .current_work, .next_work, .current_work_none_inner {
       text-align: center;
 
       padding: 11.5px;
       background: #6c92b8;
       color: white;
       font-size: 1em;
-      .work_name {
-//        font-weight: bold;
+      .work_name { //        font-weight: bold;
       }
     }
     .next_work_container {
@@ -38,32 +37,220 @@
     }
   }
 
+  .timeline_view {
+    .timeline_overlay {
+      z-index: 1;
+      position: absolute;
+      width: 280px;
+      padding: 10px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.89);
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      top: 0px;
+      left: 0px;
 
+      .save_button {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+      }
 
+      .close_button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+    }
 
+    .controls {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+    }
 
-  .next_recap {
-    height: 200px;
-    .deadline_list {
-      height: 160px;
-      .deadline_item {
-        padding: 12px;
-        background: #6c92b8;
-        color: white;
-        margin-bottom: 1px;
-        cursor: pointer;
+    position: relative;
+  }
+
+  .now_view {
+    padding: 10px;
+  }
+
+  .next_info {
+    position: relative;
+    height: 300px;
+    span.pause {
+      display: none;
+    }
+    .pause_info {
+      display: none;
+    }
+
+    .current_controls {
+      width: 150px;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      > div {
+        padding: 5px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+
+    .paused {
+      span.working {
         display: none;
       }
+      span.pause {
+        display: inline;
+      }
+      .pause_info {
+        background: rgba(255, 255, 255, 0.67);
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
 
-      .deadline_item.overdue {
-        background: #f3a487;
+        .information {
+          padding: 20px;
+          width: 200px;
+          background: white;
+          margin: auto;
+          margin-top: 50px;
+
+          color: grey;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+          text-align: center;
+          .pause_time {
+            font-size: 1.3em;
+            height: 30px;
+            line-height: 30px;
+          }
+        }
+      }
+    }
+
+    .no_task_message {
+      display: none;
+    }
+    .loader {
+      display: none;
+    }
+
+    .no_task {
+      .no_task_message {
+        display: block;
+      }
+      .now_view_inner {
+        display: none;
+      }
+      .loader {
+        display: none;
+      }
+    }
+
+    .loading {
+      .no_task_message {
+        display: noe;
+      }
+      .now_view_inner {
+        display: none;
+      }
+      .loader {
+        display: block;
+        text-align: center;
+        padding-top: 50px;
+        font-size: big;
+      }
+    }
+
+  //    height: 200px;
+  //    .deadline_list {
+  //      height: 160px;
+  //      .deadline_item {
+  //        padding: 12px;
+  //        background: #6c92b8;
+  //        color: white;
+  //        margin-bottom: 1px;
+  //        cursor: pointer;
+  //        display: none;
+  //      }
+  //
+  //      .deadline_item.overdue {
+  //        background: #f3a487;
+  //      }
+  //
+  //    }
+  //    .pure-paginator {
+  //      width: 89px;
+  //      margin: auto;
+  //    }
+  }
+
+  .next_days_view {
+    .days_container {
+      width: 896px;
+      margin: auto;
+      .next_day_view {
+        padding: 10px;
+        width: 180px;
+        height: 180px;
+        position: relative;
+        float: left;
+        border: 2px rgb(207, 207, 207) solid;
+        margin: 10px;
+
+        .year {
+          color: #A5A5A5;
+        }
+        .close_button {
+          float: right;
+        }
+
+        .for_expanded {
+          display: none;
+        }
+
+        .day_nb {
+          font-size: 0.8em;
+        }
+
+      }
+      .next_day_view .expanded {
+        .for_expanded {
+          display: block;
+        }
+        .for_normal {
+          display: none;
+        }
+        padding: 10px;
+        position: absolute;
+        width: 280px;
+        height: 280px;
+        margin-left: -50px;
+        margin-top: -50px;
+        z-index: 2;
+        background: white;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+
+      }
+
+      .planned_list_item {
+        padding: 10px;
+        background: rgba(43, 184, 203, 0.8);
+        margin-bottom: 1px;
+        cursor: pointer;
+        .task_name_ {
+          font-size: 1.1em;
+          font-weight: bold;
+        }
       }
 
     }
-    .pure-paginator {
-      width: 89px;
-      margin: auto;
-    }
+
   }
 
   .past_recap {
@@ -73,7 +260,9 @@
   }
 
   .recap_square {
-    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+    margin: 10px;
   }
 }
 

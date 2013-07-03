@@ -8,14 +8,17 @@ define([
     var PlannedList = Backbone.View.extend({
         tagName: "div",
         className: "planned_list",
-        initialize: function () {
-
+        initialize: function (planned_list) {
+            var base = this;
+            base.collection = planned_list;
         },
         init: function (SmartBlocks, planning) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
-            base.planned_tasks = new PlannedTasksCollection();
+            if (!base.collection)
+                base.planned_tasks = new PlannedTasksCollection();
+            else
+                base.planned_tasks = base.collection;
 
             base.planning = planning;
 
@@ -27,7 +30,8 @@ define([
             var template = _.template(PlannedListTemplate, {});
 
             base.$el.html(template);
-            base.fetchList();
+            if (!base.collection)
+                base.fetchList();
         },
         startLoading: function () {
             var base = this;
@@ -50,8 +54,7 @@ define([
                     var planned_list = base.$el.find(".planned_list");
                     planned_list.html("");
                     var contained_tasks = [];
-                    for (var k in base.planned_tasks.models)
-                    {
+                    for (var k in base.planned_tasks.models) {
                         var planned_task = base.planned_tasks.models[k];
                         if (!contained_tasks[planned_task.getName()]) {
 
@@ -66,10 +69,10 @@ define([
         },
         registerEvents: function () {
             var base = this;
-
-            base.planning.events.on("planning_modified", function () {
-                base.fetchList();
-            });
+            if (base.planning)
+                base.planning.events.on("planning_modified", function () {
+                    base.fetchList();
+                });
         }
     });
 

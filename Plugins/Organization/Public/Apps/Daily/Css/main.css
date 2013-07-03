@@ -138,6 +138,10 @@ input[type="text"].datepicker {
 /**
 TODAY'S PLANNED
 */
+.planned_list {
+    margin-top: 20px;
+}
+
 .planned_list .todays_planned {
     padding: 10px;
     background: rgba(93, 203, 98, 0.80);
@@ -197,12 +201,14 @@ TODAY'S PLANNED
 
     /*background-color: #ca625a;*/
 
-    border-radius: 5px;
-    left: 50px;
-    right: 10px;
+    /*border-radius: 5px;*/
+    left: 45px;
+    border-left: 5px rgba(51, 219, 242, 0.89) solid;
+
+    right: 5px;
     z-index: 2;
     color: white;
-    background: rgba(43, 184, 203, 0.8);
+    background: rgba(43, 184, 203, 0.9);
     font-size: 12px;
 }
 
@@ -212,7 +218,10 @@ TODAY'S PLANNED
 
 .planned_task.over {
     /*background: rgba(185, 183, 177, 0.80);*/
-    background: rgba(43, 184, 203, 0.5);
+    /*background: rgba(43, 184, 203, 0.9);*/
+    /*left: 45px;*/
+    /*border-left: 5px rgba(85, 178, 198, 0.88) solid;*/
+
 }
 
 .line {

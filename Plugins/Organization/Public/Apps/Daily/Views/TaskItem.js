@@ -104,7 +104,8 @@ define([
                     context_menu.addButton("Delete this task", function () {
                         base.task.destroy({
                             success: function () {
-                                base.planning.events.trigger("deleted_task", id);
+                                if (base.planning)
+                                    base.planning.events.trigger("deleted_task", id);
                                 base.$el.remove();
                                 base.SmartBlocks.events.trigger("org.task_modified", base.task);
                             }
@@ -119,15 +120,16 @@ define([
             });
 
             base.$el.mouseover(function () {
-                base.planning.events.trigger("over_task", base.task.id);
+                if (base.planning)
+                    base.planning.events.trigger("over_task", base.task.id);
             });
-
-            base.planning.events.on("over_task", function (id) {
-                if (base.task.id == id)
-                    base.$el.addClass("over");
-                else
-                    base.$el.removeClass("over");
-            });
+            if (base.planning)
+                base.planning.events.on("over_task", function (id) {
+                    if (base.task.id == id)
+                        base.$el.addClass("over");
+                    else
+                        base.$el.removeClass("over");
+                });
 
 
         }
