@@ -47,7 +47,7 @@ class PlannedTasksController extends \Controller
     public function show($params = array())
     {
         $planned_task = PlannedTask::find($params["id"]);
-        if (is_object($planned_task) && $planned_task->getTask()->getOwner()->getId() == \User::current_user()->getId())
+        if (is_object($planned_task) && $planned_task->getOwner()->getId() == \User::current_user()->getId())
         {
             $response = $planned_task->toArray();
         }

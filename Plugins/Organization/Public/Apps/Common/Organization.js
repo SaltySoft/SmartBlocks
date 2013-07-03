@@ -23,6 +23,26 @@ define([
                 display += " " + Math.floor(sec) + "s";
             }
             return display;
+        },
+        getDayName: function (date) {
+            var days = [
+                "Monday",
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday'
+            ];
+
+            return days[date.getDay()];
+        },
+        getMonthName: function (date) {
+            var monthNames = [ "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+
+            return monthNames[date.getMonth()];
         }
     };
 

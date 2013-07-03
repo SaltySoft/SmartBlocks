@@ -19,7 +19,7 @@ define([
 
             base.ih = base.timeline.input_handler;
             base.drawn = false;
-            base.y = Math.round(Math.random() * 10) * 45 % base.timeline.canvas.height / 2;
+            base.y = 100; // Math.round(Math.random() * 10) * 45 % base.timeline.canvas.height / 2;
             base.time_changed = false;
             base.add_time_x = 0;
             base.date = base.planned_task.getStart();
@@ -43,6 +43,8 @@ define([
             var width = base.planned_task.get("duration") / (3600000 / 50);
             var height = 45;
             base.context.fillRect(x, y, width, height);
+            base.context.fillStyle = "rgb(64, 190, 251)";
+            base.context.fillRect(x-5, y, 5, height);
 
             base.x = x;
             base.y = y;

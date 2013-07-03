@@ -67,8 +67,10 @@ class TasksController extends \Controller
         {
             $start = new \DateTime();
             $start->setTimestamp($data["date"]);
+            $start->setTime(0,0,0);
             $end = new \DateTime();
-            $end->setTimestamp($data["date"] + 3600 * 24);
+            $end->setTimestamp($data["date"]);
+            $end->setTime(23,59,59);
             $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
                 ->setParameter("start_date", $start)
                 ->setParameter("stop_date", $end);
