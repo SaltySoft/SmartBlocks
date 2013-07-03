@@ -204,7 +204,8 @@ TODAY'S PLANNED
     /*border-radius: 5px;*/
     left: 45px;
     border-left: 5px rgba(51, 219, 242, 0.89) solid;
-
+    border-top: 3px gray solid;
+    margin-top: -3px;
     right: 5px;
     z-index: 2;
     color: white;

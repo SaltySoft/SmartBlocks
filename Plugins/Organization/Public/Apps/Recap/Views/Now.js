@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!Organization/Apps/Recap/Templates/now_view.html',
     'Organization/Apps/Common/Organization',
-    'Organization/Apps/Daily/Models/PlannedTask'
-], function ($, _, Backbone, NowTemplate, Organization, PlannedTask) {
+    'Organization/Apps/Daily/Models/PlannedTask',
+    'Organization/Apps/Recap/Views/Clock'
+], function ($, _, Backbone, NowTemplate, Organization, PlannedTask, ClockView) {
 
 
     var View = Backbone.View.extend({
@@ -85,6 +86,10 @@ define([
 
             var template = _.template(NowTemplate, {});
             base.$el.html(template);
+
+            var clock_view = new ClockView();
+            base.$el.find(".clock_container").html(clock_view.$el);
+            clock_view.init(base.SmartBlocks, base.planned_tasks);
         },
         registerEvents: function () {
             var base = this;
@@ -111,7 +116,8 @@ define([
                     task.setStart(now);
                     task.set("duration", stop.getTime() - now.getTime());
                     task.save();
-                    base.planned_tasks.fetch();
+                    base.planned_tasks.add(task);
+//                    base.planned_tasks.fetch();
                 }
             });
             base.$el.delegate(".cancel_pause_button", "click", function () {

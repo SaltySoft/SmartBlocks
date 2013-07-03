@@ -78,6 +78,14 @@
   .next_info {
     position: relative;
     height: 300px;
+    .clock_view {
+      width: 200px;
+      height: 200px;
+//      background: whitesmoke;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+    }
     span.pause {
       display: none;
     }
@@ -165,6 +173,9 @@
         padding-top: 50px;
         font-size: big;
       }
+      .clock_view {
+        display: none;
+      }
     }
 
   //    height: 200px;
@@ -200,7 +211,7 @@
         height: 180px;
         position: relative;
         float: left;
-        border: 2px rgb(207, 207, 207) solid;
+        background: whitesmoke;
         margin: 10px;
 
         .year {

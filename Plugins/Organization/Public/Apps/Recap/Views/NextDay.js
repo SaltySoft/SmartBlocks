@@ -110,19 +110,24 @@ define([
                 deadline_view.init(base.SmartBlocks);
             }
         },
-        expand: function () {
+        expand: function (elt) {
             var base = this;
             if (!base.$el.find(".expandable").hasClass("expanded")) {
-                base.parent.$el.find(".expandable").removeClass("expanded");
+                for (var k in base.parent.next_days) {
+                    base.parent.next_days[k].bindClick();
+                }
                 base.$el.find(".expandable").addClass("expanded");
             }
         },
         bindClick: function () {
             var base = this;
+
             base.$el.bind("click.expand", function () {
-                base.expand();
+                var elt = $(this);
+                base.expand(elt);
                 base.$el.unbind("click.expand");
             });
+            base.$el.find(".expandable").removeClass("expanded");
         },
         registerEvents: function () {
             var base = this;
