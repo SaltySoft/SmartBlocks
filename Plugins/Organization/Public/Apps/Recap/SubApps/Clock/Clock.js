@@ -59,17 +59,7 @@ define([
                 base.ctx.closePath();
             }
 
-            //sticks
-            //hours
-            base.ctx.beginPath();
-            base.ctx.strokeStyle = "black";
-            base.ctx.lineWidth = 2;
-            var angle = (now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600) * Math.PI / 12 - Math.PI / 2;
-            base.ctx.moveTo(base.cv.width / 2, base.cv.height / 2);
-            var x = Math.cos(angle) * (80) + base.cv.width / 2;
-            var y = Math.sin(angle) * (80) + base.cv.height / 2;
-            base.ctx.lineTo(x, y);
-            base.ctx.stroke();
+
 
             base.ctx.beginPath();
             base.ctx.strokeStyle = "black";
@@ -125,10 +115,26 @@ define([
                 }
             }
         },
+        drawSticks: function () {
+            var base = this;
+            var now = new Date();
+            //sticks
+            //hours
+            base.ctx.beginPath();
+            base.ctx.strokeStyle = "red";
+            base.ctx.lineWidth = 2;
+            var angle = (now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600) * Math.PI / 12 - Math.PI / 2;
+            base.ctx.moveTo(base.cv.width / 2, base.cv.height / 2);
+            var x = Math.cos(angle) * (80) + base.cv.width / 2;
+            var y = Math.sin(angle) * (80) + base.cv.height / 2;
+            base.ctx.lineTo(x, y);
+            base.ctx.stroke();
+        },
         draw: function () {
             var base = this;
             base.drawBackground();
             base.drawTasks();
+            base.drawSticks();
         },
         run: function () {
             var base = this;
