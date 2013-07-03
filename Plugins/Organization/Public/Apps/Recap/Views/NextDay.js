@@ -79,7 +79,7 @@ define([
             base.$el.find(".day_name").html(dayname);
             base.$el.find(".day_nb").html(" (" + ( base.date.getDate() < 10 ? '0' : '') +
                 base.date.getDate() + "/" + ( base.date.getMonth() < 10 ? '0' : '') +
-                base.date.getMonth() + "/" + '<span class="year">' + base.date.getFullYear() + "</span>)");
+                base.date.getMonth() + ")");
 
 
         },
@@ -87,17 +87,64 @@ define([
             var base = this;
 
             base.$el.find(".tasks_nb").html(base.planned_tasks.models.length);
+            if (base.planned_tasks.models.length > 0) {
+                base.$el.find(".tasks_nb_container").show();
+            } else {
+                base.$el.find(".tasks_nb_container").hide();
+            }
             base.$el.find(".deadlines_nb").html(base.deadlines.models.length);
-
+            if (base.deadlines.models.length > 0) {
+                base.$el.find(".deadlines_nb_container").show();
+            } else {
+                base.$el.find(".deadlines_nb_container").hide();
+            }
 
 
             base.$el.find(".planned_tasks").html("");
+            var count = 0;
+            var deadlines_count = [];
             for (var k in base.planned_tasks.models) {
                 var planned_task = base.planned_tasks.models[k];
                 var pt_view = new PlannedListItem(planned_task);
                 base.$el.find(".planned_tasks").append(pt_view.$el);
                 pt_view.init(base.SmartBlocks);
+                count += planned_task.get("duration");
+                if (planned_task.get("task")) {
+                    if (!deadlines_count[planned_task.get("task").get("id")]) {
+                        deadlines_count[planned_task.get("task").get("id")] = {};
+                        deadlines_count[planned_task.get("task").get("id")].duration = 0;
+                    }
+                    deadlines_count[planned_task.get("task").get("id")].task = planned_task.get("task");
+                    deadlines_count[planned_task.get("task").get("id")].duration += planned_task.get("duration");
+                }
             }
+            if (count > 0) {
+                base.$el.find(".planned_hours_count").html(Organization.getTimeString(count));
+                base.$el.find(".planned_hours_count_container").show();
+            } else {
+                base.$el.find(".planned_hours_count_container").hide();
+                base.$el.find(".planned_tasks").html('<span class="empty">No task planned on that day</span>');
+            }
+
+
+            var longest_deadline = undefined;
+            var max = 0;
+            for (var k in deadlines_count) {
+                var o = deadlines_count[k];
+                if (o.duration > max) {
+                    longest_deadline = o;
+                }
+            }
+            if (longest_deadline) {
+                base.$el.find(".main_deadline").html(longest_deadline.task.get("name"));
+                base.$el.find(".md_count").html(Organization.getTimeString(longest_deadline.duration));
+                base.$el.find(".main_deadline_container").show();
+            } else {
+                base.$el.find(".main_deadline_container").hide();
+
+            }
+
+
 
 
             base.$el.find(".due_deadlines").html("");
@@ -108,6 +155,10 @@ define([
                 });
                 base.$el.find(".due_deadlines").append(deadline_view.$el);
                 deadline_view.init(base.SmartBlocks);
+            }
+
+            if (base.deadlines.models.length == 0) {
+                base.$el.find(".due_deadlines").html('<span class="empty">No deadline due that day</span>');
             }
         },
         expand: function (elt) {
