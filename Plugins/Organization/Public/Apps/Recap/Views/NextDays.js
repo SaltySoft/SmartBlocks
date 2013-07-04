@@ -37,6 +37,7 @@ define([
                 date = new Date(date);
                 date.setDate(date.getDate() + 1);
             }
+            base.$el.find(".days_container").append('<div class="clearer"></div>');
         },
         registerEvents: function () {
             var base = this;

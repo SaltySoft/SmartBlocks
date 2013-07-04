@@ -96,6 +96,7 @@ define([
 
             base.$el.delegate(".pause_button", "click", function () {
                 var elt = $(this);
+
                 if (base.current_state == base.states.working) {
                     base.current_state = base.states.pause;
                     base.$el.addClass("paused");
@@ -107,16 +108,23 @@ define([
                     var start = base.current_task.getStart();
                     var stop = new Date(start);
                     stop.setTime(stop.getTime() + base.current_task.get("duration"));
+
                     base.current_task.set("duration", base.pause_time.getTime() - start.getTime());
                     base.current_task.save();
-                    var task = new PlannedTask(base.current_task.attributes);
-                    task.id = undefined;
-                    task.attributes.id = undefined;
                     var now = new Date();
-                    task.setStart(now);
-                    task.set("duration", stop.getTime() - now.getTime());
-                    task.save();
-                    base.planned_tasks.add(task);
+                    if (now < stop) {
+                        var task = new PlannedTask(base.current_task.attributes);
+                        task.id = undefined;
+                        task.attributes.id = undefined;
+
+
+                        task.setStart(now);
+
+                        task.set("duration", stop.getTime() - now.getTime());
+                        task.save();
+                        base.planned_tasks.add(task);
+                    }
+
 //                    base.planned_tasks.fetch();
                 }
             });

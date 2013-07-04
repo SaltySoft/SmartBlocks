@@ -89,8 +89,7 @@ body {
     height: 301.5px;
     .clock_view {
       width: 200px;
-      height: 200px;
-//      background: whitesmoke;
+      height: 200px; //      background: whitesmoke;
       position: absolute;
       right: 10px;
       bottom: 10px;
@@ -177,7 +176,7 @@ body {
       .plan_day_controls {
         position: absolute;
         bottom: 10px;
-        left:10px;
+        left: 10px;
       }
     }
 
@@ -198,29 +197,9 @@ body {
         display: none;
       }
     }
-
-  //    height: 200px;
-  //    .deadline_list {
-  //      height: 160px;
-  //      .deadline_item {
-  //        padding: 12px;
-  //        background: #6c92b8;
-  //        color: white;
-  //        margin-bottom: 1px;
-  //        cursor: pointer;
-  //        display: none;
-  //      }
-  //
-  //      .deadline_item.overdue {
-  //        background: #f3a487;
-  //      }
-  //
-  //    }
-  //    .pure-paginator {
-  //      width: 89px;
-  //      margin: auto;
-  //    }
   }
+
+
 
   .next_days_view {
     .days_container {
@@ -241,14 +220,13 @@ body {
         }
 
         .deadlines_nb_container {
-          display:none;
+          display: none;
         }
 
         .empty {
           color: gray;
           font-style: italic;
         }
-
 
         .details {
           position: absolute;
@@ -269,9 +247,9 @@ body {
           }
         }
 
-      h3 {
-        margin-bottom: 10px;
-      }
+        h3 {
+          margin-bottom: 10px;
+        }
 
         .year {
           color: #A5A5A5;
@@ -295,6 +273,10 @@ body {
       }
       .next_day_view .expanded {
         border-top: 5px #2bb8cb solid;
+
+        .day_nb {
+          right: 27px;
+        }
         .for_expanded {
           display: block;
         }
@@ -328,14 +310,24 @@ body {
 
   }
 
+  @media (max-width: 1000px) {
+    .next_days_view {
+      .days_container {
+        width: -moz-fit-content;
+        width: -webkit-fit-content;
+        width: fit-content;
+        margin: auto;
+      }
+    }
+  }
+
   .past_recap {
     .work_time {
       font-size: 1.3em;
     }
   }
 
-  .recap_square {
-//    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  .recap_square { //    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     background: white;
     border: 1px grey solid;
     margin: 10px;
