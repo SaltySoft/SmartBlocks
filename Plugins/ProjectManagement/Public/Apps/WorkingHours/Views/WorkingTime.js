@@ -255,7 +255,6 @@ define([
                 }
             });
 
-
             base.$el.delegate(".save_working_hours_button", "click", function (event) {
                 base.render(true);
             });

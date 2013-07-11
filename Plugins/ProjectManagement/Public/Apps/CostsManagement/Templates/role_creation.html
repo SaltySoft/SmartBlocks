@@ -1,0 +1,39 @@
+<div class="informations" >
+    Add the role of a user in a project by precising its role name (ex: developer, manager...) and cost by hours.
+</div >
+
+<form action="javascript:void(0);" class="pure-form pure-form-aligned role_creation_form" >
+    <fieldset >
+        <div class="pure-control-group" >
+            <label for="role_creation_form_project" class="role_creation_label" >Project</label >
+            <select name="project_id" id="role_creation_form_project" class="pure-input-medium" >
+                <% _.each(projects, function (project) {%>
+                <option value="<%= project.get('id') %>" ><%= project.get('name') %></option >
+                <% });%>
+            </select >
+        </div >
+
+        <div class="pure-control-group" >
+            <label for="role_creation_form_user" class="role_creation_label" >User</label >
+            <select name="user_id" id="role_creation_form_user" class="pure-input-medium" >
+                <% _.each(users, function (user) {%>
+                <option value="<%= user.get('id') %>" ><%= user.get('username') %></option >
+                <% });%>
+            </select >
+        </div >
+
+        <div class="pure-control-group" >
+            <label for="role_creation_form_name" >Role name</label >
+            <input type="text" id="role_creation_form_name" name="name" /> (ex: developer, manager...)
+        </div >
+
+        <div class="pure-control-group" >
+            <label for="role_creation_form_cost" >Cost</label >
+            <input type="text" id="role_creation_form_cost" name="cost" /> € / hour
+        </div >
+
+        <div class="pure-controls" >
+            <button type="submit" class="pure-button pure-button-primary" >Create</button >
+        </div >
+    </fieldset >
+</form >
