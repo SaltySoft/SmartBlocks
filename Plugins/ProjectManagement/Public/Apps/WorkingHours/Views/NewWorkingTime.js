@@ -5,8 +5,9 @@ define([
     'ProjectManagement/Apps/WorkingHours/Models/Project',
     'ProjectManagement/Apps/WorkingHours/Models/WorkingDuration',
     'text!ProjectManagement/Apps/WorkingHours/Templates/working_time.html',
-    'ProjectManagement/Apps/WorkingHours/Collections/Projects'
-], function ($, _, Backbone, Project, WorkingDuration, WorkingTimeTemplate, ProjectsCollection) {
+    'ProjectManagement/Apps/WorkingHours/Collections/Projects',
+    'ProjectManagement/Apps/WorkingHours/Collections/WorkingDurations'
+], function ($, _, Backbone, Project, WorkingDuration, WorkingTimeTemplate, ProjectsCollection, WorkingDurationsCollection) {
 
     function getWeekNumber(d) {
         // Copy date so don't modify original
@@ -60,9 +61,10 @@ define([
                     day_names:['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
                 }
             };
+
             //Init notes collections
             base.projects_collection = new ProjectsCollection();
-
+            base.changedWorkDuration = new WorkingDurationsCollection();
             base.actualDate = new Date();
 
             base.render(true);
@@ -255,10 +257,6 @@ define([
                 }
             });
 
-            base.$el.delegate(".save_working_hours_button", "click", function (event) {
-                base.render(true);
-            });
-
             base.$el.delegate(".hours_input", "blur", function (event) {
                 event.stopPropagation();
                 console.log("hours_display blur ---------------------------");
@@ -276,53 +274,85 @@ define([
                 hours_display.show();
                 hours_edition.hide();
 
-                var working_duration = undefined;
-//                console.log("base.projects_collection", base.projects_collection);
-//                console.log("data-pid", hours_input.attr("data-pid"));
-                var project = base.projects_collection.get(hours_input.attr("data-pid"));
-                console.log("project", project);
                 var wd_date = new Date();
                 wd_date.setTime(hours_input.attr("data-date"));
-                if (project !== undefined) {
-                    var wd_id = project.getWorkingDurationIdAtDate(project, wd_date);
-                    console.log("wd_id", wd_id);
-                    if (wd_id != 0) {
-                        console.log("wd FIND id: ", wd_id);
-                        working_duration = project.get("working_durations").get(wd_id);
-                        console.log("working_duration", working_duration);
-                        if (hours_number <= 0) {
-                            working_duration.destroy();
-                        }
-                        else {
-                            working_duration.set("hours_number", hours_number);
-                        }
-                    }
-                    else {
-                        console.log("wd not found");
-                        if (hours_number > 0) {
-                            console.log("hours_number : ", hours_number);
-                            working_duration = new WorkingDuration({
-                                hours_number:hours_number,
-                                date:wd_date.getTime() / 1000,
-                                project_id:project.id
-                            });
-                        }
-                    }
-                    if (working_duration !== undefined) {
-                        console.log("working_duration.save", working_duration);
 
-                        working_duration.save({}, {
-                            success:function () {
-                                project.get("working_durations").push(working_duration);
-//                                base.render(false);
-                                console.log("success working_duration save");
-                            },
-                            error:function () {
-                                console.log("error working_duration save");
-                            }
-                        });
-                    }
+                var working_duration = new WorkingDuration({
+                    hours_number:hours_number,
+                    date:wd_date.getTime() / 1000,
+                    project_id:hours_input.attr("data-pid")
+                });
+                base.changedWorkDuration.add(working_duration);
+
+//
+//                var working_duration = undefined;
+////                console.log("base.projects_collection", base.projects_collection);
+////                console.log("data-pid", hours_input.attr("data-pid"));
+//                var project = base.projects_collection.get(hours_input.attr("data-pid"));
+//                console.log("project", project);
+//                if (project !== undefined) {
+//                    var wd_id = project.getWorkingDurationIdAtDate(project, wd_date);
+//                    console.log("wd_id", wd_id);
+//                    if (wd_id != 0) {
+//                        console.log("wd FIND id: ", wd_id);
+//                        working_duration = project.get("working_durations").get(wd_id);
+//                        console.log("working_duration", working_duration);
+//                        if (hours_number <= 0) {
+//                            working_duration.destroy({}, {
+//                                success:function () {
+//                                    console.log("success destroy workduration");
+//                                },
+//                                error:function () {
+//                                    console.log("error destroy workduration");
+//                                }
+//                            });
+//                        }
+//                        else {
+//                            working_duration.set("hours_number", hours_number);
+//                        }
+//                    }
+//                    else {
+//                        console.log("wd not found");
+//                        if (hours_number > 0) {
+//                            console.log("hours_number : ", hours_number);
+//                            working_duration = new WorkingDuration({
+//                                hours_number:hours_number,
+//                                date:wd_date.getTime() / 1000,
+//                                project_id:project.id
+//                            });
+//                        }
+//                    }
+//                    if (working_duration !== undefined) {
+//                        console.log("working_duration.save", working_duration);
+//
+//                        base.changedWorkDuration.push(working_duration);
+//                        working_duration.save({}, {
+//                            success:function () {
+//                                project.get("working_durations").push(working_duration);
+////                                base.render(false);
+//                                console.log("success working_duration save");
+//                            },
+//                            error:function () {
+//                                console.log("error working_duration save");
+//                            }
+//                        });
+//                    }
+//                }
+            });
+
+            base.$el.delegate(".save_working_hours_button", "click", function (event) {
+                for (var k in base.changedWorkDuration) {
+                    base.changedWorkDuration[k].save({}, {
+                        success:function () {
+                            console.log("success changed working_duration save");
+                        },
+                        error:function () {
+                            console.log("error changed working_duration save");
+                        }
+                    });
                 }
+                base.changedWorkDuration = new WorkingDurationsCollection();
+                base.render(true);
             });
 
             $('table tr td').hover(function () {

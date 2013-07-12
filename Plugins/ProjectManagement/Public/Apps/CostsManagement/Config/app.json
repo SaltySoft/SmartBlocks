@@ -1,0 +1,8 @@
+{
+    "name":"CostsManagement",
+    "token":"costsManagement",
+    "description":"This app allows projects costs management.",
+    "link":"/ProjectManagement/CostsManagements/app",
+    "logo_url":"/ProjectManagement/Apps/WorkingHours/Resources/logoWorkingHours.png",
+    "block_token":"projectManagement"
+}
