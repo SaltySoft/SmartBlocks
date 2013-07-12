@@ -105,9 +105,17 @@ class TasksController extends \Controller
         $task = new Task;
 
         $task->setName($data["name"]);
-        $due_date = new \DateTime();
-        $due_date->setTimestamp($data["due_date"]);
-        $task->setDueDate($due_date);
+        $task->setDescription(isset($data["description"]) ? $data["description"] : "");
+        if (isset($data["required_time"]))
+        {
+            $task->setRequiredTime($data["required_time"]);
+        }
+        if (isset($data["due_date"]))
+        {
+            $due_date = new \DateTime();
+            $due_date->setTimestamp($data["due_date"]);
+            $task->setDueDate($due_date);
+        }
 
         if (isset($_GET["token"]) && $_GET["token"] != "")
         {
@@ -116,8 +124,48 @@ class TasksController extends \Controller
             $task->setOwner($user);
         }
 
-        $task->save();
+        if (isset($data["tags"]))
+        {
+            foreach ($data["tags"] as $tag_a)
+            {
+                $tag = TaskTag::find($tag_a);
+                if (is_object($tag))
+                {
+                    $task->getTags()->add($tag);
+                }
+            }
+        }
 
+        if (isset($data["parent"]))
+        {
+            if (is_array($data["parent"]))
+            {
+                $parent = Task::find($data["parent"]["id"]);
+                if (is_object($parent))
+                {
+                    $task->setParent($parent);
+                }
+            }
+            else
+            {
+                $task->setParent(null);
+            }
+        }
+
+        if (isset($data["children"]))
+        {
+            $task->getChildren()->clear();
+            foreach ($data["children"] as $child_a)
+            {
+                $child = Task::find($child_a["id"]);
+                if (is_object($child))
+                {
+                    $task->getChildren()->add($child);
+                }
+            }
+        }
+
+        $task->save();
         $this->render = false;
         header("Content-Type: application/json");
         echo json_encode($task->toArray());
@@ -157,11 +205,48 @@ class TasksController extends \Controller
         {
             $data = $this->getRequestData();
             $task->setName($data["name"]);
+            $task->setDescription(isset($data["description"]) ? $data["description"] : "");
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
-            $due_date = new \DateTime();
-            $due_date->setTimestamp($data["due_date"]);
-            $task->setDueDate($due_date);
+            if (isset($data["required_time"]))
+            {
+                $task->setRequiredTime($data["required_time"]);
+            }
+
+            if (isset($data["due_date"]))
+            {
+                $due_date = new \DateTime();
+                $due_date->setTimestamp($data["due_date"]);
+                $task->setDueDate($due_date);
+            }
+            else
+            {
+                $task->setDueDate(null);
+            }
+
+            if (isset($data["parent"]))
+            {
+                $parent = Task::find($data["parent"]["id"]);
+                if (is_object($parent))
+                {
+                    $task->setParent($parent);
+                }
+            }
+
+
+            if (isset($data["tags"]))
+            {
+                $task->getTags()->clear();
+
+                foreach ($data["tags"] as $tag_a)
+                {
+                    $tag = TaskTag::find($tag_a["id"]);
+                    if (is_object($tag))
+                    {
+                        $task->getTags()->add($tag);
+                    }
+                }
+            }
 
 //            foreach ($data["linked_users"] as $user_array)
 //            {
@@ -186,6 +271,28 @@ class TasksController extends \Controller
 //                    $task_user->save();
 //                }
 //            }
+            $em = \Model::getEntityManager();
+            if (isset($data["children"]))
+            {
+
+                foreach ($task->getChildren() as $child)
+                {
+                    $child->setParent(null);
+                    $em->persist($child);
+                }
+
+
+                foreach ($data["children"] as $child_a)
+                {
+                    $child = Task::find($child_a["id"]);
+                    if (is_object($child))
+                    {
+                        $child->setParent($task);
+                        $em->persist($child);
+                    }
+                }
+                $em->flush();
+            }
 
             $task->save();
             echo json_encode($task->toArray());
