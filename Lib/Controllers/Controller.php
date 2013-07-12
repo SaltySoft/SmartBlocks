@@ -290,7 +290,7 @@ class Controller
                 header("HTTP/1.0 404 Not Found");
             }
 
-            if ($status == 421)
+            if ($status == 401)
                 header("HTTP/1.0 401 Unauthorized");
             if ($status == 406)
                 header("HTTP/1.0 406 Not Acceptable");
