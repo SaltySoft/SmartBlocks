@@ -94,17 +94,30 @@
     }
   }
 
-  .activity_preview_container.empty {
 
-  }
 
   .activity_preview_container {
+
+    .activity_prev {
+      display: block;
+    }
+    .empty_content {
+      display: none;
+    }
+
+    .for_archived {
+      display: none;
+    }
+
+    .for_normal {
+      display: inline;
+    }
+
     .preview_controls_container {
       position: absolute;
       bottom: 10px;
       left: 10px;
       right: 10px;
-
       .deletion_button {
         position: absolute;
         right: 0px;
@@ -116,7 +129,23 @@
       height: 100px;
       margin: 5px;
       background: #d3d3d3;
+    }
+  }
+  .empty {
+    .activity_prev {
+      display: none;
+    }
+    .empty_content {
+      display: block;
+    }
+  }
+  .activity_preview.archived {
+    .for_archived {
+      display: inline;
+    }
 
+    .for_normal {
+      display: none;
     }
   }
 }

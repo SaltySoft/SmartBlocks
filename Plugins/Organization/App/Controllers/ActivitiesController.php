@@ -8,18 +8,33 @@
 
 namespace Organization;
 
-
-use Doctrine\DBAL\Types\Type;
-
 class ActivitiesController extends \Controller
 {
     public function index($params = array())
     {
+        $data = $this->getRequestData();
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("activity")->from('\Organization\Activity', 'activity');
         $qb->leftJoin("activity.tasks", "task")->leftJoin("task.linked_users", "linked_user");
-        $qb->where("activity.creator = :user OR task.owner = :user OR linked_user = :user");
+        $qb->where("(activity.creator = :user OR task.owner = :user OR linked_user = :user)");
+        if (!isset($data["archives"]))
+        {
+            $qb->andWhere("activity.archived = 0");
+        }
+        if (isset($data["name"]))
+        {
+
+            $qb->andWhere("activity.name LIKE :name")->setParameter('name', $data["name"] . '%');
+        }
+
+        if (isset($data["type"]) && $data["type"] != 0)
+        {
+            $qb->leftJoin('activity.type', 'type')
+                ->andWhere('type.id = :id')->setParameter('id', $data["type"]);
+        }
+
+
         $qb->setParameter("user", \User::current_user());
         $result = $qb->getQuery()->getResult();
         $response = array();
@@ -52,10 +67,14 @@ class ActivitiesController extends \Controller
         $activity->setArchived(isset($data["archived"]) ? $data["archived"] : false);
         $activity->setDescription(isset($data["description"]) ? $data["description"] : null);
         $activity->setCreator(\User::current_user());
-        if (isset($data["type"])) {
-            if (is_array($data["type"])) {
+        if (isset($data["type"]))
+        {
+            if (is_array($data["type"]))
+            {
                 $type = ActivityType::find($data["type"]["id"]);
-            } else {
+            }
+            else
+            {
                 $type = ActivityType::find($data["type"]);
             }
 
@@ -70,10 +89,11 @@ class ActivitiesController extends \Controller
             {
                 $this->json_error("The provided type does not exist", 404);
             }
-        } else {
+        }
+        else
+        {
             $this->json_error("You must provide a type", 406);
         }
-
 
 
     }

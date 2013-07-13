@@ -9,6 +9,7 @@ define([
         className: "activity_search_controls",
         initialize: function () {
             var base = this;
+            base.parameters = {};
         },
         init: function (SmartBlocks, parent) {
             var base = this;
@@ -17,12 +18,13 @@ define([
             base.activity_types = base.parent.activity_types;
 
             base.render();
+            base.registerEvents();
 
             base.parent.events.on("activity_types_loaded", function () {
                 base.$el.find(".types_select").find(".activity_types").remove();
                 for (var k in base.activity_types.models) {
                     var activity_type = base.activity_types.models[k];
-                    base.$el.find(".types_select").append('<option class="activity_type" data-id="' + activity_type.get("id") + '">' + activity_type.get("name") +'</option>');
+                    base.$el.find(".types_select").append('<option class="activity_type" value="' + activity_type.get("id") + '">' + activity_type.get("name") + '</option>');
                 }
             });
 
@@ -35,6 +37,16 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.delegate("form", "submit", function () {
+                var form = $(this);
+                var array = form.serializeArray();
+                base.parameters = {};
+                for (var k in array) {
+                    base.parameters[array[k].name] = array[k].value;
+                }
+                base.parent.events.trigger("load_list_with_params", base.parameters);
+            });
         }
     });
 
