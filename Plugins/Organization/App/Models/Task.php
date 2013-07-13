@@ -408,14 +408,11 @@ class Task extends \Model
 
     public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true)
     {
-
         $tags = array();
-
         foreach ($this->tags as $tag)
         {
             $tags[] = $tag->toArray();
         }
-
 
         $array = array(
             "id" => $this->id,
@@ -429,7 +426,6 @@ class Task extends \Model
             "due_date" => isset($this->due_date) ? $this->due_date->getTimeStamp() : null,
             "type" => $this->type != null ? $this->type->toArray() : null,
             "tags" => $tags,
-
         );
 
         if ($show_activities)
