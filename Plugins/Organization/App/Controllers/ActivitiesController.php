@@ -13,28 +13,20 @@ use Doctrine\DBAL\Types\Type;
 
 class ActivitiesController extends \Controller
 {
-
-
     public function index($params = array())
     {
         $em = \Model::getEntityManager();
-
         $qb = $em->createQueryBuilder();
-
         $qb->select("activity")->from('\Organization\Activity', 'activity');
         $qb->leftJoin("activity.tasks", "task")->leftJoin("task.linked_users", "linked_user");
         $qb->where("activity.creator = :user OR task.owner = :user OR linked_user = :user");
         $qb->setParameter("user", \User::current_user());
-
         $result = $qb->getQuery()->getResult();
-
         $response = array();
-
         foreach ($result as $activity)
         {
             $reponse[] = $activity->toArray();
         }
-
         $this->return_json($response);
     }
 
@@ -57,6 +49,7 @@ class ActivitiesController extends \Controller
 
         $activity = new Activity();
         $activity->setName($data["name"]);
+        $activity->setArchived(isset($data["archived"]) ? $data["archived"] : false);
         $activity->setDescription(isset($data["description"]) ? $data["description"] : null);
         $activity->setCreator(\User::current_user());
         $type = ActivityType::find($data["type"]["id"]);
@@ -73,22 +66,21 @@ class ActivitiesController extends \Controller
         }
 
 
-
     }
 
     public function update($params = array())
     {
         $data = $this->getRequestData();
-
         $activity = Activity::find($params["id"]);
         if (is_object($activity))
         {
             if ($activity->getCreator() == \User::current_user())
             {
                 $activity->setName($data["name"]);
+                if (isset($data["archived"]))
+                    $activity->setArchived($data["archived"]);
                 $activity->setDescription(isset($data["description"]) ? $data["description"] : null);
                 $activity->getTasks()->clear();
-
                 foreach ($data["tasks"] as $task_array)
                 {
                     $task = Task::find($task_array["id"]);
@@ -102,14 +94,12 @@ class ActivitiesController extends \Controller
                 {
                     $activity->setType($type);
                     $activity->save();
-
                     $this->return_json($activity->toArray());
                 }
                 else
                 {
                     $this->json_error("The provided type does not exist", 404);
                 }
-
             }
             else
             {

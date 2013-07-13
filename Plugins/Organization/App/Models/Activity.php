@@ -68,11 +68,17 @@ class Activity extends \Model
      */
     private $type;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $archived;
+
     public function __construct()
     {
         $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
         $this->created = new \DateTime();
         $this->updated = new \DateTime();
+        $this->archived = false;
     }
 
     public function getId()
@@ -150,6 +156,16 @@ class Activity extends \Model
         return $this->type;
     }
 
+    public function setArchived($archived)
+    {
+        $this->archived = $archived;
+    }
+
+    public function getArchived()
+    {
+        return $this->archived;
+    }
+
     function delete()
     {
         foreach ($this->getTasks() as $task)
@@ -176,8 +192,10 @@ class Activity extends \Model
 
             "created" => $this->created,
             "updated" => $this->updated,
-            "type" => $this->type->toArray()
+            "type" => $this->type->toArray(),
+            "archived" => $this->archived
         );
+
         if ($show_tasks)
         {
             $tasks = array();
