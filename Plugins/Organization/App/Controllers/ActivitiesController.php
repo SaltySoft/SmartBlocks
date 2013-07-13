@@ -25,7 +25,7 @@ class ActivitiesController extends \Controller
         $response = array();
         foreach ($result as $activity)
         {
-            $reponse[] = $activity->toArray();
+            $response[] = $activity->toArray();
         }
         $this->return_json($response);
     }
@@ -52,18 +52,27 @@ class ActivitiesController extends \Controller
         $activity->setArchived(isset($data["archived"]) ? $data["archived"] : false);
         $activity->setDescription(isset($data["description"]) ? $data["description"] : null);
         $activity->setCreator(\User::current_user());
-        $type = ActivityType::find($data["type"]["id"]);
-        if (is_object($type))
-        {
-            $activity->setType($type);
-            $activity->save();
+        if (isset($data["type"])) {
+            if (is_array($data["type"])) {
+                $type = ActivityType::find($data["type"]["id"]);
+            } else {
+                $type = ActivityType::find($data["type"]);
+            }
 
-            $this->return_json($activity->toArray());
+            if (is_object($type))
+            {
+                $activity->setType($type);
+                $activity->save();
+
+                $this->return_json($activity->toArray());
+            }
+            else
+            {
+                $this->json_error("The provided type does not exist", 404);
+            }
+
         }
-        else
-        {
-            $this->json_error("The provided type does not exist", 404);
-        }
+
 
 
     }

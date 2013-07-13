@@ -7,9 +7,10 @@ define([
     'Organization/Apps/Tasks/Views/MainView',
     'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Recap/Views/MainView',
+    'Organization/Apps/ActivitiesIndex/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, TaskUsersCollection, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, TaskUsersCollection, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -27,7 +28,8 @@ define([
                     "week" : "week",
                     "month" : "month",
                     "daily": "daily",
-                    "recap": "recap"
+                    "recap": "recap",
+                    "activities": "activitiesIndex"
                 },
                 week: function () {
                     base.launchWeek();
@@ -40,6 +42,9 @@ define([
                 },
                 recap: function () {
                     base.launchRecap();
+                },
+                activitiesIndex: function () {
+                    base.launchActivitiesIndex();
                 }
             });
 
@@ -99,6 +104,15 @@ define([
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.recap").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchActivitiesIndex: function () {
+            var base = this;
+
+            base.current_view = new ActivitiesIndexView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
             base.setContent(base.current_view.$el);
         },
         checkForNotifications: function () {

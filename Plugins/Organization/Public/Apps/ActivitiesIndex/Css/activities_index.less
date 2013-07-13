@@ -1,0 +1,108 @@
+.task_list_item {
+  padding: 10px;
+  background: #0094cc;
+  color: white;
+}
+
+.task_list_item.overdue {
+  padding: 10px;
+  background: rgba(204, 0, 0, 0.60);
+  color: white;
+}
+
+.activities_index_view {
+  margin: auto;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+
+  > div {
+    height: 99%;
+    position: relative;
+  }
+
+  .app_body {
+    position: absolute;
+    bottom: 0px;
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    .panel {
+      position: absolute;
+      bottom: 50px;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+    }
+
+    > div {
+      height: 99%;
+
+      > div {
+        height: 99%;
+        position: relative;
+      }
+    }
+
+  }
+
+  .panel {
+    margin: 5px;
+    padding: 10px;
+    background: white;
+  }
+
+
+
+  .search_controls_container {
+   .search_ctrls_form {
+      line-height: 30px;
+      .types_select {
+        width:150px;
+      }
+    }
+ }
+
+  .activities_list_container {
+    .activity_list_item a {
+      display: block;
+      text-decoration: none;
+      padding: 10px;
+      margin-bottom: 1px;
+      color: whitesmoke;
+      transition: background 500ms;
+      -webkit-transition: background 500ms; /* Safari */
+    }
+    .activity_list_item a:hover {
+      background: #d3d3d3;
+      color: #525252;
+    }
+  }
+
+  .activity_preview_container.empty {
+
+  }
+  .activity_preview_container {
+    .preview_controls_container {
+      position: absolute;
+      bottom: 0px;
+      left: 0px;
+      right: 0px;
+
+      .deletion_button {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+      }
+    }
+
+    .activity_time_line_container {
+      height: 100px;
+      margin: 5px;
+      background: #d3d3d3;
+
+    }
+  }
+}
