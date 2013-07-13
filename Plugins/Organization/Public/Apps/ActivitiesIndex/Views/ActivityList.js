@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/activity_list.html',
-    './ActivityItem'
-], function ($, _, Backbone, ActivityListTemplate, ActivityItem) {
+    './ActivityItem',
+    'Organization/Apps/Common/Views/ActivityCreationView'
+], function ($, _, Backbone, ActivityListTemplate, ActivityItem, ActivityCreationView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activity_list",
@@ -39,6 +40,11 @@ define([
                     base.$el.find(".activities_list").append(activity_item_view.$el);
                     activity_item_view.init(base.SmartBlocks, base.parent);
                 }
+            });
+
+            base.$el.delegate(".activity_creation_button", "click", function () {
+                var activity_creation_view = new ActivityCreationView();
+                activity_creation_view.init(base.SmartBlocks, base.parent.activity_types);
             });
         }
     });

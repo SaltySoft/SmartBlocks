@@ -72,6 +72,11 @@ define([
         },
         registerEvents: function () {
             var base = this;
+            base.SmartBlocks.events.on("org_new_activity", function (activity) {
+                base.activities.add(activity);
+                
+                base.events.trigger("loaded_activities");
+            });
         }
     });
     return View;
