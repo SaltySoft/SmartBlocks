@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Daily/Templates/task_item.html',
+    'text!Organization/Apps/Common/Templates/task_item.html',
     'underscore_string'
 ], function ($, _, Backbone, TaskItemTemplate, _s) {
     var DeadlineItemView = Backbone.View.extend({

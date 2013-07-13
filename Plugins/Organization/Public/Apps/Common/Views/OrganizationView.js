@@ -57,7 +57,7 @@ define([
             var template = _.template(Template, {});
             base.$el.html(template);
         },
-        registereEvents: function () {
+        registerEvents: function () {
             var base = this;
             base.$el.delegate(".control_bar a", "click", function () {
                 var elt = $(this);
@@ -108,7 +108,6 @@ define([
         },
         launchActivitiesIndex: function () {
             var base = this;
-
             base.current_view = new ActivitiesIndexView();
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");

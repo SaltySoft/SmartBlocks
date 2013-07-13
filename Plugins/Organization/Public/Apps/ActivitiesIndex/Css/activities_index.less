@@ -12,11 +12,10 @@
 
 .activities_index_view {
   margin: auto;
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
-  left: 0px;
+  position: relative;
+  height: 99%;
+  width: 800px;
+
 
   > div {
     height: 99%;
@@ -79,17 +78,32 @@
       background: #d3d3d3;
       color: #525252;
     }
+    .activity_list {
+      height: 100%;
+      position: relative;
+
+      .activities_list {
+        height: 100%;
+        overflow-y: scroll;
+      }
+      .activity_creation_button {
+        position: absolute;
+        bottom: 0px;
+        left:0px;
+      }
+    }
   }
 
   .activity_preview_container.empty {
 
   }
+
   .activity_preview_container {
     .preview_controls_container {
       position: absolute;
-      bottom: 0px;
-      left: 0px;
-      right: 0px;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
 
       .deletion_button {
         position: absolute;

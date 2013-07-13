@@ -70,7 +70,8 @@ class ActivitiesController extends \Controller
             {
                 $this->json_error("The provided type does not exist", 404);
             }
-
+        } else {
+            $this->json_error("You must provide a type", 406);
         }
 
 

@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../Templates/activity_item.html'
-], function ($, _, Backbone, ActivityItemTemplate) {
+    'text!../Templates/activity_item.html',
+    'ContextMenuView'
+], function ($, _, Backbone, ActivityItemTemplate, ContextMenu) {
     var View = Backbone.View.extend({
         tagName: "li",
         className: "activity_list_item",
@@ -16,6 +17,8 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.parent = parent;
+
+            base.$el.attr("oncontextmenu", "return false;");
 
             base.render();
             base.registerEvents();
@@ -36,6 +39,26 @@ define([
             base.$el.delegate("a", "click", function () {
                 base.parent.events.trigger("change_activity_preview", base.activity);
             });
+
+            base.$el.mouseup(function (e) {
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Detailed view", function () {
+                        window.location = "#activities/" + base.activity.get('id');
+                    });
+                    context_menu.addButton("Delete", function () {
+                        base.activity.destroy({
+                            success: function () {
+                                base.$el.remove();
+                            }
+                        });
+                    });
+                    context_menu.show(e);
+
+                }
+            })
+
+
         }
     });
 
