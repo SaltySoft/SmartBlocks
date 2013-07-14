@@ -56,6 +56,7 @@ define([
             var base = this;
             base.tasks_tags.fetch({
                 success:function () {
+                    console.log("MAIN VIEW base.tasks_tags", base.tasks_tags);
                     base.events.trigger("tasks_tags_loaded");
                 }
             });

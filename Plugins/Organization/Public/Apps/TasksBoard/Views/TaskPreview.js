@@ -30,10 +30,7 @@ define([
                 base.$el.addClass("empty");
             } else {
                 base.$el.removeClass("empty");
-                console.log("TASK PREVIEW base.task", base.task);
-
                 var subtasks_list = new TasksListView(base.task.get("children"));
-                console.log("TASK PREVIEW subtasks_list", subtasks_list);
                 base.$el.find(".subtasks_list_container").html(subtasks_list.$el);
                 subtasks_list.init(base.SmartBlocks);
 

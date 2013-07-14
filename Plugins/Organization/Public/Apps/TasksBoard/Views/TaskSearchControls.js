@@ -24,11 +24,11 @@ define([
                 for (var k in base.tasks_tags.models) {
                     var tasks_tag = base.tasks_tags.models[k];
 
-                    base.$el.find(".task_search_tags").append('<input type="checkbox" class="search_tags" data-id="'
+                    base.$el.find(".task_search_tags").append('<label ><input type="checkbox" class="search_tags" data-id="'
                         + tasks_tag.get("id")
                         + '" name="'
                         + tasks_tag.get("name")
-                        + '" />');
+                        + '" />' + tasks_tag.get("name") + '</label >');
                 }
             });
         },
