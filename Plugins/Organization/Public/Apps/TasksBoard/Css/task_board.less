@@ -42,8 +42,8 @@
     .search_controls_container {
         .search_ctrls_form {
             line-height: 30px;
-            .types_select {
-                width: 150px;
+            .task_search_tags {
+                display: inline-block;
             }
         }
     }
@@ -55,6 +55,8 @@
             padding: 10px;
             margin-bottom: 1px;
             color: whitesmoke;
+            background-color: #2db8cb;
+
             transition: background 500ms;
             -webkit-transition: background 500ms; /* Safari */
         }
@@ -126,3 +128,26 @@
         }
     }
 }
+
+.task_creation_view {
+    width: 400px;
+    background-color: white;
+    box-shadow: 0px 0px 5px black;
+    padding: 20px;
+    position: relative;
+    margin: auto;
+    top: 50px;
+}
+
+.task_creation_view .task_creation_description {
+    display: block;
+    margin: 4px 0px 0px 0px;
+    height: 61px;
+    width: 394px;
+}
+
+.task_creation_view input[type=text] {
+    font-size: 0.9em;
+    margin-top: 2px;
+}
+

@@ -27,6 +27,9 @@ define([
             var base = this;
             var template = _.template(TaskItemTemplate, {});
             base.$el.html(template);
+
+            base.$el.find(".name").html(base.model.get("name"));
+//            base.$el.css("background", base.activity.get("type").get("color"));
         },
         registerEvents: function () {
             var base = this;

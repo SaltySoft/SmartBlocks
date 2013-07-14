@@ -29,6 +29,7 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
             base.$el.delegate(".create_button", "click", function () {
                 var form = base.$el.find("form");
                 var data = form.serializeArray();
@@ -47,6 +48,10 @@ define([
             base.$el.delegate(".cancel_button", "click", function () {
                 base.$el.remove();
                 return false;
+            });
+
+            base.$el.find("#form_task_date").datepicker({
+                dateFormat: 'yy-mm-dd'
             });
         }
     });
