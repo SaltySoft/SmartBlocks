@@ -7,8 +7,9 @@ define([
     'Organization/Apps/Common/Views/PlannedTasksList',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Common/Views/TaskPopup',
-    './TimeStats'
-], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView) {
+    './TimeStats',
+    './TaskTags'
+], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_show_main_view",
@@ -40,7 +41,7 @@ define([
             base.$el.find(".name").html(base.task.get("name"));
             base.$el.find(".description").html(base.task.get("description"));
             if (base.task.get("parent") !== undefined && base.task.get("parent") !== null) {
-                base.$el.find(".parent_task_link").html('<a href="#tasks/' + base.task.get("parent").get("id") +'">' +  base.task.get("parent").get("name") + '</a>');
+                base.$el.find(".parent_task_link").html('<a href="#tasks/' + base.task.get("parent").get("id") + '">' + base.task.get("parent").get("name") + '</a>');
             } else {
                 base.$el.find(".parent_task_link").html("No parent");
             }
@@ -60,6 +61,26 @@ define([
             var time_stats_view = new TimeStatsView(base.task);
             base.$el.find(".time_stats_container").html(time_stats_view.$el);
             time_stats_view.init(base.SmartBlocks);
+
+            var task_tags_view = new TaskTagsView(base.task);
+            base.$el.find(".tags_container").html(task_tags_view.$el);
+            task_tags_view.init(base.SmartBlocks, {
+                main: function (tag) {
+
+                },
+                context: [
+                    {
+                        name: "Remove",
+                        callback: function (tag) {
+                            base.task.get("tags").remove(tag);
+                            base.update();
+                            base.task.save();
+                        }
+                    }
+                ]
+
+
+            });
         },
         registerEvents: function () {
             var base = this;
@@ -68,7 +89,7 @@ define([
                 var task = new Task();
                 task.set("parent", base.task);
                 var date = new Date();
-                date.setHours(23,59,59,0);
+                date.setHours(23, 59, 59, 0);
                 task.setDueDate(date);
                 var task_popup = new TaskPopup(task);
                 task_popup.init(base.SmartBlocks, function () {
@@ -79,7 +100,13 @@ define([
                     });
                 });
             });
+
+            base.task.on("changed", function () {
+                base.update();
+            });
+
         }
+
     });
 
     return View;

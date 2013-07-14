@@ -33,7 +33,6 @@ define([
                     planned_task_item.init(base.SmartBlocks);
                 }
             }
-            console.log(base.planned_tasks.models);
         },
         registerEvents: function () {
             var base = this;

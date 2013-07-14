@@ -20,7 +20,6 @@ define([
         render: function () {
 
             var base = this;
-            console.log(base.task_list);
             for (var k in base.task_list.models) {
                 var task = base.task_list.models[k];
                 var task_list_item = new TaskListItem(task);

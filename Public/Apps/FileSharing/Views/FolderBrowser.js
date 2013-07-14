@@ -13,7 +13,6 @@ define([
     'Apps/FileSharing/Views/FolderProperties',
     'ContextMenuView'
 ], function ($, _, _s, Backbone, Folder, File, FolderBrowserTemplate, FoldersCollection, FilesCollection, FileUploadView, FolderCreationView, FolderPropertiesView, ContextMenuView) {
-    console.log(_s);
     var FolderBrowser = Backbone.View.extend({
         tagName: "div",
         className: "k_fs_folder_browser",
