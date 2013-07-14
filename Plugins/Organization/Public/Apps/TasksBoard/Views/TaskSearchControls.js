@@ -23,9 +23,12 @@ define([
             base.parent.events.on("tasks_tags_loaded", function () {
                 for (var k in base.tasks_tags.models) {
                     var tasks_tag = base.tasks_tags.models[k];
-                    '<input type="checkbox" class="search_tags" data-id="' + tasks_tag.get("id") + '" name="' + tasks_tag.get("name") + '" />'
 
-                    base.$el.find(".task_search_tags").append();
+                    base.$el.find(".task_search_tags").append('<input type="checkbox" class="search_tags" data-id="'
+                        + tasks_tag.get("id")
+                        + '" name="'
+                        + tasks_tag.get("name")
+                        + '" />');
                 }
             });
         },

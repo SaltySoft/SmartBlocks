@@ -6,7 +6,7 @@ define([
     './TaskSearchControls',
     './TaskList',
     './TaskPreview',
-    'Organization/Apps/Common/Collections/Tasks',
+    'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Common/Collections/TaskTags'
 ], function ($, _, Backbone, MainViewTemplate, TaskSearchControlsView, TaskListView, TaskPreview, TasksCollection, TaskTagsCollection) {
     /**

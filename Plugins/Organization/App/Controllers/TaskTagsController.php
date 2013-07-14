@@ -25,9 +25,9 @@ class TaskTagsController extends \Controller
         $result = $qb->getQuery()->getResult();
         $response = array();
         foreach ($result as $tag)
-    {
-        $response[] = $tag->toArray();
-    }
+        {
+            $response[] = $tag->toArray();
+        }
         $this->return_json($response);
     }
 
