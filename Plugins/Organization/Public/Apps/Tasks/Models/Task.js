@@ -76,7 +76,7 @@ define([
         initialize: function (model) {
             if (model) {
                 var children_array = model.children;
-                if (!model.children.models) {
+                if (children_array && !model.children.models) {
                     if (!TasksCollection) {
                         TasksCollection = require('../Collections/Tasks');
                     }
@@ -90,28 +90,36 @@ define([
                 }
 
 
+
                 var planned_tasks_array = model.planned_tasks;
-                var planned_tasks_collection = new PlannedTasksCollection();
-                for (var k in planned_tasks_array) {
-                    var planned_task = new PlannedTask(planned_tasks_array[k]);
-                    planned_tasks_collection.add(planned_task);
+                if (planned_tasks_array && !planned_tasks_array.models) {
+                    var planned_tasks_collection = new PlannedTasksCollection();
+                    for (var k in planned_tasks_array) {
+                        var planned_task = new PlannedTask(planned_tasks_array[k]);
+                        planned_tasks_collection.add(planned_task);
+                    }
+                    this.attributes.planned_tasks = planned_tasks_collection;
                 }
-                this.attributes.planned_tasks = planned_tasks_collection;
+
 
                 var parent_a = model.parent;
-                if (parent_a)
+                if (parent_a && !parent_a.attributes)
                     this.attributes.parent = new Task(parent_a);
 
+
                 var tags_a = model.tags;
-                var tags_collection = new TaskTagsCollection();
-                for (var k in tags_a) {
-                    var tag = new TaskTag(tags_a[k]);
-                    tags_collection.add(tag);
+                if (model.tags && !tags_a.models) {
+                    var tags_collection = new TaskTagsCollection();
+                    for (var k in tags_a) {
+                        var tag = new TaskTag(tags_a[k]);
+                        tags_collection.add(tag);
+                    }
+                    this.attributes.tags = tags_collection;
                 }
-                this.attributes.tags = tags_collection;
 
                 var owner = new User(model.owner);
-                this.attributes.owner = owner;
+                if (model.owner && !model.owner.attributes)
+                    this.attributes.owner = owner;
             }
         }
     });
