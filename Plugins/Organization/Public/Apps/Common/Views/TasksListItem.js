@@ -96,7 +96,7 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.delegate("a", "click", function (e) {
+            base.$el.delegate("a", "mousedown", function (e) {
                 e.stopPropagation();
             });
 

@@ -6,6 +6,9 @@ define([
     'UserModel',
     'UsersCollection'
 ], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection) {
+
+
+
     var Task = Backbone.Model.extend({
         urlRoot: "/Organization/Tasks",
         getDueDate: function () {
@@ -30,11 +33,14 @@ define([
         parse: function (response) {
 
             var children_array = response.children;
-            var subtasks = [];
+            if (!TasksCollection) {
+                TasksCollection = require('../Collections/Tasks');
+            }
+            var subtasks = new TasksCollection();
 
             for (var k in children_array) {
                 var task = new Task(children_array[k]);
-                subtasks.push(task);
+                subtasks.add(task);
             }
             response.children = subtasks;
 
@@ -46,6 +52,9 @@ define([
             }
             response.planned_tasks = planned_tasks_collection;
 
+            var parent_a = response.parent;
+            if (response.parent)
+                response.parent = new Task(parent_a);
 
 
             var owner = new User(response.owner);
@@ -57,11 +66,14 @@ define([
         initialize: function (model) {
             if (model) {
                 var children_array = model.children;
-                var subtasks = [];
+                if (!TasksCollection) {
+                    TasksCollection = require('../Collections/Tasks');
+                }
+                var subtasks = new TasksCollection();
 
                 for (var k in children_array) {
                     var task = new Task(children_array[k]);
-                    subtasks.push(task);
+                    subtasks.add(task);
                 }
                 this.attributes.children = subtasks;
 
@@ -73,10 +85,19 @@ define([
                 }
                 this.attributes.planned_tasks = planned_tasks_collection;
 
+                var parent_a = model.parent;
+                if (parent_a)
+                    this.attributes.parent = new Task(parent_a);
+
                 var owner = new User(model.owner);
                 this.attributes.owner = owner;
             }
         }
+    });
+
+    var TasksCollection = Backbone.Collection.extend({
+        url: "/Organization/Tasks",
+        model: Task
     });
 
     return Task;

@@ -8,12 +8,14 @@ define([
     'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Recap/Views/MainView',
     'Organization/Apps/ActivitiesIndex/Views/MainView',
-    'Organization/Apps/TasksBoard/Views/MainView',
     'Organization/Apps/ActivitiesShow/Views/MainView',
+    'Organization/Apps/TasksBoard/Views/MainView',
+    'Organization/Apps/TasksShow/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
+    'Organization/Apps/Tasks/Models/Task',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, TasksBoardView, ActivitiesShowView, TaskUsersCollection, Activity, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, TaskUsersCollection, Activity, Task, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -33,8 +35,9 @@ define([
                     "daily": "daily",
                     "recap": "recap",
                     "activities": "activitiesIndex",
-                    "tasks":"tasksBoard",
-                    "activities/:id": "activitiesShow"
+                    "activities/:id": "activitiesShow",
+                    "tasks/:id": "tasksShow",
+                    "tasks":"tasksBoard"
                 },
                 week: function () {
                     base.launchWeek();
@@ -56,6 +59,9 @@ define([
                 },
                 activitiesShow: function (id) {
                     base.launchActivitiesShow(id);
+                },
+                tasksShow: function (id) {
+                    base.launchTasksShow(id);
                 }
             });
 
@@ -138,6 +144,15 @@ define([
             var base = this;
             var activity = new Activity({ id: id });
             base.current_view = new ActivitiesShowView(activity);
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchTasksShow : function (id) {
+            var base = this;
+            var task = new Task({ id: id });
+            base.current_view = new TasksShow(task);
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.activities").addClass("selected");
