@@ -5,17 +5,24 @@
         <label for="form_task_name">Task name :</label>
         <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here"/>
     </div>
-    <div class="pure-control-group">
+    <div>
+        <label>Type of task</label>
+        <select class="task_type">
+            <option value="0">Deadline</option>
+            <option value="1">General task</option>
+        </select>
+    </div>
+    <div class="pure-control-group for_deadlines">
         <label for="form_task_name">Due date :</label>
         <input type="text" id="form_task_date" placeholder="Click here to change date"/>
     </div>
-    <div class="pure-control-group">
+    <div class="pure-control-group for_deadlines">
         <label for="form_task_time">Due time :</label>
         <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23"/>
         &nbsp;:&nbsp;
         <input type="number" class="minute" value="59" min="0" max="59"/>
     </div>
-    <div class="pure-control-group">
+    <div class="pure-control-group for_deadlines">
         <label for="required_time">
             Estimated time :
         </label>

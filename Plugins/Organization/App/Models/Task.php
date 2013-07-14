@@ -454,7 +454,7 @@ class Task extends \Model
             "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
-            "due_date" => isset($this->due_date) ? $this->due_date->getTimeStamp() : null,
+            "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
             "type" => $this->type != null ? $this->type->toArray() : null,
             "tags" => $tags,
 

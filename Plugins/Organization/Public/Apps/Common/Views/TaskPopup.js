@@ -34,14 +34,19 @@ define([
         saveTask: function () {
             var base = this;
             base.task.set("name", base.$el.find("#form_task_name").val());
-            base.task.set("required_time", base.$el.find(".required_time").val() * 3600000);
-            var date = new Date(base.$el.find("#form_task_date").val());
+            if (base.$el.find(".task_type").val() == 0) {
+                base.task.set("required_time", base.$el.find(".required_time").val() * 3600000);
+                var date = new Date(base.$el.find("#form_task_date").val());
 
-            date.setHours(base.$el.find(".hour").val());
-            date.setMinutes(base.$el.find(".minute").val());
-            date.setSeconds(0);
-            date.setMilliseconds(0);
-            base.task.setDueDate(date);
+                date.setHours(base.$el.find(".hour").val());
+                date.setMinutes(base.$el.find(".minute").val());
+                date.setSeconds(0);
+                date.setMilliseconds(0);
+                base.task.setDueDate(date);
+            } else {
+                base.task.set("due_date", undefined);
+            }
+
             if (base.task.get("name") != "") {
                 base.task.save({}, {
                     success: function () {
@@ -86,6 +91,16 @@ define([
             base.$el.find("#form_task_date").val(date);
             base.$el.find(".hour").val(today.getHours());
             base.$el.find(".minute").val(today.getMinutes());
+
+            base.$el.find(".task_type").change(function () {
+                var elt = $(this);
+                if (elt.val() == 1) {
+                    base.$el.find(".for_deadlines").hide();
+                } else {
+                    base.$el.find(".for_deadlines").show();
+                }
+
+            });
 
         },
         hide: function () {
