@@ -18,7 +18,6 @@ define([
             base.render();
         },
         render: function () {
-
             var base = this;
             for (var k in base.task_list.models) {
                 var task = base.task_list.models[k];

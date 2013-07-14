@@ -34,6 +34,7 @@ define([
                 base.$el.find(".tasks_list").find(".task_list_item").remove();
                 for (var k in base.tasks.models) {
                     var task = base.tasks.models[k];
+                    console.log("TASK LIST task", task);
                     var task_item_view = new TaskItemView(task);
                     base.$el.find(".tasks_list").append(task_item_view.$el);
                     task_item_view.init(base.SmartBlocks, base.parent);

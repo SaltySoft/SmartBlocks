@@ -143,14 +143,15 @@ class TaskTag extends \Model
 
     public function toArray()
     {
-        $array = array(
-            "id" => $this->id,
-            "name" => $this->name,
-            "creator" => $this->creator->toArray(0),
-            "created" => $this->created,
-            "updated" => $this->updated
-        );
+        $myArray = array();
+        $myArray["id"] = $this->id;
+        if ($this->name)
+            $myArray["name"] = $this->name;
+        if ($this->creator)
+            $myArray["creator"] = $this->creator->toArray(0);
+        $myArray["created"] = $this->created;
+        $myArray["updated"] = $this->updated;
 
-        return $array;
+        return $myArray;
     }
 }

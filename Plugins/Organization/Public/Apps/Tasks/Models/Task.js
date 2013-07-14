@@ -83,6 +83,7 @@ define([
                     var task = new Task(children_array[k]);
                     subtasks.add(task);
                 }
+
                 this.attributes.children = subtasks;
 
                 var planned_tasks_array = model.planned_tasks;
