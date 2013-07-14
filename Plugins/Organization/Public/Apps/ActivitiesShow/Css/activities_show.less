@@ -1,0 +1,53 @@
+.activity_show_view {
+  margin: auto;
+  position: relative;
+  height: 500px;
+  width: 800px;
+
+  background: white;
+  padding: 10px;
+  margin-top: 50px;
+
+  .for_normal {
+    display: block;
+  }
+
+  .for_edition {
+    display: none;
+  }
+
+  .description {
+    height: 75px;
+    overflow: hidden;
+  }
+
+  .add_task_button {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+  }
+
+  .activity_timeline {
+    height: 100px;
+    background: #d3d3d3;
+  }
+
+}
+
+.activity_show_view.edition {
+  .for_normal {
+    display: none;
+  }
+
+  .for_edition {
+    display: block;
+  }
+}
+
+.task_preview {
+  .controls {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+  }
+}
