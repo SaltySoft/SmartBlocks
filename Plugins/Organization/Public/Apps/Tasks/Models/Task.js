@@ -76,7 +76,7 @@ define([
         initialize: function (model) {
             if (model) {
                 var children_array = model.children;
-                if (!model.children.models) {
+                if (children_array && !model.children.models) {
                     if (!TasksCollection) {
                         TasksCollection = require('../Collections/Tasks');
                     }
@@ -92,7 +92,7 @@ define([
 
 
                 var planned_tasks_array = model.planned_tasks;
-                if (!planned_tasks_array.models) {
+                if (planned_tasks_array && !planned_tasks_array.models) {
                     var planned_tasks_collection = new PlannedTasksCollection();
                     for (var k in planned_tasks_array) {
                         var planned_task = new PlannedTask(planned_tasks_array[k]);
@@ -108,7 +108,7 @@ define([
 
 
                 var tags_a = model.tags;
-                if (!tags_a.models) {
+                if (model.tags && !tags_a.models) {
                     var tags_collection = new TaskTagsCollection();
                     for (var k in tags_a) {
                         var tag = new TaskTag(tags_a[k]);
@@ -118,7 +118,7 @@ define([
                 }
 
                 var owner = new User(model.owner);
-                if (!model.owner.attributes)
+                if (model.owner && !model.owner.attributes)
                     this.attributes.owner = owner;
             }
         }
