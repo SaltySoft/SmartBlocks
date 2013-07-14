@@ -15,9 +15,13 @@ class TaskTagsController extends \Controller
     {
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
-        $qb->select("tag")->from('\Organization\TaskTag', 'tag');
-//        $data = $this->getRequestData();
-//        if (isset($data[""]))
+        $qb->select("tag")->from('\Organization\TaskTag', 'tag')->where('tag.creator = :user')->setParameter("user", \User::current_user());
+        $data = $this->getRequestData();
+        if (isset($data["filter"]))
+        {
+            $qb->andWhere("tag.name LIKE :filter")->setParameter("filter", $data["filter"]."%");
+        }
+
         $result = $qb->getQuery()->getResult();
         $response = array();
         foreach ($result as $tag)

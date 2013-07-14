@@ -5,9 +5,9 @@
         <label for="form_task_name">Task name :</label>
         <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here"/>
     </div>
-    <div>
-        <label>Type of task</label>
-        <select class="task_type">
+    <div class="pure-control-group">
+        <label for="form_task_type">Type of task</label>
+        <select id="form_task_type" class="task_type">
             <option value="0">Deadline</option>
             <option value="1">General task</option>
         </select>
