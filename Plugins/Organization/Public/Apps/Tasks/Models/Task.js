@@ -4,8 +4,10 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Daily/Models/PlannedTask',
     'UserModel',
-    'UsersCollection'
-], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection) {
+    'UsersCollection',
+    'Organization/Apps/Common/Models/TaskTag',
+    'Organization/Apps/Common/Collections/TaskTags'
+], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection, TaskTag, TaskTagsCollection) {
 
 
 
@@ -60,6 +62,14 @@ define([
             var owner = new User(response.owner);
             response.owner = owner;
 
+            var tags_a = response.tags;
+            var tags_collection = new TaskTagsCollection();
+            for (var k in tags_a) {
+                var tag = new TaskTag(tags_a[k]);
+                tags_collection.add(tag);
+            }
+            response.tags = tags_collection;
+
 
             return response;
         },
@@ -88,6 +98,14 @@ define([
                 var parent_a = model.parent;
                 if (parent_a)
                     this.attributes.parent = new Task(parent_a);
+
+                var tags_a = model.tags;
+                var tags_collection = new TaskTagsCollection();
+                for (var k in tags_a) {
+                    var tag = new TaskTag(tags_a[k]);
+                    tags_collection.add(tag);
+                }
+                this.attributes.tags = tags_collection;
 
                 var owner = new User(model.owner);
                 this.attributes.owner = owner;

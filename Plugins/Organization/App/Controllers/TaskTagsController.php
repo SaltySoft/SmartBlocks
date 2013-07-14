@@ -16,6 +16,8 @@ class TaskTagsController extends \Controller
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("tag")->from('\Organization\TaskTag', 'tag');
+        $data = $this->getRequestData();
+        if (isset($data[""]))
         $result = $qb->getQuery()->getResult();
         $response = array();
         foreach ($result as $tag)

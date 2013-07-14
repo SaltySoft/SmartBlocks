@@ -25,8 +25,14 @@ define([
 
             });
             base.$el.html(template);
-
             base.update();
+            var timer = setInterval(function () {
+                if (base.$el.height() > 0)
+                    base.update();
+                else
+                clearInterval(timer);
+            }, 500);
+
         },
         update: function () {
             var base = this;
@@ -44,8 +50,6 @@ define([
                 var end = new Date(planned_task.getStart());
                 var time = start.getTime() + parseInt(planned_task.get("duration"));
                 end.setTime(time);
-                console.log("PLANNED", now, start, end, time);
-
 
                 if (end.getTime() < now.getTime()) {
                     past_planned += planned_task.get("duration");
