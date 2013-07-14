@@ -10,7 +10,6 @@ define([
         initialize: function (task) {
             var base = this;
             base.task = task;
-            console.log("ACTUAL DATE", base.task.getDueDate());
             base.events =_.extend({}, Backbone.Events);
         },
         init: function (SmartBlocks, callback) {
