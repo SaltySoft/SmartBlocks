@@ -7,23 +7,19 @@ define([
 
     var init = function (SmartBlocks) {
         Launcher.init(SmartBlocks);
-
-
     };
 
     var sync = function () {
-
-
-            $.ajax({
-                url: "/Organization/Tasks/todoist_sync",
-                success: function (data, status) {
+        $.ajax({
+            url:"/Organization/Tasks/todoist_sync",
+            success:function (data, status) {
 //                    console.log("todoist_synced", data);
-                }
-            });
+            }
+        });
     };
 
     return {
-        initialize: init,
-        sync: sync
+        initialize:init,
+        sync:sync
     };
 });

@@ -1,22 +1,22 @@
-<a href="javascript:void(0);" class="task_popup_close_button"><img src="/images/icons/cross_close.png"/></a>
-<h2>Deadline details</h2>
-<form action="javascript:void(0);" class="pure-form pure-form-aligned task_form">
-    <div class="pure-control-group">
-        <label for="form_task_name">Task name :</label>
-        <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here"/>
-    </div>
-    <div class="pure-control-group">
-        <label for="form_task_name">Due date :</label>
-        <input type="text" id="form_task_date" placeholder="Click here to change date"/>
-    </div>
-    <div class="pure-control-group">
-        <label for="form_task_time">Due time :</label>
-            <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23"/>
-            &nbsp;:&nbsp;
-            <input type="number" class="minute" value="59" min="0" max="59"/>
-    </div>
-    <div class="pure-controls">
-        <button class="action_button pure-button pure-button-primary" data-action="save">Save</button>
-        <button class="action_button pure-button" data-action="cancel">Cancel</button>
-    </div>
-</form>
+<a href="javascript:void(0);" class="task_popup_close_button" ><img src="/images/icons/cross_close.png" /></a >
+<h2 >Deadline details</h2 >
+<form action="javascript:void(0);" class="pure-form pure-form-aligned task_form" >
+    <div class="pure-control-group" >
+        <label for="form_task_name" >Task name :</label >
+        <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here" />
+    </div >
+    <div class="pure-control-group" >
+        <label for="form_task_name" >Due date :</label >
+        <input type="text" id="form_task_date" placeholder="Click here to change date" />
+    </div >
+    <div class="pure-control-group" >
+        <label for="form_task_time" >Due time :</label >
+        <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23" />
+        &nbsp;:&nbsp;
+        <input type="number" class="minute" value="59" min="0" max="59" />
+    </div >
+    <div class="pure-controls" >
+        <button class="action_button pure-button pure-button-primary" data-action="save" >Save</button >
+        <button class="action_button pure-button" data-action="cancel" >Cancel</button >
+    </div >
+</form >

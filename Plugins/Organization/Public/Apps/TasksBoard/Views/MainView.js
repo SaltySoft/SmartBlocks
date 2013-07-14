@@ -67,6 +67,20 @@ define([
         },
         registerEvents:function () {
             var base = this;
+
+            base.SmartBlocks.events.on("org_new_task", function (task) {
+                base.tasks.add(task);
+                base.events.trigger("loaded_tasks");
+            });
+
+            base.events.on("load_task_list_with_params", function (params) {
+                base.tasks.fetch({
+                    data:params,
+                    success:function () {
+                        base.events.trigger("loaded_tasks");
+                    }
+                });
+            });
         }
     });
 

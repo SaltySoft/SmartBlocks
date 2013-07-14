@@ -1,0 +1,30 @@
+<div class="task_prev" >
+    <div class="pure-g" >
+        <div class="pure-u-1-2" >
+            <h2 class="name" ><%= (task ? task.get("name") : '') %></h2 >
+
+            <div class="description" >
+                <%= (task ? task.get("description") : '') %>
+            </div >
+        </div >
+        <div class="pure-u-1-2" >
+            <div class="task_time_line_container" >
+            </div >
+            <h4 >Subtasks</h4 >
+
+            <div class="subtasks_list_container" >
+
+            </div >
+        </div >
+        <div class="pure-u-1 preview_controls_container" >
+            <!--<button class="pure-button archive_button"><span class="for_archived">Unarchive</span><span-->
+            <!--class="for_normal">Archive</span></button>-->
+            <a class="pure-button pure-button-primary go_to_task_button"
+               href="#tasks/<%= (task ? task.get('id') : '') %>" >Go to detailed view</a >
+            <button class="pure-button pure-button-error deletion_button" >Delete Task</button >
+        </div >
+    </div >
+</div >
+<div class="empty_content" >
+    Click on a task on the left to preview it.
+</div >
