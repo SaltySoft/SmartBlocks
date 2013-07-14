@@ -76,16 +76,19 @@ define([
         initialize: function (model) {
             if (model) {
                 var children_array = model.children;
-                if (!TasksCollection) {
-                    TasksCollection = require('../Collections/Tasks');
-                }
-                var subtasks = new TasksCollection();
+                if (!model.children.models) {
+                    if (!TasksCollection) {
+                        TasksCollection = require('../Collections/Tasks');
+                    }
+                    var subtasks = new TasksCollection();
 
-                for (var k in children_array) {
-                    var task = new Task(children_array[k]);
-                    subtasks.add(task);
+                    for (var k in children_array) {
+                        var task = new Task(children_array[k]);
+                        subtasks.add(task);
+                    }
+                    this.attributes.children = subtasks;
                 }
-                this.attributes.children = subtasks;
+
 
                 var planned_tasks_array = model.planned_tasks;
                 var planned_tasks_collection = new PlannedTasksCollection();
