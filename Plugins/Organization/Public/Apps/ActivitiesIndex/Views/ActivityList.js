@@ -42,8 +42,6 @@ define([
                 }
             });
 
-
-
             base.$el.delegate(".activity_creation_button", "click", function () {
                 var activity_creation_view = new ActivityCreationView();
                 activity_creation_view.init(base.SmartBlocks, base.parent.activity_types);

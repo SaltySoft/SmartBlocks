@@ -7,8 +7,6 @@ define([
     'UsersCollection'
 ], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection) {
 
-
-
     var Task = Backbone.Model.extend({
         urlRoot: "/Organization/Tasks",
         getDueDate: function () {
