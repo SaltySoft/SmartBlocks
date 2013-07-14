@@ -11,9 +11,10 @@ define([
             var base = this;
             base.task_list = task_list;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, item_click_handler) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.item_click_handler = item_click_handler;
             base.render();
         },
         render: function () {
@@ -24,7 +25,7 @@ define([
                 var task = base.task_list.models[k];
                 var task_list_item = new TaskListItem(task);
                 base.$el.append(task_list_item.$el);
-                task_list_item.init(base.SmartBlocks);
+                task_list_item.init(base.SmartBlocks, base.item_click_handler);
             }
         },
         registerEvents: function () {

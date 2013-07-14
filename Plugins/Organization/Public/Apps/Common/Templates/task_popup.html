@@ -11,9 +11,15 @@
     </div>
     <div class="pure-control-group">
         <label for="form_task_time">Due time :</label>
-            <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23"/>
-            &nbsp;:&nbsp;
-            <input type="number" class="minute" value="59" min="0" max="59"/>
+        <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23"/>
+        &nbsp;:&nbsp;
+        <input type="number" class="minute" value="59" min="0" max="59"/>
+    </div>
+    <div class="pure-control-group">
+        <label for="required_time">
+            Estimated time :
+        </label>
+        <input type="number" min="0" value="0" id="required_time" class="required_time" name="reqired_time" /> hours
     </div>
     <div class="pure-controls">
         <button class="action_button pure-button pure-button-primary" data-action="save">Save</button>

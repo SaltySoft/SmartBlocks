@@ -13,9 +13,10 @@ define([
             console.log("ACTUAL DATE", base.task.getDueDate());
             base.events =_.extend({}, Backbone.Events);
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, callback) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.callback = callback;
 
             base.render();
             base.registerEvents();
@@ -24,7 +25,7 @@ define([
             var base = this;
             var popup = $(document.createElement("div"));
             popup.addClass("task_popup");
-            var template = _.template(TaskPopupTemplate, {task: base.task});
+            var template = _.template(TaskPopupTemplate, {task: base.task, activity: base.task.getActivityForUser(base.SmartBlocks.current_user)});
             popup.html(template);
             base.$el.html(popup);
 
@@ -33,6 +34,7 @@ define([
         saveTask: function () {
             var base = this;
             base.task.set("name", base.$el.find("#form_task_name").val());
+            base.task.set("required_time", base.$el.find(".required_time").val() * 3600000);
             var date = new Date(base.$el.find("#form_task_date").val());
 
             date.setHours(base.$el.find(".hour").val());
@@ -47,6 +49,9 @@ define([
                         base.events.trigger("task_updated", base.task);
                         base.hide();
                         base.SmartBlocks.events.trigger("org.task_modified", base.task);
+                        if (base.callback) {
+                            base.callback(base.task);
+                        }
                     }
                 });
             } else {

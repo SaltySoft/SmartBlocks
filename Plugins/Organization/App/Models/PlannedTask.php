@@ -195,16 +195,21 @@ class PlannedTask extends \Model
         }
     }
 
-    public function toArray($show_task_users = true)
+    public function toArray($show_task_users = true, $show_task = true)
     {
         $array = array(
             "id" => $this->id,
-            "task" => is_object($this->task) ? $this->task->toArray() : null,
+
             "start" => $this->start->getTimeStamp() * 1000,
             "duration" => $this->duration,
             "completed" => $this->completed,
             "content" => $this->content
         );
+
+        if ($show_task)
+        {
+            $array["task"] = is_object($this->task) ? $this->task->toArray() : null;
+        }
 
         return $array;
     }

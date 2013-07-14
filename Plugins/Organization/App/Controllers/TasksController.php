@@ -165,6 +165,17 @@ class TasksController extends \Controller
             }
         }
 
+        if (isset($data["activities"]))
+        {
+            if (is_array($data["activities"]))
+            {
+                $activity = Activity::find($data["activity"]["id"]);
+                if (is_object($activity)) {
+                    $task->getActivities()->add($activity);
+                }
+            }
+        }
+
         $task->save();
         $this->render = false;
         header("Content-Type: application/json");
@@ -312,19 +323,15 @@ class TasksController extends \Controller
 
         $this->render = false;
         header("Content-Type: application/json");
-        $task = \Organization\Task::find($params["id"]);
+        $task = Task::find($params["id"]);
 
         if (is_object($task))
         {
-            foreach ($task->getPlannedTasks() as $planned_task)
-            {
-                $planned_task->setTask(null);
-                $planned_task->setActive(false);
-                $planned_task->save();
-            }
 
-            $task->setActive(false);
-            $task->save();
+
+//            $task->setActive(false);
+//            $task->save();
+            $task->delete();
             echo json_encode(array("success" => true));
         }
         else

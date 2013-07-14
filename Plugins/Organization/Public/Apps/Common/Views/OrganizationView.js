@@ -8,9 +8,11 @@ define([
     'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Recap/Views/MainView',
     'Organization/Apps/ActivitiesIndex/Views/MainView',
+    'Organization/Apps/ActivitiesShow/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
+    'Organization/Apps/Common/Models/Activity',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, TaskUsersCollection, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TaskUsersCollection, Activity, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -29,7 +31,8 @@ define([
                     "month" : "month",
                     "daily": "daily",
                     "recap": "recap",
-                    "activities": "activitiesIndex"
+                    "activities": "activitiesIndex",
+                    "activities/:id": "activitiesShow"
                 },
                 week: function () {
                     base.launchWeek();
@@ -45,6 +48,9 @@ define([
                 },
                 activitiesIndex: function () {
                     base.launchActivitiesIndex();
+                },
+                activitiesShow: function (id) {
+                    base.launchActivitiesShow(id);
                 }
             });
 
@@ -109,6 +115,15 @@ define([
         launchActivitiesIndex: function () {
             var base = this;
             base.current_view = new ActivitiesIndexView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchActivitiesShow: function (id) {
+            var base = this;
+            var activity = new Activity({ id: id });
+            base.current_view = new ActivitiesShowView(activity);
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.activities").addClass("selected");

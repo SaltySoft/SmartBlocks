@@ -121,7 +121,7 @@ class Task extends \Model
     private $children;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private $required_time;
 
@@ -139,6 +139,7 @@ class Task extends \Model
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->required_time = 0;
+        $this->planned_tasks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -397,12 +398,40 @@ class Task extends \Model
 
     function delete()
     {
+        foreach ($this->getPlannedTasks() as $planned_task)
+        {
+//                $planned_task->setTask(null);
+//                $planned_task->setActive(false);
+//                $planned_task->save();
+            $planned_task->delete();
+        }
+        foreach ($this->getChildren() as $child)
+        {
+            $child->delete();
+        }
         \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
             "app" => "organizer",
             "action" => "task_deleted",
             "task" => $this->toArray()
         ));
         parent::delete();
+    }
+
+    private static function getAllPlannedTasks(Task $task)
+    {
+        $planned = array();
+
+        foreach ($task->planned_tasks as $planned_task) {
+
+            $planned[] = $planned_task->toArray(true, false);
+
+        }
+
+        foreach ($task->children as $stask) {
+            $planned = array_merge($planned, self::getAllPlannedTasks($stask));
+        }
+
+        return $planned;
     }
 
 
@@ -413,6 +442,8 @@ class Task extends \Model
         {
             $tags[] = $tag->toArray();
         }
+
+
 
         $array = array(
             "id" => $this->id,
@@ -426,7 +457,13 @@ class Task extends \Model
             "due_date" => isset($this->due_date) ? $this->due_date->getTimeStamp() : null,
             "type" => $this->type != null ? $this->type->toArray() : null,
             "tags" => $tags,
+
         );
+
+        if ($show_children) {
+            $planned_tasks = self::getAllPlannedTasks($this);
+            $array["planned_tasks"] = $planned_tasks;
+        }
 
         if ($show_activities)
         {

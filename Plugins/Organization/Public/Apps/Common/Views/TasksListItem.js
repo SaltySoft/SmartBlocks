@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!Organization/Apps/Common/Templates/task_item.html',
-    'underscore_string'
-], function ($, _, Backbone, TaskItemTemplate, _s) {
+    'underscore_string',
+    'ContextMenuView'
+], function ($, _, Backbone, TaskItemTemplate, _s, ContextMenu) {
     var DeadlineItemView = Backbone.View.extend({
         tagName: "li",
         className: "task_list_item",
@@ -12,11 +13,11 @@ define([
             var base = this;
             base.task = model;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, item_click_handler) {
             var base = this;
 
             base.SmartBlocks = SmartBlocks;
-
+            base.item_click_handler = item_click_handler;
             base.render();
             base.interval = setInterval(function () {
                 base.render();
@@ -26,6 +27,7 @@ define([
             }, 500);
             base.registerEvents();
             base.$el.show();
+            base.$el.attr("oncontextmenu", "return false;");
         },
         render: function () {
             var base = this;
@@ -91,6 +93,41 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.delegate("a", "click", function (e) {
+                e.stopPropagation();
+            });
+
+            base.$el.mousedown(function (e) {
+                if (e.which == 1 && base.item_click_handler) {
+                    base.item_click_handler(base.task);
+                }
+
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Open", function () {
+                        window.location = "#tasks/" + base.task.get('id');
+                    });
+                    context_menu.addButton("Delete", function () {
+                        if (confirm("Are you sure you want to delete this task ?")) {
+                            base.task.destroy({
+                                success: function () {
+                                    base.SmartBlocks.show_message("Task successfully deleted");
+                                    base.$el.remove();
+                                },
+                                error: function () {
+                                    base.SmartBlocks.show_message("Task could not be deleted");
+                                }
+                            });
+                        }
+                    });
+
+
+                    context_menu.show(e);
+                }
+            });
+
+
         }
     });
 

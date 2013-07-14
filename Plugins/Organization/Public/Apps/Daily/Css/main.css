@@ -137,7 +137,7 @@ input[type="text"].datepicker {
 TODAY'S PLANNED
 */
 .planned_list {
-    margin-top: 20px;
+    /*margin-top: 20px;*/
 }
 
 .planned_list .todays_planned {

@@ -201,7 +201,8 @@ class Activity extends \Model
             $tasks = array();
             foreach ($this->getTasks() as $task)
             {
-                $tasks[] = $task->toArray(true, false);
+                if ($task->getActive())
+                    $tasks[] = $task->toArray(true, false);
             }
             $array["tasks"] = $tasks;
         }
