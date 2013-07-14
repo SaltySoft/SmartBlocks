@@ -26,8 +26,6 @@ define([
             base.activity_types = new ActivityTypesCollection();
             base.activities = new ActivitiesCollection();
 
-
-
             base.render();
             base.registerEvents();
 
@@ -43,11 +41,8 @@ define([
             base.$el.find(".activity_preview_container").html(base.activity_preview.$el);
             base.activity_preview.init(SmartBlocks, base);
 
-
             base.loadActivityTypes();
             base.loadActivities();
-
-
         },
         loadActivityTypes: function () {
             var base = this;

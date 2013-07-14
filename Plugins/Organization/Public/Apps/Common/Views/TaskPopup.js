@@ -61,7 +61,6 @@ define([
             } else {
                 alert("You must provide a name");
             }
-
         },
         registerEvents: function () {
             var base = this;
@@ -98,9 +97,7 @@ define([
                 } else {
                     base.$el.find(".for_deadlines").show();
                 }
-
             });
-
         },
         hide: function () {
             var base = this;

@@ -4,11 +4,10 @@ define([
     'backbone'
 ], function ($, _, Backbone) {
     var exports = {
-        getTimeString: function (time) {
+        getTimeString:function (time) {
             var display = "";
 
-
-            var hours = time/ 3600000;
+            var hours = time / 3600000;
             if (hours >= 1) {
                 display += Math.floor(hours) + "h";
             }
@@ -24,7 +23,7 @@ define([
             }
             return display;
         },
-        getDayName: function (date) {
+        getDayName:function (date) {
             var days = [
                 "Monday",
                 'Tuesday',
@@ -37,7 +36,7 @@ define([
 
             return days[date.getDay()];
         },
-        getMonthName: function (date) {
+        getMonthName:function (date) {
             var monthNames = [ "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December"
             ];

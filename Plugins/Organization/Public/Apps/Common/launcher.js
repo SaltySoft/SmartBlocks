@@ -10,11 +10,9 @@ define([
         var org_view = new OrganizationView();
         $("#app_container").html(org_view.$el);
         org_view.init(SmartBlocks);
-
     };
 
-
     return {
-        init: initialize
+        init:initialize
     };
 });
