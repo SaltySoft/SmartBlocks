@@ -30,7 +30,7 @@ define([
                 base.$el.addClass("empty");
             } else {
                 base.$el.removeClass("empty");
-                var subtasks_list = new TasksListView(base.activity.get("children"))
+                var subtasks_list = new TasksListView(base.task.get("children"))
                 base.$el.find(".subtasks_list_container").html(subtasks_list.$el);
                 subtasks_list.init(base.SmartBlocks);
 
