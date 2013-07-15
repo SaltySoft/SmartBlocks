@@ -19,11 +19,11 @@ define([
                 base.task = undefined;
             }
         },
-        init:function (SmartBlocks, callbacks) {
+        init:function (SmartBlocks, callbacks, creation_enabled) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.callbacks = callbacks;
-
+            base.creation_enabled = creation_enabled !== undefined ? creation_enabled : true;
             base.search_results = new TaskTagsCollection();
 
             base.render();
@@ -37,7 +37,6 @@ define([
             else {
                 var tags_collection = new TaskTagsCollection();
                 base.tags = tags_collection;
-                tags = base.tags;
             }
         },
         getTags:function () {
@@ -47,7 +46,9 @@ define([
         render:function () {
             var base = this;
 
-            var template = _.template(TaskTagsTemplate, {});
+            var template = _.template(TaskTagsTemplate, {
+                creation_enabled:base.creation_enabled
+            });
             base.$el.html(template);
 
             if (base.task !== undefined) {
@@ -129,7 +130,7 @@ define([
                             });
                         }
                         else {
-                            base.tags.add(tag)
+                            base.tags.add(tag);
                             base.render();
                         }
                     },

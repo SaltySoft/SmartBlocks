@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/task_search_controls.html',
-    'Organization/Apps/Common/Views/TaskTags'
-], function ($, _, Backbone, TaskSearchControlsTemplate, TaskTagsView) {
+    'Organization/Apps/Common/Views/TaskTags',
+    'Organization/Apps/Common/Collections/TaskTags'
+], function ($, _, Backbone, TaskSearchControlsTemplate, TaskTagsView, TaskTagsCollection) {
     var View = Backbone.View.extend({
         tagName:"div",
         className:"task_search_controls",
@@ -17,7 +18,7 @@ define([
             base.SmartBlocks = SmartBlocks;
             base.parent = parent;
             base.all_tasks_tags = base.parent.tasks_tags;
-            base.tasks_tags = undefined;
+            base.tasks_tags = new TaskTagsCollection();
 
             base.render();
             base.registerEvents();
@@ -40,52 +41,59 @@ define([
             base.task_tags_view.setTags(base.tasks_tags);
             base.$el.find(".tags_container").html(base.task_tags_view.$el);
             base.task_tags_view.init(base.SmartBlocks, {
-                main:function (tag) {
-                    alert(tag.get("name"));
-                },
-                context:[
-                    {
-                        name:"Remove",
-                        callback:function (tag) {
-                            base.tasks_tags = base.task_tags_view.getTags();
-                            base.tasks_tags.remove(tag);
-                            base.update();
+                    main:function (tag) {
+//                        alert(tag.get("name"));
+                    },
+                    context:[
+                        {
+                            name:"Remove",
+                            callback:function (tag) {
+                                base.tasks_tags.remove(tag);
+                                base.update();
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                },
+                false);
+        },
+        submitForm:function () {
+            var base = this;
+
+            var form = base.$el.find(".search_ctrls_form");
+            var array = form.serializeArray();
+            base.parameters = {};
+            for (var k in array) {
+                base.parameters[array[k].name] = array[k].value;
+            }
+
+            var selected_tags = base.task_tags_view.getTags();
+            var selected_tags_models = selected_tags.models;
+            var tags_str = "";
+            for (var k in selected_tags_models) {
+                if (tags_str != "")
+                    tags_str += ",";
+                tags_str += selected_tags_models[k].get('id');
+            }
+            base.parameters['tags_str'] = tags_str;
+            base.parent.events.trigger("load_task_list_with_params", base.parameters);
         },
         registerEvents:function () {
             var base = this;
 
-            //            var timer = 0;
-//            base.$el.delegate(".tag_search_input", "keyup", function () {
-//                clearTimeout(timer);
-//                timer = setTimeout(function () {
-//
-//                }, 500);
-//            });
-//
-//            base.tasks_tags.on("")
+            var timer = 0;
+            base.$el.delegate(".name_filter", "keyup", function () {
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    base.submitForm();
+                }, 500);
+            });
 
-            base.$el.delegate("form", "submit", function () {
-                var form = $(this);
-                var array = form.serializeArray();
-                base.parameters = {};
-                for (var k in array) {
-                    base.parameters[array[k].name] = array[k].value;
-                }
+            base.tasks_tags.on("add", function () {
+                base.submitForm();
+            });
 
-                var selected_tags = base.task_tags_view.getTags();
-                var selected_tags_models = selected_tags.models;
-                var tags_str = "";
-                for (var k in selected_tags_models) {
-                    if (tags_str != "")
-                        tags_str += ",";
-                    tags_str += selected_tags_models[k].get('id');
-                }
-                base.parameters['tags_str'] = tags_str;
-                base.parent.events.trigger("load_task_list_with_params", base.parameters);
+            base.tasks_tags.on("remove", function () {
+                base.submitForm();
             });
         }
     });

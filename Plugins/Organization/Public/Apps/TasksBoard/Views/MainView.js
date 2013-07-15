@@ -78,11 +78,9 @@ define([
             });
 
             base.events.on("load_task_list_with_params", function (params) {
-                console.log("params", params);
                 base.tasks.fetch({
                     data:params,
                     success:function (data) {
-                        console.log("success", data);
                         base.events.trigger("loaded_tasks");
                     }
                 });
