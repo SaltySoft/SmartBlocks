@@ -8,13 +8,13 @@ define([
     'Organization/Apps/Common/Models/TaskTag'
 ], function ($, _, Backbone, TaskTagsTemplate, TaskTagItem, TaskTagsCollection, TaskTag) {
     var View = Backbone.View.extend({
-        tagName: "div",
-        className: "task_tags_view",
-        initialize: function (task) {
+        tagName:"div",
+        className:"task_tags_view",
+        initialize:function (task) {
             var base = this;
             base.task = task;
         },
-        init: function (SmartBlocks, callbacks) {
+        init:function (SmartBlocks, callbacks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.callbacks = callbacks;
@@ -24,7 +24,7 @@ define([
             base.render();
             base.registerEvents();
         },
-        render: function () {
+        render:function () {
             var base = this;
 
             var template = _.template(TaskTagsTemplate, {});
@@ -38,7 +38,7 @@ define([
                 task_tag_item.init(base.SmartBlocks, base.callbacks);
             }
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
 
             var tag_search_timer = 0;
@@ -48,17 +48,17 @@ define([
                 clearTimeout(tag_search_timer);
                 tag_search_timer = setTimeout(function () {
                     base.search_results.fetch({
-                        data: {
-                            filter: elt.val()
+                        data:{
+                            filter:elt.val()
                         },
-                        success: function () {
+                        success:function () {
                             list.css("left", elt.position().left);
                             list.css("top", elt.position().top + 25);
                             list.show();
                             list.html("");
                             for (var k in base.search_results.models) {
                                 var tag = base.search_results.models[k];
-                                list.append('<li ><a href="javascript:void(0);" class="add_tag_button" data-id="' + tag.get('id') + '">'+ tag.get("name") + '</a></li>');
+                                list.append('<li ><a href="javascript:void(0);" class="add_tag_button" data-id="' + tag.get('id') + '">' + tag.get("name") + '</a></li>');
                             }
                         }
                     });
@@ -76,8 +76,7 @@ define([
                     base.task.get('tags').add(tag);
                     base.task.trigger("changed");
                     base.task.save({}, {
-                        success: function () {
-
+                        success:function () {
                         }
                     });
                 }
@@ -85,27 +84,23 @@ define([
 
             base.$el.delegate(".create_tag_button", "click", function () {
                 var tag = new TaskTag({
-                    name: base.$el.find(".tag_search_input").val()
+                    name:base.$el.find(".tag_search_input").val()
                 });
                 tag.save({}, {
-                    success: function () {
+                    success:function () {
                         base.task.get('tags').add(tag);
                         base.task.trigger("changed");
                         base.task.save({}, {
-                            success: function () {
-
+                            success:function () {
                             }
                         });
                     },
-                    error: function (o, data) {
+                    error:function (o, data) {
                         var response = JSON.parse(data.responseText);
                         base.SmartBlocks.show_message(response.message);
                     }
                 });
-
             });
-
-
         }
     });
 
