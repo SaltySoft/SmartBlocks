@@ -111,7 +111,10 @@ define([
             });
 
             base.$el.delegate(".edit_button", "click", function () {
-
+                var task_popup = new TaskPopup(base.task);
+                task_popup.init(base.SmartBlocks, function () {
+                    base.update();
+                });
             });
 
         }

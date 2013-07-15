@@ -1,3 +1,5 @@
+@elts_bg: #f7efd8;
+
 .task_show_main_view {
   width: 800px;
   padding: 10px;
@@ -6,7 +8,8 @@
   margin-top: 50px;
 
   .description {
-    height: 150px;
+    height: 100px;
+    background: @elts_bg;
   }
 
   .task_info {
@@ -24,7 +27,7 @@
   }
 
   .task_tag_item {
-    background: #d3ccb9;
+    background: @elts_bg;
     border: 1px black solid;
     margin: 1px;
     text-align: center;
@@ -53,6 +56,18 @@
 
   .add_tag_button:hover {
     background: #0076a3;
+  }
+
+  .planned_tasks_container {
+    height: 150px;
+    overflow-y: scroll;
+    background: @elts_bg;
+  }
+
+  .subtasks_container {
+    height: 150px;
+    overflow-y: scroll;
+    background:@elts_bg;
   }
 
   .tags_edition_container {

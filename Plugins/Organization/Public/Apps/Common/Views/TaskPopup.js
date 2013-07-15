@@ -49,6 +49,7 @@ define([
                 base.task.set("due_date", undefined);
             }
 
+            base.task.set("description", base.$el.find(".form_description").val());
             if (base.task.get("name") != "") {
                 base.task.save({}, {
                     success:function () {
