@@ -14,7 +14,7 @@
     </div>
     <div class="pure-control-group">
         <label for="form_task_type">Description</label>
-        <textarea class="form_description"></textarea>
+        <textarea class="form_description"><%= task.get('description') %></textarea>
     </div>
     <div class="pure-control-group for_deadlines">
         <label for="form_task_name">Due date :</label>
@@ -30,7 +30,7 @@
         <label for="required_time">
             Estimated time :
         </label>
-        <input type="number" min="0" value="0" id="required_time" class="required_time" name="reqired_time" /> hours
+        <input type="number" min="0" value="<%= task.get('required_time') / 3600000 %>" id="required_time" class="required_time" name="reqired_time" /> hours
     </div>
     <div class="pure-controls">
         <button class="action_button pure-button pure-button-primary" data-action="save">Save</button>
