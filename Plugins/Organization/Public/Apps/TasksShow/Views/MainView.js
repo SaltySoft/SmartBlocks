@@ -114,9 +114,7 @@ define([
                     base.update();
                 });
             });
-
         }
-
     });
 
     return View;

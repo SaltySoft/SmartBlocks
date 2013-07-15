@@ -31,7 +31,18 @@ define([
         },
         setTags:function (tags) {
             var base = this;
-            base.tags = tags;
+            if (tags !== undefined) {
+                base.tags = tags;
+            }
+            else {
+                var tags_collection = new TaskTagsCollection();
+                base.tags = tags_collection;
+                tags = base.tags;
+            }
+        },
+        getTags:function () {
+            var base = this;
+            return base.tags;
         },
         render:function () {
             var base = this;
@@ -77,7 +88,7 @@ define([
                             }
                         }
                     });
-                }, 500);
+                }, 300);
             });
 
             base.$el.delegate(".add_tag_button", "click", function () {
@@ -97,7 +108,8 @@ define([
                         });
                     }
                     else {
-
+                        base.tags.add(tag);
+                        base.render();
                     }
                 }
             });
@@ -117,7 +129,8 @@ define([
                             });
                         }
                         else {
-
+                            base.tags.add(tag)
+                            base.render();
                         }
                     },
                     error:function (o, data) {

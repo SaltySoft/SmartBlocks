@@ -1,49 +1,54 @@
 @elts_bg: #f7efd8;
 
 .task_show_main_view {
-  width: 800px;
-  padding: 10px;
-  background: white;
-  margin: auto;
-  margin-top: 50px;
+    width: 800px;
+    padding: 10px;
+    background: white;
+    margin: auto;
+    margin-top: 50px;
 
-  .description {
-    height: 90px;
-    padding: 5px;
-    background: @elts_bg;
-  }
-
-  .task_info {
-    margin-top: 30px;
-  }
-
-  .activity_timeline_container {
-    height: 100px;
-    background: #d3d3d3;
-  }
-
-
-  .planned_tasks_container {
-    height: 150px;
-    overflow-y: scroll;
-    background: @elts_bg;
-  }
-
-  .subtasks_container {
-    height: 150px;
-    overflow-y: scroll;
-    background:@elts_bg;
-  }
-
-  .tags_edition_container {
-
-    .tag_search_input {
-      width: 100px;
+    .description {
+        height: 90px;
+        padding: 5px;
+        background: @elts_bg;
     }
 
-    .create_tag_button {
-      padding: 0.3em;
-      font-size: 0.9em;
+    .task_info {
+        margin-top: 30px;
     }
-  }
+
+    .activity_timeline_container {
+        height: 100px;
+        background: #d3d3d3;
+    }
+
+    .planned_tasks_container {
+        height: 150px;
+        overflow-y: scroll;
+        background: @elts_bg;
+    }
+
+    .subtasks_container {
+        height: 150px;
+        overflow-y: scroll;
+        background: @elts_bg;
+    }
+
+    .tags_edition_container {
+
+        .task_tags_list {
+            overflow: auto;
+            margin-top: 8px;
+            max-height: 221px;
+        }
+
+        .tag_search_input {
+            width: 100px;
+        }
+
+        .create_tag_button {
+            padding: 0.3em;
+            font-size: 0.9em;
+        }
+    }
 }
