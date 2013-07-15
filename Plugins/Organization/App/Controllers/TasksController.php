@@ -44,6 +44,7 @@ class TasksController extends \Controller
             $qb->select("t")
                 ->from("\\Organization\\Task", "t")
                 ->leftJoin("t.linked_users", "tu")
+                ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
                 ->setParameter("user", \User::current_user())
@@ -55,6 +56,7 @@ class TasksController extends \Controller
             $qb->select("t")
                 ->from("\\Organization\\Task", "t")
                 ->leftJoin("t.linked_users", "tu")
+                ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
                 ->setParameter("user", $user)
@@ -66,10 +68,10 @@ class TasksController extends \Controller
         {
             $start = new \DateTime();
             $start->setTimestamp($data["date"]);
-            $start->setTime(0,0,0);
+            $start->setTime(0, 0, 0);
             $end = new \DateTime();
             $end->setTimestamp($data["date"]);
-            $end->setTime(23,59,59);
+            $end->setTime(23, 59, 59);
             $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
                 ->setParameter("start_date", $start)
                 ->setParameter("stop_date", $end);
@@ -78,6 +80,34 @@ class TasksController extends \Controller
         if (isset($data["filter"]) && $data["filter"] = "undone")
         {
             $qb->andWhere("t.completion_date is NULL");
+        }
+
+        if (isset($data["name"]) && $data["name"] != "")
+        {
+            $qb->andWhere("t.name LIKE :name")
+                ->setParameter("name", '%' . $data["name"] . '%');
+        }
+
+        if (isset($data["tags_str"]) && $data["tags_str"] != "")
+        {
+            $tags_id = explode(",", $data["tags_str"]);
+            $tags_query = "";
+            foreach ($tags_id as $tag_id)
+            {
+                $tag = TaskTag::find($tag_id);
+                if (is_object($tag))
+                {
+                    if ($tags_query != "")
+                        $tags_query .= " OR ";
+                    $tags_query .= "ta = :tag" . $tag_id;
+                }
+                $qb->setParameter("tag" . $tag_id, $tag);
+            }
+
+            if ($tags_query != "")
+            {
+                $qb->andWhere($tags_query);
+            }
         }
 
         $results = $qb->getQuery()->getResult();
@@ -169,7 +199,8 @@ class TasksController extends \Controller
             if (is_array($data["activities"]))
             {
                 $activity = Activity::find($data["activity"]["id"]);
-                if (is_object($activity)) {
+                if (is_object($activity))
+                {
                     $task->getActivities()->add($activity);
                 }
             }
@@ -415,7 +446,7 @@ class TasksController extends \Controller
                 $em = \Model::getEntityManager();
                 $qb = $em->createQueryBuilder();
                 $stop = clone $date;
-                $stop->modify("+".($planned_task->getDuration() / 1000)." seconds");
+                $stop->modify("+" . ($planned_task->getDuration() / 1000) . " seconds");
                 $qb->select("task")
                     ->from('\Organization\Task', 'task')
                     ->where('task.due_date >= :date')
@@ -425,7 +456,7 @@ class TasksController extends \Controller
                     ->setParameter('user', \User::current_user())
                     ->setParameter('name', $event->getSummary());
                 $tasks = $qb->getQuery()->getResult();
-                echo $event->getSummary()."SUMMARY" . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600))) . " " . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600);
+                echo $event->getSummary() . "SUMMARY" . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600))) . " " . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600);
                 if (isset($tasks[0]))
                 {
                     $task = $tasks[0];
@@ -459,12 +490,12 @@ class TasksController extends \Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select("pt")
-                ->from('\Organization\PlannedTask', 'pt')
-                ->leftJoin("pt.task", "task")
-                ->where("task.owner = :user")
-                ->setParameter("user", \User::current_user())
-                ->andWhere("pt.gcal_id is not NULL")
-                ->andWhere("pt.active = true");
+            ->from('\Organization\PlannedTask', 'pt')
+            ->leftJoin("pt.task", "task")
+            ->where("task.owner = :user")
+            ->setParameter("user", \User::current_user())
+            ->andWhere("pt.gcal_id is not NULL")
+            ->andWhere("pt.active = true");
         $i = 0;
         foreach ($ids as $id)
         {

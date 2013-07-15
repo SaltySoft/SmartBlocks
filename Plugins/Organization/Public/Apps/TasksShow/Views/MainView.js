@@ -136,9 +136,7 @@ define([
                     });
                 }
             });
-
         }
-
     });
 
     return View;
