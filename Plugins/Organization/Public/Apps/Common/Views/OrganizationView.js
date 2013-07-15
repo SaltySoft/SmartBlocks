@@ -11,11 +11,12 @@ define([
     'Organization/Apps/ActivitiesShow/Views/MainView',
     'Organization/Apps/TasksBoard/Views/MainView',
     'Organization/Apps/TasksShow/Views/MainView',
+    'Organization/Apps/Planning/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Tasks/Models/Task',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, TaskUsersCollection, Activity, Task, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TaskUsersCollection, Activity, Task, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -37,7 +38,8 @@ define([
                     "activities": "activitiesIndex",
                     "activities/:id": "activitiesShow",
                     "tasks/:id": "tasksShow",
-                    "tasks":"tasksBoard"
+                    "tasks":"tasksBoard",
+                    "planning": "planning"
                 },
                 week: function () {
                     base.launchWeek();
@@ -62,6 +64,9 @@ define([
                 },
                 tasksShow: function (id) {
                     base.launchTasksShow(id);
+                },
+                planning: function () {
+                    base.launchPlanningView();
                 }
             });
 
@@ -156,6 +161,14 @@ define([
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchPlanningView: function () {
+            var base = this;
+            base.current_view = new PlanningView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.planning").addClass("selected");
             base.setContent(base.current_view.$el);
         },
         checkForNotifications: function () {
