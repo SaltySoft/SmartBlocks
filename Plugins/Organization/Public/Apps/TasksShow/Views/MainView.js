@@ -83,8 +83,6 @@ define([
                         }
                     }
                 ]
-
-
             });
         },
         registerEvents: function () {

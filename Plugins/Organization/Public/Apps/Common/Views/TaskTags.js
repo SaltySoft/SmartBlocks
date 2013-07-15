@@ -12,7 +12,12 @@ define([
         className:"task_tags_view",
         initialize:function (task) {
             var base = this;
-            base.task = task;
+            if (task !== undefined) {
+                base.task = task;
+            }
+            else {
+                base.task = undefined;
+            }
         },
         init:function (SmartBlocks, callbacks) {
             var base = this;
@@ -24,13 +29,23 @@ define([
             base.render();
             base.registerEvents();
         },
+        setTags:function (tags) {
+            var base = this;
+            base.tags = tags;
+        },
         render:function () {
             var base = this;
 
             var template = _.template(TaskTagsTemplate, {});
             base.$el.html(template);
 
-            var task_tags = base.task.get("tags").models;
+            if (base.task !== undefined) {
+                var task_tags = base.task.get("tags").models;
+            }
+            else {
+                var task_tags = base.tags.models;
+            }
+
             base.$el.find(".task_tags_list").find(".task_tag_item").remove();
             for (var k in task_tags) {
                 var task_tag_item = new TaskTagItem(task_tags[k]);
@@ -73,12 +88,17 @@ define([
                 var tag = base.search_results.get(id);
 
                 if (tag) {
-                    base.task.get('tags').add(tag);
-                    base.task.trigger("changed");
-                    base.task.save({}, {
-                        success:function () {
-                        }
-                    });
+                    if (base.task !== undefined) {
+                        base.task.get('tags').add(tag);
+                        base.task.trigger("changed");
+                        base.task.save({}, {
+                            success:function () {
+                            }
+                        });
+                    }
+                    else {
+
+                    }
                 }
             });
 
@@ -88,12 +108,17 @@ define([
                 });
                 tag.save({}, {
                     success:function () {
-                        base.task.get('tags').add(tag);
-                        base.task.trigger("changed");
-                        base.task.save({}, {
-                            success:function () {
-                            }
-                        });
+                        if (base.task !== undefined) {
+                            base.task.get('tags').add(tag);
+                            base.task.trigger("changed");
+                            base.task.save({}, {
+                                success:function () {
+                                }
+                            });
+                        }
+                        else {
+
+                        }
                     },
                     error:function (o, data) {
                         var response = JSON.parse(data.responseText);
