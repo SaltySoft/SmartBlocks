@@ -4,11 +4,10 @@
         <input type="text" name="name" class="name_filter" placeholder="Filter by name..." />
 
         <div class="task_search_tags" >
+            <% _.each(tasks_tags, function(tag)) { %>
+                <div class=""></div>
+            <% }); %>
         </div >
-        <!--<label >-->
-            <!--<input type="checkbox" id="show_arch_checkbox" name="archives" />-->
-            <!--Show Archives-->
-        <!--</label >-->
         <button type="submit" class="pure-button pure-button-primary" >Filter</button >
     </form >
 </div >

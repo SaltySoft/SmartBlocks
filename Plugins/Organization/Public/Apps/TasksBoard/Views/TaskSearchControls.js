@@ -21,6 +21,7 @@ define([
             base.registerEvents();
 
             base.parent.events.on("tasks_tags_loaded", function () {
+                base.render();
                 for (var k in base.tasks_tags.models) {
                     var tasks_tag = base.tasks_tags.models[k];
 
@@ -34,7 +35,9 @@ define([
         },
         render:function () {
             var base = this;
-            var template = _.template(TaskSearchControlsTemplate, {});
+            var template = _.template(TaskSearchControlsTemplate, {
+                tasks_tags: base.tasks_tags.models
+            });
             base.$el.html(template);
         },
         registerEvents:function () {
