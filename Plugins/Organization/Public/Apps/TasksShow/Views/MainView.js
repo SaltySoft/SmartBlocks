@@ -71,7 +71,7 @@ define([
             base.$el.find(".tags_container").html(task_tags_view.$el);
             task_tags_view.init(base.SmartBlocks, {
                 main: function (tag) {
-
+                    alert(tag.get("name"));
                 },
                 context: [
                     {
@@ -108,6 +108,10 @@ define([
 
             base.task.on("changed", function () {
                 base.update();
+            });
+
+            base.$el.delegate(".edit_button", "click", function () {
+
             });
 
         }
