@@ -8,13 +8,18 @@ define([
     'Organization/Apps/Common/Models/TaskTag'
 ], function ($, _, Backbone, TaskTagsTemplate, TaskTagItem, TaskTagsCollection, TaskTag) {
     var View = Backbone.View.extend({
-        tagName: "div",
-        className: "task_tags_view",
-        initialize: function (task) {
+        tagName:"div",
+        className:"task_tags_view",
+        initialize:function (task) {
             var base = this;
-            base.task = task;
+            if (task !== undefined) {
+                base.task = task;
+            }
+            else {
+                base.task = undefined;
+            }
         },
-        init: function (SmartBlocks, callbacks) {
+        init:function (SmartBlocks, callbacks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.callbacks = callbacks;
@@ -24,13 +29,23 @@ define([
             base.render();
             base.registerEvents();
         },
-        render: function () {
+        setTags:function (tags) {
+            var base = this;
+            base.tags = tags;
+        },
+        render:function () {
             var base = this;
 
             var template = _.template(TaskTagsTemplate, {});
             base.$el.html(template);
 
-            var task_tags = base.task.get("tags").models;
+            if (base.task !== undefined) {
+                var task_tags = base.task.get("tags").models;
+            }
+            else {
+                var task_tags = base.tags.models;
+            }
+
             base.$el.find(".task_tags_list").find(".task_tag_item").remove();
             for (var k in task_tags) {
                 var task_tag_item = new TaskTagItem(task_tags[k]);
@@ -38,7 +53,7 @@ define([
                 task_tag_item.init(base.SmartBlocks, base.callbacks);
             }
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
 
             var tag_search_timer = 0;
@@ -48,17 +63,17 @@ define([
                 clearTimeout(tag_search_timer);
                 tag_search_timer = setTimeout(function () {
                     base.search_results.fetch({
-                        data: {
-                            filter: elt.val()
+                        data:{
+                            filter:elt.val()
                         },
-                        success: function () {
+                        success:function () {
                             list.css("left", elt.position().left);
                             list.css("top", elt.position().top + 25);
                             list.show();
                             list.html("");
                             for (var k in base.search_results.models) {
                                 var tag = base.search_results.models[k];
-                                list.append('<li ><a href="javascript:void(0);" class="add_tag_button" data-id="' + tag.get('id') + '">'+ tag.get("name") + '</a></li>');
+                                list.append('<li ><a href="javascript:void(0);" class="add_tag_button" data-id="' + tag.get('id') + '">' + tag.get("name") + '</a></li>');
                             }
                         }
                     });
@@ -73,39 +88,44 @@ define([
                 var tag = base.search_results.get(id);
 
                 if (tag) {
-                    base.task.get('tags').add(tag);
-                    base.task.trigger("changed");
-                    base.task.save({}, {
-                        success: function () {
+                    if (base.task !== undefined) {
+                        base.task.get('tags').add(tag);
+                        base.task.trigger("changed");
+                        base.task.save({}, {
+                            success:function () {
+                            }
+                        });
+                    }
+                    else {
 
-                        }
-                    });
+                    }
                 }
             });
 
             base.$el.delegate(".create_tag_button", "click", function () {
                 var tag = new TaskTag({
-                    name: base.$el.find(".tag_search_input").val()
+                    name:base.$el.find(".tag_search_input").val()
                 });
                 tag.save({}, {
-                    success: function () {
-                        base.task.get('tags').add(tag);
-                        base.task.trigger("changed");
-                        base.task.save({}, {
-                            success: function () {
+                    success:function () {
+                        if (base.task !== undefined) {
+                            base.task.get('tags').add(tag);
+                            base.task.trigger("changed");
+                            base.task.save({}, {
+                                success:function () {
+                                }
+                            });
+                        }
+                        else {
 
-                            }
-                        });
+                        }
                     },
-                    error: function (o, data) {
+                    error:function (o, data) {
                         var response = JSON.parse(data.responseText);
                         base.SmartBlocks.show_message(response.message);
                     }
                 });
-
             });
-
-
         }
     });
 
