@@ -4,11 +4,12 @@ define([
     var WorkloadTimeline = new Class();
 
     WorkloadTimeline.include({
-        init: function (canvas, planned_tasks) {
+        init: function (canvas, planned_tasks, total_amount) {
             var base = this;
             base.planned_tasks = planned_tasks;
             base.canvas = canvas;
             base.ctx = base.canvas.getContext('2d');
+            base.total_amount = total_amount;
             console.log();
             base.clicked = false;
             base.mouse_pos = {x: 0, y:0};
@@ -31,7 +32,7 @@ define([
             var base = this;
 
             if (base.clicked) {
-                base.speedX = base.mouse_mvt.x * 2;
+                base.speedX = base.mouse_mvt.x;
             } else {
                 base.speedX *= 0.9;
             }
@@ -51,6 +52,8 @@ define([
             var offset = 0;
             base.ctx.save();
             base.ctx.translate(base.posx, 0);
+            var burndown = [];
+            var worked = 0
             for (var i = now.getDate() - base.day; i <= now.getDate() + 365 - base.day; i++) {
                 var dstart = new Date();
                 dstart.setDate(i);
@@ -79,8 +82,27 @@ define([
                 var metrics = base.ctx.measureText(dstart.getDate());
                 base.ctx.fillText(dstart.getDate(), offset ,  base.canvas.height);
                 base.ctx.fill();
+                worked += work_amount;
+                burndown.push({
+                    x: offset + 7,
+                    worked: worked
+                });
                 offset += 16;
             }
+            base.ctx.beginPath();
+            base.ctx.fillStyle = "rgba(255,150,0,0.5)";
+            if (burndown.length > 0) {
+                base.ctx.moveTo(burndown[0].x,(base.canvas.height - 15));
+                for (var k in burndown) {
+
+                    base.ctx.lineTo(burndown[k].x, (base.canvas.height - 15) - worked / 3600000 * 5 + burndown[k].worked / 3600000 * 5)
+                }
+            }
+            base.ctx.closePath();
+            base.ctx.stroke();
+            base.ctx.fill();
+
+
             base.ctx.restore();
 
         },
