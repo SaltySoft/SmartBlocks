@@ -1,11 +1,10 @@
 .task_popup {
-    width: 400px;
-
+    width: 450px;
     background-color: white;
     box-shadow: 0px 0px 5px black;
     padding: 20px;
     position: relative;
-    margin:auto;
+    margin: auto;
     top: 50px;
 }
 
@@ -24,7 +23,6 @@
     right: 5px;
 }
 
-
 .task_popup .pure-control-group {
     margin: 15px;
 
@@ -41,12 +39,17 @@
     font-size: 1.1em;
 }
 
-
 .task_form input[type="text"] {
     width: 200px;
 }
 
-
-.ui-datepicker  {
+.ui-datepicker {
     z-index: 10;
+}
+
+.form_description {
+    margin: 0px;
+    height: 80px;
+    width: 260px;
+    resize: none;
 }
