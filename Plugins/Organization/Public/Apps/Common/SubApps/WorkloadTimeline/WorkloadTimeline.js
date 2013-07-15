@@ -1,6 +1,7 @@
 define([
-    'Class'
-], function (Class) {
+    'Class',
+    './Button'
+], function (Class, Button) {
     var WorkloadTimeline = new Class();
 
     WorkloadTimeline.include({
@@ -14,6 +15,27 @@ define([
             base.clicked = false;
             base.mouse_pos = {x: 0, y:0};
             base.mouse_mvt = {x: 0, y:0};
+            base.buttons = [];
+            base.daywidth = 15;
+
+            base.buttons.push(new Button(base, "<<", 10, 10, 50, 20, function () {
+                base.speedX = 20;
+            }));
+
+            base.buttons.push(new Button(base, ">>", 70, 10, 50, 20, function () {
+                base.speedX -= 20;
+            }));
+
+            base.buttons.push(new Button(base, "-", 130, 10, 50, 20, function () {
+                base.daywidth -= 1;
+                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
+            }));
+
+            base.buttons.push(new Button(base, "+", 190, 10, 50, 20, function () {
+                base.daywidth += 1;
+                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
+            }));
+
             base.registerEvents();
             base.run();
 
@@ -39,6 +61,10 @@ define([
             base.posx += base.speedX;
             base.mouse_mvt.x = 0;
             base.mouse_mvt.y = 0;
+
+            for (var k in base.buttons) {
+                base.buttons[k].logic();
+            }
         },
         draw: function () {
             var base = this;
@@ -77,17 +103,17 @@ define([
                     base.ctx.fillStyle = "rgba(255,0,0,0.9)";
                 }
                 base.ctx.beginPath();
-                base.ctx.rect(offset, base.canvas.height - 15 - height, 10, height);
+                base.ctx.rect(offset, base.canvas.height - 15 - height, base.daywidth, height);
 
                 var metrics = base.ctx.measureText(dstart.getDate());
-                base.ctx.fillText(dstart.getDate(), offset ,  base.canvas.height);
+                base.ctx.fillText(dstart.getDate(), offset + base.daywidth / 2 - metrics.width / 2 ,  base.canvas.height);
                 base.ctx.fill();
                 worked += work_amount;
                 burndown.push({
                     x: offset + 7,
                     worked: worked
                 });
-                offset += 16;
+                offset += base.daywidth + 1;
             }
             base.ctx.beginPath();
             base.ctx.fillStyle = "rgba(255,150,0,0.5)";
@@ -104,6 +130,9 @@ define([
 
 
             base.ctx.restore();
+            for (var k in base.buttons) {
+                base.buttons[k].draw();
+            }
 
         },
         run: function () {
@@ -112,8 +141,10 @@ define([
             base.ctx.clearRect(0,0,1000, base.canvas.height);
             base.logic();
             base.draw();
+            if ($(base.canvas).height() > 0) {
+                requestAnimationFrame($.proxy(base.run, base), base.canvas);
+            }
 
-            requestAnimationFrame($.proxy(base.run, base), base.canvas);
         },
         registerEvents: function () {
             var base = this;

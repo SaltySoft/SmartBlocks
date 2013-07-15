@@ -23,6 +23,7 @@ define([
             base.canvas = base.$el.find(".workload_timeline_canvas")[0];
             base.ctx = base.canvas.getContext('2d');
             base.wt = new WorkloadTimelineApp(base.canvas, base.planned_tasks, base.total_amount);
+            base.$el.disableSelection();
         },
         render: function () {
             var base = this;

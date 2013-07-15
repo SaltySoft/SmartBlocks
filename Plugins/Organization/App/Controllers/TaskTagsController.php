@@ -48,10 +48,16 @@ class TaskTagsController extends \Controller
     {
         $tag = new TaskTag();
         $data = $this->getRequestData();
-        $tag->setName($data["name"]);
-        $tag->setCreator(\User::current_user());
-        $tag->save();
-        $this->return_json($tag->toArray());
+        $tags = TaskTag::where(array("name" => $data["name"]));
+        if ($data["name"] != "" && !isset($tags[0])) {
+            $tag->setName($data["name"]);
+            $tag->setCreator(\User::current_user());
+            $tag->save();
+            $this->return_json($tag->toArray());
+        } else {
+            $this->json_error("Name cannot be blank or already existing.", 406);
+        }
+
     }
 
     public function update($params = array())

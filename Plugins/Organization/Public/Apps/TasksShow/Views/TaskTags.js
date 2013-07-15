@@ -96,6 +96,10 @@ define([
 
                             }
                         });
+                    },
+                    error: function (o, data) {
+                        var response = JSON.parse(data.responseText);
+                        base.SmartBlocks.show_message(response.message);
                     }
                 });
 

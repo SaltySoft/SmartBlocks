@@ -30,7 +30,7 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.find(".remove_button").mousedown(function (e) {
+            base.$el.mousedown(function (e) {
 
                 if (e.which == 1) {
                     if (base.callbacks && base.callbacks.main) {
