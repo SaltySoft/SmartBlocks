@@ -8,8 +8,9 @@ define([
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Common/Views/TaskPopup',
     './TimeStats',
-    './TaskTags'
-], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView) {
+    './TaskTags',
+    'Organization/Apps/Common/Views/WorkloadTimeline'
+], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView, WorkloadTimelineView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_show_main_view",
@@ -35,6 +36,10 @@ define([
 
             var template = _.template(MainViewTemplate, {});
             base.$el.html(template);
+            console.log(base.task.get("planned_tasks"));
+            var workload_timeline_view = new WorkloadTimelineView(base.task.get("planned_tasks"));
+            base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
+            workload_timeline_view.init(base.SmartBlocks);
         },
         update: function () {
             var base = this;
