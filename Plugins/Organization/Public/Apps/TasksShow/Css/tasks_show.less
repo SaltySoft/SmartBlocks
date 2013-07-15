@@ -1,20 +1,42 @@
 @elts_bg: #f7efd8;
 
 .task_show_main_view {
+    height: 600px;
+    .for_normal {
+        display: block;
+    }
+
+    .for_loading {
+        display: none;
+    }
+
+    .page_loader {
+        text-align: center;
+        padding-top: 200px;
+        font-size: 2.5em;
+        color: #d7d7d7;
+    }
+
+
     width: 800px;
     padding: 10px;
     background: white;
     margin: auto;
     margin-top: 50px;
-
+    position: relative;
     .description {
-        height: 90px;
+        height: 104px;
+        margin-bottom: 20px;
         padding: 5px;
         background: @elts_bg;
     }
 
     .task_info {
         margin-top: 30px;
+
+        > div > div > div {
+            padding: 10px;
+        }
     }
 
     .activity_timeline_container {
@@ -26,6 +48,7 @@
         height: 150px;
         overflow-y: scroll;
         background: @elts_bg;
+        margin-bottom: 20px;
     }
 
     .subtasks_container {
@@ -41,7 +64,7 @@
             margin-top: 8px;
             max-height: 221px;
         }
-
+    
         .tag_search_input {
             width: 100px;
         }
@@ -50,5 +73,39 @@
             padding: 0.3em;
             font-size: 0.9em;
         }
+    }
+
+    .workload_timeline_container {
+        background: @elts_bg;
+    }
+
+
+    .task_content {
+        padding: 5px;
+    }
+
+    .controls {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+
+        .deletion_button {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+        }
+    }
+
+
+}
+
+.task_show_main_view.loading {
+    .for_normal {
+        display: none;
+    }
+
+    .for_loading {
+        display: block;
     }
 }

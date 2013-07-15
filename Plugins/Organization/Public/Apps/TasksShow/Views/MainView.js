@@ -8,12 +8,12 @@ define([
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Common/Views/TaskPopup',
     './TimeStats',
-    './TaskTags',
+    'Organization/Apps/Common/Views/TaskTags',
     'Organization/Apps/Common/Views/WorkloadTimeline'
 ], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView, WorkloadTimelineView) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "task_show_main_view",
+        className: "task_show_main_view loading",
         initialize: function (task) {
             var base = this;
             base.model = task;
@@ -22,21 +22,26 @@ define([
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.prerender();
             base.task.fetch({
                 success: function () {
+                    base.$el.removeClass("loading");
                     base.render();
                     base.update();
                     base.registerEvents();
                 }
             });
-
+        },
+        prerender: function () {
+            var base = this;
+            var template = _.template(MainViewTemplate, {});
+            base.$el.html(template);
         },
         render: function () {
             var base = this;
 
             var template = _.template(MainViewTemplate, {});
             base.$el.html(template);
-            console.log(base.task.get("planned_tasks"));
             var workload_timeline_view = new WorkloadTimelineView(base.task.get("planned_tasks", base.task.get("required_time")));
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
             workload_timeline_view.init(base.SmartBlocks);
@@ -113,6 +118,23 @@ define([
                 task_popup.init(base.SmartBlocks, function () {
                     base.update();
                 });
+            });
+
+            base.$el.delegate(".deletion_button", "click", function () {
+                if (confirm("Are you sure you want to delete this task ?")) {
+                    if (base.task.get("parent")) {
+                        var id = base.task.get("parent").get('id');
+                    }
+                    window.location = id ? "#tasks/" + id : "#tasks";
+                    base.task.destroy({
+                        success: function () {
+                            base.SmartBlocks.show_message("Successfully deleted task");
+                        },
+                        error: function () {
+                            base.SmartBlocks.show_message("Deletion failed");
+                        }
+                    });
+                }
             });
         }
     });

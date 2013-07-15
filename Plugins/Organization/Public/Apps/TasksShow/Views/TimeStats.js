@@ -48,16 +48,17 @@ define([
                 var planned_task = planned_tasks[k];
                 var start = planned_task.getStart();
                 var end = new Date(planned_task.getStart());
-                var time = start.getTime() + parseInt(planned_task.get("duration"));
+                var duration =  parseInt(planned_task.get("duration"));
+                var time = start.getTime() + duration;
                 end.setTime(time);
 
                 if (end.getTime() < now.getTime()) {
-                    past_planned += planned_task.get("duration");
+                    past_planned += duration;
                 } else {
                     if (start > now) {
-                        past_planned += planned_task.get("duration");
+                        past_planned += duration;
                     } else {
-                        next_planned += planned_task.get("duration") + start.getTime() - now.getTime();
+                        next_planned += duration + start.getTime() - now.getTime();
                         past_planned += - start.getTime() + now.getTime();
                     }
                 }
@@ -66,7 +67,8 @@ define([
             next_planned = parseInt(next_planned);
             base.$el.find(".past_planned_time").html((past_planned / 3600000).toFixed(2));
             base.$el.find(".next_planned_time").html((next_planned / 3600000).toFixed(2));
-            base.$el.find(".planned_time_difference").html(((base.task.get("required_time") - (past_planned + next_planned))  / 3600000).toFixed(2));
+            var difference = ((base.task.get("required_time") - (past_planned + next_planned))  / 3600000).toFixed(2);
+            base.$el.find(".planned_time_difference").html(difference > 0 ? difference : 0);
         },
         registerEvents: function () {
             var base = this;

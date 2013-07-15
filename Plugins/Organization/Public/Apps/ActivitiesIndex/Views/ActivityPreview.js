@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/activity_preview.html',
-    'Organization/Apps/Common/Views/TasksList'
-], function ($, _, Backbone, ActivityPreviewTemplate, TasksListView) {
+    'Organization/Apps/Common/Views/TasksList',
+    'Organization/Apps/Common/Views/WorkloadTimeline',
+    'Organization/Apps/Daily/Collections/PlannedTasks'
+], function ($, _, Backbone, ActivityPreviewTemplate, TasksListView, WorkloadTimelineView, PlannedTasksCollection) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activity_preview",
@@ -39,7 +41,25 @@ define([
                 } else {
                     base.$el.removeClass("archived");
                 }
+
+                var planned_tasks = new PlannedTasksCollection();
+                var tasks = base.activity.get("tasks").models;
+                var required_time = 0;
+                for (var k in tasks) {
+                    var planned_tasks_c = tasks[k].get("planned_tasks");
+                    required_time += tasks[k].get("required_time");
+                    for (var k in planned_tasks_c.models) {
+                        planned_tasks.add(planned_tasks_c.models[k]);
+                    }
+
+                }
+
+                var workload_timeline_view = new WorkloadTimelineView(planned_tasks, required_time);
+                base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
+                workload_timeline_view.init(base.SmartBlocks);
             }
+
+
 
         },
         registerEvents: function () {
