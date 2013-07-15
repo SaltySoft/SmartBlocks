@@ -4,11 +4,13 @@ define([
     'backbone',
     'text!../Templates/main_view.html',
     './TaskSearchControls',
-    './TaskList',
+    'Organization/Apps/Common/Views/TasksList',
     './TaskPreview',
     'Organization/Apps/Tasks/Collections/Tasks',
-    'Organization/Apps/Common/Collections/TaskTags'
-], function ($, _, Backbone, MainViewTemplate, TaskSearchControlsView, TaskListView, TaskPreview, TasksCollection, TaskTagsCollection) {
+    'Organization/Apps/Common/Collections/TaskTags',
+    'Organization/Apps/Tasks/Models/Task',
+    'Organization/Apps/Common/Views/TaskPopup'
+], function ($, _, Backbone, MainViewTemplate, TaskSearchControlsView, TaskListView, TaskPreview, TasksCollection, TaskTagsCollection, Task, TaskPopupView) {
     /**
      * Tasks Board Index
      * Main View
@@ -33,9 +35,11 @@ define([
             base.$el.find(".search_controls_container").html(base.search_controls_view.$el);
             base.search_controls_view.init(SmartBlocks, base);
 
-            base.tasks_list_view = new TaskListView();
+            base.tasks_list_view = new TaskListView(base.tasks);
             base.$el.find(".tasks_list_container").html(base.tasks_list_view.$el);
-            base.tasks_list_view.init(SmartBlocks, base);
+            base.tasks_list_view.init(SmartBlocks, function (task) {
+                base.events.trigger("change_task_preview", task);
+            });
 
             base.task_preview = new TaskPreview();
             base.$el.find(".task_preview_container").html(base.task_preview.$el);
@@ -80,6 +84,15 @@ define([
                         base.events.trigger("loaded_tasks");
                     }
                 });
+            });
+
+            base.$el.delegate(".task_creation_button", "click", function () {
+                var date = new Date();
+                date.setHours(23, 59, 59, 00);
+                var task = new Task();
+                task.setDueDate(date);
+                var popup_view = new TaskPopupView(task);
+                popup_view.init(base.SmartBlocks);
             });
         }
     });

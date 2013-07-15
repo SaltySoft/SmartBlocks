@@ -33,12 +33,6 @@ define([
                 var subtasks_list = new TasksListView(base.task.get("children"));
                 base.$el.find(".subtasks_list_container").html(subtasks_list.$el);
                 subtasks_list.init(base.SmartBlocks);
-
-//                if (base.task.get("archived")) {
-//                    base.$el.addClass("archived");
-//                } else {
-//                    base.$el.removeClass("archived");
-//                }
             }
         },
         registerEvents:function () {
@@ -47,22 +41,6 @@ define([
                 base.task = task;
                 base.render();
             });
-
-//            base.$el.delegate(".archive_button", "click", function () {
-//                base.activity.set("archived", !base.activity.get("archived"));
-//                base.activity.save({}, {
-//                    success: function () {
-//
-//                        if (base.activity.get("archived")) {
-//                            base.$el.addClass("archived");
-//                            base.SmartBlocks.show_message("Activity archived");
-//                        } else {
-//                            base.$el.removeClass("archived");
-//                            base.SmartBlocks.show_message("Activity unarchived");
-//                        }
-//                    }
-//                });
-//            });
 
             base.$el.delegate(".deletion_button", "click", function () {
                 if (confirm("Are you sure you want to delete this task ?")) {
