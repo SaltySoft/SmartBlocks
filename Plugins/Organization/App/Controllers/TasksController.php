@@ -38,7 +38,6 @@ class TasksController extends \Controller
 
         $em = \Model::getEntityManager();
 
-
         $qb = $em->createQueryBuilder();
 
         if (\User::current_user() != null)

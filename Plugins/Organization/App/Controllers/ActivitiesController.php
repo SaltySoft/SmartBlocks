@@ -24,7 +24,6 @@ class ActivitiesController extends \Controller
         }
         if (isset($data["name"]))
         {
-
             $qb->andWhere("activity.name LIKE :name")->setParameter('name', $data["name"] . '%');
         }
 
