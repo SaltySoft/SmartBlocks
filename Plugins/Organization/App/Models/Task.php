@@ -314,7 +314,7 @@ class Task extends \Model
         $required_time = $this->required_time;
         if (!$this->children->isEmpty())
         {
-            $required_time = 0;
+//            $required_time = 0;
             foreach ($this->children as $child)
             {
                 $required_time += $child->getRequiredTime();
@@ -443,8 +443,6 @@ class Task extends \Model
             $tags[] = $tag->toArray();
         }
 
-
-
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
@@ -456,8 +454,7 @@ class Task extends \Model
             "order_index" => $this->order_index,
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
             "type" => $this->type != null ? $this->type->toArray() : null,
-            "tags" => $tags,
-
+            "tags" => $tags
         );
 
         if ($show_children) {
