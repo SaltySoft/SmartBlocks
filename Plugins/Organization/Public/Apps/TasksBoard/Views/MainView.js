@@ -10,7 +10,7 @@ define([
     'Organization/Apps/Common/Collections/TaskTags',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Common/Views/TaskPopup'
-], function ($, _, Backbone, MainViewTemplate, TaskSearchControlsView, TaskListView, TaskPreview, TasksCollection, TaskTagsCollection, Task, TaskPopupView) {
+], function ($, _, Backbone, MainViewTemplate, TaskSearchControlsView, TasksListView, TaskPreview, TasksCollection, TaskTagsCollection, Task, TaskPopupView) {
     /**
      * Tasks Board Index
      * Main View
@@ -35,7 +35,7 @@ define([
             base.$el.find(".search_controls_container").html(base.search_controls_view.$el);
             base.search_controls_view.init(SmartBlocks, base);
 
-            base.tasks_list_view = new TaskListView(base.tasks);
+            base.tasks_list_view = new TasksListView(base.tasks);
             base.$el.find(".tasks_list_container").html(base.tasks_list_view.$el);
             base.tasks_list_view.init(SmartBlocks, function (task) {
                 base.events.trigger("change_task_preview", task);

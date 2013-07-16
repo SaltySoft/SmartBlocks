@@ -55,8 +55,7 @@
             height: 68px;
             width: 68%;
         }
-        .search_ctrls_form {
-//            line-height: 30px;
+        .search_ctrls_form { //            line-height: 30px;
             .task_search_tags {
                 display: inline-block;
             }
@@ -87,9 +86,24 @@
         }
     }
 
-    .tasl_preview_container {
+    .task_preview_container {
         .task_prev {
             display: block;
+
+            .subtasks_list_container {
+                .empty {
+                    .task_prev {
+                        display: none;
+                    }
+                    .empty_content {
+                        display: block;
+                    }
+                }
+            }
+
+            .subtasks_list_container {
+                margin-right: 5px;
+            }
         }
         .empty_content {
             display: none;
