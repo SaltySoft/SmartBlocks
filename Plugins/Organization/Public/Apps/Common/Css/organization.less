@@ -28,6 +28,7 @@
 .planned_list_item {
     padding: 10px;
     background: rgba(43, 184, 203, 0.5);
+    margin-bottom: 1px;
 }
 
 .task_popup_container {
@@ -73,32 +74,4 @@
 
 .add_tag_button:hover {
     background: #0076a3;
-}
-
-.activity_list_item a {
-  display: block;
-  text-decoration: none;
-  padding: 10px;
-  margin-bottom: 1px;
-  color: whitesmoke;
-  transition: background 500ms;
-  -webkit-transition: background 500ms; /* Safari */
-}
-.activity_list_item a:hover {
-  background: #d3d3d3;
-  color: #525252;
-}
-.activity_list {
-  height: 100%;
-  position: relative;
-
-  .activities_list {
-    height: calc(~'100% - 41px');
-    overflow-y: scroll;
-  }
-  .activity_creation_button {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-  }
 }

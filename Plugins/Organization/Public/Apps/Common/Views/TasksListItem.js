@@ -24,7 +24,7 @@ define([
                 if (base.$el.height() <= 0) {
                     clearInterval(base.interval);
                 }
-            }, 500);
+            }, 900);
             base.registerEvents();
             base.$el.show();
             base.$el.attr("oncontextmenu", "return false;");
@@ -42,7 +42,7 @@ define([
 
                     base.$el.addClass("overdue");
 
-                    var display = "Overdue by ";
+                    var display = "- Overdue by ";
                     var milliseconds = now.getTime() - date.getTime();
 
                     var days = milliseconds / ( 24 * 3600 * 1000);
@@ -66,7 +66,7 @@ define([
                 } else {
                     base.$el.removeClass("overdue");
 
-                    var display = "Due in ";
+                    var display = "- Due in ";
                     var milliseconds = date.getTime() - now.getTime();
 
                     var days = milliseconds / ( 24 * 3600 * 1000);

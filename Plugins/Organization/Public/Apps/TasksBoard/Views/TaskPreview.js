@@ -3,8 +3,12 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/task_preview.html',
-    'Organization/Apps/Common/Views/TasksList'
-], function ($, _, Backbone, TaskPreviewTemplate, TasksListView) {
+    'Organization/Apps/Common/Views/TasksList',
+    'Organization/Apps/Common/Views/WorkloadTimeline',
+    'Organization/Apps/Common/Views/PlannedTasksList',
+    'Organization/Apps/Common/Views/TaskTagItem',
+    'Organization/Apps/TasksShow/Views/TimeStats'
+], function ($, _, Backbone, TaskPreviewTemplate, TasksListView, WorkloadTimelineView, PlannedTasksListView, TaskTagItem, TimeStatsView) {
     var View = Backbone.View.extend({
         tagName:"div",
         className:"task_preview",
@@ -28,11 +32,45 @@ define([
             base.$el.html(template);
             if (!base.task) {
                 base.$el.addClass("empty");
-            } else {
+            }
+            else {
                 base.$el.removeClass("empty");
-                var subtasks_list = new TasksListView(base.task.get("children"));
-                base.$el.find(".subtasks_list_container").html(subtasks_list.$el);
-                subtasks_list.init(base.SmartBlocks);
+                if (base.task.get("children").length > 0) {
+                    var subtasks_list = new TasksListView(base.task.get("children"));
+                    base.$el.find(".subtasks_list_container").html(subtasks_list.$el);
+                    subtasks_list.init(base.SmartBlocks);
+                }
+                else {
+                    base.$el.find(".subtasks_list_container").html("No subtasks found.");
+                }
+                base.update();
+            }
+        },
+        update:function () {
+            var base = this;
+
+            base.$el.find(".name").html(base.task.get("name"));
+            base.$el.find(".description").html(base.task.get("description"));
+//            base.$el.find(".activity_link").html();
+//            base.$el.find(".participants_container").html();
+
+            var time_stats_view = new TimeStatsView(base.task);
+            base.$el.find(".time_stats_container").html(time_stats_view.$el);
+            time_stats_view.init(base.SmartBlocks);
+
+            var workload_timeline_view = new WorkloadTimelineView(base.task.get("planned_tasks", base.task.get("required_time")));
+            base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
+            workload_timeline_view.init(base.SmartBlocks);
+
+            var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
+            base.$el.find(".planned_tasks_list_container").html(planned_tasks_list.$el);
+            planned_tasks_list.init(base.SmartBlocks);
+
+            var task_tags = base.task.get("tags").models;
+            for (var k in task_tags) {
+                var task_tag_item = new TaskTagItem(task_tags[k]);
+                base.$el.find(".task_tags_panel").append(task_tag_item.$el);
+                task_tag_item.init(base.SmartBlocks, undefined);
             }
         },
         registerEvents:function () {

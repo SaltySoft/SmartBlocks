@@ -12,7 +12,7 @@
     .app_body {
         position: absolute;
         bottom: 0px;
-        top: 115px;
+        top: 93px;
         left: 0px;
         right: 0px;
 
@@ -43,7 +43,7 @@
         .task_tags_list {
             overflow: auto;
             margin-top: 8px;
-            height: 85px;
+            height: 60px;
         }
         .simple_filters_container {
             float: left;
@@ -52,14 +52,23 @@
         }
         .tags_filter_container {
             display: inline-block;
-            height: 80px;
+            height: 68px;
             width: 68%;
         }
-        .search_ctrls_form {
-            line-height: 30px;
+        .search_ctrls_form { //            line-height: 30px;
             .task_search_tags {
                 display: inline-block;
             }
+            input {
+                margin-top: 6px;
+            }
+        }
+        .search_controls_panel {
+            width: 155px;
+        }
+
+        .task_tags_list_panel {
+            width: calc(~'100% - 155px');
         }
     }
 
@@ -77,9 +86,33 @@
         }
     }
 
-    .tasl_preview_container {
+    .task_preview_container {
         .task_prev {
             display: block;
+
+            .subtasks_list_container {
+                .empty {
+                    .task_prev {
+                        display: none;
+                    }
+                    .empty_content {
+                        display: block;
+                    }
+                }
+            }
+
+            .subtasks_list_container {
+                margin-right: 5px;
+            }
+            .task_tags_container {
+                margin-top: 5px;
+
+                .task_tags_panel {
+                    .task_tag_item {
+                        cursor: inherit;
+                    }
+                }
+            }
         }
         .empty_content {
             display: none;
