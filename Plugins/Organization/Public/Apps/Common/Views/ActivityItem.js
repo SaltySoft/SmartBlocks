@@ -37,7 +37,7 @@ define([
             var base = this;
 
             base.$el.delegate("a", "click", function () {
-                base.parent.events.trigger("change_activity_preview", base.activity);
+                base.parent.events.trigger("activity_clicked", base.activity);
             });
 
             base.$el.mouseup(function (e) {

@@ -7,4 +7,54 @@
 
 
 
+  .planning_task_item {
+    position: relative;
+    .item_desc {
+      padding: 5px;
+      color: white;
+      background: #1989a6;
+      margin-bottom: 1px;
+      cursor: pointer;
+    }
+
+    .view_link {
+      position: absolute;
+      right: 5px;
+    }
+    .children_button {
+      display: none;
+    }
+
+    .children_container {
+      margin-left: 10px;
+      display: none;
+    }
+  }
+
+
+  .planning_task_item.parent {
+    > div > .children_button {
+      display: inline;
+    }
+  }
+
+  .planning_task_item.parent.expanded {
+     > .children_container {
+      display: block;
+    }
+  }
+
+  .planning_task_item.ui-draggable-dragging {
+    z-index: 1000;
+    > .item_desc {
+      height: 100px;
+      width: 100px;
+      position: absolute;
+    }
+
+    .children_container .item_desc {
+      display: none;
+    }
+  }
+
 }

@@ -5,7 +5,7 @@ var sb_paths = {
     backbone: "/javascript/backbone",
     text: "/javascript/text",
     default: "/javascript/default",
-    jqueryui: "/javascript/jquery-ui-1.10.3.custom.min",
+    jqueryui: "/javascript/jquery-ui.min",
     jqueryflip:"/javascript/jquery.flip.min",
     SmartBlocks: "/javascript/SmartBlocks",
 
@@ -29,7 +29,8 @@ var sb_paths = {
 
     jDeepCopy: "/javascript/jqueryDeepCopy",
     amplify_lib: "/javascript/amplify.min",
-    amplify: "/javascript/amplify.min"
+    amplify: "/javascript/amplify.min",
+    fullCalendar: "/javascript/fullcalendar.min"
 
 };
 
@@ -54,5 +55,9 @@ var sb_shims = {
             deps: ['jquery'],
             exports: "amplify"
         }
+    },
+    fullCalendar: {
+        deps: ['jquery', 'jqueryui'],
+        exports: "fullCalendar"
     }
 };

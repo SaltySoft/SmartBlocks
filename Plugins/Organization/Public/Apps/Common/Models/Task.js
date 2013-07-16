@@ -6,6 +6,9 @@ define([
 ], function (_, Backbone, TaskTag, TaskTagsCollection) {
     var Task = Backbone.Model.extend({
         urlRoot:"/Organization/Tasks",
+        defaults: {
+            "model_type" : "Task"
+        },
         parse:function (response) {
             var tags = response.tags;
             var tags_collection = new TaskTagsCollection();

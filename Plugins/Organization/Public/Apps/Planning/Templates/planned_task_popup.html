@@ -1,0 +1,31 @@
+<h4>Edit this task</h4>
+<form action="javascript:void(0);" class="pure-form pure-form-aligned">
+    <div class="pure-control-group">
+        <label for="form_content">Content</label>
+        <input type="text" id="form_content" placeholder="Enter a content" value="<%= planned_task.get("content") %>" class="content"/>
+    </div>
+    <div class="pure-control-group">
+        <label for="planned_task_start">Start</label>
+        <input min="0" max="23" type="number" id="planned_task_start" value="<%= planned_task.getStart().getHours() %>" class="start_hour time_input"/>:
+        <input min="0" max="59"  step="5" type="number" value="<%= planned_task.getStart().getMinutes() %>" class="start_minute time_input"/>
+    </div>
+    <div class="pure-control-group">
+        <label for="form_duration">Duration</label>
+        <input min="0" max="<%= 24 * 60 %>" step="5" type="number" id="form_duration" value="<%= Math.round(planned_task.get("duration") / 60000) %>" class="duration_input time_input"/> minutes
+    </div>
+    <div class="pure-control-group">
+        <ul class="deadline_list">
+
+        </ul>
+    </div>
+    <div class="deadline_drop">
+
+    </div>
+    <div class="pure-controls">
+        <a href="javascript:void(0);" class="save_button pure-button pure-button-primary">Save</a>
+        <% if (planned_task.get("id")) { %>
+        <a href="javascript:void(0);" class="delete_button pure-button">Delete</a>
+        <% } %>
+        <a href="javascript:void(0);" class="cancel_button pure-button">Cancel</a>
+    </div>
+</form>

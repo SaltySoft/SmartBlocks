@@ -4,7 +4,7 @@ define([
     'backbone',
     'text!../Templates/main_view.html',
     './ActivitySearchControls',
-    './ActivityList',
+    'Organization/Apps/Common/Views/ActivityList',
     './ActivityPreview',
     'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Common/Collections/Activities'

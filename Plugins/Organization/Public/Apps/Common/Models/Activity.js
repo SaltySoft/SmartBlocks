@@ -6,7 +6,8 @@ define([
     'Organization/Apps/Tasks/Collections/Tasks'
 ], function (_, Backbone, ActivityType, Task, TasksCollection) {
     var Activity = Backbone.Model.extend({
-        default: {
+        defaults: {
+                "model_type" : "Activity"
 
         },
         urlRoot: "/Organization/Activities",

@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/main_view.html',
-    './Calendar'
-], function ($, _, Backbone, MainViewTemplate, CalendarView) {
+    './Calendar',
+    './TasksPanel',
+    'Organization/Apps/Tasks/Collections/Tasks'
+], function ($, _, Backbone, MainViewTemplate, CalendarView, TasksPanel, TasksCollection) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "planning_view",
@@ -15,7 +17,16 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
 
-            base.render();
+            base.tasks = new TasksCollection();
+
+            base.tasks.fetch({
+                success: function () {
+                    base.render();
+                }
+            });
+
+
+
         },
         render: function () {
             var base = this;
@@ -25,7 +36,13 @@ define([
 
             var calendar_view = new CalendarView();
             base.$el.find(".calendar_container").html(calendar_view.$el);
-            calendar_view.init(base.SmartBlocks);
+            calendar_view.init(base.SmartBlocks, base);
+
+
+            base.task_panel = new TasksPanel();
+            base.$el.find(".activity_tree_container").html(base.task_panel.$el);
+            base.task_panel.init(base.SmartBlocks, base);
+
 
         },
         registerEvents: function () {

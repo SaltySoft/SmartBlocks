@@ -64,7 +64,7 @@ define([
         },
         registerEvents: function () {
             var base = this;
-            base.parent.events.on("change_activity_preview", function (activity) {
+            base.parent.events.on("activity_clicked", function (activity) {
                 base.activity = activity;
                 base.render();
             });
