@@ -30,7 +30,8 @@ define([
             });
             base.$el.html(template);
 
-            var tasks = new TasksCollection(base.task.get('children'));
+            var tasks = base.task.get('children');
+            console.log(tasks);
             var task_list_view = new TasksListView(tasks);
             base.$el.find(".subtasks_container").html(task_list_view.$el);
             task_list_view.init(base.SmartBlocks);

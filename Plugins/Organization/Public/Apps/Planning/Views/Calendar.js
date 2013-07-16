@@ -78,11 +78,15 @@ define([
 
                     // assign it the date that was reported
                     copiedEventObject.start = date;
+                    if (allDay) {
+                        date.setHours(12);
+                    }
                     var end = new Date(date);
+
                     end.setHours(end.getHours() + 1);
                     copiedEventObject.end = end;
                     console.log(end);
-                    copiedEventObject.allDay = allDay;
+                    copiedEventObject.allDay = false;
                     copiedEventObject.editable = true;
                     copiedEventObject.className = "planned_task_cal";
                     // render the event on the calendar
@@ -98,9 +102,10 @@ define([
                     planned_task.save({}, {
                         success: function () {
                             copiedEventObject.id = planned_task.get("id");
-                            copiedEventObject.color = task.get("activity").type.color;
+                            copiedEventObject.color = (task.get("activity") != null) ? task.get("activity").type.color : "gray";
                             base.$el.fullCalendar('renderEvent', copiedEventObject);
                             base.planned_tasks.add(planned_task);
+                            base.parent.events.trigger("updated_planned_task", planned_task);
                         }
                     });
 
@@ -125,7 +130,13 @@ define([
                         planned_task.set("duration", event.end.getTime() - event.start.getTime());
 
                         console.log(event, planned_task.getStart());
-                        planned_task.save();
+
+                        planned_task.save({}, {
+                            success: function () {
+                                base.parent.events.trigger("updated_planned_task");
+                            }
+                        });
+
                     }
 
                 },
@@ -139,9 +150,11 @@ define([
 
                         popup.events.on("deleted", function () {
                             base.$el.fullCalendar( 'removeEvents', event.id)
+                            base.parent.events.trigger("updated_planned_task");
                         });
                         popup.events.on("saved", function (event) {
                             base.$el.fullCalendar( 'updateEvent', event)
+                            base.parent.events.trigger("updated_planned_task");
                         });
                     }
 

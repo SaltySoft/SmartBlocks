@@ -49,11 +49,16 @@ define([
         update: function () {
             var base = this;
             base.$el.find(".name").html(base.task.get("name"));
-            base.$el.find(".description").html(base.task.get("description"));
+            base.$el.find(".description").html(base.task.get("description") != "" ? base.task.get("description") : "No description");
             if (base.task.get("parent") !== undefined && base.task.get("parent") !== null) {
-                base.$el.find(".parent_task_link").html('<a href="#tasks/' + base.task.get("parent").get("id") + '">' + base.task.get("parent").get("name") + '</a>');
+                base.$el.find(".parent_task_link").html('Parent task : <a href="#tasks/' + base.task.get("parent").get("id") + '">' + base.task.get("parent").get("name") + '</a>');
             } else {
-                base.$el.find(".parent_task_link").html("No parent");
+                if (base.task.get("activity")) {
+                    base.$el.find(".parent_task_link").html('Activity: <a href="#activities/' + base.task.get("activity").id + '">' + base.task.get("activity").name + '</a>');
+                } else {
+                    base.$el.find(".parent_task_link").html("No parent");
+                }
+
             }
 
 
@@ -64,9 +69,9 @@ define([
             });
 
 
-            var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
-            base.$el.find(".planned_tasks_container").html(planned_tasks_list.$el);
-            planned_tasks_list.init(base.SmartBlocks);
+//            var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
+//            base.$el.find(".planned_tasks_container").html(planned_tasks_list.$el);
+//            planned_tasks_list.init(base.SmartBlocks);
 
             var time_stats_view = new TimeStatsView(base.task);
             base.$el.find(".time_stats_container").html(time_stats_view.$el);

@@ -289,29 +289,29 @@ class TasksController extends \Controller
                 }
             }
 
-            foreach ($data["linked_users"] as $user_array)
-            {
-                $user = \User::find($user_array['id']);
-                $add = true;
-                if (is_object($user))
-                {
-                    foreach ($task->getLinkedUsers() as $task_user)
-                    {
-                        if ($task_user->getUser()->getId() == $user->getId())
-                        {
-                            $add = false;
-                        }
-                    }
-                }
-                if ($add)
-                {
-                    $task_user = new \Organization\TaskUser();
-                    $task_user->setUser($user);
-                    $task_user->setTask($task);
-                    $task_user->setPending(true);
-                    $task_user->save();
-                }
-            }
+//            foreach ($data["linked_users"] as $user_array)
+//            {
+//                $user = \User::find($user_array['id']);
+//                $add = true;
+//                if (is_object($user))
+//                {
+//                    foreach ($task->getLinkedUsers() as $task_user)
+//                    {
+//                        if ($task_user->getUser()->getId() == $user->getId())
+//                        {
+//                            $add = false;
+//                        }
+//                    }
+//                }
+//                if ($add)
+//                {
+//                    $task_user = new \Organization\TaskUser();
+//                    $task_user->setUser($user);
+//                    $task_user->setTask($task);
+//                    $task_user->setPending(true);
+//                    $task_user->save();
+//                }
+//            }
             $em = \Model::getEntityManager();
             if (isset($data["children"]))
             {

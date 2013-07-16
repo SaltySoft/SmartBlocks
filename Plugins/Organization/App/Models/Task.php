@@ -423,6 +423,7 @@ class Task extends \Model
 
         foreach ($task->planned_tasks as $planned_task) {
 
+            if ($planned_task->getActive())
             $planned[] = $planned_task->toArray(true, false);
 
         }

@@ -42,7 +42,7 @@ define([
 
                     base.$el.addClass("overdue");
 
-                    var display = "- Overdue by ";
+                    var display = "+ ";
                     var milliseconds = now.getTime() - date.getTime();
 
                     var days = milliseconds / ( 24 * 3600 * 1000);
@@ -66,7 +66,7 @@ define([
                 } else {
                     base.$el.removeClass("overdue");
 
-                    var display = "- Due in ";
+                    var display = "- ";
                     var milliseconds = date.getTime() - now.getTime();
 
                     var days = milliseconds / ( 24 * 3600 * 1000);
