@@ -73,6 +73,24 @@ define([
             }
             response.tags = tags_collection;
 
+//            if (!Activity) {
+//                Activity  = require('Organization/Apps/Common/Models/Activity');
+//            }
+//            var activity = new Activity(response.activity)
+//            response.activity = activity;
+
+            var linked_users = response.task_users;
+            if (linked_users) {
+                var users_collection = new UsersCollection();
+                for (var k in linked_users) {
+                    var user = new User(linked_users[k]);
+                    users_collection.add(user);
+                }
+                response.task_users = users_collection;
+            }
+
+
+
 
             return response;
         },
@@ -119,6 +137,23 @@ define([
                     }
                     this.attributes.tags = tags_collection;
                 }
+//                if (!Activity) {
+//                    Activity  = require('Organization/Apps/Common/Models/Activity');
+//                }
+//                var activity = new Activity(model.activity);
+//                if (model.activity && !model.activity.attributes)
+//                    this.attributes.activity = activity;
+
+
+                var linked_users = model.task_users;
+                if (linked_users && !linked_users.models) {
+                    var users_collection = new UsersCollection();
+                    for (var k in linked_users) {
+                        var user = new User(linked_users[k]);
+                        users_collection.add(user);
+                    }
+                    this.attributes.task_users = users_collection;
+                }
 
                 var owner = new User(model.owner);
                 if (model.owner && !model.owner.attributes)
@@ -132,5 +167,6 @@ define([
         model: Task
     });
 
+    window.Task = Task;
     return Task;
 });

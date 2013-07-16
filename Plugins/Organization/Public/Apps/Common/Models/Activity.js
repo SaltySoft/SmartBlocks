@@ -21,7 +21,9 @@ define([
             var collection = new TasksCollection();
 
             for (var k in task_array) {
-
+                if (!Task) {
+                    Task  = require('Organization/Apps/Tasks/Models/Task');
+                }
                 var task = new Task(task_array[k]);
 
                 collection.add(task);

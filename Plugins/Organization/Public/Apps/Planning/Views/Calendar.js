@@ -44,13 +44,15 @@ define([
                 var end = new Date(start);
                 var duration = parseInt(planned_task.get("duration"));
                 end.setTime(end.getTime() + duration);
+                console.log(planned_task.get("task").get("activity"));
                 var event = {
                     title: planned_task.get("content") ? planned_task.get("content") : "Untitled",
                     start: start,
                     end: end,
                     allDay: false,
                     id: planned_task.get("id"),
-                    className: "planned_task_cal"
+                    className: "planned_task_cal",
+                    color: (planned_task.get("task").get("activity") != null) ? planned_task.get("task").get("activity").type.color : "gray"
                 };
                 base.events.push(event);
             }
@@ -96,6 +98,7 @@ define([
                     planned_task.save({}, {
                         success: function () {
                             copiedEventObject.id = planned_task.get("id");
+                            copiedEventObject.color = task.get("activity").type.color;
                             base.$el.fullCalendar('renderEvent', copiedEventObject);
                             base.planned_tasks.add(planned_task);
                         }

@@ -66,7 +66,7 @@ define([
 //        }
 
     }
-
+    window.User = User;
     return User;
 });
 
