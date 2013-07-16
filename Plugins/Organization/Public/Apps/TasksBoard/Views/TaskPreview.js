@@ -67,10 +67,15 @@ define([
             planned_tasks_list.init(base.SmartBlocks);
 
             var task_tags = base.task.get("tags").models;
-            for (var k in task_tags) {
-                var task_tag_item = new TaskTagItem(task_tags[k]);
-                base.$el.find(".task_tags_panel").append(task_tag_item.$el);
-                task_tag_item.init(base.SmartBlocks, undefined);
+            if (task_tags.length > 0) {
+                for (var k in task_tags) {
+                    var task_tag_item = new TaskTagItem(task_tags[k]);
+                    base.$el.find(".task_tags_panel").append(task_tag_item.$el);
+                    task_tag_item.init(base.SmartBlocks, undefined);
+                }
+            }
+            else {
+                base.$el.find(".task_tags_panel").append("No tags associated.");
             }
         },
         registerEvents:function () {
