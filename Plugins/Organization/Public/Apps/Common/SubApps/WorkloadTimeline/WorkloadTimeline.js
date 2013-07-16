@@ -5,7 +5,7 @@ define([
     var WorkloadTimeline = new Class();
 
     WorkloadTimeline.include({
-        init: function (canvas, planned_tasks, total_amount) {
+        init: function (canvas, planned_tasks, total_amount, deadline, start) {
             var base = this;
             base.planned_tasks = planned_tasks;
             base.canvas = canvas;
@@ -16,7 +16,9 @@ define([
             base.mouse_pos = {x: 0, y:0};
             base.mouse_mvt = {x: 0, y:0};
             base.buttons = [];
-            base.daywidth = 15;
+            base.daywidth = 30;
+            base.deadline = deadline;
+            base.start = start;
 
             base.buttons.push(new Button(base, "<<", 10, 10, 50, 20, function () {
                 base.speedX = 20;
@@ -26,15 +28,15 @@ define([
                 base.speedX -= 20;
             }));
 
-            base.buttons.push(new Button(base, "-", 130, 10, 50, 20, function () {
-                base.daywidth -= 1;
-                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
-            }));
-
-            base.buttons.push(new Button(base, "+", 190, 10, 50, 20, function () {
-                base.daywidth += 1;
-                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
-            }));
+//            base.buttons.push(new Button(base, "-", 130, 10, 50, 20, function () {
+//                base.daywidth -= 1;
+//                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
+//            }));
+//
+//            base.buttons.push(new Button(base, "+", 190, 10, 50, 20, function () {
+//                base.daywidth += 1;
+//                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
+//            }));
 
             base.registerEvents();
             base.run();
@@ -46,8 +48,8 @@ define([
             var diff = now - start;
             var oneDay = 1000 * 60 * 60 * 24;
             base.day = Math.floor(diff / oneDay);
-
-            base.posx = -base.day * 16 + 16 * 15;
+            base.originx = -101 * (base.daywidth + 1) + (base.daywidth + 1) * (base.canvas.width / base.daywidth / 2);
+            base.posx = 0;
             base.speedX = 0;
         },
         logic: function () {
@@ -57,6 +59,7 @@ define([
                 base.speedX = base.mouse_mvt.x;
             } else {
                 base.speedX *= 0.9;
+                base.posx *= 0.99;
             }
             base.posx += base.speedX;
             base.mouse_mvt.x = 0;
@@ -77,10 +80,10 @@ define([
             var now = new Date();
             var offset = 0;
             base.ctx.save();
-            base.ctx.translate(base.posx, 0);
+            base.ctx.translate(base.posx + base.originx, 0);
             var burndown = [];
             var worked = 0
-            for (var i = now.getDate() - base.day; i <= now.getDate() + 365 - base.day; i++) {
+            for (var i = now.getDate() - 100; i <= now.getDate() + 100; i++) {
                 var dstart = new Date();
                 dstart.setDate(i);
                 dstart.setHours(0,0,0,0);
@@ -98,21 +101,48 @@ define([
                     }
                 }
                 var height = work_amount / 3600000 * 5;
-                base.ctx.fillStyle = "rgba(0,0,0,0.9)";
+
                 if (now > dstart && now < dend) {
-                    base.ctx.fillStyle = "rgba(255,0,0,0.9)";
+                    base.ctx.fillStyle = "rgba(0,0,0,0.05)";
+                    base.ctx.beginPath();
+                    base.ctx.rect(offset, 0, base.daywidth, base.canvas.height);
+                    base.ctx.fill();
                 }
+                if (base.deadline) {
+                    if (base.deadline > dstart && base.deadline < dend) {
+                        base.ctx.fillStyle = "rgba(255,0,0,0.1)";
+                        base.ctx.beginPath();
+                        base.ctx.rect(offset, 0, base.daywidth, base.canvas.height);
+                        base.ctx.fill();
+                    }
+                }
+
+                base.ctx.fillStyle = "rgba(0,0,0,0.9)";
                 base.ctx.beginPath();
                 base.ctx.rect(offset, base.canvas.height - 15 - height, base.daywidth, height);
 
+
+                var hours =work_amount / 3600000;
+                if (Math.round(hours) == hours) {
+                    hours = Math.round(hours);
+                } else {
+                    hours = hours.toFixed(1);
+                }
+                if (hours > 0) {
+                    var metrics = base.ctx.measureText(hours + "h");
+                    base.ctx.fillText(hours + "h", offset + base.daywidth / 2 - metrics.width / 2,  base.canvas.height - 15 - height - 3);
+                }
                 var metrics = base.ctx.measureText(dstart.getDate());
                 base.ctx.fillText(dstart.getDate(), offset + base.daywidth / 2 - metrics.width / 2 ,  base.canvas.height);
                 base.ctx.fill();
                 worked += work_amount;
-                burndown.push({
-                    x: offset + 7,
-                    worked: worked
-                });
+
+                if (!base.start || base.start < dend) {
+                    burndown.push({
+                        x: offset + 7,
+                        worked: worked
+                    });
+                }
                 offset += base.daywidth + 1;
             }
             base.ctx.beginPath();

@@ -314,7 +314,7 @@ class Task extends \Model
         $required_time = $this->required_time;
         if (!$this->children->isEmpty())
         {
-//            $required_time = 0;
+            $required_time = 0;
             foreach ($this->children as $child)
             {
                 $required_time += $child->getRequiredTime();
@@ -467,7 +467,7 @@ class Task extends \Model
             "description" => $this->description,
             "required_time" => $this->getRequiredTime(),
             "owner" => $this->owner->toArray(0),
-            "creation_date" => $this->creation_date,
+            "creation_date" => $this->creation_date * 1000,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,

@@ -42,9 +42,9 @@ define([
 
             var template = _.template(MainViewTemplate, {});
             base.$el.html(template);
-            var workload_timeline_view = new WorkloadTimelineView(base.task.get("planned_tasks", base.task.get("required_time")));
+            var workload_timeline_view = new WorkloadTimelineView(base.task.get("planned_tasks"));
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
-            workload_timeline_view.init(base.SmartBlocks);
+            workload_timeline_view.init(base.SmartBlocks, base.task.get("required_time"), base.task.getDueDate(), new Date(base.task.get("creation_date")));
         },
         update: function () {
             var base = this;
