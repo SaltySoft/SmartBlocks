@@ -10,11 +10,10 @@ define([
 ], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection, TaskTag, TaskTagsCollection) {
 
 
-
     var Task = Backbone.Model.extend({
         urlRoot: "/Organization/Tasks",
         defaults: {
-            "model_type" : "Task"
+            "model_type": "Task"
         },
         getDueDate: function () {
             return new Date(this.get("due_date") * 1000);
@@ -90,8 +89,6 @@ define([
             }
 
 
-
-
             return response;
         },
         initialize: function (model) {
@@ -109,7 +106,6 @@ define([
                     }
                     this.attributes.children = subtasks;
                 }
-
 
 
                 var planned_tasks_array = model.planned_tasks;
@@ -159,6 +155,28 @@ define([
                 if (model.owner && !model.owner.attributes)
                     this.attributes.owner = owner;
             }
+        },
+        fullyPlanned: function () {
+            var base = this;
+            var worked_time = 0;
+            var now = new Date();
+            var planned_tasks = base.attributes.planned_tasks.models;
+            for (var k in planned_tasks) {
+                var pt = planned_tasks[k];
+                var start = pt.getStart();
+                var end = new Date(start);
+                end.setTime(end.getTime() + pt.get("duration"));
+
+                worked_time += pt.get("duration");
+            }
+
+            if (!base.get("due_date")) {
+                return false;
+            } else {
+                return  (worked_time >= base.get("required_time") && base.getDueDate() < now);
+            }
+
+
         }
     });
 

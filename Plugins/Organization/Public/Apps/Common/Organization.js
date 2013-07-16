@@ -7,6 +7,7 @@ define([
         getTimeString:function (time) {
             var display = "";
 
+
             var hours = time / 3600000;
             if (hours >= 1) {
                 display += Math.floor(hours) + "h";

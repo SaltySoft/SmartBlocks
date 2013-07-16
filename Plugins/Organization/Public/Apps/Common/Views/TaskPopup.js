@@ -32,6 +32,17 @@ define([
             base.$el.html(popup);
 
             $("body").prepend(base.$el);
+            var elt = base.$el.find(".task_type");
+            if (base.task.get("due_date")) {
+                elt.val(0);
+            }
+
+
+            if (elt.val() == 1) {
+                base.$el.find(".for_deadlines").hide();
+            } else {
+                base.$el.find(".for_deadlines").show();
+            }
         },
         saveTask:function () {
             var base = this;
