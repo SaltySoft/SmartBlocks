@@ -6,8 +6,9 @@ define([
     'Organization/Apps/Common/Views/TasksList',
     'Organization/Apps/Common/Views/WorkloadTimeline',
     'Organization/Apps/Common/Views/PlannedTasksList',
+    'Organization/Apps/Common/Views/TaskTagItem',
     'Organization/Apps/TasksShow/Views/TimeStats'
-], function ($, _, Backbone, TaskPreviewTemplate, TasksListView, WorkloadTimelineView, PlannedTasksListView, TimeStatsView) {
+], function ($, _, Backbone, TaskPreviewTemplate, TasksListView, WorkloadTimelineView, PlannedTasksListView, TaskTagItem, TimeStatsView) {
     var View = Backbone.View.extend({
         tagName:"div",
         className:"task_preview",
@@ -64,6 +65,13 @@ define([
             var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
             base.$el.find(".planned_tasks_list_container").html(planned_tasks_list.$el);
             planned_tasks_list.init(base.SmartBlocks);
+
+            var task_tags = base.task.get("tags").models;
+            for (var k in task_tags) {
+                var task_tag_item = new TaskTagItem(task_tags[k]);
+                base.$el.find(".task_tags_panel").append(task_tag_item.$el);
+                task_tag_item.init(base.SmartBlocks, undefined);
+            }
         },
         registerEvents:function () {
             var base = this;
