@@ -79,7 +79,6 @@ class PlannedTask extends \Model
      */
     private $owner;
 
-
     public function __construct()
     {
         $this->start = time();
@@ -182,6 +181,7 @@ class PlannedTask extends \Model
     {
         return $this->owner;
     }
+
 
     public function getContent($force = false)
     {

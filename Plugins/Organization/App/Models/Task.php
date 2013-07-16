@@ -434,6 +434,23 @@ class Task extends \Model
         return $planned;
     }
 
+    private static function getUserActivities($task)
+    {
+        $activities = array();
+
+        foreach ($task->getActivities() as $activity)
+        {
+            if ($activity->getCreator() == \User::current_user())
+                $activities[] = $activity->toArray(false);
+        }
+
+
+        if (is_object($task->parent)) {
+            $activities = array_merge($activities, self::getUserActivities($task->parent));
+        }
+
+        return $activities;
+    }
 
     public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true)
     {
@@ -468,9 +485,12 @@ class Task extends \Model
 
             foreach ($this->activities as $activity)
             {
-                $activities[] = $activity->toArray(false);
+                if ($activity->getCreator() == \User::current_user())
+                    $activities[] = $activity->toArray(false);
             }
             $array["activities"] = $activities;
+            $acts = self::getUserActivities($this);
+            $array["activity"] = isset($acts[0]) ? $acts[0] : null;
         }
 
         if ($show_task_users)
