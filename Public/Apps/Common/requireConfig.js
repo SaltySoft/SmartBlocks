@@ -31,7 +31,6 @@ var sb_paths = {
     amplify_lib: "/javascript/amplify.min",
     amplify: "/javascript/amplify.min",
     fullCalendar: "/javascript/fullcalendar.min"
-
 };
 
 var sb_shims = {

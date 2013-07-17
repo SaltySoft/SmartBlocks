@@ -62,15 +62,25 @@ define([
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
             workload_timeline_view.init(base.SmartBlocks);
 
-            var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
-            base.$el.find(".planned_tasks_list_container").html(planned_tasks_list.$el);
-            planned_tasks_list.init(base.SmartBlocks);
+            if (base.task.get("planned_tasks").length > 0) {
+                var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
+                base.$el.find(".planned_tasks_list_container").html(planned_tasks_list.$el);
+                planned_tasks_list.init(base.SmartBlocks);
+            }
+            else {
+                base.$el.find(".planned_tasks_list_container").html("No work time planned.");
+            }
 
             var task_tags = base.task.get("tags").models;
-            for (var k in task_tags) {
-                var task_tag_item = new TaskTagItem(task_tags[k]);
-                base.$el.find(".task_tags_panel").append(task_tag_item.$el);
-                task_tag_item.init(base.SmartBlocks, undefined);
+            if (task_tags.length > 0) {
+                for (var k in task_tags) {
+                    var task_tag_item = new TaskTagItem(task_tags[k]);
+                    base.$el.find(".task_tags_panel").append(task_tag_item.$el);
+                    task_tag_item.init(base.SmartBlocks, undefined);
+                }
+            }
+            else {
+                base.$el.find(".task_tags_panel").append("No tags associated.");
             }
         },
         registerEvents:function () {
@@ -85,7 +95,7 @@ define([
                     base.task.destroy({
                         success:function () {
                             base.$el.addClass("empty");
-                            base.parent.events.trigger("loaded_tasks");
+                            base.parent.events.trigger("task_deleted");
                         },
                         error:function () {
                         }

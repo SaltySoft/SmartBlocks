@@ -36,9 +36,11 @@ define([
             if (base.task.get("due_date")) {
                 elt.val(0);
             }
+            if (base.task.get('required_time') > 0){
+                base.$el.find("#required_time").val(base.task.get('required_time') / 3600000);
+            }
 
-
-            if (elt.val() == 1) {
+            if (elt.val() == 0) {
                 base.$el.find(".for_deadlines").hide();
             } else {
                 base.$el.find(".for_deadlines").show();
@@ -47,10 +49,10 @@ define([
         saveTask:function () {
             var base = this;
             base.task.set("name", base.$el.find("#form_task_name").val());
-            if (base.$el.find(".task_type").val() == 0) {
-                base.task.set("required_time", base.$el.find(".required_time").val() * 3600000);
-                var date = new Date(base.$el.find("#form_task_date").val());
 
+            base.task.set("required_time", base.$el.find(".required_time").val() * 3600000);
+            if (base.$el.find(".task_type").val() == 1) {
+                var date = new Date(base.$el.find("#form_task_date").val());
                 date.setHours(base.$el.find(".hour").val());
                 date.setMinutes(base.$el.find(".minute").val());
                 date.setSeconds(0);
@@ -109,7 +111,7 @@ define([
 
             base.$el.find(".task_type").change(function () {
                 var elt = $(this);
-                if (elt.val() == 1) {
+                if (elt.val() == 0) {
                     base.$el.find(".for_deadlines").hide();
                 } else {
                     base.$el.find(".for_deadlines").show();

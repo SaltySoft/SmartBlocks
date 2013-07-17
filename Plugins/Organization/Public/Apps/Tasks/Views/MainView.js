@@ -53,16 +53,16 @@ define([
 
             base.tasks_list.fetch({
                 success: function () {
-                    console.log(base.tasks_list.models);
+//                    console.log(base.tasks_list.models);
                     base.SmartBlocks.stopLoading();
-                    console.log(base.tasks_list);
+//                    console.log(base.tasks_list);
                     base.renderList();
                 }
             });
         },
         renderList: function () {
             var base = this;
-            console.log(base.tasks_list);
+//            console.log(base.tasks_list);
             var tasks_list = base.tasks_list.models;
             var list_container = base.$el.find(".tasks_list");
             list_container.html("");
@@ -77,7 +77,7 @@ define([
             }
             for (var k in tasks_list) {
                 var task = tasks_list[k];
-                console.log(getWeekNumber(task.getDueDate()), getWeekNumber(base.current_date));
+//                console.log(getWeekNumber(task.getDueDate()), getWeekNumber(base.current_date));
                 if (getWeekNumber(task.getDueDate())[0] == getWeekNumber(base.current_date)[0] && getWeekNumber(task.getDueDate())[1] == getWeekNumber(base.current_date)[1])  {
                     if (date.getTime() != task.getDueDate().getTime()) {
                         date = task.getDueDate();
@@ -101,7 +101,7 @@ define([
                         name: "New task",
                         due_date: new Date().getTime() / 1000
                     });
-                    console.log(TaskPopupView);
+//                    console.log(TaskPopupView);
                     var popup_view = new TaskPopupView(task);
                     popup_view.events.on("task_updated", function (task) {
                         base.render();

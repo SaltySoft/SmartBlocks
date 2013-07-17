@@ -84,8 +84,8 @@ class TasksController extends \Controller
 
         if (isset($data["name"]) && $data["name"] != "")
         {
-            $qb->andWhere("t.name LIKE :name")
-                ->setParameter("name", '%' . $data["name"] . '%');
+            $qb->andWhere("upper(t.name) LIKE :name")
+                ->setParameter("name", '%' . strtoupper($data["name"]) . '%');
         }
 
         if (isset($data["tags_str"]) && $data["tags_str"] != "")

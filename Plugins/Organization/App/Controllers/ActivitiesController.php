@@ -24,7 +24,7 @@ class ActivitiesController extends \Controller
         }
         if (isset($data["name"]))
         {
-            $qb->andWhere("activity.name LIKE :name")->setParameter('name', $data["name"] . '%');
+            $qb->andWhere("upper(activity.name) LIKE :name")->setParameter('name', '%' . strtoupper($data["name"]) . '%');
         }
 
         if (isset($data["type"]) && $data["type"] != 0)
@@ -32,7 +32,6 @@ class ActivitiesController extends \Controller
             $qb->leftJoin('activity.type', 'type')
                 ->andWhere('type.id = :id')->setParameter('id', $data["type"]);
         }
-
 
         $qb->setParameter("user", \User::current_user());
         $result = $qb->getQuery()->getResult();

@@ -67,8 +67,6 @@ define([
             next_planned = parseInt(next_planned);
             base.$el.find(".past_planned_time").html((past_planned / 3600000).toFixed(2));
             base.$el.find(".next_planned_time").html((next_planned / 3600000).toFixed(2));
-            console.log("required_time", base.task.get("required_time"));
-            console.log("past_planned + next_planned", past_planned + next_planned);
             var difference = ((base.task.get("required_time") - (past_planned + next_planned)) / 3600000).toFixed(2);
             base.$el.find(".planned_time_difference").html(difference > 0 ? difference : 0);
         },

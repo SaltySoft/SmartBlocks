@@ -72,6 +72,10 @@ define([
         registerEvents:function () {
             var base = this;
 
+            base.events.on("task_deleted", function () {
+                base.loadTasks();
+            });
+
             base.SmartBlocks.events.on("org_new_task", function (task) {
                 base.tasks.add(task);
                 base.events.trigger("loaded_tasks");

@@ -25,7 +25,7 @@ define([
             var base = this;
             var activity = undefined;
             var activities_list = base.get("activities");
-            console.log(activities_list);
+//            console.log(activities_list);
             for (var k in activities_list) {
                 var current_activity = activities_list[k];
                 if (current_activity.creator.id == user.get('id')) {

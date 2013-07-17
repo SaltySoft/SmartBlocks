@@ -44,7 +44,7 @@ define([
                 var end = new Date(start);
                 var duration = parseInt(planned_task.get("duration"));
                 end.setTime(end.getTime() + duration);
-                console.log(planned_task.get("task").get("activity"));
+//                console.log(planned_task.get("task").get("activity"));
                 var event = {
                     title: planned_task.get("content") ? planned_task.get("content") : "Untitled",
                     start: start,

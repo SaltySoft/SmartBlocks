@@ -8,13 +8,13 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks'
 ], function ($, _, Backbone, ActivityPreviewTemplate, TasksListView, WorkloadTimelineView, PlannedTasksCollection) {
     var View = Backbone.View.extend({
-        tagName: "div",
-        className: "activity_preview",
-        initialize: function (model) {
+        tagName:"div",
+        className:"activity_preview",
+        initialize:function (model) {
             var base = this;
             base.activity = model;
         },
-        init: function (SmartBlocks, parent) {
+        init:function (SmartBlocks, parent) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.parent = parent;
@@ -22,20 +22,24 @@ define([
             base.render();
             base.registerEvents();
         },
-        render: function () {
+        render:function () {
             var base = this;
             var template = _.template(ActivityPreviewTemplate, {
-                activity: base.activity
+                activity:base.activity
             });
             base.$el.html(template);
             if (!base.activity) {
                 base.$el.addClass("empty");
             } else {
                 base.$el.removeClass("empty");
-                var tasks_list = new TasksListView(base.activity.get("tasks"));
-                base.$el.find(".tasks_list_container").html(tasks_list.$el);
-                tasks_list.init(base.SmartBlocks);
-
+                if (base.activity.get("tasks").length > 0) {
+                    var tasks_list = new TasksListView(base.activity.get("tasks"));
+                    base.$el.find(".tasks_list_container").html(tasks_list.$el);
+                    tasks_list.init(base.SmartBlocks);
+                }
+                else {
+                    base.$el.find(".tasks_list_container").html("No tasks found.");
+                }
                 if (base.activity.get("archived")) {
                     base.$el.addClass("archived");
                 } else {
@@ -60,9 +64,8 @@ define([
             }
 
 
-
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
             base.parent.events.on("activity_clicked", function (activity) {
                 base.activity = activity;
@@ -72,7 +75,7 @@ define([
             base.$el.delegate(".archive_button", "click", function () {
                 base.activity.set("archived", !base.activity.get("archived"));
                 base.activity.save({}, {
-                    success: function () {
+                    success:function () {
 
                         if (base.activity.get("archived")) {
                             base.$el.addClass("archived");
@@ -88,11 +91,11 @@ define([
             base.$el.delegate(".deletion_button", "click", function () {
                 if (confirm("Are you sure you want to delete this activity ?")) {
                     base.activity.destroy({
-                        success: function () {
+                        success:function () {
                             base.$el.addClass("empty");
                             base.parent.events.trigger("loaded_activities");
                         },
-                        error: function () {
+                        error:function () {
 
                         }
                     });
