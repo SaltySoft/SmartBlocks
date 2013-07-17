@@ -95,7 +95,7 @@ define([
                     base.task.destroy({
                         success:function () {
                             base.$el.addClass("empty");
-                            base.parent.events.trigger("loaded_tasks");
+                            base.parent.events.trigger("task_deleted");
                         },
                         error:function () {
                         }
