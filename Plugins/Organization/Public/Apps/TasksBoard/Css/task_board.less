@@ -79,7 +79,7 @@
 
         .tasks_list_container {
             height: calc(~'100% - 35px');
-            overflow-y: scroll;
+            overflow-y: overlay;
         }
         .task_creation_button {
             position: absolute;
@@ -92,6 +92,15 @@
     .task_preview_container {
         .task_prev {
             display: block;
+
+            .task_info {
+                position: absolute;
+                left: 9px;
+                width: 46%;
+                bottom: 294px;
+                top: 10px;
+                overflow-y: overlay;
+            }
 
             .workload_timeline_container {
                 background: @elts_bg;
@@ -117,17 +126,16 @@
                 width: 46%;
                 bottom: 90px;
                 top: 190px;
-                overflow-y: scroll;
+                overflow-y: overlay;
                 background: @elts_bg;
             }
             .task_tags_container {
                 position: absolute;
                 left: 9px;
                 right: 9px;
-                bottom: 45px;
+                bottom: 44px;
                 top: 372px;
-                overflow-y: scroll;
-                background: @elts_bg;
+                overflow-y: overlay;
 
                 .task_tags_panel {
                     .task_tag_item {
@@ -187,7 +195,7 @@
             width: 48%;
             bottom: 90px;
             top: 190px;
-            overflow-y: scroll;
+            overflow-y: overlay;
             background: @elts_bg;
         }
     }
