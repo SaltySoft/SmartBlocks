@@ -48,7 +48,7 @@ class TaskTagsController extends \Controller
     {
         $tag = new TaskTag();
         $data = $this->getRequestData();
-        $tags = TaskTag::where(array("name" => $data["name"]));
+        $tags = TaskTag::where(array("name" => $data["name"], "creator"=> \User::current_user()));
         if ($data["name"] != "" && !isset($tags[0])) {
             $tag->setName($data["name"]);
             $tag->setCreator(\User::current_user());

@@ -8,14 +8,14 @@ define([
     'Organization/Apps/Common/Organization'
 ], function ($, _, Backbone, DeadlineThumbnailTemplate, DeadlineClock, DeadlineProgressBar, Organization) {
     var View = Backbone.View.extend({
-        tagName: "div",
-        className: "deadline_thumbnail_view",
-        initialize: function (task) {
+        tagName:"div",
+        className:"deadline_thumbnail_view",
+        initialize:function (task) {
             var base = this;
             base.task = task;
             base.events = $.extend({}, Backbone.Events);
         },
-        init: function (SmartBlocks, class_to_add) {
+        init:function (SmartBlocks, class_to_add) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
 
@@ -26,11 +26,11 @@ define([
             base.render();
             base.registerEvents();
         },
-        render: function () {
+        render:function () {
             var base = this;
 
             var template = _.template(DeadlineThumbnailTemplate, {
-                task: base.task
+                task:base.task
             });
             base.$el.html(template);
 
@@ -51,12 +51,12 @@ define([
             }, 500);
 
         },
-        update: function () {
+        update:function () {
             var base = this;
             base.$el.find(".status").html("");
             var date = base.task.getDueDate();
             var due_on = (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + (date.getMonth() < 10 ? '0' : '') + (date.getMonth() + 1) + '/' + date.getFullYear();
-            var due_hour = (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '')  + date.getMinutes();
+            var due_hour = (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
 
             base.$el.find(".due_on_d").html("Due on " + due_on);
             base.$el.find(".due_hour").html("At " + due_hour);
@@ -69,14 +69,13 @@ define([
                 base.$el.find(".status").html("The deadline is passed");
             } else {
                 base.$el.find(".timeleft").html("- " + Organization.getFullTimeString(timeleft));
-
-                if (base.deadline_progress_bar.planned_time && base.deadline_progress_bar.missing_time) {
-                    var ttal_time = base.deadline_progress_bar.planned_time + base.deadline_progress_bar.missing_time;
-                    if (timeleft < ttal_time) {
-                        base.$el.find(".status").html("You'll be late");
-                    } else {
-                        base.$el.find(".status").html("You'll be ok");
-                    }
+                var plannedt = base.deadline_progress_bar.planned_time ? base.deadline_progress_bar.planned_time : 0;
+                var missingt = base.deadline_progress_bar.planned_time ? base.deadline_progress_bar.missing_time : 0;
+                var ttal_time = base.deadline_progress_bar.planned_time + base.deadline_progress_bar.missing_time;
+                if (timeleft < ttal_time) {
+                    base.$el.find(".status").html("You'll be late");
+                } else {
+                    base.$el.find(".status").html("You'll be ok");
                 }
 
             }
@@ -87,7 +86,7 @@ define([
 
 
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
 
             base.$el.delegate(".completed_button", "click", function () {

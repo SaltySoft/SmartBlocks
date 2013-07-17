@@ -72,7 +72,7 @@ define([
             var end = base.task.getDueDate();
             if (now > end) {
                 ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 5, 0, 2 * Math.PI, false);
-                if (missing_time <= 0) {
+                if (missing_time + planned_time <= 60000) {
                     ctx.fillStyle = "#3da02b";
                 } else {
                     ctx.fillStyle = "#a62000";
@@ -89,7 +89,7 @@ define([
                 ctx.stroke();
                 ctx.fill();
                 ctx.fillStyle = "white";
-                if (missing_time <= 5 * 60000) {
+                if (missing_time + planned_time <= 60000) {
                     var metrics = ctx.measureText("OK");
                     ctx.fillText("OK", canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
                 } else {

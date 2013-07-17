@@ -75,7 +75,7 @@ define([
             ctx.fillStyle = "white";
             var metrics = ctx.measureText(planned_time / 3600000);
             if (planned_time / required_time * canvas.width > 20)
-                ctx.fillText((planned_time / 3600000).toFixed(1), planned_time / required_time * canvas.width / 2 + completex - metrics.width / 2, canvas.height / 2 - 3);
+                ctx.fillText((planned_time / 3600000).toFixed(1), planned_time / required_time * canvas.width / 2 + completex, canvas.height / 2 - 3);
 
             ctx.beginPath();
             ctx.rect(plannedx, 0, missing_time / required_time * canvas.width, canvas.height);
@@ -84,7 +84,7 @@ define([
             ctx.fillStyle = "white";
             var metrics = ctx.measureText(missing_time / 3600000);
             if (planned_time / required_time * canvas.width > 20)
-                ctx.fillText((missing_time / 3600000).toFixed(1), missing_time / required_time * canvas.width / 2 + plannedx - metrics.width / 2, canvas.height / 2 - 3);
+                ctx.fillText((missing_time / 3600000).toFixed(1), missing_time / required_time * canvas.width / 2 + plannedx, canvas.height / 2 - 3);
         },
         run: function () {
             var base = this;
