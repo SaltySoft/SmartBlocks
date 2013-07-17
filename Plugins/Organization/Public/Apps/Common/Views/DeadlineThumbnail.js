@@ -15,9 +15,13 @@ define([
             base.task = task;
             base.events = $.extend({}, Backbone.Events);
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, class_to_add) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+
+            if (class_to_add) {
+                base.$el.addClass(class_to_add);
+            }
 
             base.render();
             base.registerEvents();

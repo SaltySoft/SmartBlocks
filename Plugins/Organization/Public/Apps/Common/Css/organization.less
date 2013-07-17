@@ -67,13 +67,16 @@
   cursor: pointer;
 
   display: block;
-  padding: 3px;
+  padding: 5px;
+
   color: gray;
+
   text-decoration: none;
 }
 
 .add_tag_button:hover {
   background: #0076a3;
+
 }
 
 .task_list_item {
@@ -115,8 +118,10 @@
 }
 
 .deadline_thumbnail_view {
+  width: 300px;
+  padding: 10px;
+
   position: relative;
-  margin: 5px;
   a {
     padding: 5px;
     width: calc(~"50% - 12px");
@@ -140,6 +145,14 @@
 
   .time_desc {
 
+  }
+}
 
+.deadline_thumbnail_view.inpage {
+  .name {
+    display: none;
+  }
+  .controls {
+    display: none;
   }
 }

@@ -9,8 +9,9 @@ define([
     'Organization/Apps/Common/Views/TaskPopup',
     './TimeStats',
     'Organization/Apps/Common/Views/TaskTags',
-    'Organization/Apps/Common/Views/WorkloadTimeline'
-], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView, WorkloadTimelineView) {
+    'Organization/Apps/Common/Views/WorkloadTimeline',
+    'Organization/Apps/Common/Views/DeadlineThumbnail'
+], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView, WorkloadTimelineView, DeadlineThumbnail) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_show_main_view loading",
@@ -73,9 +74,15 @@ define([
 //            base.$el.find(".planned_tasks_container").html(planned_tasks_list.$el);
 //            planned_tasks_list.init(base.SmartBlocks);
 
-            var time_stats_view = new TimeStatsView(base.task);
-            base.$el.find(".time_stats_container").html(time_stats_view.$el);
-            time_stats_view.init(base.SmartBlocks);
+//            var time_stats_view = new TimeStatsView(base.task);
+//            base.$el.find(".time_stats_container").html(time_stats_view.$el);
+//            time_stats_view.init(base.SmartBlocks);
+
+            if (base.task.get("due_date")) {
+                var deadline_information_view = new DeadlineThumbnail(base.task);
+                base.$el.find(".time_stats_container").html(deadline_information_view.$el);
+                deadline_information_view.init(base.SmartBlocks, "inpage");
+            }
 
             var task_tags_view = new TaskTagsView(base.task);
             base.$el.find(".tags_container").html(task_tags_view.$el);
