@@ -107,10 +107,22 @@
                 margin-top: 5px;
             }
             .subtasks_list_container {
-                margin-right: 5px;
+                position: absolute;
+                left: 9px;
+                width: 46%;
+                bottom: 90px;
+                top: 190px;
+                overflow-y: scroll;
+                background: @elts_bg;
             }
             .task_tags_container {
-                margin-top: 5px;
+                position: absolute;
+                left: 9px;
+                right: 9px;
+                bottom: 45px;
+                top: 372px;
+                overflow-y: scroll;
+                background: @elts_bg;
 
                 .task_tags_panel {
                     .task_tag_item {
@@ -167,8 +179,8 @@
         .planned_tasks_list_container {
             position: absolute;
             right: 9px;
-            width: 50%;
-            bottom: 50px;
+            width: 48%;
+            bottom: 90px;
             top: 190px;
             overflow-y: scroll;
             background: @elts_bg;
