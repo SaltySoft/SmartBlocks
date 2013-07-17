@@ -167,13 +167,13 @@ define([
                 var end = new Date(start);
                 end.setTime(end.getTime() + pt.get("duration"));
 
-                worked_time += pt.get("duration");
+                worked_time += pt.get("duration");z
             }
 
             if (!base.get("due_date")) {
                 return false;
             } else {
-                return  (worked_time >= base.get("required_time") && base.getDueDate() < now);
+                return  (worked_time >= base.get("required_time"));
             }
 
 

@@ -11,7 +11,6 @@ define([
             base.canvas = canvas;
             base.ctx = base.canvas.getContext('2d');
             base.total_amount = total_amount;
-            console.log();
             base.clicked = false;
             base.mouse_pos = {x: 0, y:0};
             base.mouse_mvt = {x: 0, y:0};
@@ -27,16 +26,6 @@ define([
             base.buttons.push(new Button(base, ">>", 70, 10, 50, 20, function () {
                 base.speedX -= 20;
             }));
-
-//            base.buttons.push(new Button(base, "-", 130, 10, 50, 20, function () {
-//                base.daywidth -= 1;
-//                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
-//            }));
-//
-//            base.buttons.push(new Button(base, "+", 190, 10, 50, 20, function () {
-//                base.daywidth += 1;
-//                base.posx = -base.day * (base.daywidth + 1) + (base.daywidth + 1) * 15;
-//            }));
 
             base.registerEvents();
             base.run();

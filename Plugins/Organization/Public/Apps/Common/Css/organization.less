@@ -88,17 +88,18 @@
   margin-bottom: 1px;
 }
 
-.task_list_item:hover,.task_list_item.overdue:hover {
+.task_list_item:hover, .task_list_item.overdue:hover {
   background: white;
 }
+
 .planned_task_popup {
   padding: 10px;
   background: white;
   position: fixed;
   top: -90px;
   z-index: 1000;
-  box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
-  color:black;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  color: black;
 
   #form_content {
     width: 175px;
@@ -110,5 +111,20 @@
     padding: 2px;
     width: 50px;
     width: 86px;
+  }
+}
+
+.deadline_thumbnail_view {
+  position: relative;
+  margin: 5px;
+  a {
+    padding: 5px;
+    width: calc(~"50% - 12px");
+  }
+  .controls {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 100px;
   }
 }
