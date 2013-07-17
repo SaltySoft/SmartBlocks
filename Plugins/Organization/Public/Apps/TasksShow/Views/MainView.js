@@ -49,6 +49,11 @@ define([
         },
         update: function () {
             var base = this;
+            if (base.task.get("completion_date")) {
+                 base.$el.addClass("completed");
+            } else {
+                base.$el.removeClass("completed");
+            }
             base.$el.find(".name").html(base.task.get("name"));
             base.$el.find(".description").html(base.task.get("description") != "" ? base.task.get("description") : "No description");
             if (base.task.get("parent") !== undefined && base.task.get("parent") !== null) {
@@ -146,6 +151,37 @@ define([
                             base.SmartBlocks.show_message("Deletion failed");
                         }
                     });
+                }
+            });
+
+            base.$el.delegate(".completed_button", "click", function () {
+                if (base.task.get("completion_date")) {
+                    base.task.get("completion_date")
+                    base.$el.removeClass("completed");
+
+                    base.task.set("completion_date", null);
+                    base.task.save({}, {
+                        success: function () {
+                            base.SmartBlocks.show_message("Successfully changed task status");
+
+                        },
+                        error: function () {
+                            base.SmartBlocks.show_message("Could not change task status");
+                            base.$el.addClass("completed");
+                        }
+                    });
+                } else {
+                    base.task.set("completion_date", new Date().getTime() / 1000);
+                    base.task.save({}, {
+                        success: function () {
+                            base.SmartBlocks.show_message("Successfully changed task status");
+                        },
+                        error: function () {
+                            base.SmartBlocks.show_message("Could not change task status");
+                            base.$el.removeClass("completed");
+                        }
+                    });
+                    base.$el.addClass("completed");
                 }
             });
         }
