@@ -1,75 +1,76 @@
 .planning_view {
-  width: 1000px;
-  margin: auto;
-  margin-top: 50px;
-  padding: 10px;
-  background: white;
+    width: 1000px;
+    margin: auto;
+    margin-top: 50px;
+    padding: 10px;
+    background: white;
 
-
-
-  .planning_task_item {
-    position: relative;
-    .item_desc {
-      padding: 5px;
-      color: white;
-      background: #0094cc;
-      margin-bottom: 1px;
-      cursor: pointer;
+    .activity_tree_container {
+        margin-right: 5px;
     }
 
-    &.overdue .item_desc {
-      padding: 5px;
-      color: white;
-      background: rgba(204, 0, 0, 0.6);
-      margin-bottom: 1px;
-      cursor: pointer;
+    .planning_task_item {
+        position: relative;
+        .item_desc {
+            padding: 5px;
+            color: white;
+            background: #0094cc;
+            margin-bottom: 1px;
+            cursor: pointer;
+        }
+
+        &.overdue .item_desc {
+            padding: 5px;
+            color: white;
+            background: rgba(204, 0, 0, 0.6);
+            margin-bottom: 1px;
+            cursor: pointer;
+        }
+
+        .type {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1px #d3d3d3 solid;
+        }
+
+        .view_link {
+            position: absolute;
+            right: 5px;
+        }
+        .children_button {
+            display: none;
+        }
+
+        .children_container {
+            margin-left: 10px;
+            display: none;
+        }
     }
 
-    .type {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border: 1px #d3d3d3 solid;
+    .planning_task_item.parent {
+        > div > .children_button {
+            display: inline;
+        }
     }
 
-    .view_link {
-      position: absolute;
-      right: 5px;
-    }
-    .children_button {
-      display: none;
+    .planning_task_item.parent.expanded {
+        > .children_container {
+            display: block;
+        }
     }
 
-    .children_container {
-      margin-left: 10px;
-      display: none;
-    }
-  }
+    .planning_task_item.ui-draggable-dragging {
+        z-index: 1000;
+        > .item_desc {
+            height: 100px;
+            width: 100px;
+            position: absolute;
+        }
 
-
-  .planning_task_item.parent {
-    > div > .children_button {
-      display: inline;
+        .children_container .item_desc {
+            display: none;
+        }
     }
-  }
-
-  .planning_task_item.parent.expanded {
-     > .children_container {
-      display: block;
-    }
-  }
-
-  .planning_task_item.ui-draggable-dragging {
-    z-index: 1000;
-    > .item_desc {
-      height: 100px;
-      width: 100px;
-      position: absolute;
-    }
-
-    .children_container .item_desc {
-      display: none;
-    }
-  }
 
 }

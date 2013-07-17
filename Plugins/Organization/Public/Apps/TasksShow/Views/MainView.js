@@ -13,19 +13,19 @@ define([
     'Organization/Apps/Common/Views/DeadlineThumbnail'
 ], function ($, _, Backbone, MainViewTemplate, TasksListView, PlannedTasksListView, Task, TaskPopup, TimeStatsView, TaskTagsView, WorkloadTimelineView, DeadlineThumbnail) {
     var View = Backbone.View.extend({
-        tagName: "div",
-        className: "task_show_main_view loading",
-        initialize: function (task) {
+        tagName:"div",
+        className:"task_show_main_view loading",
+        initialize:function (task) {
             var base = this;
             base.model = task;
             base.task = task;
         },
-        init: function (SmartBlocks) {
+        init:function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.prerender();
             base.task.fetch({
-                success: function () {
+                success:function () {
                     base.$el.removeClass("loading");
                     base.render();
                     base.update();
@@ -33,12 +33,12 @@ define([
                 }
             });
         },
-        prerender: function () {
+        prerender:function () {
             var base = this;
             var template = _.template(MainViewTemplate, {});
             base.$el.html(template);
         },
-        render: function () {
+        render:function () {
             var base = this;
 
             var template = _.template(MainViewTemplate, {});
@@ -47,10 +47,10 @@ define([
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
             workload_timeline_view.init(base.SmartBlocks, base.task.get("required_time"), base.task.getDueDate(), new Date(base.task.get("creation_date")));
         },
-        update: function () {
+        update:function () {
             var base = this;
             if (base.task.get("completion_date")) {
-                 base.$el.addClass("completed");
+                base.$el.addClass("completed");
             } else {
                 base.$el.removeClass("completed");
             }
@@ -64,16 +64,16 @@ define([
                 } else {
                     base.$el.find(".parent_task_link").html("No parent");
                 }
-
             }
 
-
-            var subtask_list_view = new TasksListView(base.task.get("children"));
-            base.$el.find(".subtasks_container").html(subtask_list_view.$el);
-            subtask_list_view.init(base.SmartBlocks, function () {
-
-            });
-
+            if (base.task.get("children").length > 0) {
+                var subtask_list_view = new TasksListView(base.task.get("children"));
+                base.$el.find(".subtasks_container").html(subtask_list_view.$el);
+                subtask_list_view.init(base.SmartBlocks, function () {
+                });
+            } else {
+                base.$el.find(".subtasks_container").html("No subtasks found.");
+            }
 
 //            var planned_tasks_list = new PlannedTasksListView(base.task.get("planned_tasks"));
 //            base.$el.find(".planned_tasks_container").html(planned_tasks_list.$el);
@@ -96,13 +96,13 @@ define([
             var task_tags_view = new TaskTagsView(base.task);
             base.$el.find(".tags_container").html(task_tags_view.$el);
             task_tags_view.init(base.SmartBlocks, {
-                main: function (tag) {
+                main:function (tag) {
                     alert(tag.get("name"));
                 },
-                context: [
+                context:[
                     {
-                        name: "Remove",
-                        callback: function (tag) {
+                        name:"Remove",
+                        callback:function (tag) {
                             base.task.get("tags").remove(tag);
                             base.update();
                             base.task.save();
@@ -111,7 +111,7 @@ define([
                 ]
             });
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
 
             base.$el.delegate(".add_task_button", "click", function () {
@@ -123,7 +123,7 @@ define([
                 var task_popup = new TaskPopup(task);
                 task_popup.init(base.SmartBlocks, function () {
                     base.task.fetch({
-                        success: function () {
+                        success:function () {
                             base.update();
                         }
                     });
@@ -148,10 +148,10 @@ define([
                     }
                     window.location = id ? "#tasks/" + id : "#tasks";
                     base.task.destroy({
-                        success: function () {
+                        success:function () {
                             base.SmartBlocks.show_message("Successfully deleted task");
                         },
-                        error: function () {
+                        error:function () {
                             base.SmartBlocks.show_message("Deletion failed");
                         }
                     });
@@ -165,11 +165,11 @@ define([
 
                     base.task.set("completion_date", null);
                     base.task.save({}, {
-                        success: function () {
+                        success:function () {
                             base.SmartBlocks.show_message("Successfully changed task status");
 
                         },
-                        error: function () {
+                        error:function () {
                             base.SmartBlocks.show_message("Could not change task status");
                             base.$el.addClass("completed");
                         }
@@ -177,10 +177,10 @@ define([
                 } else {
                     base.task.set("completion_date", new Date().getTime() / 1000);
                     base.task.save({}, {
-                        success: function () {
+                        success:function () {
                             base.SmartBlocks.show_message("Successfully changed task status");
                         },
-                        error: function () {
+                        error:function () {
                             base.SmartBlocks.show_message("Could not change task status");
                             base.$el.removeClass("completed");
                         }
