@@ -95,7 +95,7 @@ define([
                 date.setHours(23, 59, 59, 00);
                 var task = new Task();
                 task.setDueDate(date);
-                var popup_view = new TaskPopupView(task);
+                var popup_view = new TaskPopupView(task, undefined);
                 popup_view.init(base.SmartBlocks);
             });
         }
