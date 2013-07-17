@@ -2,8 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!Organization/Apps/Common/Templates/task_popup.html'
-], function ($, _, Backbone, TaskPopupTemplate) {
+    'text!Organization/Apps/Common/Templates/task_popup.html',
+    'Organization/Apps/Common/Models/Activity',
+    'Organization/Apps/Common/Collections/Activities'
+], function ($, _, Backbone, TaskPopupTemplate, Activity, ActivitiesCollection) {
     var TaskPopup = Backbone.View.extend({
         tagName:"div",
         className:"cache task_popup_container",
@@ -16,9 +18,24 @@ define([
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.callback = callback;
+            base.activities = new ActivitiesCollection();
 
-            base.render();
+            if (!base.callback) {
+                base.loadActivities();
+            }
+            else {
+                base.render();
+            }
             base.registerEvents();
+        },
+        loadActivities:function () {
+            var base = this;
+            base.activities.fetch({
+                success:function () {
+//                    base.events.trigger("loaded_activities");
+                    base.render();
+                }
+            });
         },
         render:function () {
             var base = this;
@@ -26,6 +43,7 @@ define([
             popup.addClass("task_popup");
             var template = _.template(TaskPopupTemplate, {
                 task:base.task,
+                activities:base.activities.models,
                 activity:base.task.getActivityForUser(base.SmartBlocks.current_user)
             });
             popup.html(template);
@@ -36,7 +54,7 @@ define([
             if (base.task.get("due_date")) {
                 elt.val(0);
             }
-            if (base.task.get('required_time') > 0){
+            if (base.task.get('required_time') > 0) {
                 base.$el.find("#required_time").val(base.task.get('required_time') / 3600000);
             }
 
@@ -63,6 +81,7 @@ define([
             }
 
             base.task.set("description", base.$el.find(".form_description").val());
+
             if (base.task.get("name") != "") {
                 base.task.save({}, {
                     success:function () {
@@ -73,6 +92,22 @@ define([
                         base.SmartBlocks.events.trigger("org_new_task", base.task);
                         if (base.callback) {
                             base.callback(base.task);
+                        }
+                        else {
+                            if (!base.task.get("parent")) {
+                                var activity_id = base.$el.find("#form_task_activity").val();
+                                var activity = new Activity({ id:activity_id});
+                                activity.fetch({
+                                    success:function () {
+                                        activity.get('tasks').add(base.task);
+                                        activity.save({}, {
+                                            success:function () {
+                                                console.log("adding task to activity");
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         }
                     }
                 });
