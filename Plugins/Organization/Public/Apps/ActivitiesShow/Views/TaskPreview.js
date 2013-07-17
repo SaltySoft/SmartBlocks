@@ -31,13 +31,13 @@ define([
             base.$el.html(template);
 
             var tasks = base.task.get('children');
-            console.log(tasks);
+//            console.log(tasks);
             var task_list_view = new TasksListView(tasks);
             base.$el.find(".subtasks_container").html(task_list_view.$el);
             task_list_view.init(base.SmartBlocks);
 
             var collection = base.task.get("planned_tasks");
-            console.log(collection);
+//            console.log(collection);
             var planned_tasks_list = new PlannedTasksListView(collection);
             base.$el.find(".planned_tasks_container").html(planned_tasks_list.$el);
             planned_tasks_list.init(base.SmartBlocks);
