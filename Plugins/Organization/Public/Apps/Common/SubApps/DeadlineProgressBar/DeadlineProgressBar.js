@@ -49,6 +49,9 @@ define([
             missing_time = required_time - planned_time - completed_time;
             missing_time = missing_time < 0 ? 0 : missing_time;
 
+            base.planned_time = planned_time;
+            base.missing_time = missing_time;
+
             var canvas = base.canvas;
             var ctx = base.ctx;
 

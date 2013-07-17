@@ -41,8 +41,8 @@ define([
             var canvas_p = base.$el.find(".progress_bar");
 
 
-            var deadline_clock = new DeadlineClock(canvas_c[0], base.task);
-            var deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
+            base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
+            base.deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
 
             base.update()
             var timer = setInterval(function () {
@@ -53,7 +53,7 @@ define([
         },
         update: function () {
             var base = this;
-
+            base.$el.find(".status").html("");
             var date = base.task.getDueDate();
             var due_on = (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + (date.getMonth() < 10 ? '0' : '') + (date.getMonth() + 1) + '/' + date.getFullYear();
             var due_hour = (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '')  + date.getMinutes();
@@ -66,9 +66,21 @@ define([
 
             if (now > date) {
                 base.$el.find(".timeleft").html("+ " + Organization.getFullTimeString(timeleft));
+                base.$el.find(".status").html("The deadline is passed");
             } else {
                 base.$el.find(".timeleft").html("- " + Organization.getFullTimeString(timeleft));
+
+                if (base.deadline_progress_bar.planned_time && base.deadline_progress_bar.missing_time) {
+                    var ttal_time = base.deadline_progress_bar.planned_time + base.deadline_progress_bar.missing_time;
+                    if (timeleft < ttal_time) {
+                        base.$el.find(".status").html("You'll be late");
+                    } else {
+                        base.$el.find(".status").html("You'll be ok");
+                    }
+                }
             }
+
+
 
         },
         registerEvents: function () {
