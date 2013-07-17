@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!../Templates/deadline_thumbnail.html',
     '../SubApps/DeadlineClock/DeadlineClock',
-    '../SubApps/DeadlineProgressBar/DeadlineProgressBar'
-], function ($, _, Backbone, DeadlineThumbnailTemplate, DeadlineClock, DeadlineProgressBar) {
+    '../SubApps/DeadlineProgressBar/DeadlineProgressBar',
+    'Organization/Apps/Common/Organization'
+], function ($, _, Backbone, DeadlineThumbnailTemplate, DeadlineClock, DeadlineProgressBar, Organization) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "deadline_thumbnail_view",
@@ -38,6 +39,32 @@ define([
 
             var deadline_clock = new DeadlineClock(canvas_c[0], base.task);
             var deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
+
+            base.update()
+            var timer = setInterval(function () {
+                if (base.$el.height() > 0)
+                    base.update()
+            }, 500);
+
+        },
+        update: function () {
+            var base = this;
+
+            var date = base.task.getDueDate();
+            var due_on = (date.getDate() < 10 ? '0' : '') + date.getDate() + '/' + (date.getMonth() < 10 ? '0' : '') + (date.getMonth() + 1) + '/' + date.getFullYear();
+            var due_hour = (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '')  + date.getMinutes();
+
+            base.$el.find(".due_on_d").html("Due on " + due_on);
+            base.$el.find(".due_hour").html("At " + due_hour);
+
+            var now = new Date();
+            var timeleft = Math.abs(date.getTime() - now.getTime());
+
+            if (now > date) {
+                base.$el.find(".timeleft").html("+ " + Organization.getFullTimeString(timeleft));
+            } else {
+                base.$el.find(".timeleft").html("- " + Organization.getFullTimeString(timeleft));
+            }
 
         },
         registerEvents: function () {

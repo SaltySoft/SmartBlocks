@@ -68,7 +68,6 @@ define([
             ctx.rect(plannedx,0, missing_time / required_time * canvas.width, canvas.height);
             ctx.fillStyle = "#a62000";
             ctx.fill();
-            console.log("asd");
         },
         run: function () {
             var base = this;
