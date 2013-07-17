@@ -1,9 +1,7 @@
 @elts_bg: whitesmoke;
 
-
-
 .task_show_main_view {
-
+  height: 483px;
 
   .for_finished {
     display: none;
@@ -75,8 +73,6 @@
 
   }
 
-
-
   .task_tags_view {
 
     h3 {
@@ -87,8 +83,6 @@
       width: 100%;
     }
   }
-
-
 
   .workload_timeline_container {
     background: @elts_bg;
@@ -113,9 +107,19 @@
     }
   }
 
+  .time_stats_container.empty {
+    height: 135px;
+    padding: 10px;
+    line-height: 135px;
+    width: 336px;
+    text-align: center;
+    font-size: 1.5em;
+    color: #c9c9c9;
+  }
 
   .time_stats_container {
     background: #f5f5f5;
+
     .deadline_thumbnail_view {
       margin: auto;
     }
