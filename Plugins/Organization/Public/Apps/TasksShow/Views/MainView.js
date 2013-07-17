@@ -87,6 +87,10 @@ define([
                 var deadline_information_view = new DeadlineThumbnail(base.task);
                 base.$el.find(".time_stats_container").html(deadline_information_view.$el);
                 deadline_information_view.init(base.SmartBlocks, "inpage");
+                base.$el.find(".time_stats_container").removeClass("empty");
+            } else {
+                base.$el.find(".time_stats_container").addClass("empty");
+                base.$el.find(".time_stats_container").html("This task is not a deadline");
             }
 
             var task_tags_view = new TaskTagsView(base.task);
