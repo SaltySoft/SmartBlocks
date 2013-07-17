@@ -9,7 +9,7 @@ define([
             base.canvas = canvas;
             base.task = task;
             base.ctx = base.canvas.getContext('2d');
-            base.registerEvents();
+//            base.registerEvents();
             base.run();
         },
         logic: function () {
@@ -51,31 +51,45 @@ define([
 
             base.planned_time = planned_time;
             base.missing_time = missing_time;
+            base.completed_time = completed_time;
 
             var canvas = base.canvas;
             var ctx = base.ctx;
 
             ctx.beginPath();
             var completex = completed_time / required_time * canvas.width;
-            ctx.rect(0,0, completed_time / required_time * canvas.width, canvas.height);
+            ctx.rect(0, 0, completed_time / required_time * canvas.width, canvas.height);
             ctx.fillStyle = "#3da02b";
             ctx.fill();
+            ctx.fillStyle = "white";
+            var metrics = ctx.measureText(completed_time / 3600000);
+            if (completed_time / required_time * canvas.width > 20)
+                ctx.fillText((completed_time / 3600000).toFixed(1), completex / 2, canvas.height / 2 - 3);
+
 
             ctx.beginPath();
             var plannedx = completex + planned_time / required_time * canvas.width;
-            ctx.rect(completex,0, planned_time / required_time * canvas.width, canvas.height);
+            ctx.rect(completex, 0, planned_time / required_time * canvas.width, canvas.height);
             ctx.fillStyle = "#1d7373";
             ctx.fill();
+            ctx.fillStyle = "white";
+            var metrics = ctx.measureText(planned_time / 3600000);
+            if (planned_time / required_time * canvas.width > 20)
+                ctx.fillText((planned_time / 3600000).toFixed(1), planned_time / required_time * canvas.width / 2 + completex - metrics.width / 2, canvas.height / 2 - 3);
 
             ctx.beginPath();
-            ctx.rect(plannedx,0, missing_time / required_time * canvas.width, canvas.height);
+            ctx.rect(plannedx, 0, missing_time / required_time * canvas.width, canvas.height);
             ctx.fillStyle = "#a62000";
             ctx.fill();
+            ctx.fillStyle = "white";
+            var metrics = ctx.measureText(missing_time / 3600000);
+            if (planned_time / required_time * canvas.width > 20)
+                ctx.fillText((missing_time / 3600000).toFixed(1), missing_time / required_time * canvas.width / 2 + plannedx - metrics.width / 2, canvas.height / 2 - 3);
         },
         run: function () {
             var base = this;
 
-            base.ctx.clearRect(0,0,base.canvas.width, base.canvas.height);
+            base.ctx.clearRect(0, 0, base.canvas.width, base.canvas.height);
 
             base.logic();
             base.draw();

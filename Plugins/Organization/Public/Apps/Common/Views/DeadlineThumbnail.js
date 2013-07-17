@@ -78,8 +78,12 @@ define([
                         base.$el.find(".status").html("You'll be ok");
                     }
                 }
-            }
 
+            }
+            if (base.deadline_progress_bar.completed_time !== undefined) {
+
+                base.$el.find(".timeontime").html((base.deadline_progress_bar.completed_time / 3600000).toFixed(1) + "h / " + (base.task.get("required_time") / 3600000).toFixed(1) + "h done");
+            }
 
 
         },

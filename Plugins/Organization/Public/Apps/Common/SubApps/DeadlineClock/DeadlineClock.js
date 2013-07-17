@@ -69,6 +69,7 @@ define([
             ctx.lineTo(canvas.width / 2, canvas.height / 2);
             ctx.closePath();
             ctx.fillStyle = "#dddddd";
+            var end = base.task.getDueDate();
             if (now > end) {
                 ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 5, 0, 2 * Math.PI, false);
                 if (missing_time <= 0) {
@@ -78,7 +79,9 @@ define([
                 }
             }
             ctx.fill();
+
             if (now > end) {
+
                 ctx.beginPath();
                 ctx.strokeStyle = "rgba(0,0,0,0.5)";
                 ctx.fillStyle = "rgba(0,0,0,0.2)";
@@ -86,14 +89,13 @@ define([
                 ctx.stroke();
                 ctx.fill();
                 ctx.fillStyle = "white";
-                if (missing_time <= 0) {
+                if (missing_time <= 5 * 60000) {
                     var metrics = ctx.measureText("OK");
                     ctx.fillText("OK", canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
                 } else {
                     var metrics = ctx.measureText("Late");
                     ctx.fillText("Late", canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
                 }
-
             }
         },
         run: function () {
