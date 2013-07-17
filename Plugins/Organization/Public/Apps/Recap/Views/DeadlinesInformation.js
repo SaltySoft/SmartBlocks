@@ -54,6 +54,11 @@ define([
 
 
             }
+
+            if (base.deadlines.models.length < 1) {
+                console.log(base.deadlines.models);
+                base.$el.find(".deadlines_container").html('<div style="text-align: center; height: 50px; line-height: 50px">No current deadline</div>');
+            }
             base.$el.find(".deadlines_container").append('<div class="clearer"></div>');
         },
         registerEvents: function () {
