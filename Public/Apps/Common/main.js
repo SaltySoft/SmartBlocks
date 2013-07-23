@@ -1,7 +1,7 @@
 requirejs.config({
-    baseUrl: '/',
-    paths: sb_paths,
-    shim: sb_shims
+    baseUrl:'/',
+    paths:sb_paths,
+    shim:sb_shims
 });
 
 /*Fill with default apps (file sharing and chat)*/
@@ -90,6 +90,5 @@ $(document).ready(function () {
                     SmartBlocks.heartBeat(current_user);
                 }, 5000);
             });
-
         });
 });

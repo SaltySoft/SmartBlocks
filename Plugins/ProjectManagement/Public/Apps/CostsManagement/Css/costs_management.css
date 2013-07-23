@@ -1,0 +1,48 @@
+.pm_costs_management {
+    padding: 15px;
+}
+
+.pm_costs_management .role_creation_form input {
+    padding: .5em .6em;
+    height: 30px;
+}
+
+.pm_costs_management .informations {
+    padding: 10px;
+    margin: 10px;
+    background-color: rgb(204, 216, 218);
+    border-radius: 15px;
+    width: 40%;
+}
+
+.pm_costs_management .role_container {
+
+}
+
+.pm_costs_management .role_container .role_info {
+
+}
+
+.pm_costs_management tbody tr td.editing {
+    background: #ffffff;
+    padding: 0px;
+    height: 25px;
+}
+
+.pm_costs_management .display {
+    /*height: 100%;*/
+}
+
+.pm_costs_management .edition {
+    /*height: 100%;*/
+    display: none;
+}
+
+.pm_costs_management .role_td input[type=text] {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+    border-radius: 0px;
+    border: none;
+    text-align: center;
+}
