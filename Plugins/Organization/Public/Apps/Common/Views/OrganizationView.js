@@ -7,9 +7,16 @@ define([
     'Organization/Apps/Tasks/Views/MainView',
     'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Recap/Views/MainView',
+    'Organization/Apps/ActivitiesIndex/Views/MainView',
+    'Organization/Apps/ActivitiesShow/Views/MainView',
+    'Organization/Apps/TasksBoard/Views/MainView',
+    'Organization/Apps/TasksShow/Views/MainView',
+    'Organization/Apps/Planning/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
+    'Organization/Apps/Common/Models/Activity',
+    'Organization/Apps/Tasks/Models/Task',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, TaskUsersCollection, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TaskUsersCollection, Activity, Task, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -27,7 +34,12 @@ define([
                     "week" : "week",
                     "month" : "month",
                     "daily": "daily",
-                    "recap": "recap"
+                    "recap": "recap",
+                    "activities": "activitiesIndex",
+                    "activities/:id": "activitiesShow",
+                    "tasks/:id": "tasksShow",
+                    "tasks":"tasksBoard",
+                    "planning": "planning"
                 },
                 week: function () {
                     base.launchWeek();
@@ -40,6 +52,21 @@ define([
                 },
                 recap: function () {
                     base.launchRecap();
+                },
+                activitiesIndex: function () {
+                    base.launchActivitiesIndex();
+                },
+                tasksBoard:function () {
+                    base.launchTasksBoard();
+                },
+                activitiesShow: function (id) {
+                    base.launchActivitiesShow(id);
+                },
+                tasksShow: function (id) {
+                    base.launchTasksShow(id);
+                },
+                planning: function () {
+                    base.launchPlanningView();
                 }
             });
 
@@ -52,7 +79,7 @@ define([
             var template = _.template(Template, {});
             base.$el.html(template);
         },
-        registereEvents: function () {
+        registerEvents: function () {
             var base = this;
             base.$el.delegate(".control_bar a", "click", function () {
                 var elt = $(this);
@@ -100,6 +127,50 @@ define([
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.recap").addClass("selected");
             base.setContent(base.current_view.$el);
+        },
+        launchActivitiesIndex: function () {
+            var base = this;
+            base.current_view = new ActivitiesIndexView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchTasksBoard:function () {
+            var base = this;
+
+            base.current_view = new TasksBoardView();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.tasks").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchActivitiesShow: function (id) {
+            var base = this;
+            var activity = new Activity({ id: id });
+            base.current_view = new ActivitiesShowView(activity);
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchTasksShow : function (id) {
+            var base = this;
+            var task = new Task({ id: id });
+            base.current_view = new TasksShow(task);
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchPlanningView: function () {
+            var base = this;
+            base.current_view = new PlanningView();
+
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.planning").addClass("selected");
+            base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
         },
         checkForNotifications: function () {
             var base = this;

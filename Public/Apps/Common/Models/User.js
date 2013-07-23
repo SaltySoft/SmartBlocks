@@ -41,7 +41,6 @@ define([
         }
     });
     User.getCurrent = function (callback) {
-        console.log("trying to get current user");
 //        if (amplify.store("current_user")) {
 //            console.log(amplify.store("current_user"));
 //            var user = new User(amplify.store("current_user"));
@@ -67,7 +66,7 @@ define([
 //        }
 
     }
-
+    window.User = User;
     return User;
 });
 

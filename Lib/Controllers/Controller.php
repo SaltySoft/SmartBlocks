@@ -277,8 +277,24 @@ class Controller
         echo json_encode($response);
     }
 
-    protected function json_error($message)
+    protected function json_error($message, $status = 200)
     {
+        if ($status == 200)
+        {
+            header("HTTP/1.0 200 OK");
+        }
+        else
+        {
+            if ($status == 404)
+            {
+                header("HTTP/1.0 404 Not Found");
+            }
+
+            if ($status == 401)
+                header("HTTP/1.0 401 Unauthorized");
+            if ($status == 406)
+                header("HTTP/1.0 406 Not Acceptable");
+        }
         $this->return_json(array("success" => false, "error" => true, "message" => $message));
     }
 

@@ -38,13 +38,13 @@ class TasksController extends \Controller
 
         $em = \Model::getEntityManager();
 
-
         $qb = $em->createQueryBuilder();
 
         if (\User::current_user() != null)
             $qb->select("t")
                 ->from("\\Organization\\Task", "t")
                 ->leftJoin("t.linked_users", "tu")
+                ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
                 ->setParameter("user", \User::current_user())
@@ -56,6 +56,7 @@ class TasksController extends \Controller
             $qb->select("t")
                 ->from("\\Organization\\Task", "t")
                 ->leftJoin("t.linked_users", "tu")
+                ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
                 ->setParameter("user", $user)
@@ -67,10 +68,10 @@ class TasksController extends \Controller
         {
             $start = new \DateTime();
             $start->setTimestamp($data["date"]);
-            $start->setTime(0,0,0);
+            $start->setTime(0, 0, 0);
             $end = new \DateTime();
             $end->setTimestamp($data["date"]);
-            $end->setTime(23,59,59);
+            $end->setTime(23, 59, 59);
             $qb->andWhere("(t.due_date >= :start_date AND t.due_date < :stop_date)")
                 ->setParameter("start_date", $start)
                 ->setParameter("stop_date", $end);
@@ -79,6 +80,34 @@ class TasksController extends \Controller
         if (isset($data["filter"]) && $data["filter"] = "undone")
         {
             $qb->andWhere("t.completion_date is NULL");
+        }
+
+        if (isset($data["name"]) && $data["name"] != "")
+        {
+            $qb->andWhere("upper(t.name) LIKE :name")
+                ->setParameter("name", '%' . strtoupper($data["name"]) . '%');
+        }
+
+        if (isset($data["tags_str"]) && $data["tags_str"] != "")
+        {
+            $tags_id = explode(",", $data["tags_str"]);
+            $tags_query = "";
+            foreach ($tags_id as $tag_id)
+            {
+                $tag = TaskTag::find($tag_id);
+                if (is_object($tag))
+                {
+                    if ($tags_query != "")
+                        $tags_query .= " OR ";
+                    $tags_query .= "ta = :tag" . $tag_id;
+                }
+                $qb->setParameter("tag" . $tag_id, $tag);
+            }
+
+            if ($tags_query != "")
+            {
+                $qb->andWhere($tags_query);
+            }
         }
 
         $results = $qb->getQuery()->getResult();
@@ -105,9 +134,17 @@ class TasksController extends \Controller
         $task = new Task;
 
         $task->setName($data["name"]);
-        $due_date = new \DateTime();
-        $due_date->setTimestamp($data["due_date"]);
-        $task->setDueDate($due_date);
+        $task->setDescription(isset($data["description"]) ? $data["description"] : "");
+        if (isset($data["required_time"]))
+        {
+            $task->setRequiredTime($data["required_time"]);
+        }
+        if (isset($data["due_date"]))
+        {
+            $due_date = new \DateTime();
+            $due_date->setTimestamp($data["due_date"]);
+            $task->setDueDate($due_date);
+        }
 
         if (isset($_GET["token"]) && $_GET["token"] != "")
         {
@@ -116,8 +153,60 @@ class TasksController extends \Controller
             $task->setOwner($user);
         }
 
-        $task->save();
+        if (isset($data["tags"]))
+        {
+            foreach ($data["tags"] as $tag_a)
+            {
+                $tag = TaskTag::find($tag_a);
+                if (is_object($tag))
+                {
+                    $task->getTags()->add($tag);
+                }
+            }
+        }
 
+        if (isset($data["parent"]))
+        {
+            if (is_array($data["parent"]))
+            {
+                $parent = Task::find($data["parent"]["id"]);
+                if (is_object($parent))
+                {
+                    $task->setParent($parent);
+                }
+            }
+            else
+            {
+                $task->setParent(null);
+            }
+        }
+
+        if (isset($data["children"]))
+        {
+            $task->getChildren()->clear();
+            foreach ($data["children"] as $child_a)
+            {
+                $child = Task::find($child_a["id"]);
+                if (is_object($child))
+                {
+                    $task->getChildren()->add($child);
+                }
+            }
+        }
+
+        if (isset($data["activities"]))
+        {
+            if (is_array($data["activities"]))
+            {
+                $activity = Activity::find($data["activity"]["id"]);
+                if (is_object($activity))
+                {
+                    $task->getActivities()->add($activity);
+                }
+            }
+        }
+
+        $task->save();
         $this->render = false;
         header("Content-Type: application/json");
         echo json_encode($task->toArray());
@@ -157,11 +246,48 @@ class TasksController extends \Controller
         {
             $data = $this->getRequestData();
             $task->setName($data["name"]);
+            $task->setDescription(isset($data["description"]) ? $data["description"] : "");
             $task->setCompletionDate($data["completion_date"]);
             $task->setOrderIndex($data["order_index"]);
-            $due_date = new \DateTime();
-            $due_date->setTimestamp($data["due_date"]);
-            $task->setDueDate($due_date);
+            if (isset($data["required_time"]))
+            {
+                $task->setRequiredTime($data["required_time"]);
+            }
+
+            if (isset($data["due_date"]))
+            {
+                $due_date = new \DateTime();
+                $due_date->setTimestamp($data["due_date"]);
+                $task->setDueDate($due_date);
+            }
+            else
+            {
+                $task->setDueDate(null);
+            }
+
+            if (isset($data["parent"]))
+            {
+                $parent = Task::find($data["parent"]["id"]);
+                if (is_object($parent))
+                {
+                    $task->setParent($parent);
+                }
+            }
+
+
+            if (isset($data["tags"]))
+            {
+                $task->getTags()->clear();
+
+                foreach ($data["tags"] as $tag_a)
+                {
+                    $tag = TaskTag::find($tag_a["id"]);
+                    if (is_object($tag))
+                    {
+                        $task->getTags()->add($tag);
+                    }
+                }
+            }
 
 //            foreach ($data["linked_users"] as $user_array)
 //            {
@@ -186,6 +312,28 @@ class TasksController extends \Controller
 //                    $task_user->save();
 //                }
 //            }
+            $em = \Model::getEntityManager();
+            if (isset($data["children"]))
+            {
+
+                foreach ($task->getChildren() as $child)
+                {
+                    $child->setParent(null);
+                    $em->persist($child);
+                }
+
+
+                foreach ($data["children"] as $child_a)
+                {
+                    $child = Task::find($child_a["id"]);
+                    if (is_object($child))
+                    {
+                        $child->setParent($task);
+                        $em->persist($child);
+                    }
+                }
+                $em->flush();
+            }
 
             $task->save();
             echo json_encode($task->toArray());
@@ -205,19 +353,15 @@ class TasksController extends \Controller
 
         $this->render = false;
         header("Content-Type: application/json");
-        $task = \Organization\Task::find($params["id"]);
+        $task = Task::find($params["id"]);
 
         if (is_object($task))
         {
-            foreach ($task->getPlannedTasks() as $planned_task)
-            {
-                $planned_task->setTask(null);
-                $planned_task->setActive(false);
-                $planned_task->save();
-            }
 
-            $task->setActive(false);
-            $task->save();
+
+//            $task->setActive(false);
+//            $task->save();
+            $task->delete();
             echo json_encode(array("success" => true));
         }
         else
@@ -302,7 +446,7 @@ class TasksController extends \Controller
                 $em = \Model::getEntityManager();
                 $qb = $em->createQueryBuilder();
                 $stop = clone $date;
-                $stop->modify("+".($planned_task->getDuration() / 1000)." seconds");
+                $stop->modify("+" . ($planned_task->getDuration() / 1000) . " seconds");
                 $qb->select("task")
                     ->from('\Organization\Task', 'task')
                     ->where('task.due_date >= :date')
@@ -312,7 +456,7 @@ class TasksController extends \Controller
                     ->setParameter('user', \User::current_user())
                     ->setParameter('name', $event->getSummary());
                 $tasks = $qb->getQuery()->getResult();
-                echo $event->getSummary()."SUMMARY" . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600))) . " " . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600);
+                echo $event->getSummary() . "SUMMARY" . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600))) . " " . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600);
                 if (isset($tasks[0]))
                 {
                     $task = $tasks[0];
@@ -346,12 +490,12 @@ class TasksController extends \Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select("pt")
-                ->from('\Organization\PlannedTask', 'pt')
-                ->leftJoin("pt.task", "task")
-                ->where("task.owner = :user")
-                ->setParameter("user", \User::current_user())
-                ->andWhere("pt.gcal_id is not NULL")
-                ->andWhere("pt.active = true");
+            ->from('\Organization\PlannedTask', 'pt')
+            ->leftJoin("pt.task", "task")
+            ->where("task.owner = :user")
+            ->setParameter("user", \User::current_user())
+            ->andWhere("pt.gcal_id is not NULL")
+            ->andWhere("pt.active = true");
         $i = 0;
         foreach ($ids as $id)
         {

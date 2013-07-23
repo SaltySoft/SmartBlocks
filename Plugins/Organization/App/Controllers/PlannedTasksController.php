@@ -12,6 +12,7 @@ class PlannedTasksController extends \Controller
         $qb->select("pt")
             ->from("\\Organization\\PlannedTask", "pt")
             ->where("pt.owner = :user")
+
             ->andWhere('pt.active = true')
             ->setParameter("user", \User::current_user());
 
@@ -86,6 +87,27 @@ class PlannedTasksController extends \Controller
         $planned_task->save();
         $response = $planned_task->toArray();
 
+//        if (isset($data["users"]))
+//        {
+//            if (is_array($data["users"]))
+//            {
+//                foreach ($data["users"] as $user_a)
+//                {
+//                    $user = \User::find($user_a["id"]);
+//                    if (is_object($user))
+//                    {
+//                        $invite = new PlannedTaskInvite();
+//                        $invite->setUser($user);
+//                        $invite->setPlannedTask($planned_task);
+//                        $invite->save();
+//                    }
+//                }
+//            }
+//        }
+
+
+
+
 
         $this->render = false;
         header("Content-type: application/json");
@@ -123,6 +145,39 @@ class PlannedTasksController extends \Controller
             $planned_task->setCompleted($data["completed"]);
             $planned_task->setContent($data["content"]);
             $planned_task->save();
+
+
+            if (isset($data["users"]))
+            {
+                $em = \Model::getEntityManager();
+                $qb = $em->createQueryBuilder();
+
+                $qb->select("pti")->from('\Organization\PlannedTaskInvite', 'pti')
+                    ->where("pti.planned_task = :planned_task")->setParameter("planned_task", $planned_task);
+
+                foreach ($qb->getQuery()->getResult() as $pti)
+                {
+                    $pti->delete();
+                }
+
+//                if (is_array($data["users"]))
+//                {
+////                    print_r($data["users"]);
+//                    foreach ($data["users"] as $user_a)
+//                    {
+//                        $user = \User::find($user_a["id"]);
+//                        if (is_object($user))
+//                        {
+//                            $invite = new PlannedTaskInvite();
+//                            $invite->setUser($user);
+//                            $invite->setPlannedTask($planned_task);
+//                            $invite->save();
+//                        }
+//                    }
+//                }
+            }
+
+
             $response = $planned_task->toArray();
         }
         else

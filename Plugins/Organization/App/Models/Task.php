@@ -41,6 +41,11 @@ class Task extends \Model
     private $name;
 
     /**
+     * @Column(type="text")
+     */
+    private $description;
+
+    /**
      * @ManyToOne(targetEntity="\User")
      */
     private $owner;
@@ -95,15 +100,46 @@ class Task extends \Model
      */
     private $type;
 
+    /**
+     * @ManyToMany(targetEntity="\Organization\Activity", mappedBy="tasks")
+     */
+    private $activities;
+
+    /**
+     * @ManyToMany(targetEntity="\Organization\TaskTag", inversedBy="tasks")
+     */
+    private $tags;
+
+    /**
+     * @ManyToOne(targetEntity="\Organization\Task")
+     */
+    private $parent;
+
+    /**
+     * @OneToMany(targetEntity="\Organization\Task", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @Column(type="bigint")
+     */
+    private $required_time;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
         $this->name = "New task";
+        $this->description = "";
         $this->creation_date = time();
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->last_updated = time();
         $this->active = true;
+        $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->required_time = 0;
+        $this->planned_tasks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -233,11 +269,67 @@ class Task extends \Model
         return $this->type;
     }
 
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setRequiredTime($required_time)
+    {
+        $this->required_time = $required_time;
+    }
+
+    public function getRequiredTime()
+    {
+        $required_time = $this->required_time;
+        if (!$this->children->isEmpty())
+        {
+            $required_time = 0;
+            foreach ($this->children as $child)
+            {
+                $required_time += $child->getRequiredTime();
+            }
+        }
+        return $required_time;
+    }
+
+
+
     public static function getTypes()
     {
-        if (file_exists(ROOT.DS."Plugins".DS."Organization".DS."Config".DS."task_types.json"))
+        if (file_exists(ROOT . DS . "Plugins" . DS . "Organization" . DS . "Config" . DS . "task_types.json"))
         {
-            $contents = file_get_contents(ROOT.DS."Plugins".DS."Organization".DS."Config".DS."task_types.json");
+            $contents = file_get_contents(ROOT . DS . "Plugins" . DS . "Organization" . DS . "Config" . DS . "task_types.json");
             return json_decode($contents, true);
         }
         else
@@ -265,7 +357,8 @@ class Task extends \Model
         {
             foreach ($project["items"] as $item)
             {
-                if ($item["due_date"] != null) {
+                if ($item["due_date"] != null)
+                {
                     $task = new Task();
                     $date = new \DateTime($item["due_date"]);
                     $task->setDueDate($date->getTimestamp() - 23 * 3600 - 59 * 60 - 59);
@@ -305,6 +398,17 @@ class Task extends \Model
 
     function delete()
     {
+        foreach ($this->getPlannedTasks() as $planned_task)
+        {
+//                $planned_task->setTask(null);
+//                $planned_task->setActive(false);
+//                $planned_task->save();
+            $planned_task->delete();
+        }
+        foreach ($this->getChildren() as $child)
+        {
+            $child->delete();
+        }
         \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
             "app" => "organizer",
             "action" => "task_deleted",
@@ -313,19 +417,82 @@ class Task extends \Model
         parent::delete();
     }
 
-
-    public function toArray($show_task_users = true)
+    private static function getAllPlannedTasks(Task $task)
     {
+        $planned = array();
+
+        foreach ($task->planned_tasks as $planned_task) {
+
+            if ($planned_task->getActive())
+            $planned[] = $planned_task->toArray(true, false);
+
+        }
+
+        foreach ($task->children as $stask) {
+            $planned = array_merge($planned, self::getAllPlannedTasks($stask));
+        }
+
+        return $planned;
+    }
+
+    private static function getUserActivities($task)
+    {
+        $activities = array();
+
+        foreach ($task->getActivities() as $activity)
+        {
+            if ($activity->getCreator() == \User::current_user())
+                $activities[] = $activity->toArray(false);
+        }
+
+
+        if (is_object($task->parent)) {
+            $activities = array_merge($activities, self::getUserActivities($task->parent));
+        }
+
+        return $activities;
+    }
+
+    public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true)
+    {
+        $tags = array();
+        foreach ($this->tags as $tag)
+        {
+            $tags[] = $tag->toArray();
+        }
+
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
-            "owner" => $this->owner->toArray(),
-            "creation_date" => $this->creation_date,
+            "description" => $this->description,
+            "required_time" => $this->getRequiredTime(),
+            "owner" => $this->owner->toArray(0),
+            "creation_date" => $this->creation_date * 1000,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
-            "due_date" => $this->due_date->getTimeStamp(),
-            "type" => $this->type != null ? $this->type->toArray() : null
+            "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
+            "type" => $this->type != null ? $this->type->toArray() : null,
+            "tags" => $tags
         );
+
+        if ($show_children) {
+            $planned_tasks = self::getAllPlannedTasks($this);
+            $array["planned_tasks"] = $planned_tasks;
+        }
+
+        if ($show_activities)
+        {
+            $activities = array();
+
+            foreach ($this->activities as $activity)
+            {
+                if ($activity->getCreator() == \User::current_user())
+                    $activities[] = $activity->toArray(false);
+            }
+            $array["activities"] = $activities;
+            $acts = self::getUserActivities($this);
+            $array["activity"] = isset($acts[0]) ? $acts[0] : null;
+        }
 
         if ($show_task_users)
         {
@@ -336,6 +503,27 @@ class Task extends \Model
             }
             $array["task_users"] = $linked_users;
         }
+        if ($show_parent)
+        {
+            $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false,false,true, false) : null;
+        }
+
+        if ($show_children)
+        {
+            $children = array();
+            $em = \Model::getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select("task")->from('\Organization\Task', 'task');
+            $qb->where("task.parent = :parent")->setParameter("parent", $this);
+            $result = $qb->getQuery()->getResult();
+
+            foreach ($result as $child)
+            {
+                $children[] = $child->toArray(false, false, false, true);
+            }
+            $array["children"] = $children;
+        }
+
         return $array;
     }
 }

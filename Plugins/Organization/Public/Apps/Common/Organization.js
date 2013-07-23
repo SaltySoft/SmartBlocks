@@ -8,7 +8,7 @@ define([
             var display = "";
 
 
-            var hours = time/ 3600000;
+            var hours = time / 3600000;
             if (hours >= 1) {
                 display += Math.floor(hours) + "h";
             }
@@ -22,6 +22,31 @@ define([
             if (sec >= 1 && time < 15 * 60000) {
                 display += " " + Math.floor(sec) + "s";
             }
+            return display;
+        },
+        getFullTimeString: function (time) {
+            var display = "";
+
+            var milliseconds = time;
+
+            var days = milliseconds / ( 24 * 3600 * 1000);
+            if (days >= 1) {
+                display += Math.floor(days) + "d ";
+            }
+
+            var hours = (days - Math.floor(days)) * 24;
+            if (hours >= 1 && days <= 3)
+                display += Math.floor(hours) + "h ";
+
+            var minutes = (hours - Math.floor(hours)) * 60;
+            if (milliseconds < 1000 * 3600 * 24 && milliseconds > 60000)
+                display += Math.floor(minutes) + "m ";
+
+            var seconds = (minutes - Math.floor(minutes)) * 60;
+            if (milliseconds < 1000 * 3600 * 0.5 && milliseconds < 60000) {
+                display += Math.floor(seconds) + "s ";
+            }
+
             return display;
         },
         getDayName: function (date) {

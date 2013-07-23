@@ -1,0 +1,20 @@
+<form class="pure-form search_ctrls_form" action="javascript:void(0);" >
+    <div class="simple_filters_container" >
+        <h2 >Tasks Board</h2 >
+        <label >
+            Find by name
+            <input type="text" name="name" class="name_filter" placeholder="Filter by name..." value="" />
+        </label >
+        </br>
+        <!--<button type="submit" class="pure-button pure-button-primary" >Filter</button >-->
+    </div >
+    <div class="tags_filter_container" >
+        <div class="tags_container" >
+        </div >
+        <div class="task_search_tags" >
+            <% _.each(tasks_tags, function(tag) { %>
+            <div class="" ></div >
+            <% }); %>
+        </div >
+    </div >
+</form >

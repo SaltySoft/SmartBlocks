@@ -25,6 +25,9 @@ define([
         parse: function (response) {
             var task_array = response.task;
             if (task_array != null) {
+                if (!Task) {
+                    Task = require('Organization/Apps/Tasks/Models/Task');
+                }
                 var task = new Task(task_array);
                 response.task = task;
             }

@@ -9,8 +9,9 @@ define([
     'Organization/Apps/Recap/Views/Timeline',
     'Organization/Apps/Recap/Views/Now',
     'Organization/Apps/Recap/Views/NextDays',
-    'Organization/Apps/Daily/Collections/PlannedTasks'
-], function ($, _, Backbone, RecapTemplate, TodayRecapView, NextRecapView, PastRecapView, TimelineView, NowView, NextDaysView, PlannedTasksCollection) {
+    'Organization/Apps/Daily/Collections/PlannedTasks',
+    './DeadlinesInformation'
+], function ($, _, Backbone, RecapTemplate, TodayRecapView, NextRecapView, PastRecapView, TimelineView, NowView, NextDaysView, PlannedTasksCollection, DeadlinesInformationView) {
     var MainView = Backbone.View.extend({
         tagName: 'div',
         className: 'recap_main_view',
@@ -62,9 +63,15 @@ define([
 //            base.$el.find(".past_info").html(past_view.$el);
 //            past_view.init(base.SmartBlocks, base);
 
+
+            var deadlines_information = new DeadlinesInformationView();
+            base.$el.find(".deadlines_information").html(deadlines_information.$el);
+            deadlines_information.init(base.SmartBlocks);
+
             var next_days = new NextDaysView();
             base.$el.find(".past_info").html(next_days.$el);
             next_days.init(base.SmartBlocks, base);
+
 
         },
         registerEvents: function () {

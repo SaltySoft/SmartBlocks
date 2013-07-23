@@ -36,6 +36,10 @@ define([
                 base.timeslots.push(timeslot);
             }
 
+
+            base.speedx = 0;
+            base.posx = 0;
+
             base.run();
         },
         drawBackground: function () {
@@ -77,6 +81,7 @@ define([
         },
         draw: function () {
             var base = this;
+
             base.drawBackground();
             base.drawTimeSlots();
             base.drawNowLine();
@@ -88,6 +93,16 @@ define([
                 var ts = base.timeslots[k];
                 ts.logic();
             }
+
+            if (base.input_handler.mouse_pressed[1]) {
+                base.speedx = base.input_handler.mouse.dx * 2;
+            } else {
+                base.speedx *= 0.9;
+                base.posx *= 0.995;
+            }
+
+            base.posx += base.speedx;
+
         },
         run: function () {
             var base = this;
@@ -98,7 +113,7 @@ define([
             base.context.restore();
             base.context.save();
             base.context.clearRect(0,0,base.canvas.width,  base.canvas.height);
-            base.context.translate(base.offset_x, 0);
+            base.context.translate(base.offset_x + base.posx, 0);
             base.draw();
             base.logic();
             requestAnimationFrame($.proxy(base.run, base), base.canvas);

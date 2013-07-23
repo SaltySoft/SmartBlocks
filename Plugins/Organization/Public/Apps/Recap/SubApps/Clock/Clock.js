@@ -21,6 +21,7 @@ define([
             base.ih.init(base.cv);
         },
         logic: function () {
+            var base = this;
 
         },
         drawBackground: function () {
@@ -95,18 +96,25 @@ define([
                 if (pstart >= today_start && pstart < today_end) {
                     var start_angle = (pstart.getHours() + pstart.getMinutes() / 60) * Math.PI / 12 - Math.PI / 2;
                     var end_angle = (pend.getHours() + pend.getMinutes() / 60) * Math.PI / 12 - Math.PI / 2;
-                    base.ctx.fillStyle = "rgba(43, 184, 203, 0.48)";
+                    base.ctx.fillStyle = planned_task.get("task").get("activity") ? planned_task.get("task").get("activity").type.color :"rgba(43, 184, 203, 0.48)";
 
-                    if (pstart <= now && now <= pend) {
-                        base.ctx.fillStyle = "rgba(43, 184, 203, 0.2)";
-                    }
+
 
                     base.ctx.beginPath();
+
+
+
 
                     base.ctx.arc(base.cv.width / 2, base.cv.height / 2, base.cv.height / 2 - 3, start_angle, end_angle, false);
                     base.ctx.lineTo(base.cv.width / 2, base.cv.height / 2);
                     base.ctx.closePath();
+                    base.ctx.save();
+                    base.ctx.globalAlpha = 0.4;
+                    if (pstart <= now && now <= pend) {
+                        base.ctx.globalAlpha = 0.2;
+                    }
                     base.ctx.fill();
+                    base.ctx.restore();
                     base.ctx.strokeStyle = "grey";
                     base.ctx.lineWidth = 1;
                     base.ctx.stroke();
