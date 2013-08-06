@@ -12,17 +12,21 @@ define([
     'Organization/Apps/TasksBoard/Views/MainView',
     'Organization/Apps/TasksShow/Views/MainView',
     'Organization/Apps/Planning/Views/MainView',
+    'Organization/Apps/TasksIndex/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Tasks/Models/Task',
+    'Organization/Apps/Tasks/Collections/Tasks',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TaskUsersCollection, Activity, Task, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TasksIndex, TaskUsersCollection, Activity, Task, TasksCollection,External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
         initialize: function () {
             var base = this;
             base.task_users = new TaskUsersCollection();
+            window.OrgApp = base;
+            base.tasks = new TasksCollection();
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -38,7 +42,7 @@ define([
                     "activities": "activitiesIndex",
                     "activities/:id": "activitiesShow",
                     "tasks/:id": "tasksShow",
-                    "tasks":"tasksBoard",
+                    "tasks":"tasksIndex",
                     "planning": "planning"
                 },
                 week: function () {
@@ -67,11 +71,19 @@ define([
                 },
                 planning: function () {
                     base.launchPlanningView();
+                },
+                tasksIndex: function () {
+                    base.launchTasksIndex();
                 }
             });
 
             var app_router = new Router();
-            Backbone.history.start();
+            base.tasks.fetch({
+                success: function () {
+                    Backbone.history.start();
+                }
+            });
+
 
         },
         render: function () {
@@ -161,6 +173,15 @@ define([
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+        },
+        launchTasksIndex: function () {
+            var base = this;
+
+            base.current_view = new TasksIndex();
+            base.current_view.init(base.SmartBlocks);
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
         },
         launchPlanningView: function () {

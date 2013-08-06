@@ -47,6 +47,7 @@ class TasksController extends \Controller
                 ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
+                ->andWhere("t.parent is NULL")
                 ->setParameter("user", \User::current_user())
                 ->orderBy("t.due_date");
         else
@@ -59,6 +60,7 @@ class TasksController extends \Controller
                 ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
+                ->andWhere("t.parent is NULL")
                 ->setParameter("user", $user)
                 ->orderBy("t.due_date");
         }

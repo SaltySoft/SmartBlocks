@@ -1,0 +1,99 @@
+.tasks_index_view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+
+  > .header {
+    padding: 10px;
+  }
+
+  .thumbnails_container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+    top: 50px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    .task_thumbnail_view {
+
+      float: left;
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      height: 100%;
+      position: relative;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+      transform: translate(0px, 0);
+      transition: transform 10s ease;
+
+      .description {
+        padding: 10px;
+        background: #f5f5f5;
+      }
+
+      &.small {
+        height: 300px;
+        width: 300px;
+
+        .for_small {
+          display: block;
+        }
+        .not_for_small {
+          display: none;
+        }
+
+        .description {
+          width: 150px;
+
+        }
+
+      }
+
+      &.medium {
+        height: 235px;
+        width: 450px;
+
+        .for_medium {
+          display: block;
+        }
+        .not_for_medium {
+          display: none;
+        }
+
+        .description {
+          width: 250px;
+
+        }
+      }
+
+      &.big {
+
+        width: 900px;
+
+        .for_big {
+          display: block;
+        }
+        .not_for_big {
+          display: none;
+        }
+
+        .description {
+          width: 300px;
+
+        }
+      }
+
+      .deadline_thumbnail_view {
+        position: absolute;
+        right: 10px;
+        bottom: 0px;
+
+      }
+    }
+
+  }
+}

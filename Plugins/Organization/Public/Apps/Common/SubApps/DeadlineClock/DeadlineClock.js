@@ -7,7 +7,6 @@ define([
         init: function (canvas, task) {
             var base = this;
             base.task = task;
-            console.log(canvas, task);
             base.canvas = canvas;
             base.ctx = base.canvas.getContext('2d');
             base.run();
