@@ -17,8 +17,9 @@ define([
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Tasks/Collections/Tasks',
+    'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TasksIndex, TaskUsersCollection, Activity, Task, TasksCollection,External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView,  ActivitiesShowView, TasksBoardView,TasksShow, PlanningView, TasksIndex, TaskUsersCollection, Activity, Task, TasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -26,6 +27,7 @@ define([
             var base = this;
             base.task_users = new TaskUsersCollection();
             window.OrgApp = base;
+            base.
             base.tasks = new TasksCollection();
         },
         init: function (SmartBlocks) {

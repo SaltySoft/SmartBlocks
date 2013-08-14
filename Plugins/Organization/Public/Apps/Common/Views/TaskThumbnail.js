@@ -3,8 +3,10 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/task_thumbnail.html',
-    './DeadlineThumbnail'
-], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView) {
+    './DeadlineThumbnail',
+    '../SubApps/DeadlineClock/DeadlineClock',
+    '../SubApps/DeadlineProgressBar/DeadlineProgressBar',
+], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_thumbnail_view",
@@ -28,7 +30,32 @@ define([
             });
             base.$el.html(template);
 
-            base.update();
+            var canvas_c = base.$el.find(".deadline_clock");
+
+            var canvas_p = base.$el.find(".progress_bar");
+
+
+            base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
+
+            base.deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
+
+            base.update()
+            var timer = setInterval(function () {
+                if (base.$el.height() > 0)
+                    base.update()
+            }, 500);
+
+
+            base.$el.hide();
+
+
+            base.$el.fadeIn(100, function (){
+                if (base.callback) {
+                    base.callback();
+                }
+            });
+
+
 
         },
         update: function () {
@@ -41,17 +68,14 @@ define([
             else
                 base.$el.find(".description").html("No description");
 
-            //subviews
-            var deadline_info = new DeadlineInfoView(base.task);
-            base.$el.find('.deadline_information').html(deadline_info.$el);
+            var date = base.task.getDueDate();
 
-            deadline_info.init(base.SmartBlocks);
-            base.$el.hide();
-            base.$el.fadeIn(100, function (){
-                if (base.callback) {
-                    base.callback();
-                }
-            });
+            var formatted_date = date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+
+
+
+
+
 
         },
         registerEvents: function () {
