@@ -54,7 +54,7 @@ define([
             if (base.pos > 0)
                 base.pos = 0;
 
-            if (-base.pos > base.tt_container.$el.width()) {
+            if (-base.pos >= base.tt_container.$el.width()) {
                 base.pos = base.previous;
             }
             if (base.previous != base.pos)
