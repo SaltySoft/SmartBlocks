@@ -139,11 +139,30 @@ class TasksController extends \Controller
                 }
             }
         }
+        $results = $return_array;
+        if (isset($data["tags"]) && $data["tags"] != "")
+        {
+
+            $tags = explode(",", $data["tags"]);
+            if (count($tags) > 0) {
+                $return_array = new  \Doctrine\Common\Collections\ArrayCollection();
+                foreach ($results as $result)
+                {
+                    foreach ($result->getTags() as $task_tag) {
+                        foreach ($tags as $tag)
+                            if (strpos($task_tag->getName(), $tag) !== FALSE) {
+                                $return_array->add($result);
+                            }
+                    }
+                }
+            }
+            $results = $return_array;
+        }
 
         $this->render = false;
         header("Content-Type: application/json");
         $render_array = array();
-        foreach ($return_array as $result)
+        foreach ($results as $result)
         {
             $render_array[] = $result->toArray();
         }

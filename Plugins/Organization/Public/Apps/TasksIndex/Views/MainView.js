@@ -79,8 +79,13 @@ define([
             }
 
             var name_filter = base.$el.find(".name_filter");
+            var name_timer = 0;
+
             name_filter.keyup(function () {
-                base.filterTasks();
+                clearTimeout(name_timer);
+                name_timer = setTimeout(function () {
+                    base.filterTasks();
+                }, 200);
             });
 
             var more_filters_button = base.$el.find(".more_filters_button");
@@ -101,17 +106,30 @@ define([
             finished_filter.change(function () {
                 base.filterTasks();
             });
+
+            var tags_filters = base.$el.find(".tags_filter");
+
+            var tags_timer = 0;
+            tags_filters.keyup(function () {
+                clearTimeout(tags_timer);
+                tags_timer = setTimeout(function () {
+                    base.filterTasks();
+                }, 200);
+
+            });
         },
         filterTasks: function () {
             var base = this;
 
             var tags_list = [];
-            
+
+            tags_list = base.$el.find(".tags_filter").val().split(/[,;.\s]/i);
 
             base.tasks.fetch({
                 data: {
                     "name" : base.$el.find(".name_filter").val(),
-                    "filter": base.$el.find(".finished_filter").is(":checked") ? undefined : "undone"
+                    "filter": base.$el.find(".finished_filter").is(":checked") ? undefined : "undone",
+                    "tags": tags_list.join(",")
                 },
                 success: function () {
                     base.tt_container.render();
