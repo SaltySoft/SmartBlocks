@@ -5,6 +5,18 @@
   bottom: 0;
   top: 0;
 
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+
+
   > .header {
     padding: 10px;
     h1 {
@@ -126,5 +138,9 @@
       }
     }
 
+  }
+
+  &.loading .thumbnails_container {
+    display: none;
   }
 }

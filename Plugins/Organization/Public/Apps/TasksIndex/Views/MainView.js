@@ -124,7 +124,7 @@ define([
             var tags_list = [];
 
             tags_list = base.$el.find(".tags_filter").val().split(/[,;.\s]/i);
-
+            base.$el.addClass("loading");
             base.tasks.fetch({
                 data: {
                     "name" : base.$el.find(".name_filter").val(),
@@ -134,6 +134,7 @@ define([
                 success: function () {
                     base.tt_container.render();
                     base.$el.find(".found_count_nb").html(base.tasks.models.length);
+                    base.$el.removeClass("loading");
                 }
             });
         },
