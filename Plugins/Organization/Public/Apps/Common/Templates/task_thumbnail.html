@@ -2,14 +2,16 @@
     <div class="pure-u-1">
         <h3><a href="#tasks/<%= task.get('id') %>"><span class="task_name"></span></a></h3>
 
-        <div class="for_big for_small for_medium description_container">
-            <div class="description">
 
-            </div>
-        </div>
         <div class="clock_container">
             <canvas class="deadline_clock" width="75" height="75"></canvas>
         </div>
+
+    </div>
+    <div class="pure-u-1">
+        <ul class="tags_container">
+
+        </ul>
         <div class="controls">
             <div>
                 <a href="#tasks/<%= task.get('id') %>" class="pure-button pure-button-success">More info</a>
@@ -17,10 +19,13 @@
         </div>
     </div>
     <div class="pure-u-1">
-        <ul class="tags_container">
+        <div class="for_big for_small for_medium description_container">
+            <div class="description">
 
-        </ul>
+            </div>
+        </div>
     </div>
+
     <div class="pure-u-1">
         <div class="progress_bar_container">
             <canvas class="progress_bar" width="450" height="30"></canvas>
