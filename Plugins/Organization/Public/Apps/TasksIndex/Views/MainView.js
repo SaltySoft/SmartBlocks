@@ -46,9 +46,9 @@ define([
 
             base.previous = base.pos;
             if (delta < 0) {
-                base.pos -= base.$el.width() - base.$el.width() % 490;
+                base.pos -= base.$el.width() - base.$el.width() % 480;
             } else {
-                base.pos += base.$el.width() - base.$el.width() % 490;
+                base.pos += base.$el.width() - base.$el.width() % 480;
             }
 
             if (base.pos > 0)
@@ -132,9 +132,10 @@ define([
                     "tags": tags_list.join(",")
                 },
                 success: function () {
+                    base.$el.removeClass("loading");
                     base.tt_container.render();
                     base.$el.find(".found_count_nb").html(base.tasks.models.length);
-                    base.$el.removeClass("loading");
+
                 }
             });
         },

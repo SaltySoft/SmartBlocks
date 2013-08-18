@@ -15,8 +15,6 @@
     margin-top: 200px;
   }
 
-
-
   > .header {
     padding: 10px;
     h1 {
@@ -36,7 +34,7 @@
       float: left;
     }
 
-    &.normal .for_expanded_b, &.normal .for_expanded_i{
+    &.normal .for_expanded_b, &.normal .for_expanded_i {
       display: none;
     }
 
@@ -56,7 +54,7 @@
       display: inline;
     }
 
-    &.expanded .for_normal_i, &.expanded .for_normal_b{
+    &.expanded .for_normal_i, &.expanded .for_normal_b {
       display: none;
     }
   }
@@ -64,15 +62,21 @@
   .thumbnails_container {
     position: absolute;
     left: 0;
-    right: 75px;
+    right: 0px;
     bottom: 0px;
     top: 50px;
     overflow-x: hidden;
     overflow-y: hidden;
 
-    .task_thumbnail_view {
-
+    .thumbnail_subcontainer {
       float: left;
+      width: 480px;
+    }
+    .task_thumbnails_container_view {
+
+    }
+
+    .task_thumbnail_view { //      float: left;
       background: white;
       margin: 10px;
       padding: 10px;
@@ -109,7 +113,6 @@
         .not_for_medium {
           display: none;
         }
-
 
       }
 

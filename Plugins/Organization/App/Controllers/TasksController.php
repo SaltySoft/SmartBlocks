@@ -150,7 +150,7 @@ class TasksController extends \Controller
                 {
                     foreach ($result->getTags() as $task_tag) {
                         foreach ($tags as $tag)
-                            if (strpos($task_tag->getName(), $tag) !== FALSE) {
+                            if ($tag != "" && strpos($task_tag->getName(), $tag) !== FALSE) {
                                 $return_array->add($result);
                             }
                     }
