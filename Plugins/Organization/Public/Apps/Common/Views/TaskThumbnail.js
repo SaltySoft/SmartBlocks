@@ -6,7 +6,8 @@ define([
     './DeadlineThumbnail',
     '../SubApps/DeadlineClock/DeadlineClock',
     '../SubApps/DeadlineProgressBar/DeadlineProgressBar',
-], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar) {
+    './TaskTagItem'
+], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar, TaskTagItem) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_thumbnail_view",
@@ -34,10 +35,18 @@ define([
 
             var canvas_p = base.$el.find(".progress_bar");
 
+            if (base.task.hasDeadline()) {
+                base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
+                base.deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
+                base.$el.addClass("deadline");
+                base.$el.removeClass("normal");
+            } else {
+                base.$el.addClass("normal");
+                base.$el.removeClass("deadline");
+            }
 
-            base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
 
-            base.deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);
+
 
             base.update()
             var timer = setInterval(function () {
@@ -49,14 +58,34 @@ define([
             base.$el.hide();
 
 
-            base.$el.fadeIn(100, function (){
+            base.$el.fadeIn(100, function () {
                 if (base.callback) {
                     base.callback();
                 }
             });
 
+            base.renderTags();
+        },
+        renderTags: function () {
+            var base = this;
 
+            var tags = base.task.get("tags");
+            for (var k in tags.models) {
+                var tag = tags.models[k];
+                var tag_item = new TaskTagItem(tag);
+                base.$el.find(".tags_container").append(tag_item.$el);
+                tag_item.init(base.SmartBlocks, {
+                    main: function () {
 
+                    },
+                    context: [{
+                        name: "stuff",
+                        callback: function () {
+
+                        }
+                    }]
+                });
+            }
         },
         update: function () {
             var base = this;
@@ -71,10 +100,6 @@ define([
             var date = base.task.getDueDate();
 
             var formatted_date = date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-
-
-
-
 
 
         },

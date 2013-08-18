@@ -15,16 +15,12 @@ define([
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
             base.width = 0;
             base.height = 0;
             base.count = 0;
-
             base.render();
             base.registerEvents();
             base.$el.disableSelection();
-
-
         },
         render: function () {
             var base = this;
@@ -44,11 +40,7 @@ define([
 
                 base.width = 450;
                 base.height = 235;
-
-
             }
-
-
             base.$el.append('<div class="clearer"></div>');
 
             base.resize();
@@ -69,9 +61,21 @@ define([
             $(window).resize(function () {
                 base.resize();
             });
+        },
+        filterTasks: function (filter_word) {
+            var base = this;
 
-
-
+            base.tasks.fetch({
+                data: {
+                    "filter" : "stuff"
+                }
+            });
+        },
+        addFilterWord: function (word) {
+            var base = this;
+        },
+        updateFilterWords: function () {
+            var base = this;
         }
     });
 

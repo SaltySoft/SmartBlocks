@@ -88,6 +88,7 @@ define([
                 ctx.stroke();
                 ctx.fill();
                 ctx.fillStyle = "white";
+                ctx.font = 'normal 10px Arial';
                 if (missing_time + planned_time <= 60000) {
                     var metrics = ctx.measureText("OK");
                     ctx.fillText("OK", canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
@@ -95,6 +96,22 @@ define([
                     var metrics = ctx.measureText("Late");
                     ctx.fillText("Late", canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
                 }
+            } else {
+                var msecs_left = end.getTime() - now.getTime();
+
+                var text = "";
+
+                var secs_left = Math.round(msecs_left / 1000) % 60;
+                var min_left = Math.round(msecs_left / 60000) % 60;
+                var hours_left = Math.round(msecs_left / 3600000) % 24;
+
+                text = hours_left + "h" + (min_left < 10 ? "0" : "") + min_left + "m" + (secs_left < 10 ? "0" : "") +  secs_left + "s";
+
+                ctx.fillStyle = "white";
+                ctx.font = 'normal 10px Arial';
+                var metrics = ctx.measureText(text);
+                ctx.fillText(text, canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
+
             }
         },
         run: function () {

@@ -15,6 +15,9 @@ define([
         defaults: {
             "model_type": "Task"
         },
+        hasDeadline: function () {
+            return this.get("due_date");
+        },
         getDueDate: function () {
             return new Date(this.get("due_date") * 1000);
         },
