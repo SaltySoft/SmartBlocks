@@ -34,6 +34,7 @@ define([
             base.$el.find(".thumbnails_container").html(task_thumbnails_container.$el);
             task_thumbnails_container.init(base.SmartBlocks);
             base.tt_container = task_thumbnails_container;
+            base.filterTasks();
 
         },
         scroll: function (e) {
@@ -76,6 +77,53 @@ define([
                 // Firefox
                 base.el.addEventListener("DOMMouseScroll", $.proxy(base.scroll, base), false);
             }
+
+            var name_filter = base.$el.find(".name_filter");
+            name_filter.keyup(function () {
+                base.filterTasks();
+            });
+
+            var more_filters_button = base.$el.find(".more_filters_button");
+            var form = base.$el.find(".filters_container");
+
+            more_filters_button.click(function () {
+                if (form.hasClass("normal")) {
+                    form.removeClass("normal");
+                    form.addClass("expanded");
+                } else if (form.hasClass("expanded")) {
+                    form.removeClass("expanded");
+                    form.addClass("normal");
+                }
+            });
+
+            var finished_filter = base.$el.find(".finished_filter");
+
+            finished_filter.change(function () {
+                base.filterTasks();
+            });
+        },
+        filterTasks: function () {
+            var base = this;
+
+            var tags_list = [];
+            
+
+            base.tasks.fetch({
+                data: {
+                    "name" : base.$el.find(".name_filter").val(),
+                    "filter": base.$el.find(".finished_filter").is(":checked") ? undefined : "undone"
+                },
+                success: function () {
+                    base.tt_container.render();
+                    base.$el.find(".found_count_nb").html(base.tasks.models.length);
+                }
+            });
+        },
+        addFilterWord: function (word) {
+            var base = this;
+        },
+        updateFilterWords: function () {
+            var base = this;
         }
     });
 

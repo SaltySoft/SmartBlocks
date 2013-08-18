@@ -18,7 +18,7 @@ define([
             base.width = 0;
             base.height = 0;
             base.count = 0;
-            base.render();
+//            base.render();
             base.registerEvents();
             base.$el.disableSelection();
         },
@@ -61,21 +61,6 @@ define([
             $(window).resize(function () {
                 base.resize();
             });
-        },
-        filterTasks: function (filter_word) {
-            var base = this;
-
-            base.tasks.fetch({
-                data: {
-                    "filter" : "stuff"
-                }
-            });
-        },
-        addFilterWord: function (word) {
-            var base = this;
-        },
-        updateFilterWords: function () {
-            var base = this;
         }
     });
 

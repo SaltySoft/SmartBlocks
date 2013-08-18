@@ -14,6 +14,39 @@
 
   .filters_container {
     margin-left: 150px;
+    line-height: 30px;
+
+    .hidden_filters {
+      float: left;
+    }
+
+    .shown_filters {
+      float: left;
+    }
+
+    &.normal .for_expanded_b, &.normal .for_expanded_i{
+      display: none;
+    }
+
+    &.expanded .for_expanded_b {
+      display: block;
+    }
+
+    &.expanded .for_expanded_i {
+      display: inline;
+    }
+
+    &.normal .for_normal_b {
+      display: block;
+    }
+
+    &.normal .for_normal_i {
+      display: inline;
+    }
+
+    &.expanded .for_normal_i, &.expanded .for_normal_b{
+      display: none;
+    }
   }
 
   .thumbnails_container {
