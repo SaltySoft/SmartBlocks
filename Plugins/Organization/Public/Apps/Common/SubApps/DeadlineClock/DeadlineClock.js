@@ -67,7 +67,7 @@ define([
             ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 5, -Math.PI / 2 + ratio * 2 * Math.PI, -Math.PI / 2 + 2 * Math.PI, false);
             ctx.lineTo(canvas.width / 2, canvas.height / 2);
             ctx.closePath();
-            ctx.fillStyle = "#dddddd";
+            ctx.fillStyle = "#cccccc";
             var end = base.task.getDueDate();
             if (now > end) {
                 ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 5, 0, 2 * Math.PI, false);
@@ -108,9 +108,14 @@ define([
                 text = hours_left + "h" + (min_left < 10 ? "0" : "") + min_left + "m" + (secs_left < 10 ? "0" : "") +  secs_left + "s";
 
                 ctx.fillStyle = "white";
-                ctx.font = 'normal 10px Arial';
+                ctx.font = 'normal 11px Arial';
                 var metrics = ctx.measureText(text);
-                ctx.fillText(text, canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 3);
+                ctx.fillText(text, canvas.width / 2 - metrics.width / 2, canvas.height / 2 + 5);
+
+                var days = Math.round(msecs_left / (24 * 3600000));
+                days = days + " days";
+                var metrics = ctx.measureText(days);
+                ctx.fillText(days, canvas.width / 2 - metrics.width / 2, canvas.height / 2 - 5);
 
             }
         },
