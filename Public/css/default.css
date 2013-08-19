@@ -376,21 +376,6 @@ h6 {
     border: 1px solid #aaaaaa;
 }
 
-#loader {
-    position: fixed;
-    top: 50px;
-    z-index: 1000;
-    display: none;
-    text-align: center;
-    line-height: 100px;
-    width: 200px;
-    height: 100px;
-    top: 50%;
-    left: 50%;
-    margin-top: -100px;
-    margin-left: -50px;
-    background-color: rgba(255, 255, 255, 0.8);
-}
 
 /*button {*/
     /*padding: 5px 5px 5px 5px;*/

@@ -3,50 +3,38 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/main_view.html',
-    'Organization/Apps/Common/Collections/Activities',
-    './ThumbnailsContainer',
-    'Organization/Apps/Common/Collections/ActivityTypes'
-], function ($, _, Backbone, MainViewTemplate, ActivitiesCollection, ThumbnailsContainerView, ActivityTypesCollection) {
+    'Organization/Apps/Tasks/Collections/Tasks',
+    './ThumbnailsContainer'
+], function ($, _, Backbone, MainViewTemplate, TasksCollection, ThumbnailsContainerView) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "activities_index_view",
+        className: "tasks_index_view",
         initialize: function () {
             var base = this;
-            base.$el.addClass("loading");
-            base.activities = OrgApp.activities;
+
+            base.tasks = OrgApp.tasks;
             base.moving = false;
             base.moving_timer = 0;
         },
         init: function (SmartBlocks) {
             var base = this;
-
             base.SmartBlocks = SmartBlocks;
 
-            base.activity_types = new ActivityTypesCollection();
+            base.render();
+            base.registerEvents();
             base.pos = 0;
-            base.activity_types.fetch({
-                success: function () {
-                    base.render();
-                    base.registerEvents();
-
-                }
-            });
-
-
         },
         render: function () {
             var base = this;
 
-            var template = _.template(MainViewTemplate, {
-                activity_types: base.activity_types.models
-            });
+            var template = _.template(MainViewTemplate, {});
             base.$el.html(template);
 
-            var task_thumbnails_container = new ThumbnailsContainerView(base.activities);
+            var task_thumbnails_container = new ThumbnailsContainerView(base.tasks);
             base.$el.find(".thumbnails_container").html(task_thumbnails_container.$el);
             task_thumbnails_container.init(base.SmartBlocks);
             base.tt_container = task_thumbnails_container;
-            base.filterActivities();
+            base.filterTasks();
 
         },
         scroll: function (e) {
@@ -96,7 +84,7 @@ define([
             name_filter.keyup(function () {
                 clearTimeout(name_timer);
                 name_timer = setTimeout(function () {
-                    base.filterActivities();
+                    base.filterTasks();
                 }, 200);
             });
 
@@ -113,34 +101,40 @@ define([
                 }
             });
 
-            var finished_filter = base.$el.find(".archived_filter");
+            var finished_filter = base.$el.find(".finished_filter");
 
             finished_filter.change(function () {
-                base.filterActivities();
+                base.filterTasks();
             });
 
-            var types_filter = base.$el.find(".types_filter");
+            var tags_filters = base.$el.find(".tags_filter");
 
-            types_filter.change(function () {
-                base.filterActivities();
+            var tags_timer = 0;
+            tags_filters.keyup(function () {
+                clearTimeout(tags_timer);
+                tags_timer = setTimeout(function () {
+                    base.filterTasks();
+                }, 200);
+
             });
         },
-        filterActivities: function () {
+        filterTasks: function () {
             var base = this;
 
+            var tags_list = [];
+
+            tags_list = base.$el.find(".tags_filter").val().split(/[,;.\s]/i);
             base.$el.addClass("loading");
-            base.activities.fetch({
+            base.tasks.fetch({
                 data: {
-                    "name": base.$el.find(".name_filter").val(),
-                    "archives": base.$el.find(".archived_filter").is(":checked") ? "1" : undefined,
-                    "type": base.$el.find(".types_filter").val()
+                    "name" : base.$el.find(".name_filter").val(),
+                    "filter": base.$el.find(".finished_filter").is(":checked") ? undefined : "undone",
+                    "tags": tags_list.join(",")
                 },
                 success: function () {
-
                     base.$el.removeClass("loading");
-                    base.$el.find(".found_count_nb").html(base.activities.models.length);
                     base.tt_container.render();
-
+                    base.$el.find(".found_count_nb").html(base.tasks.models.length);
 
                 }
             });

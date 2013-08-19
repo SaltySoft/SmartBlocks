@@ -47,6 +47,7 @@ class TasksController extends \Controller
                 ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
+                ->andWhere("t.parent is NULL")
                 ->setParameter("user", \User::current_user())
                 ->orderBy("t.due_date");
         else
@@ -59,6 +60,7 @@ class TasksController extends \Controller
                 ->leftJoin("t.tags", "ta")
                 ->where("t.owner = :user OR (tu.user = :user)")
                 ->andWhere("t.active = true")
+                ->andWhere("t.parent is NULL")
                 ->setParameter("user", $user)
                 ->orderBy("t.due_date");
         }
@@ -77,7 +79,7 @@ class TasksController extends \Controller
                 ->setParameter("stop_date", $end);
         }
 
-        if (isset($data["filter"]) && $data["filter"] = "undone")
+        if (isset($data["filter"]) && $data["filter"] == "undone")
         {
             $qb->andWhere("t.completion_date is NULL");
         }
@@ -111,6 +113,51 @@ class TasksController extends \Controller
         }
 
         $results = $qb->getQuery()->getResult();
+        $return_array = $results;
+        if (isset($data["filter"]) && $data["filter"] == "undone")
+        {
+            $return_array = new  \Doctrine\Common\Collections\ArrayCollection();
+            foreach ($results as $result)
+            {
+                $count = 0;
+                $duration = $result->getRequiredTime() / 1000;
+                $furthest_end = new \DateTime();
+                $furthest_end->setTimestamp(0);
+                foreach ($result->getPlannedTasks() as $pt)
+                {
+                    $furthest_end = new \DateTime();
+                    $end = $pt->getStart()->getTimestamp() + $pt->getDuration() / 1000;
+                    $count += $pt->getDuration() / 1000;
+                    if ($furthest_end->getTimestamp() < $end)
+                    {
+                        $furthest_end->setTimestamp($end);
+                    }
+                }
+                if ($count < $duration || $furthest_end->getTimestamp() > (new \DateTime())->getTimestamp())
+                {
+                    $return_array->add($result);
+                }
+            }
+        }
+        $results = $return_array;
+        if (isset($data["tags"]) && $data["tags"] != "")
+        {
+
+            $tags = explode(",", $data["tags"]);
+            if (count($tags) > 0) {
+                $return_array = new  \Doctrine\Common\Collections\ArrayCollection();
+                foreach ($results as $result)
+                {
+                    foreach ($result->getTags() as $task_tag) {
+                        foreach ($tags as $tag)
+                            if ($tag != "" && strpos($task_tag->getName(), $tag) !== FALSE) {
+                                $return_array->add($result);
+                            }
+                    }
+                }
+            }
+            $results = $return_array;
+        }
 
         $this->render = false;
         header("Content-Type: application/json");

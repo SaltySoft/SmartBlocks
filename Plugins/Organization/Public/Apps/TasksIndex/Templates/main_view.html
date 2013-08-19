@@ -1,16 +1,11 @@
 <div class="header">
     <div>
-        <h1>Activities</h1>
+        <h1>Tasks</h1>
 
         <form class="pure-form filters_container normal">
             <div class="shown_filters">
                 <input type="text" class="name_filter" placeholder="Filter by name"/>
-                <select class="types_filter">
-                    <option value="0">Any type</option>
-                    <% for (var k in activity_types) { %>
-                    <option value="<%= activity_types[k].get('id') %>"><%= activity_types[k].get("name") %></option>
-                    <% } %>
-                </select>
+                <input type="text" class="tags_filter" placeholder="Filter by tag"/>
             </div>
             &nbsp;
             <a href="javascript:void(0)" class="more_filters_button"><span class="for_expanded_i">Less</span><span
@@ -19,7 +14,7 @@
             <div class="for_expanded_b hidden_filters">
                 &nbsp;
                 <label>
-                    <input type="checkbox" class="archived_filter"/> Show archived
+                    <input type="checkbox" class="finished_filter"/> Show finished
                 </label>
             </div>
             <span class="found_count"><span class="found_count_nb"></span> items found</span>
@@ -30,5 +25,5 @@
 <div class="thumbnails_container">
 </div>
 <div class="loader_container">
-    <img src="/images/loader3.gif"/><br/>
+    <img src="/images/loader3.gif" /><br/>
 </div>
