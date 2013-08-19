@@ -4,30 +4,42 @@ define([
     'backbone',
     'text!../Templates/main_view.html',
     'Organization/Apps/Common/Collections/Activities',
-    './ThumbnailsContainer'
-], function ($, _, Backbone, MainViewTemplate, ActivitiesCollection, ThumbnailsContainerView) {
+    './ThumbnailsContainer',
+    'Organization/Apps/Common/Collections/ActivityTypes'
+], function ($, _, Backbone, MainViewTemplate, ActivitiesCollection, ThumbnailsContainerView, ActivityTypesCollection) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activities_index_view",
         initialize: function () {
             var base = this;
-
+            base.$el.addClass("loading");
             base.activities = OrgApp.activities;
             base.moving = false;
             base.moving_timer = 0;
         },
         init: function (SmartBlocks) {
             var base = this;
+
             base.SmartBlocks = SmartBlocks;
 
-            base.render();
-            base.registerEvents();
+            base.activity_types = new ActivityTypesCollection();
             base.pos = 0;
+            base.activity_types.fetch({
+                success: function () {
+                    base.render();
+                    base.registerEvents();
+
+                }
+            });
+
+
         },
         render: function () {
             var base = this;
 
-            var template = _.template(MainViewTemplate, {});
+            var template = _.template(MainViewTemplate, {
+                activity_types: base.activity_types.models
+            });
             base.$el.html(template);
 
             var task_thumbnails_container = new ThumbnailsContainerView(base.activities);
@@ -46,9 +58,9 @@ define([
 
             base.previous = base.pos;
             if (delta < 0) {
-                base.pos -= base.$el.width() - base.$el.width() % 490;
+                base.pos -= base.$el.width() - base.$el.width() % 480;
             } else {
-                base.pos += base.$el.width() - base.$el.width() % 490;
+                base.pos += base.$el.width() - base.$el.width() % 480;
             }
 
             if (base.pos > 0)
@@ -107,29 +119,21 @@ define([
                 base.filterActivities();
             });
 
-            var tags_filters = base.$el.find(".tags_filter");
+            var types_filter = base.$el.find(".types_filter");
 
-            var tags_timer = 0;
-            tags_filters.keyup(function () {
-                clearTimeout(tags_timer);
-                tags_timer = setTimeout(function () {
-                    base.filterActivities();
-                }, 200);
-
+            types_filter.change(function () {
+                base.filterActivities();
             });
         },
         filterActivities: function () {
             var base = this;
 
-            var tags_list = [];
-
-            tags_list = base.$el.find(".tags_filter").val().split(/[,;.\s]/i);
             base.$el.addClass("loading");
             base.activities.fetch({
                 data: {
-                    "name" : base.$el.find(".name_filter").val(),
+                    "name": base.$el.find(".name_filter").val(),
                     "archives": base.$el.find(".archived_filter").is(":checked") ? "1" : undefined,
-                    "tags": tags_list.join(",")
+                    "type": base.$el.find(".types_filter").val()
                 },
                 success: function () {
 

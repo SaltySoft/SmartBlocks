@@ -79,9 +79,13 @@ define([
         },
         registerEvents: function () {
             var base = this;
-
+            var resize_timer = 0;
             $(window).resize(function () {
-                base.resize();
+                clearTimeout(resize_timer);
+                resize_timer = setTimeout(function () {
+                    base.render();
+                }, 50);
+
             });
         }
     });
