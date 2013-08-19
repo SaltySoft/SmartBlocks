@@ -13,6 +13,7 @@ define([
     'Organization/Apps/TasksShow/Views/MainView',
     'Organization/Apps/Planning/Views/MainView',
     'Organization/Apps/TasksIndex/Views/MainView',
+    'Organization/Apps/ActivityCreation/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',
@@ -20,7 +21,7 @@ define([
     'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, TaskUsersCollection, Activity, ActivitiesCollection, Task, TasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, Task, TasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -45,11 +46,13 @@ define([
                     "month": "month",
                     "daily": "daily",
                     "recap": "recap",
+                    "activities/new": "activityCreation",
                     "activities": "activitiesIndex",
                     "activities/:id": "activitiesShow",
                     "tasks/:id": "tasksShow",
                     "tasks": "tasksIndex",
                     "planning": "planning"
+
                 },
                 week: function () {
                     base.launchWeek();
@@ -80,6 +83,9 @@ define([
                 },
                 tasksIndex: function () {
                     base.launchTasksIndex();
+                },
+                activityCreation: function () {
+                    base.launchActivityCreation();
                 }
             });
 
@@ -190,6 +196,15 @@ define([
 
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.planning").addClass("selected");
+            base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
+        },
+        launchActivityCreation: function () {
+            var base = this;
+            base.current_view = new ActivityCreationView();
+
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.activities").addClass("selected");
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
