@@ -58,19 +58,10 @@ define([
 
             base.$el.css("width", subcontainers_count * base.width);
             base.$el.append('<div class="clearer"></div>');
-            var margin_top = Math.floor((base.$el.parent().height() - base.$el.height()) / 2);
-
-
-            base.$el.css("margin-top", margin_top);
-            console.log("MARGIN TOP", margin_top, "PARENT HEIGHT", base.$el.parent().height(), "ELEMENT HEIGHT", base.$el.height());
-            console.log("VERT_COUNT", vert_count);
-
-
-
+            base.$el.css("margin-top", Math.floor((base.$el.parent().height() - base.height * vert_count) / 2));
         },
         resize: function () {
             var base = this;
-//            base.$el.css("width", (base.count + 1) * (base.width + 40) / Math.floor(base.$el.parent().height() / (base.height + 40)));
             base.$el.animate({
                 opacity: 1,
                 queue: false

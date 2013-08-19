@@ -60,7 +60,7 @@ define([
             base.$el.append('<div class="clearer"></div>');
 
             base.$el.css("width", subcontainers_count * base.width);
-            base.$el.css("margin-top", Math.floor((base.$el.parent().height() - base.$el.height()) / 2));
+            base.$el.css("margin-top", Math.floor((base.$el.parent().height() - base.height * vert_count) / 2));
 //            base.resize();
 
         },

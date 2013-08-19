@@ -25,6 +25,12 @@ define([
         render: function () {
             var base = this;
 
+            if (base.activity.get("archived")) {
+                base.$el.addClass("archived");
+            } else {
+                base.$el.removeClass("archived");
+            }
+
             var template = _.template(ActivityThumbnailTemplate, {
                 activity: base.activity
             });
