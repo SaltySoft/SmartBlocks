@@ -32,7 +32,6 @@ define([
             var div = $(document.createElement('div'));
             div.addClass("thumbnail_subcontainer");
             var vert_count = Math.floor(base.$el.parent().height() / base.height);
-            console.log("vert_count", vert_count);
             var current = -1;
             var subcontainers_count = 1;
             for (var k in base.tasks.models) {

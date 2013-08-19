@@ -1,0 +1,34 @@
+.activity_thumbnail_view {
+  position: relative;
+
+  .description_container {
+    width: 440px;
+    height: 30px;
+
+    margin: 1px;
+    .description {
+      height: 20px;
+      min-height: 20px;
+      width: 430px;
+      padding: 5px;
+      background: rgb(241, 241, 241);
+      color: gray;
+      overflow: hidden;
+      line-height: 20px;
+      cursor: default;
+      text-align: justify;
+      transition: height 500ms;
+    }
+
+    .description:hover {
+      position: absolute;
+      height: auto;
+    }
+  }
+
+  .controls {
+    a {
+      float: right;
+    }
+  }
+}

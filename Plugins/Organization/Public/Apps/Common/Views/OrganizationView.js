@@ -86,7 +86,11 @@ define([
             var app_router = new Router();
             base.tasks.fetch({
                 success: function () {
-                    Backbone.history.start();
+                    base.activities.fetch({
+                        success: function () {
+                            Backbone.history.start();
+                        }
+                    });
                 }
             });
 

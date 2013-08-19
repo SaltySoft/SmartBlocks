@@ -34,7 +34,7 @@ define([
             base.$el.find(".thumbnails_container").html(task_thumbnails_container.$el);
             task_thumbnails_container.init(base.SmartBlocks);
             base.tt_container = task_thumbnails_container;
-            base.filterTasks();
+            base.filterActivities();
 
         },
         scroll: function (e) {
@@ -54,7 +54,7 @@ define([
             if (base.pos > 0)
                 base.pos = 0;
 
-            if (-base.pos > base.tt_container.$el.width()) {
+            if (-base.pos >= base.tt_container.$el.width()) {
                 base.pos = base.previous;
             }
             if (base.previous != base.pos)
@@ -101,10 +101,10 @@ define([
                 }
             });
 
-            var finished_filter = base.$el.find(".finished_filter");
+            var finished_filter = base.$el.find(".archived_filter");
 
             finished_filter.change(function () {
-                base.filterTasks();
+                base.filterActivities();
             });
 
             var tags_filters = base.$el.find(".tags_filter");
@@ -113,7 +113,7 @@ define([
             tags_filters.keyup(function () {
                 clearTimeout(tags_timer);
                 tags_timer = setTimeout(function () {
-                    base.filterTasks();
+                    base.filterActivities();
                 }, 200);
 
             });
@@ -128,13 +128,16 @@ define([
             base.activities.fetch({
                 data: {
                     "name" : base.$el.find(".name_filter").val(),
-//                    "filter": base.$el.find(".finished_filter").is(":checked") ? undefined : "undone",
+                    "archives": base.$el.find(".archived_filter").is(":checked") ? "1" : undefined,
                     "tags": tags_list.join(",")
                 },
                 success: function () {
-                    base.tt_container.render();
-                    base.$el.find(".found_count_nb").html(base.activities.models.length);
+
                     base.$el.removeClass("loading");
+                    base.$el.find(".found_count_nb").html(base.activities.models.length);
+                    base.tt_container.render();
+
+
                 }
             });
         },
