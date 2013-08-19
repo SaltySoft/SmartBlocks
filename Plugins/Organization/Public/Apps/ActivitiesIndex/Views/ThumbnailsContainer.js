@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Organization/Apps/Common/Views/ActivityThumbnail'
-], function ($, _, Backbone, TaskThumbnail) {
+    'Organization/Apps/Common/Views/ActivityThumbnail',
+    'text!../Templates/add_activity_thumb.html'
+], function ($, _, Backbone, TaskThumbnail, AddActivityThumbTemplate) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_thumbnails_container_view",
@@ -54,10 +55,18 @@ define([
                 task_thumbnail.$el.addClass("medium");
                 task_thumbnail.init(base.SmartBlocks, $.proxy(base.resize, base));
             }
-            base.$el.append(div);
 
-            base.$el.css("width", subcontainers_count * base.width);
+            var add_button = _.template(AddActivityThumbTemplate, {});
+            if (current >= vert_count - 1) {
+                base.$el.append(div);
+                div = $(document.createElement('div'));
+                div.addClass("thumbnail_subcontainer");
+                subcontainers_count++;
+            }
+            div.append(add_button);
+            base.$el.append(div);
             base.$el.append('<div class="clearer"></div>');
+            base.$el.css("width", subcontainers_count * base.width);
             base.$el.css("margin-top", Math.floor((base.$el.parent().height() - base.height * vert_count) / 2));
         },
         resize: function () {
