@@ -5,22 +5,78 @@
   bottom: 0;
   top: 0;
 
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
   > .header {
     padding: 10px;
+    h1 {
+      float: left;
+    }
+  }
+
+  .filters_container {
+    margin-left: 150px;
+    line-height: 30px;
+
+    .hidden_filters {
+      float: left;
+    }
+
+    .shown_filters {
+      float: left;
+    }
+
+    &.normal .for_expanded_b, &.normal .for_expanded_i {
+      display: none;
+    }
+
+    &.expanded .for_expanded_b {
+      display: block;
+    }
+
+    &.expanded .for_expanded_i {
+      display: inline;
+    }
+
+    &.normal .for_normal_b {
+      display: block;
+    }
+
+    &.normal .for_normal_i {
+      display: inline;
+    }
+
+    &.expanded .for_normal_i, &.expanded .for_normal_b {
+      display: none;
+    }
   }
 
   .thumbnails_container {
     position: absolute;
     left: 0;
-    right: 0;
+    right: 0px;
     bottom: 0px;
     top: 50px;
     overflow-x: hidden;
     overflow-y: hidden;
 
-    .task_thumbnail_view {
-
+    .thumbnail_subcontainer {
       float: left;
+      width: 480px;
+    }
+    .task_thumbnails_container_view {
+
+    }
+
+    .task_thumbnail_view { //      float: left;
       background: white;
       margin: 10px;
       padding: 10px;
@@ -29,12 +85,6 @@
       box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
       transform: translate(0px, 0);
       transition: transform 10s ease;
-
-      .description {
-        padding: 10px;
-        background: #f5f5f5;
-      }
-
       &.small {
         height: 300px;
         width: 300px;
@@ -64,10 +114,6 @@
           display: none;
         }
 
-        .description {
-          width: 250px;
-
-        }
       }
 
       &.big {
@@ -95,5 +141,9 @@
       }
     }
 
+  }
+
+  &.loading .thumbnails_container {
+    display: none;
   }
 }
