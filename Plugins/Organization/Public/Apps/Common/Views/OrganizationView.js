@@ -173,7 +173,7 @@ define([
             base.current_view = new TasksShow(task);
             base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
-            base.$el.find(".control_bar a.activities").addClass("selected");
+            base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
         },
         launchTasksIndex: function () {
