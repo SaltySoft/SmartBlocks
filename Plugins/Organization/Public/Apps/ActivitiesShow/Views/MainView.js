@@ -70,17 +70,21 @@ define([
         renderEdition: function () {
             var base = this;
             var edition_view = new EditionView(base.activity);
-            base.$el.find(".task_subapp_container").html(edition_view.$el);
+            base.$el.find(".activity_subapp_container").html(edition_view.$el);
             edition_view.init(base.SmartBlocks);
         },
         setSubpage: function (subpage) {
             var base = this;
             if (subpage)
                 base.subpage = subpage;
-            console.log(base.subpage, base.subpage === "edition");
+            base.$el.find(".menu_button").removeClass("pure-menu-selected");
             if (base.subpage == "edition") {
                 base.renderEdition();
+                base.$el.find(".edition_tab_button").addClass("pure-menu-selected");
             }
+
+
+
 
         },
         render: function () {

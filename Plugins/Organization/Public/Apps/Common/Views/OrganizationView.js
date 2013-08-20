@@ -106,6 +106,7 @@ define([
             loading_screen.init(base.SmartBlocks);
             loading_screen.setMax(10);
             var app_router = new Router();
+
             loading_screen.setLoad(0);
             loading_screen.setText("Loading tasks");
             base.tasks.fetch({
@@ -196,7 +197,10 @@ define([
         launchActivitiesShow: function (id, subpage) {
             var base = this;
             if (!base.current_view || base.current_view.app_name != "activity_show" || id != base.current_view.activity.get('id')) {
-                var activity = new Activity({ id: id });
+                var activity = base.activities.get(id);
+                if (!activity) {
+                    activity = new Activity({id: id});
+                }
                 base.current_view = new ActivitiesShowView(activity);
                 base.current_view.init(base.SmartBlocks, subpage);
                 base.$el.find(".control_bar a").removeClass("selected");

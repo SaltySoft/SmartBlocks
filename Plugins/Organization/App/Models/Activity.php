@@ -108,7 +108,7 @@ class Activity extends \Model
 
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = htmlentities($description);
     }
 
     public function getDescription()
