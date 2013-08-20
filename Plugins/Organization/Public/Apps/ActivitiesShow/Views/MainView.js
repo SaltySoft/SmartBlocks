@@ -11,26 +11,35 @@ define([
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Common/Collections/Activities',
     'Organization/Apps/Common/Views/WorkloadTimeline',
-    'Organization/Apps/Daily/Collections/PlannedTasks'
-], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection) {
+    'Organization/Apps/Daily/Collections/PlannedTasks',
+    'text!LoadingTemplate',
+    './Edition'
+], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection, LoadingTemplate, EditionView) {
     var View = Backbone.View.extend({
-        tagName:"div",
-        className:"activity_show_view",
-        initialize:function (model) {
+        tagName: "div",
+        className: "activity_show_view",
+        initialize: function (model) {
             var base = this;
             base.events = $.extend({}, Backbone.Events);
 
             base.model = model;
             base.activity = model;
+            base.app_name = "activity_show";
         },
-        init:function (SmartBlocks) {
+        init: function (SmartBlocks, subpage) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.subpage = subpage;
+            base.$el.addClass("loading");
+            base.loading_template = _.template(LoadingTemplate, {
+            });
+
+            base.$el.html(base.loading_template);
 
             base.activity_types = new ActivityTypesCollection();
             base.loaded = 0;
             base.activity_types.fetch({
-                success:function () {
+                success: function () {
                     base.loaded++;
                     if (base.loaded == 2) {
                         base.launch();
@@ -39,7 +48,7 @@ define([
             });
 
             base.activity.fetch({
-                success:function () {
+                success: function () {
                     base.loaded++;
                     if (base.loaded == 2) {
                         base.launch();
@@ -47,22 +56,50 @@ define([
                 }
             });
         },
-        launch:function () {
+        launch: function () {
             var base = this;
+            base.$el.removeClass("loading");
             base.render();
             base.registerEvents();
+            base.setSubpage();
         },
-        render:function () {
+        renderSummary: function () {
+
+        },
+        renderEdition: function () {
+            var base = this;
+            var edition_view = new EditionView(base.activity);
+            base.$el.find(".task_subapp_container").html(edition_view.$el);
+            edition_view.init(base.SmartBlocks);
+        },
+        setSubpage: function (subpage) {
+            var base = this;
+            if (subpage)
+                base.subpage = subpage;
+
+            switch(base.subpage) {
+                case "summary":
+
+                    break;
+                case "edition" :
+                    base.renderEdition();
+                    break;
+                default:
+                    break;
+            }
+
+        },
+        render: function () {
             var base = this;
             var template = _.template(MainViewTemplate, {
-                activity:base.activity,
-                types:base.activity_types.models
+                activity: base.activity,
+                types: base.activity_types.models
             });
 
             base.$el.html(template);
-            base.$el.css("border", "2px " + base.activity.get('type').get('color') + " solid");
-            base.update();
-
+            var container_v = base.$el.find(".activity_show");
+            base.container_v = container_v;
+            container_v.css("border", "2px " + base.activity.get('type').get('color') + " solid");
 
             var planned_tasks = new PlannedTasksCollection();
             var tasks = base.activity.get("tasks").models;
@@ -78,10 +115,11 @@ define([
             var workload_timeline_view = new WorkloadTimelineView(planned_tasks, required_time);
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
             workload_timeline_view.init(base.SmartBlocks);
+            base.update();
         },
-        update:function () {
+        update: function () {
             var base = this;
-            base.$el.css("border", "2px " + base.activity.get('type').get('color') + " solid");
+            base.container_v.css("border", "2px " + base.activity.get('type').get('color') + " solid");
             base.$el.find(".name").html(base.activity.get("name"));
             base.$el.find(".description").html(base.activity.get("description"));
 
@@ -99,16 +137,16 @@ define([
                 base.$el.find(".tasks_list_container").html("No tasks found.");
             }
         },
-        registerEvents:function () {
+        registerEvents: function () {
             var base = this;
 
             base.$el.delegate(".type_select", "change", function () {
                 var value = $(this).val();
                 var type = new ActivityType({
-                    id:value
+                    id: value
                 });
                 type.fetch({
-                    success:function () {
+                    success: function () {
                         base.activity.set("type", type);
                         base.activity.save();
                         base.update();
@@ -148,7 +186,7 @@ define([
                     base.SmartBlocks.startLoading("Saving");
                     base.activity.get('tasks').add(task);
                     base.activity.save({}, {
-                        success:function () {
+                        success: function () {
                             base.SmartBlocks.stopLoading();
                             base.update();
                         }

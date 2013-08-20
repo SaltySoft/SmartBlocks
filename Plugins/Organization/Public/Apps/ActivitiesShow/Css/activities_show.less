@@ -1,6 +1,29 @@
 @elts_bg: whitesmoke;
 
 .activity_show_view {
+  position: relative;
+
+  .menu {
+//    float: right;
+//    width: auto;
+  }
+
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+  &.loading .activity_show {
+    display: none;
+  }
+
+  .activity_show {
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
     margin: auto;
     position: relative;
     height: 500px;
@@ -11,81 +34,84 @@
     margin-top: 50px;
 
     .activity_infos {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        top: 9px;
-        overflow-y: overlay;
-        height: 130px; //        background: @elts_bg;
+      position: absolute;
+      left: 9px;
+      width: 31.33%;
+      top: 9px;
+      overflow-y: overlay;
+      height: 130px; //        background: @elts_bg;
     }
 
     .type {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        top: 145px;
-        overflow-y: overlay;
+      position: absolute;
+      left: 9px;
+      width: 31.33%;
+      top: 145px;
+      overflow-y: overlay;
     }
 
     .acti_desc_textarea {
-        margin: 0px;
-        width: 176px;
-        height: 35px;
-        resize: none;
+      margin: 0px;
+      width: 176px;
+      height: 35px;
+      resize: none;
     }
 
     .tasks_associated_container {
-        margin-top: 10px;
+      margin-top: 10px;
     }
     .tasks_list_container {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        bottom: 45px;
-        top: 200px;
-        overflow-y: overlay;
-        background: @elts_bg;
+      position: absolute;
+      left: 9px;
+      width: 31.33%;
+      bottom: 45px;
+      top: 200px;
+      overflow-y: overlay;
+      background: @elts_bg;
     }
 
     .for_normal {
-        display: block;
+      display: block;
     }
 
     .for_edition {
-        display: none;
+      display: none;
     }
 
     .description {
-        height: 75px;
-        overflow: hidden;
+      height: 75px;
+      overflow: hidden;
     }
 
     .add_task_button {
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
     }
 
     .workload_timeline_container {
-        height: 160px;
-        background: whitesmoke;
+      height: 160px;
+      background: whitesmoke;
     }
-}
+  }
 
-.activity_show_view.edition {
+  .activity_show_view.edition {
     .for_normal {
-        display: none;
+      display: none;
     }
 
     .for_edition {
-        display: block;
+      display: block;
     }
+  }
+
+  .task_preview {
+    .controls {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+    }
+
 }
 
-.task_preview {
-    .controls {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-    }
 }

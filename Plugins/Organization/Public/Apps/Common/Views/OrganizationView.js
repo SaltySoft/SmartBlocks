@@ -49,7 +49,9 @@ define([
                     "activities/new": "activityCreation",
                     "activities": "activitiesIndex",
                     "activities/:id": "activitiesShow",
+                    "activities/:id/:subpage": "activitiesShowSubpage",
                     "tasks/:id": "tasksShow",
+                    "tasks/:id/:subpage": "tasksShowSubpage",
                     "tasks": "tasksIndex",
                     "planning": "planning"
 
@@ -75,8 +77,14 @@ define([
                 activitiesShow: function (id) {
                     base.launchActivitiesShow(id);
                 },
+                activitiesShowSubpage: function (id, subpage) {
+                    base.launchActivitiesShow(id);
+                },
                 tasksShow: function (id) {
-                    base.launchTasksShow(id);
+                    base.launchTasksShow(id, "summary");
+                },
+                tasksShowSubpage: function (id, subpage) {
+                    base.launchTasksShow(id, subpage);
                 },
                 planning: function () {
                     base.launchPlanningView();
@@ -164,14 +172,19 @@ define([
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
         },
-        launchActivitiesShow: function (id) {
+        launchActivitiesShow: function (id, subpage) {
             var base = this;
-            var activity = new Activity({ id: id });
-            base.current_view = new ActivitiesShowView(activity);
-            base.current_view.init(base.SmartBlocks);
-            base.$el.find(".control_bar a").removeClass("selected");
-            base.$el.find(".control_bar a.activities").addClass("selected");
-            base.setContent(base.current_view.$el);
+            if (!base.current_view || base.current_view.app_name != "activity_show" || id != base.current_view.activity.get('id')) {
+                var activity = new Activity({ id: id });
+                base.current_view = new ActivitiesShowView(activity);
+                base.current_view.init(base.SmartBlocks, subpage);
+                base.$el.find(".control_bar a").removeClass("selected");
+                base.$el.find(".control_bar a.activities").addClass("selected");
+                base.setContent(base.current_view.$el);
+            } else {
+                base.current_view.setSubpage(subpage);
+            }
+
         },
         launchTasksShow: function (id) {
             var base = this;

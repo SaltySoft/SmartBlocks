@@ -1,0 +1,26 @@
+<form class="edition_form pure-form" action="javascript:void(0);">
+    <div>
+        <label>
+            Name:
+            <input type="text" placeholder="Enter a name" value="<%= activity.get('name') %>" />
+        </label>
+    </div>
+    <div>
+        <label>
+            Type :
+            <select class="type_select">
+                <% for (var k in types) {%>
+                <option
+                <% if (activity.get('type').get('id') == types[k].get('id')) { %>
+                selected
+                <% }%> value="<%= types[k].get('id') %>"><%= types[k].get('name') %>
+                </option>
+                <% }%>
+            </select>
+        </label>
+    </div>
+    <div class="pure-controls">
+        <button type="reset" class="pure-button pure-button-warning">Cancel changes</button>
+        <button type="submit" class="pure-button pure-button-success">Save changes</button>
+    </div>
+</form>
