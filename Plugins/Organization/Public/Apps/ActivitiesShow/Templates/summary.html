@@ -1,0 +1,51 @@
+<div class="pure-g">
+    <div class="pure-u-1-3">
+        <div class="basics explain_text">
+            <em>Trivials</em>
+            <ul>
+                <li>
+                    <span class="title">Name : </span><span class="name info"><%= activity.get('name') %></span>
+                </li>
+                <li>
+                    <span class="title">Type : </span><span class="type info"><%= types.get(activity.get('type')).get('name') %></span>
+                </li>
+                <li>
+                    <span class="title">Associated tasks : </span><span class="tasks_count info"><%= activity.get('tasks').models.length %></span>
+                </li>
+                <li>
+                    <span class="title">Associated timeslots : </span><span class="pt_count info"></span>
+                </li>
+                <li>
+                        <span class="title">Total work : </span><span class="total_work info"><</span>
+                </li>
+                <li>
+                    <span class="title">Work done : </span><span class="work_done info"><</span>
+                </li>
+                <li>
+                    <span class="title">Work to do : </span><span class="work_todo info"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="pure-u-2-3">
+
+        <div class="description explain_text">
+            <em>Description</em>
+            <%= activity.get('description') %>
+        </div>
+    </div>
+    <div class="pure-u-1-3">
+        <div class="explain_text">
+        </div>
+    </div>
+    <div class="pure-u-2-3">
+        <div class="explain_text">
+            <em>Workload timeline</em>
+            <div class="workload_timeline_container">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+

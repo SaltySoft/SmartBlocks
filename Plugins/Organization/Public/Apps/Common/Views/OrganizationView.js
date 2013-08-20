@@ -31,6 +31,7 @@ define([
             var base = this;
             base.task_users = new TaskUsersCollection();
             window.OrgApp = base;
+            base.common = CommonMethods;
 
             base.tasks = new TasksCollection();
             base.activities = new ActivitiesCollection();

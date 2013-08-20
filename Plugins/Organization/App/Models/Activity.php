@@ -113,7 +113,7 @@ class Activity extends \Model
 
     public function getDescription()
     {
-        return $this->description;
+        return str_replace("\n", "<br/>", $this->description);
     }
 
     public function setName($name)
@@ -187,7 +187,7 @@ class Activity extends \Model
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
-            "description" => $this->description,
+            "description" => $this->getDescription(),
             "creator" => $this->creator->toArray(0),
 
             "created" => $this->created,

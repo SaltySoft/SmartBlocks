@@ -56,7 +56,7 @@
                 <div class="field">
                     <label>
                         Description
-                        <textarea class="description_input" name="description"><%= activity.get('description')
+                        <textarea class="description_input" name="description"><%= activity.get('description').replace('<br/>', "\n")
                             %></textarea>
                     </label>
                 </div>

@@ -13,8 +13,9 @@ define([
     'Organization/Apps/Common/Views/WorkloadTimeline',
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'text!LoadingTemplate',
-    './Edition'
-], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection, LoadingTemplate, EditionView) {
+    './Edition',
+    './Summary'
+], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection, LoadingTemplate, EditionView, SummaryView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activity_show_view",
@@ -65,7 +66,10 @@ define([
             base.setSubpage();
         },
         renderSummary: function () {
-
+            var base = this;
+            var summary_view = new SummaryView(base.activity);
+            base.$el.find(".activity_subapp_container").html(summary_view.$el);
+            summary_view.init(base.SmartBlocks);
         },
         renderEdition: function () {
             var base = this;
@@ -81,9 +85,10 @@ define([
             if (base.subpage == "edition") {
                 base.renderEdition();
                 base.$el.find(".edition_tab_button").addClass("pure-menu-selected");
+            } else if (base.subpage == "summary") {
+                base.renderSummary();
+                base.$el.find(".summary_tab_button").addClass("pure-menu-selected");
             }
-
-
 
 
         },
@@ -99,20 +104,7 @@ define([
             base.container_v = container_v;
             container_v.css("border", "2px " + base.activity.get('type').get('color') + " solid");
 
-            var planned_tasks = new PlannedTasksCollection();
-            var tasks = base.activity.get("tasks").models;
-            var required_time = 0;
-            for (var k in tasks) {
-                var planned_tasks_c = tasks[k].get("planned_tasks");
-                required_time += tasks[k].get("required_time");
-                for (var k in planned_tasks_c.models) {
-                    planned_tasks.add(planned_tasks_c.models[k]);
-                }
-            }
 
-            var workload_timeline_view = new WorkloadTimelineView(planned_tasks, required_time);
-            base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
-            workload_timeline_view.init(base.SmartBlocks);
             base.update();
         },
         update: function () {
