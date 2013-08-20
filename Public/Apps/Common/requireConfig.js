@@ -32,7 +32,8 @@ var sb_paths = {
     amplify: "/javascript/amplify.min",
     fullCalendar: "/javascript/fullcalendar.min",
 
-    LoadingTemplate: "/Apps/Common/Templates/loading.html"
+    LoadingTemplate: "/Apps/Common/Templates/loading.html",
+    LoadingScreen: "/Apps/Common/Views/LoadingScreen"
 };
 
 var sb_shims = {

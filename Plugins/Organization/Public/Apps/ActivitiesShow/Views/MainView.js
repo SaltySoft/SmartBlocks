@@ -29,7 +29,8 @@ define([
         init: function (SmartBlocks, subpage) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.subpage = subpage;
+            if (subpage)
+                base.subpage = subpage;
             base.$el.addClass("loading");
             base.loading_template = _.template(LoadingTemplate, {
             });
@@ -76,16 +77,9 @@ define([
             var base = this;
             if (subpage)
                 base.subpage = subpage;
-
-            switch(base.subpage) {
-                case "summary":
-
-                    break;
-                case "edition" :
-                    base.renderEdition();
-                    break;
-                default:
-                    break;
+            console.log(base.subpage, base.subpage === "edition");
+            if (base.subpage == "edition") {
+                base.renderEdition();
             }
 
         },

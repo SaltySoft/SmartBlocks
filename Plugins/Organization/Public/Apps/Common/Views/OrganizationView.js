@@ -2,6 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'LoadingScreen',
     'text!Organization/Apps/Common/Templates/organization.html',
     'Organization/Apps/Calendar/Views/MainView',
     'Organization/Apps/Tasks/Views/MainView',
@@ -17,11 +18,12 @@ define([
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',
+    'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, Task, TasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, TasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -32,6 +34,7 @@ define([
 
             base.tasks = new TasksCollection();
             base.activities = new ActivitiesCollection();
+            base.activity_types = new ActivityTypesCollection();
         },
 
         init: function (SmartBlocks) {
@@ -75,10 +78,10 @@ define([
                     base.launchTasksBoard();
                 },
                 activitiesShow: function (id) {
-                    base.launchActivitiesShow(id);
+                    base.launchActivitiesShow(id, "summary");
                 },
                 activitiesShowSubpage: function (id, subpage) {
-                    base.launchActivitiesShow(id);
+                    base.launchActivitiesShow(id, subpage);
                 },
                 tasksShow: function (id) {
                     base.launchTasksShow(id, "summary");
@@ -97,14 +100,32 @@ define([
                 }
             });
 
+
+            var loading_screen = new LoadingScreen();
+            base.setContent(loading_screen.$el);
+            loading_screen.init(base.SmartBlocks);
+            loading_screen.setMax(10);
             var app_router = new Router();
+            loading_screen.setLoad(0);
+            loading_screen.setText("Loading tasks");
             base.tasks.fetch({
                 success: function () {
+                    loading_screen.setLoad(4);
+                    loading_screen.setText("Loading activities");
                     base.activities.fetch({
                         success: function () {
-                            Backbone.history.start();
+                            loading_screen.setLoad(8);
+                            loading_screen.setText("Loading activity types");
+
+                            base.activity_types.fetch({
+                                success: function () {
+                                    loading_screen.setLoad(10);
+                                    Backbone.history.start();
+                                }
+                            });
                         }
                     });
+
                 }
             });
 

@@ -23,7 +23,8 @@ define([
             var base = this;
 
             var template = _.template(EditionTemplate, {
-                activity: base.activity
+                activity: base.activity,
+                types: OrgApp.activity_types
             });
             base.$el.html(template);
         },
