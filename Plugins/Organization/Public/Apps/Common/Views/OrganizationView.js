@@ -21,9 +21,10 @@ define([
     'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Tasks/Collections/Tasks',
+    'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, TasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -34,8 +35,10 @@ define([
             base.common = CommonMethods;
 
             base.tasks = new TasksCollection();
+            base.planned_tasks = new PlannedTasksCollection();
             base.activities = new ActivitiesCollection();
             base.activity_types = new ActivityTypesCollection();
+            base.events = $.extend({}, Backbone.Events);
         },
 
         init: function (SmartBlocks) {
@@ -116,15 +119,21 @@ define([
                     loading_screen.setText("Loading activities");
                     base.activities.fetch({
                         success: function () {
-                            loading_screen.setLoad(8);
-                            loading_screen.setText("Loading activity types");
-
-                            base.activity_types.fetch({
+                            loading_screen.setLoad(6);
+                            loading_screen.setText("Loading planned tasks");
+                            base.planned_tasks.fetch({
                                 success: function () {
-                                    loading_screen.setLoad(10);
-                                    Backbone.history.start();
+                                    loading_screen.setLoad(8);
+                                    loading_screen.setText("Loading activity types");
+                                    base.activity_types.fetch({
+                                        success: function () {
+                                            loading_screen.setLoad(10);
+                                            Backbone.history.start();
+                                        }
+                                    });
                                 }
                             });
+
                         }
                     });
 

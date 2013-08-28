@@ -22,6 +22,7 @@ define([
             base.render();
             base.registerEvents();
             base.callback = callback;
+            base.$el.disableSelection();
         },
         render: function () {
             var base = this;
