@@ -78,7 +78,7 @@ define([
                     allDay: false,
                     id: planned_task.get("id"),
                     className: "planned_task_cal",
-                    color: (base.planned_tasks.get(planned_task.get('id'))) ? base.activity.get('type').color : "gray"
+                    color: (base.planned_tasks.get(planned_task.get('id'))) ? base.activity.get('type').get('color') : "gray"
                 });
             }
 
@@ -148,7 +148,8 @@ define([
                     copiedEventObject.allDay = false;
                     copiedEventObject.editable = true;
                     copiedEventObject.className = "planned_task_cal";
-
+                    copiedEventObject.color = base.activity.get('type').get('color');
+                    console.log(copiedEventObject);
                     // render the event on the calendar
                     // the last `true` argument determines if the event "sticks" (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
 
