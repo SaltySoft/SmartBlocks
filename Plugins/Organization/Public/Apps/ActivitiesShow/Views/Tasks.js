@@ -1,13 +1,17 @@
 define([
     'jquery',
-    '../../../../../.',
-    'backbone'
-], function ($, _, Backbone) {
+    'underscore',
+    'backbone',
+    'text!../Templates/tasks.html',
+    'Organization/Apps/Common/Views/TaskThumbnail'
+], function ($, _, Backbone, tasks_template, TaskThumbnail) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "a_class",
-        initialize: function () {
+        className: "tasks_list_view",
+        initialize: function (activity) {
             var base = this;
+            base.model = activity;
+            base.activity = activity;
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -18,8 +22,31 @@ define([
         render: function () {
             var base = this;
 
-            //var template = _.template(SomeTemplate, {});
-            //base.$el.html(template);
+            var template = _.template(tasks_template, {});
+            base.$el.html(template);
+
+            base.renderTasks();
+        },
+        renderTasks: function () {
+            var base = this;
+
+            var name_filter = base.$el.find(".name_filter").val();
+
+            var tasks = _.filter(base.activity.get("tasks").models, function (elt) {
+                return elt.get("name").indexOf(name_filter) !== -1;
+            });
+
+            base.$el.find(".tasks_container").html("");
+            for (var k in tasks) {
+                var task = tasks[k];
+                var task_thumbnail = new TaskThumbnail(task);
+                base.$el.find(".tasks_container").append(task_thumbnail.$el);
+                task_thumbnail.$el.addClass("small");
+                task_thumbnail.init(base.SmartBlocks);
+
+                var plus = $(document.createElement("div"));
+                plus.addClass();
+            }
         },
         registerEvents: function () {
             var base = this;

@@ -15,8 +15,9 @@ define([
     'text!LoadingTemplate',
     './Edition',
     './Summary',
-    './Planning'
-], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection, LoadingTemplate, EditionView, SummaryView, PlanningView) {
+    './Planning',
+    './Tasks'
+], function ($, _, Backbone, MainViewTemplate, ActivityTypesCollection, ActivityType, TasksListView, TaskPreview, TaskPopup, Task, ActivitiesCollection, WorkloadTimelineView, PlannedTasksCollection, LoadingTemplate, EditionView, SummaryView, PlanningView, TasksView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activity_show_view",
@@ -78,6 +79,12 @@ define([
             base.$el.find(".activity_subapp_container").html(edition_view.$el);
             edition_view.init(base.SmartBlocks);
         },
+        renderTasks: function () {
+            var base = this;
+            var tasks_view = new TasksView(base.activity);
+            base.$el.find(".activity_subapp_container").html(tasks_view.$el);
+            tasks_view.init(base.SmartBlocks);
+        },
         renderPlanning: function () {
             var base = this;
             var edition_view = new PlanningView(base.activity);
@@ -98,6 +105,9 @@ define([
             } else if (base.subpage == "planning") {
                 base.renderPlanning();
                 base.$el.find(".planning_tab_button").addClass("pure-menu-selected");
+            } else if (base.subpage == "tasks") {
+                base.renderTasks();
+                base.$el.find(".tasks_tab_button").addClass("pure-menu-selected");
             }
         },
         render: function () {
