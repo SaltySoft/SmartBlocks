@@ -32,6 +32,10 @@ define([
             base.$el.html(template);
 
             var canvas_c = base.$el.find(".deadline_clock");
+            if (base.$el.hasClass("small")) {
+                canvas_c.attr("height", 60);
+                canvas_c.attr("width", 60);
+            }
 
             var canvas_p = base.$el.find(".progress_bar");
 

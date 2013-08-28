@@ -1,6 +1,58 @@
 .task_thumbnail_view {
   position: relative;
 
+  &.deadline {
+    .clock_container {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      opacity: 0.7;
+      transition: opacity 500ms;
+      -webkit-transition: opacity 500ms;
+    }
+
+    .clock_container:hover {
+      opacity: 1;
+    }
+
+  }
+
+  &.normal {
+
+    .clock_container {
+      display: none;
+    }
+  }
+
+  &.small {
+    width: 150px;
+    height: 75px;
+    background: gray;
+    margin: 10px;
+    padding: 5px;
+
+    .description_container {
+      display: none;
+    }
+
+    .controls {
+      display: none;
+    }
+
+    .progress_bar_container {
+      display: none;
+    }
+
+    .tags_container {
+      display: none;
+    }
+
+    .clock_container {
+      right: -15px;
+      top: -15px;
+    }
+  }
+
   .controls {
     float: left;
     text-align: center;
@@ -35,28 +87,5 @@
       background: #f5f5f5;
       height: 100px;
     }
-  }
-}
-
-.task_thumbnail_view.deadline {
-  .clock_container {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    opacity: 0.7;
-    transition: opacity 500ms;
-    -webkit-transition: opacity 500ms;
-  }
-
-  .clock_container:hover {
-    opacity: 1;
-  }
-
-}
-
-.task_thumbnail_view.normal {
-
-  .clock_container {
-    display: none;
   }
 }

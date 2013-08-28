@@ -2,6 +2,7 @@
 
 .activity_show_view {
   position: relative;
+
   .loader_container {
     display: none;
   }
@@ -20,7 +21,7 @@
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     margin: auto;
     position: relative;
-    height: 500px;
+    height: 650px;
     width: 800px;
 
     background: white;
@@ -29,9 +30,9 @@
 
     .activity_subapp_container {
       height: ~"calc(100% - 36px)";
-      @import "summary.less";
-
-      @import "edition.less";
+    @import "summary.less";
+    @import "edition.less";
+    @import "planning.less";
 
     }
 
