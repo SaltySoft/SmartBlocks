@@ -54,10 +54,31 @@
 
     .clock_container {
       opacity: 1;
+
+      position: relative;
+      > canvas {
+        margin: auto;
+        display: block;
+      }
     }
 
     h3 .task_name {
       font-size: 17px;
+      text-align: center;
+      line-height: 19px;
+
+    }
+    h3 a {
+      color: #000405;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 500ms;
+    }
+
+    h3 a:hover {
+      color: #009cc2;
+      font-weight: bold;
+      text-decoration: none;
     }
 
     .for_small_b {
