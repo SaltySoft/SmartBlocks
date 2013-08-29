@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/tasks.html',
-    'Organization/Apps/Common/Views/TaskThumbnail'
-], function ($, _, Backbone, tasks_template, TaskThumbnail) {
+    'Organization/Apps/Common/Views/TaskThumbnail',
+    'text!Organization/Apps/Common/Templates/add_task_thumb.html'
+], function ($, _, Backbone, tasks_template, TaskThumbnail, add_task_thumb) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "tasks_list_view",
@@ -43,10 +44,11 @@ define([
                 base.$el.find(".tasks_container").append(task_thumbnail.$el);
                 task_thumbnail.$el.addClass("small");
                 task_thumbnail.init(base.SmartBlocks);
-
-                var plus = $(document.createElement("div"));
-                plus.addClass();
             }
+            var plus = _.template(add_task_thumb, {
+                activity: base.activity
+            });
+            base.$el.find(".tasks_container").append(plus);
         },
         registerEvents: function () {
             var base = this;

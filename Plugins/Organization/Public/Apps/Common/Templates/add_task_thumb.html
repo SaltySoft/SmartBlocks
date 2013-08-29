@@ -1,10 +1,11 @@
-<div class="task_thumbnail_view add_task_button_container">
-    <a href="#tasks/new" class="add_task_button">
+<a class="task_thumbnail_view small add_task_button_container"
+   href="#tasks/new/<% if (activity) { %>activity=<%= activity.get('id') %><% } %>">
+    <div class="add_task_button_container_content">
         <div class="plus_container">
             <span class="plus">+</span>
         </div>
         <div class="add_text">
             Add new task
         </div>
-    </a>
-</div>
+    </div>
+</a>
