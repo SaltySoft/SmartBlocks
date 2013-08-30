@@ -80,7 +80,7 @@ define([
                         success: function () {
                             OrgApp.tasks.add(base.task);
                             console.log("SAVED TASK", base.task);
-                            window.location = "#tasks/" + base.task.get('id');
+                            OrgApp.goTo("#tasks/" + base.task.get('id'));
                         }
                     });
                 }

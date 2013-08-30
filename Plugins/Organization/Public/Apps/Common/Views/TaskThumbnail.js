@@ -6,8 +6,9 @@ define([
     './DeadlineThumbnail',
     '../SubApps/DeadlineClock/DeadlineClock',
     '../SubApps/DeadlineProgressBar/DeadlineProgressBar',
-    './TaskTagItem'
-], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar, TaskTagItem) {
+    './TaskTagItem',
+    'ContextMenuView'
+], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar, TaskTagItem, ContextMenu) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_thumbnail_view",
@@ -110,6 +111,29 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.attr("oncontextmenu", "return false;");
+
+            base.$el.mouseup(function (e) {
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton("Show", function () {
+                        window.location = '#tasks/' + base.task.get('id');
+                    });
+                    context_menu.addButton("Delete", function () {
+                        if (confirm("Are you sure you want to delete this task and all its planned events ?")) {
+                            base.task.destroy({
+                                success: function () {
+                                    base.$el.remove();
+                                }
+                            });
+                        }
+                    });
+
+                    context_menu.show(e);
+
+                }
+            });
         }
     });
 

@@ -40,8 +40,21 @@ define([
             base.activities = new ActivitiesCollection();
             base.activity_types = new ActivityTypesCollection();
             base.events = $.extend({}, Backbone.Events);
-        },
 
+            base.ForceReturn = undefined;
+        },
+        goTo: function (url) {
+            var base = this;
+
+            if (url) {
+                if (base.ForceReturn) {
+                    window.location = base.ForceReturn;
+                    base.ForceReturn = undefined;
+                } else {
+                    window.location = url;
+                }
+            }
+        },
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;

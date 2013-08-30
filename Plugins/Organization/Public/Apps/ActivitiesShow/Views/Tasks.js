@@ -27,6 +27,7 @@ define([
             base.$el.html(template);
 
             base.renderTasks();
+            base.registerEvents();
         },
         renderTasks: function () {
             var base = this;
@@ -52,6 +53,10 @@ define([
         },
         registerEvents: function () {
             var base = this;
+            base.$el.delegate(".add_task_button_container", "click", function () {
+                OrgApp.ForceReturn = "#activities/" + base.activity.get('id') + "/tasks";
+                window.location = "#tasks/new/activity=" + base.activity.get('id');
+            });
         }
     });
 
