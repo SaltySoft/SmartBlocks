@@ -263,13 +263,13 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
-        launchTaskCreation: function () {
+        launchTaskCreation: function (id) {
             var base = this;
             base.current_view = new TaskCreationView();
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
-            base.current_view.init(base.SmartBlocks);
+            base.current_view.init(base.SmartBlocks, id);
         },
         checkForNotifications: function () {
             var base = this;

@@ -144,13 +144,16 @@ class TasksController extends \Controller
         {
 
             $tags = explode(",", $data["tags"]);
-            if (count($tags) > 0) {
+            if (count($tags) > 0)
+            {
                 $return_array = new  \Doctrine\Common\Collections\ArrayCollection();
                 foreach ($results as $result)
                 {
-                    foreach ($result->getTags() as $task_tag) {
+                    foreach ($result->getTags() as $task_tag)
+                    {
                         foreach ($tags as $tag)
-                            if ($tag != "" && strpos($task_tag->getName(), $tag) !== FALSE) {
+                            if ($tag != "" && strpos($task_tag->getName(), $tag) !== FALSE)
+                            {
                                 $return_array->add($result);
                             }
                     }
@@ -241,19 +244,33 @@ class TasksController extends \Controller
             }
         }
 
+
+        $task->save();
+
+        if (isset($data["activity"]))
+        {
+            $activity = Activity::find($data["activity"]["id"]);
+            if (is_object($activity))
+            {
+                $activity->getTasks()->add($task);
+                $activity->save();
+            }
+        }
         if (isset($data["activities"]))
         {
             if (is_array($data["activities"]))
             {
-                $activity = Activity::find($data["activity"]["id"]);
-                if (is_object($activity))
+                foreach ($data["activities"] as $activity_array)
                 {
-                    $task->getActivities()->add($activity);
+                    $activity = Activity::find($activity_array["id"]);
+                    if (is_object($activity))
+                    {
+                        $activity->getTasks()->add($task);
+                        $activity->save();
+                    }
                 }
             }
         }
-
-        $task->save();
         $this->render = false;
         header("Content-Type: application/json");
         echo json_encode($task->toArray());

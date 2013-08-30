@@ -13,7 +13,8 @@ define([
     var Task = Backbone.Model.extend({
         urlRoot: "/Organization/Tasks",
         defaults: {
-            "model_type": "Task"
+            "model_type": "Task",
+            activities: []
         },
         hasDeadline: function () {
             return this.get("due_date");
