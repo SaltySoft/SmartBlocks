@@ -44,9 +44,9 @@ define([
                 var form = $(this);
                 var valid = true;
                 var name = base.$el.find(".name_input").val();
-                if (name != "" && name.match(/^[a-zA-Z]+$/i)) {
+                base.task.set("description", base.$el.find(".description_input").val());
+                if (name != "" && name.match(/^[a-zA-Z\s]+$/i)) {
                     base.task.set("name", name);
-
                     base.$el.find(".name_field_error").hide();
                 } else {
                     valid = false;
@@ -95,6 +95,10 @@ define([
                 } else {
                     base.$el.find(".deadline_time").hide();
                 }
+            });
+
+            base.$el.delegate(".cancel_button", "click", function () {
+                OrgApp.goTo("#tasks");
             });
         }
     });
