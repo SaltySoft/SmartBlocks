@@ -2,6 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'LoadingScreen',
     'text!Organization/Apps/Common/Templates/organization.html',
     'Organization/Apps/Calendar/Views/MainView',
     'Organization/Apps/Tasks/Views/MainView',
@@ -14,14 +15,17 @@ define([
     'Organization/Apps/Planning/Views/MainView',
     'Organization/Apps/TasksIndex/Views/MainView',
     'Organization/Apps/ActivityCreation/Views/MainView',
+    'Organization/Apps/taskCreation/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',
+    'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Tasks/Collections/Tasks',
+    'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskUsersCollection, Activity, ActivitiesCollection, Task, TasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -29,9 +33,13 @@ define([
             var base = this;
             base.task_users = new TaskUsersCollection();
             window.OrgApp = base;
+            base.common = CommonMethods;
 
             base.tasks = new TasksCollection();
+            base.planned_tasks = new PlannedTasksCollection();
             base.activities = new ActivitiesCollection();
+            base.activity_types = new ActivityTypesCollection();
+            base.events = $.extend({}, Backbone.Events);
         },
 
         init: function (SmartBlocks) {
@@ -49,7 +57,11 @@ define([
                     "activities/new": "activityCreation",
                     "activities": "activitiesIndex",
                     "activities/:id": "activitiesShow",
+                    "activities/:id/:subpage": "activitiesShowSubpage",
+                    "tasks/new": "taskCreation",
+                    "tasks/new/activity=:id": "taskCreation",
                     "tasks/:id": "tasksShow",
+                    "tasks/:id/:subpage": "tasksShowSubpage",
                     "tasks": "tasksIndex",
                     "planning": "planning"
 
@@ -73,10 +85,16 @@ define([
                     base.launchTasksBoard();
                 },
                 activitiesShow: function (id) {
-                    base.launchActivitiesShow(id);
+                    base.launchActivitiesShow(id, "summary");
+                },
+                activitiesShowSubpage: function (id, subpage) {
+                    base.launchActivitiesShow(id, subpage);
                 },
                 tasksShow: function (id) {
-                    base.launchTasksShow(id);
+                    base.launchTasksShow(id, "summary");
+                },
+                tasksShowSubpage: function (id, subpage) {
+                    base.launchTasksShow(id, subpage);
                 },
                 planning: function () {
                     base.launchPlanningView();
@@ -86,17 +104,46 @@ define([
                 },
                 activityCreation: function () {
                     base.launchActivityCreation();
+                },
+                taskCreation: function (id) {
+                    base.launchTaskCreation(id);
                 }
+
             });
 
+
+            var loading_screen = new LoadingScreen();
+            base.setContent(loading_screen.$el);
+            loading_screen.init(base.SmartBlocks);
+            loading_screen.setMax(10);
             var app_router = new Router();
+
+            loading_screen.setLoad(0);
+            loading_screen.setText("Loading tasks");
             base.tasks.fetch({
                 success: function () {
+                    loading_screen.setLoad(4);
+                    loading_screen.setText("Loading activities");
                     base.activities.fetch({
                         success: function () {
-                            Backbone.history.start();
+                            loading_screen.setLoad(6);
+                            loading_screen.setText("Loading planned tasks");
+                            base.planned_tasks.fetch({
+                                success: function () {
+                                    loading_screen.setLoad(8);
+                                    loading_screen.setText("Loading activity types");
+                                    base.activity_types.fetch({
+                                        success: function () {
+                                            loading_screen.setLoad(10);
+                                            Backbone.history.start();
+                                        }
+                                    });
+                                }
+                            });
+
                         }
                     });
+
                 }
             });
 
@@ -164,14 +211,22 @@ define([
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
         },
-        launchActivitiesShow: function (id) {
+        launchActivitiesShow: function (id, subpage) {
             var base = this;
-            var activity = new Activity({ id: id });
-            base.current_view = new ActivitiesShowView(activity);
-            base.current_view.init(base.SmartBlocks);
-            base.$el.find(".control_bar a").removeClass("selected");
-            base.$el.find(".control_bar a.activities").addClass("selected");
-            base.setContent(base.current_view.$el);
+            if (!base.current_view || base.current_view.app_name != "activity_show" || id != base.current_view.activity.get('id')) {
+                var activity = base.activities.get(id);
+                if (!activity) {
+                    activity = new Activity({id: id});
+                }
+                base.current_view = new ActivitiesShowView(activity);
+                base.current_view.init(base.SmartBlocks, subpage);
+                base.$el.find(".control_bar a").removeClass("selected");
+                base.$el.find(".control_bar a.activities").addClass("selected");
+                base.setContent(base.current_view.$el);
+            } else {
+                base.current_view.setSubpage(subpage);
+            }
+
         },
         launchTasksShow: function (id) {
             var base = this;
@@ -205,6 +260,14 @@ define([
 
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.activities").addClass("selected");
+            base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
+        },
+        launchTaskCreation: function () {
+            var base = this;
+            base.current_view = new TaskCreationView();
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },

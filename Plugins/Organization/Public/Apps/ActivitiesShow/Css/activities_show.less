@@ -1,91 +1,41 @@
 @elts_bg: whitesmoke;
 
 .activity_show_view {
+  position: relative;
+
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+  &.loading .activity_show {
+    display: none;
+  }
+
+  .activity_show {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
     margin: auto;
     position: relative;
-    height: 500px;
+    height: 650px;
     width: 800px;
 
     background: white;
     padding: 10px;
     margin-top: 50px;
 
-    .activity_infos {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        top: 9px;
-        overflow-y: overlay;
-        height: 130px; //        background: @elts_bg;
+    .activity_subapp_container {
+      height: ~"calc(100% - 36px)";
+    @import "summary.less";
+    @import "edition.less";
+    @import "planning.less";
+    @import "tasks.less";
     }
 
-    .type {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        top: 145px;
-        overflow-y: overlay;
-    }
+  }
 
-    .acti_desc_textarea {
-        margin: 0px;
-        width: 176px;
-        height: 35px;
-        resize: none;
-    }
-
-    .tasks_associated_container {
-        margin-top: 10px;
-    }
-    .tasks_list_container {
-        position: absolute;
-        left: 9px;
-        width: 31.33%;
-        bottom: 45px;
-        top: 200px;
-        overflow-y: overlay;
-        background: @elts_bg;
-    }
-
-    .for_normal {
-        display: block;
-    }
-
-    .for_edition {
-        display: none;
-    }
-
-    .description {
-        height: 75px;
-        overflow: hidden;
-    }
-
-    .add_task_button {
-        position: absolute;
-        left: 10px;
-        bottom: 10px;
-    }
-
-    .workload_timeline_container {
-        height: 160px;
-        background: whitesmoke;
-    }
-}
-
-.activity_show_view.edition {
-    .for_normal {
-        display: none;
-    }
-
-    .for_edition {
-        display: block;
-    }
-}
-
-.task_preview {
-    .controls {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-    }
 }

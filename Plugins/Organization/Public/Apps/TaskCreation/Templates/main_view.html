@@ -1,0 +1,41 @@
+<div class="header">
+    <h1>Tasks : new task</h1>
+</div>
+
+<form class="pure-form creation_form" action="javascript:void(0);">
+    <div class="explain_text">
+        <h4>Task Creation</h4>
+        You need to provide the name and type of the task you want to create, then you will be redirected to its page where
+        you'll be able to edit it. Click on cancel to go to the tasks index.
+    </div>
+    <div class="name_field field">
+        <div class="name_field_error field_error">
+            Must be alphabetical & non empty
+        </div>
+        <label>
+                <span>
+                    Name of the task
+                </span>
+            <input type="text" class="name_input" placeholder="Enter a name"/>
+
+        </label>
+    </div>
+    <div class="type_field field">
+        <div class="type_field_error field_error">
+            You must provide an activity
+        </div>
+        <label>
+                <span>
+                    Activity
+                </span>
+            <select class="type_input">
+                <option value="0">Any type</option>
+
+            </select>
+        </label>
+    </div>
+    <div class="pure-controls">
+        <a href="#activities" class="pure-button pure-button-warning">Cancel</a>
+        <button type="submit" class="pure-button pure-button-success">Create</button>
+    </div>
+</form>
