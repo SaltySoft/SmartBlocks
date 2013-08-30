@@ -78,7 +78,7 @@ define([
                     allDay: false,
                     id: planned_task.get("id"),
                     className: "planned_task_cal",
-                    color: (base.planned_tasks.get(planned_task.get('id'))) ? base.activity.get('type').get('color') : "gray"
+                    color: (base.activity.get('tasks').get(planned_task.get('task').get('id'))) ? base.activity.get('type').get('color') : "gray"
                 });
             }
 
@@ -161,6 +161,7 @@ define([
                     planned_task.set("duration", 3600000);
                     planned_task.set("content", task.get("name"));
                     planned_task.set("task", task);
+
                     planned_task.save({}, {
                         success: function () {
                             copiedEventObject.id = planned_task.get("id");
@@ -170,6 +171,9 @@ define([
                             task.get('planned_tasks').add(planned_task);
                             base.planning.fullCalendar('renderEvent', copiedEventObject);
                             console.log(copiedEventObject);
+                            OrgApp.planned_tasks.add(planned_task);
+                            task.get("planned_tasks").add(planned_task);
+                            task.save();
                         }
                     });
 
