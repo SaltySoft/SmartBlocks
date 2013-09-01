@@ -113,7 +113,14 @@ define([
             var date = base.task.getDueDate();
 
             var formatted_date = date.getDay() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-
+            var fully_planned = base.task.fullyPlanned();
+            if (fully_planned == 1) {
+                base.$el.find(".icon").html('<img src="/images/icons/tick.png" />');
+            } else if (fully_planned < 0) {
+                base.$el.find(".icon").html('<img src="/images/icons/time.png" />');
+            } else if (fully_planned > 1) {
+                base.$el.find(".icon").html('over');
+            }
 
         },
         registerEvents: function () {

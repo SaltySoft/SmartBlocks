@@ -171,13 +171,19 @@ define([
                 var end = new Date(start);
                 end.setTime(end.getTime() + pt.get("duration"));
 
-                worked_time += pt.get("duration");
+                worked_time += parseInt(pt.get("duration"));
             }
 
             if (!base.get("due_date")) {
-                return false;
+                return 0;
             } else {
-                return  (worked_time >= base.get("required_time"));
+                if (worked_time == parseInt(base.get("required_time"))) {
+                    return 1;
+                } else if (worked_time < parseInt(base.get("required_time"))) {
+                    return -1;
+                } else if (worked_time > parseInt(base.get("required_time"))) {
+                    return 2;
+                }
             }
 
 
