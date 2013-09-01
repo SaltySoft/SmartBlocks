@@ -44,6 +44,10 @@ define([
                 var task_thumbnail = new TaskThumbnail(task);
                 task_thumbnail.$el.addClass("small");
                 task_thumbnail.$el.draggable({
+                    appendTo: 'body',
+                    containment: 'window',
+                    scroll: false,
+                    helper: 'clone',
                     revert: true
                 });
                 base.$el.find(".tasks_list_container").append(task_thumbnail.$el);
