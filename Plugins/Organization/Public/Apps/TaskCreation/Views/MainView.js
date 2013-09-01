@@ -53,13 +53,10 @@ define([
                     base.$el.find(".name_field_error").show();
                 }
                 var type = base.$el.find(".type_input").val();
-                console.log("activity id : ", type);
                 if (type > 0) {
                     base.activity = OrgApp.activities.get(type);
-                    console.log("TASK", base.task);
                     base.task.set('activity', base.activity);
                     base.$el.find(".type_field_error").hide();
-                    console.log("TASK", base.task);
                 } else {
                     valid = false;
                     base.$el.find(".type_field_error").show();
@@ -73,13 +70,14 @@ define([
                     var minute = base.$el.find(".deadline_minute_input").val();
                     date.setHours(hour, minute, 0, 0);
                     base.task.setDueDate(date);
+                    base.task.set("required_time", base.$el.find(".needed_time_input").val());
+
                 }
                 if (valid) {
 
                     base.task.save({}, {
                         success: function () {
                             OrgApp.tasks.add(base.task);
-                            console.log("SAVED TASK", base.task);
                             OrgApp.goTo("#tasks/" + base.task.get('id'));
                         }
                     });

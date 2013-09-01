@@ -39,7 +39,7 @@ define([
                 canvas_c.attr("width", 60);
             }
 
-            var canvas_p = base.$el.find(".progress_bar");
+            var canvas_p = base.$el.find(".progress_bar_");
 
             if (base.task.hasDeadline()) {
                 base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
