@@ -36,11 +36,9 @@ define([
                 base.blocks_collection.reparse();
                 base.render();
             }
-
         },
         render: function () {
             var base = this;
-            console.log(base.blocks_collection);
             var template = _.template(DashboardTemplate, {
                 blocks: base.blocks_collection.models,
                 kernel: "kernel"

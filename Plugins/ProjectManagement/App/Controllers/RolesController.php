@@ -2,7 +2,7 @@
 
 namespace ProjectManagement;
 
-class WorkingDurationsController extends \Controller
+class RolesController extends \Controller
 {
     public function security_check()
     {
@@ -20,13 +20,17 @@ class WorkingDurationsController extends \Controller
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
 
-        $qb->select("wd")
-            ->from("ProjectManagement\\WorkingDuration", "wd");
-
-        if (isset($_GET["current_user_only"]) && $_GET["current_user_only"] == "true")
+        if (isset($_GET["project_id"]) && $_GET["project_id"] != "")
         {
-            $qb->andWhere("user = :user")
-                ->setParameter("user", \User::current_user());
+            $qb->select("r")
+                ->from("ProjectManagement\\Role", "r")
+                ->andWhere("r.project = :project_id")
+                ->setParameter("project_id", $_GET["project_id"]);
+        }
+        else
+        {
+            $qb->select("r")
+                ->from("ProjectManagement\\Role", "r");
         }
 
         $models = $qb->getQuery()->getResult();
@@ -42,7 +46,7 @@ class WorkingDurationsController extends \Controller
         $this->render = false;
         header("Content-Type: application/json");
 
-        $model = Project::find($params['id']);
+        $model = Role::find($params['id']);
 
         if (is_object($model))
         {
@@ -60,32 +64,27 @@ class WorkingDurationsController extends \Controller
 
         $this->render = false;
         header("Content-Type: application/json");
+
+        $model = new Role();
         $data = $this->getRequestData();
-
-//        $timestamp = $data["date"];
-//        $day = date('j', $timestamp);
-//        $month = date('n', $timestamp);
-//        $year = date('Y', $timestamp);
-//
-//        $em = \Model::getEntityManager();
-//        $qb = $em->createQueryBuilder();
-//
-//        $qb->select("wd")
-//            ->from("ProjectManagement\\WorkingDuration", "wd");
-//
-//        if (isset($_GET["current_user_only"]) && $_GET["current_user_only"] == "true")
-//        {
-//            $qb->andWhere("user = :user")
-//                ->setParameter("user", \User::current_user());
-//        }
-//        $models = $qb->getQuery()->getResult();
-
-
-        $model = new WorkingDuration();
-        $model->setHoursNumber($data["hours_number"]);
-        $model->setDate($data["date"]);
-        $model->setProject(Project::find($data["project_id"]));
-        $model->setUser(\User::current_user());
+        $model->setName($data["name"]);
+        $model->setCost($data["cost"]);
+        if (isset($data["user_id"]))
+        {
+            $user = \User::find($data["user_id"]);
+            if (is_object($user))
+            {
+                $model->setUser($user);
+            }
+        }
+        if (isset($data["project_id"]))
+        {
+            $project = \ProjectManagement\Project::find($data["project_id"]);
+            if (is_object($project))
+            {
+                $model->setProject($project);
+            }
+        }
 
         $model->save();
 
@@ -104,9 +103,26 @@ class WorkingDurationsController extends \Controller
         $this->render = false;
         header("Content-Type: application/json");
 
-        $model = WorkingDuration::find($params["id"]);
+        $model = Role::find($params["id"]);
         $data = $this->getRequestData();
-        $model->setHoursNumber($data["hours_number"]);
+        $model->setName($data["name"]);
+        $model->setCost($data["cost"]);
+        if (isset($data["user_id"]))
+        {
+            $user = \User::find($data["user_id"]);
+            if (is_object($user))
+            {
+                $model->setUser($user);
+            }
+        }
+        if (isset($data["project_id"]))
+        {
+            $project = \ProjectManagement\Project::find($data["project_id"]);
+            if (is_object($project))
+            {
+                $model->setProject($project);
+            }
+        }
 
         $model->save();
 
@@ -125,7 +141,7 @@ class WorkingDurationsController extends \Controller
         $this->render = false;
         header("Content-Type: application/json");
 
-        $model = Project::find($params["id"]);
+        $model = Role::find($params["id"]);
         if (is_object($model))
         {
             $model->delete();

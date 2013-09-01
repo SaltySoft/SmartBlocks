@@ -20,7 +20,7 @@ define([
         var base = this;
         base.SmartBlocks = SmartBlocks;
 
-        //Init the events and the router
+        //Init the even ts and the router
         var AppEvents = _.extend({}, Backbone.Events);
         var app_router = new AppRouter();
 
