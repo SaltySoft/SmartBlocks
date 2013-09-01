@@ -19,7 +19,6 @@ define([
             var base = this;
 
             var planned_tasks = base.task.get("planned_tasks").models;
-
             var completed_time = 0;
             var planned_time = 0;
             var missing_time = 0;
@@ -91,8 +90,11 @@ define([
 
             base.ctx.clearRect(0, 0, base.canvas.width, base.canvas.height);
 
-            base.logic();
-            base.draw();
+            if ($(base.canvas).width() > 0) {
+                base.logic();
+                base.draw();
+            }
+
 
 
             requestAnimationFrame($.proxy(base.run, base), base.canvas);

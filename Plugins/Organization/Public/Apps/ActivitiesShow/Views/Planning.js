@@ -40,7 +40,7 @@ define([
             var base = this;
             var tasks = base.activity.get('tasks');
             for (var k in tasks.models) {
-                var task = tasks.models[k];
+                var task = OrgApp.tasks.get(tasks.models[k].get('id'));
                 var task_thumbnail = new TaskThumbnail(task);
                 task_thumbnail.$el.addClass("small");
                 task_thumbnail.$el.draggable({
@@ -99,18 +99,24 @@ define([
 
                 eventDrop: function (event, jsEvent, ui, view) {
                     var planned_task = OrgApp.planned_tasks.get(event.id);
+                    var task = OrgApp.tasks.get(planned_task.get('task').get('id'));
                     if (planned_task) {
                         planned_task.setStart(event.start);
 
                         console.log(event, planned_task.getStart());
-                        planned_task.save();
+                        planned_task.save({}, {
+                            success: function () {
+                                OrgApp.events.trigger("updated_planned_task");
+                            }
+                        });
 
+                        task.get('planned_tasks').get(planned_task.get('id')).set(planned_task.attributes);
                     }
 
                 },
                 eventResize: function (event) {
                     var planned_task = OrgApp.planned_tasks.get(event.id);
-
+                    var task = OrgApp.tasks.get(planned_task.get('task').get('id'));
                     if (planned_task) {
                         planned_task.setStart(event.start);
                         planned_task.set("duration", event.end.getTime() - event.start.getTime());
@@ -119,10 +125,11 @@ define([
 
                         planned_task.save({}, {
                             success: function () {
-                                base.parent.events.trigger("updated_planned_task");
+                                OrgApp.events.trigger("updated_planned_task");
+
                             }
                         });
-
+                        task.get('planned_tasks').get(planned_task.get('id')).set(planned_task.attributes);
                     }
 
                 },
@@ -174,16 +181,15 @@ define([
                             OrgApp.planned_tasks.add(planned_task);
                             task.get("planned_tasks").add(planned_task);
                             task.save();
+
                         }
                     });
-
-
-
                 },
                 eventClick: function (event, e) {
                     var elt = $(this);
                     $(".planned_task_popup").remove();
                     var planned_task = OrgApp.planned_tasks.get(event.id);
+                    var task = OrgApp.tasks.get(planned_task.get('task').get('id'));
                     if (planned_task) {
                         var popup = new PlannedTaskPopup(planned_task);
                         popup.init(base.SmartBlocks, e, event);
@@ -191,6 +197,7 @@ define([
                         popup.events.on("deleted", function () {
                             base.planning.fullCalendar( 'removeEvents', event.id)
                             OrgApp.events.trigger("updated_planned_task");
+                            task.get('planned_tasks').remove(planned_task);
                         });
                         popup.events.on("saved", function (event) {
                             base.planning.fullCalendar( 'updateEvent', event)
