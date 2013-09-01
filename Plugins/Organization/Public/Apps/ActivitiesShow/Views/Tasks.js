@@ -13,6 +13,9 @@ define([
             var base = this;
             base.model = activity;
             base.activity = activity;
+            base.tasks = OrgApp.tasks;
+            base.current_page = 1;
+            base.page_size = 5;
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -34,11 +37,15 @@ define([
 
             var name_filter = base.$el.find(".name_filter").val();
 
-            var tasks = _.filter(base.activity.get("tasks").models, function (elt) {
-                return elt.get("name").indexOf(name_filter) !== -1;
+            var tasks = _.filter(OrgApp.tasks.models, function (elt) {
+                return elt.get("name").indexOf(name_filter) !== -1 && base.activity.get("tasks").get(elt.get('id'));
             });
 
             base.$el.find(".tasks_container").html("");
+            var plus = _.template(add_task_thumb, {
+                activity: base.activity
+            });
+            base.$el.find(".tasks_container").append(plus);
             for (var k in tasks) {
                 var task = tasks[k];
                 var task_thumbnail = new TaskThumbnail(task);
@@ -46,16 +53,17 @@ define([
                 task_thumbnail.$el.addClass("small");
                 task_thumbnail.init(base.SmartBlocks);
             }
-            var plus = _.template(add_task_thumb, {
-                activity: base.activity
-            });
-            base.$el.find(".tasks_container").append(plus);
+
         },
         registerEvents: function () {
             var base = this;
             base.$el.delegate(".add_task_button_container", "click", function () {
                 OrgApp.ForceReturn = "#activities/" + base.activity.get('id') + "/tasks";
                 window.location = "#tasks/new/activity=" + base.activity.get('id');
+            });
+
+            base.$el.delegate(".name_filter", "keyup", function () {
+                base.renderTasks();
             });
         }
     });
