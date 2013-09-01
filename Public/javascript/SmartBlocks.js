@@ -158,7 +158,7 @@ define([
                 session_ids: array,
                 broadcast: to == "all"
             };
-            if (base.websocket) {
+            if (base.websocket && base.websocket.readyState == 1) {
                 try {
                     base.websocket.send(JSON.stringify(ob));
                 } catch (e) {
