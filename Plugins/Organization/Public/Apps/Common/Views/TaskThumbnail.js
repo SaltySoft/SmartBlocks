@@ -41,6 +41,10 @@ define([
 
             var canvas_p = base.$el.find(".progress_bar_");
 
+            if (base.$el.hasClass("small")) {
+                canvas_p.attr("width", 140);
+            }
+
             if (base.task.hasDeadline()) {
                 base.deadline_clock = new DeadlineClock(canvas_c[0], base.task);
                 base.deadline_progress_bar = new DeadlineProgressBar(canvas_p[0], base.task);

@@ -70,7 +70,7 @@ define([
                     var minute = base.$el.find(".deadline_minute_input").val();
                     date.setHours(hour, minute, 0, 0);
                     base.task.setDueDate(date);
-                    base.task.set("required_time", base.$el.find(".needed_time_input").val());
+                    base.task.set("required_time", base.$el.find(".needed_time_input").val() * 3600000);
 
                 }
                 if (valid) {
