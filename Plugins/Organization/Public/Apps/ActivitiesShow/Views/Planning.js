@@ -47,8 +47,10 @@ define([
                     revert: true
                 });
                 base.$el.find(".tasks_list_container").append(task_thumbnail.$el);
+
                 task_thumbnail.init(base.SmartBlocks);
             }
+            base.$el.find(".tasks_list_container").css("width", tasks.models.length * 180);
         },
         renderCalendar: function () {
             var base = this;

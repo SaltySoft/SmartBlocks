@@ -7,8 +7,9 @@ define([
     '../SubApps/DeadlineClock/DeadlineClock',
     '../SubApps/DeadlineProgressBar/DeadlineProgressBar',
     './TaskTagItem',
-    'ContextMenuView'
-], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar, TaskTagItem, ContextMenu) {
+    'ContextMenuView',
+    'underscore_string'
+], function ($, _, Backbone, TaskThumbnailTemplate, DeadlineInfoView, DeadlineClock, DeadlineProgressBar, TaskTagItem, ContextMenu, _s) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_thumbnail_view",
@@ -29,7 +30,8 @@ define([
             var base = this;
 
             var template = _.template(TaskThumbnailTemplate, {
-                task: base.task
+                task: base.task,
+                _s: _s
             });
             base.$el.html(template);
 
@@ -54,8 +56,6 @@ define([
                 base.$el.addClass("normal");
                 base.$el.removeClass("deadline");
             }
-
-
 
 
             base.update()
@@ -88,12 +88,14 @@ define([
                     main: function () {
 
                     },
-                    context: [{
-                        name: "stuff",
-                        callback: function () {
+                    context: [
+                        {
+                            name: "stuff",
+                            callback: function () {
 
+                            }
                         }
-                    }]
+                    ]
                 });
             }
         },
@@ -101,7 +103,8 @@ define([
             var base = this;
 
             //direct info
-            base.$el.find(".task_name").html(base.task.get("name"));
+            base.$el.find(".task_name").html(_s.truncate(base.task.get("name"), 10));
+            base.$el.find(".task_name").attr("title", base.task.get("name"));
             if (base.task.get('description'))
                 base.$el.find(".description").html(base.task.get('description'));
             else
