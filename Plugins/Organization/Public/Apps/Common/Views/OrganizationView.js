@@ -15,7 +15,7 @@ define([
     'Organization/Apps/Planning/Views/MainView',
     'Organization/Apps/TasksIndex/Views/MainView',
     'Organization/Apps/ActivityCreation/Views/MainView',
-    'Organization/Apps/taskCreation/Views/MainView',
+    'Organization/Apps/TaskCreation/Views/MainView',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',

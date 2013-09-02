@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Organization/Apps/Recap/Subapps/Timeline/TimeSlot',
-    'Organization/Apps/Recap/Subapps/Timeline/InputHandler'
+    'Organization/Apps/Recap/SubApps/Timeline/TimeSlot',
+    'Organization/Apps/Recap/SubApps/Timeline/InputHandler'
 ], function ($, _, Backbone, TimeSlot, InputHandler) {
 
 
