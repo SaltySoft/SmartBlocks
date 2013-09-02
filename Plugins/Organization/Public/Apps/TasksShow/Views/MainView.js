@@ -17,11 +17,11 @@ define([
         init: function (SmartBlocks, subpage) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-
+            base.subpage = subpage;
             base.render();
             base.registerEvents();
-            base.subpage = subpage;
-            base.setSubpage();
+
+
         },
         render: function () {
             var base = this;
@@ -30,20 +30,21 @@ define([
                 task: base.task
             });
             base.$el.html(template);
+            base.setSubpage();
         },
         renderSummary: function () {
             var base = this;
             var summary_view = new SummaryView(base.task);
             base.$el.find(".task_subapp_container").html(summary_view.$el);
-            summary_view.init(base.SmartBlocks);
             base.$el.find(".summary_tab_button").addClass("pure-menu-selected");
+            summary_view.init(base.SmartBlocks);
         },
         renderEdition: function () {
             var base = this;
             var edition_view = new EditionView(base.task);
             base.$el.find(".task_subapp_container").html(edition_view.$el);
-            edition_view.init(base.SmartBlocks);
             base.$el.find(".edition_tab_button").addClass("pure-menu-selected");
+            edition_view.init(base.SmartBlocks);
         },
         setSubpage: function (subpage) {
             var base = this;
