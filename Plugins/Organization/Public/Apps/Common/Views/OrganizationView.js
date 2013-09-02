@@ -241,11 +241,11 @@ define([
             }
 
         },
-        launchTasksShow: function (id) {
+        launchTasksShow: function (id, subpage) {
             var base = this;
             var task = base.tasks.get(id);
             base.current_view = new TasksShow(task);
-            base.current_view.init(base.SmartBlocks);
+            base.current_view.init(base.SmartBlocks, subpage);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);

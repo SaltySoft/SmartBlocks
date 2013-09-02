@@ -1,0 +1,165 @@
+@elts_bg: whitesmoke;
+
+.task_show_main_view {
+  height: 483px;
+
+  .for_finished {
+    display: none;
+  }
+
+  .for_current {
+    display: inline;
+  }
+
+  .for_normal {
+    display: block;
+  }
+
+  .for_loading {
+    display: none;
+  }
+
+  .page_loader {
+    height: 400px;
+    text-align: center;
+    padding-top: 200px;
+    font-size: 2.5em;
+    color: #d7d7d7;
+  }
+
+  width: 800px;
+  padding: 10px;
+  padding-bottom: 47px;
+  background: white;
+  margin: auto;
+  margin-top: 50px;
+  position: relative;
+  .description {
+    height: 104px;
+    margin-bottom: 20px;
+    padding: 5px;
+    background: @elts_bg;
+  }
+
+  .task_info {
+    margin-top: 30px;
+
+    > div > div > div {
+      padding: 10px;
+    }
+  }
+
+  .activity_timeline_container {
+    height: 200px;
+    background: #d3d3d3;
+  }
+
+  .planned_tasks_container {
+    height: 150px;
+    overflow-y: overlay;
+    background: @elts_bg;
+    margin-bottom: 20px;
+  }
+
+  .subtasks_section {
+    position: absolute;
+    bottom: 47px;
+    width: 251px;
+    .subtasks_container {
+      height: 298px;
+      overflow-y: overlay;
+      background: @elts_bg;
+    }
+
+  }
+
+
+
+  .task_tags_view {
+
+    h3 {
+      display: none;
+    }
+
+    .pure-u-1-2 {
+      width: 100%;
+    }
+  }
+
+
+
+  .workload_timeline_container {
+    background: @elts_bg;
+  }
+
+  .task_content {
+    padding: 5px;
+  }
+
+  .controls {
+    position: absolute;
+    bottom: 10px;
+    left: 15px;
+  }
+
+  .actions {
+    margin-top: 20px;
+    button {
+      display: block;
+      margin: auto;
+      width: 150px;
+    }
+  }
+
+  .time_stats_container.empty {
+    height: 135px;
+    padding: 10px;
+    line-height: 135px;
+    width: 336px;
+    text-align: center;
+    font-size: 1.5em;
+    color: #c9c9c9;
+  }
+
+  .time_stats_container {
+    background: #f5f5f5;
+
+    .deadline_thumbnail_view {
+      margin: auto;
+    }
+  }
+  .tags_edition_container {
+
+    .tag_search_input {
+      width: 119px;
+      margin: 5px 0px;
+    }
+
+    .create_tag_button {
+      padding: 5px;
+      font-size: 0.9em;
+      width: 30px;
+    }
+  }
+
+}
+
+.task_show_main_view.loading {
+  .for_normal {
+    display: none;
+  }
+
+  .for_loading {
+    display: block;
+  }
+}
+
+.task_show_main_view.completed {
+  .for_finished {
+    display: inline;
+  }
+
+  .for_current {
+    display: none;
+  }
+}

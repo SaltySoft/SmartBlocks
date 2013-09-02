@@ -185,8 +185,11 @@ define([
                     return 2;
                 }
             }
-
-
+        },
+        isFinished:function () {
+            var base = this;
+            console.log(base.get('completion_date'));
+            return base.get('completion_date') != null;
         }
     });
 
