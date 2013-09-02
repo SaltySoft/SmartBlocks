@@ -28,60 +28,72 @@
         <div class="pure-u-1-2">
 
             <div class="fields_container">
-                <div class="name field">
-                    <label>
-                        Name:
-                        <input type="text" placeholder="Enter a name" class="name_input"
-                               value="<%= task.get('name') %>"/>
-                    </label>
-                </div>
-                <div class="field">
-                    <label>
-                        Activity :
-                        <select class="type_input" name="type">
-                            <option value="0">No activity selected</option>
-                            <% for (var k in activities) { %>
-                            <option value="<%= activities[k].get('id') %>"
-                            <% if (task.get('activity').id == activities[k].get('id')) { %>selected="true"<% } %> ><%=
-                            activities[k].get('name') %></option>
-                            <% } %>
-                        </select>
-                    </label>
-                </div>
-                <div class="field start_date_field">
-                    <label>
-                        Start date
-                        <input type="text" class="start_date_input" name="start_date" value="<%= start_date.getFullYear() %>/<%= start_date.getMonth() + 1 %>/<%= start_date.getDate() %>" />
-                    </label>
-                </div>
-                <div class="field due_date_field">
-                    <label>
-                        Due date
-                        <input type="text" class="due_date_input" name="due_date" value="<%= due_date.getFullYear() %>/<%= due_date.getMonth() + 1 %>/<%= due_date.getDate() %>" />
-                    </label>
-                </div>
-                <div class="field due_date_field">
-                    <label>
-                        At
-                    </label>
-                    <input type="number" class="due_hour_input" name="due_date" value="<%= due_date.getHours() %>" /> :
-                    <input type="number" class="due_minute_input" name="due_date" value="<%= due_date.getMinutes() %>" />
-                </div>
-                <div class="field archived_field">
-                    <label>
-                        Active
-                        <input type="checkbox" class="active_input" name="active" <% if (task.get('active')) {
-                        %>checked="true"<% }%>/>
-                    </label>
-                </div>
-                <div class="field">
-                    <label>
-                        Description
-                        <textarea class="description_input" name="description"><%=
-                            task.get('description').replace('<br/>', "\n")
-                            %></textarea>
-                    </label>
-                </div>
+                <fieldset>
+                    <legend>Main information</legend>
+                    <div class="name field">
+                        <label>
+                            Name:
+                            <input type="text" placeholder="Enter a name" class="name_input"
+                                   value="<%= task.get('name') %>"/>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>
+                            Activity :
+                            <select class="type_input" name="type">
+                                <option value="0">No activity selected</option>
+                                <% for (var k in activities) { %>
+                                <option value="<%= activities[k].get('id') %>"
+                                <% if (task.get('activity').id == activities[k].get('id')) { %>selected="true"<% } %>
+                                ><%=
+                                activities[k].get('name') %></option>
+                                <% } %>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>
+                            Description
+                            <textarea class="description_input" name="description"><%=
+                                task.get('description').replace('<br/>', "\n")
+                                %></textarea>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Start date</legend>
+                    <div class="field start_date_field">
+                        <label>
+                            On
+                            <input type="text" class="start_date_input" name="start_date"
+                                   value="<%= start_date.getFullYear() %>/<%= start_date.getMonth() + 1 %>/<%= start_date.getDate() %>"/>
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Due date</legend>
+                    <div class="field due_date_field">
+                        <label>
+                            On
+                            <input type="text" class="due_date_input" name="due_date"
+                                   value="<%= due_date.getFullYear() %>/<%= due_date.getMonth() + 1 %>/<%= due_date.getDate() %>"/>
+                        </label>
+                    </div>
+                    <div class="field due_date_field">
+                        <label>
+                            At
+                        </label>
+
+                        <div class="times_inputs">
+                            <input type="number" class="due_hour_input"
+                                   name="due_date" value="<%= due_date.getHours() %>"/> :
+                            <input type="number" class="due_minute_input"
+                                   name="due_date" value="<%= due_date.getMinutes() %>"/>
+                        </div>
+                    </div>
+                </fieldset>
+
             </div>
         </div>
     </div>

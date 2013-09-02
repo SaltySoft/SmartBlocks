@@ -36,7 +36,6 @@ define([
             base.$el.find(".start_date_input").datepicker();
 
 
-
         },
         registerEvents: function () {
             var base = this;
@@ -55,20 +54,7 @@ define([
 
                 //description edition
                 var description_input = base.$el.find(".description_input");
-                if (description_input.val() != "") {
-                    base.task.set("description", description_input.val());
-                } else {
-                    description_input.val(base.task.get("description"));
-                    valid = false;
-                }
-
-                //active state edition
-                var active_input = base.$el.find(".active_input");
-                if (active_input.is(":checked")) {
-                    base.task.set("active", true);
-                } else {
-                    base.task.set("active", false);
-                }
+                base.task.set("description", description_input.val());
 
                 //due date edition
                 var duedate_input = base.$el.find(".due_date_input");
@@ -93,6 +79,8 @@ define([
                             base.SmartBlocks.show_message("Successfully saved changes");
                         }
                     });
+                } else {
+                    console.log("stop");
                 }
 
             });
