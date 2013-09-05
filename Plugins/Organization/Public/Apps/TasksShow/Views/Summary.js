@@ -36,7 +36,6 @@ define([
 
             var workload_timeline = new WorkloadTimeline(planned_tasks);
             base.$el.find(".workload_timeline_container").html(workload_timeline.$el);
-            alert(base.$el.height());
             var start = new Date();
             start.setTime(base.task.get("creation_date"));
             workload_timeline.init(base.SmartBlocks, base.task.get("required_time"), base.task, start);
