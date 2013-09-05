@@ -4,28 +4,30 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Daily/Models/PlannedTask',
     'UserModel',
+    'Organization/Apps/Models/Subtask',
+    'Organization/Apps/Collections/Subtasks',
     'UsersCollection',
     'Organization/Apps/Common/Models/TaskTag',
     'Organization/Apps/Common/Collections/TaskTags'
-], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection, TaskTag, TaskTagsCollection) {
+], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection) {
 
 
     var Task = Backbone.Model.extend({
-        urlRoot: "/Organization/Tasks",
-        defaults: {
-            "model_type": "Task",
-            activities: []
+        urlRoot:"/Organization/Tasks",
+        defaults:{
+            "model_type":"Task",
+            activities:[]
         },
-        hasDeadline: function () {
+        hasDeadline:function () {
             return this.get("due_date");
         },
-        getDueDate: function () {
+        getDueDate:function () {
             return new Date(this.get("due_date") * 1000);
         },
-        setDueDate: function (date) {
+        setDueDate:function (date) {
             this.set("due_date", date.getTime() / 1000);
         },
-        getActivityForUser: function (user) {
+        getActivityForUser:function (user) {
             var base = this;
             var activity = undefined;
             var activities_list = base.get("activities");
@@ -38,7 +40,7 @@ define([
             }
             return activity;
         },
-        parse: function (response) {
+        parse:function (response) {
 
             var children_array = response.children;
             if (!TasksCollection) {
@@ -51,6 +53,19 @@ define([
                 subtasks.add(task);
             }
             response.children = subtasks;
+
+            var subtasks = new SubtasksCollection();
+            if (response.subtasks != null && response.subtasks != undefined) {
+                var subtasks_array = response.subtasks;
+
+                for (var k in subtasks_array) {
+                    var subtask = new Subtask(subtasks_array[k]);
+                    if (subtask) {
+                        subtasks.add(subtask);
+                    }
+                }
+            }
+            response.subtasks = subtasks;
 
             var planned_tasks_array = response.planned_tasks;
             var planned_tasks_collection = new PlannedTasksCollection();
@@ -95,7 +110,7 @@ define([
 
             return response;
         },
-        initialize: function (model) {
+        initialize:function (model) {
             if (model) {
                 var children_array = model.children;
                 if (children_array && !model.children.models) {
@@ -160,7 +175,7 @@ define([
                     this.attributes.owner = owner;
             }
         },
-        fullyPlanned: function () {
+        fullyPlanned:function () {
             var base = this;
             var worked_time = 0;
             var now = new Date();
@@ -194,8 +209,8 @@ define([
     });
 
     var TasksCollection = Backbone.Collection.extend({
-        url: "/Organization/Tasks",
-        model: Task
+        url:"/Organization/Tasks",
+        model:Task
     });
 
     window.Task = Task;

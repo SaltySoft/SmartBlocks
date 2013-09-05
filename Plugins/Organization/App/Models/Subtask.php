@@ -23,19 +23,31 @@ class Subtask extends \Model
     private $description;
 
     /**
+     * @Column(type="float")
+     */
+    private $duration;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $finished;
+
+    /**
      * @Column(type="integer")
      */
     private $order_index;
 
     /**
-     * @ManyToOne(targetEntity="\Organization\Task")
+     * @ManyToOne(targetEntity="\Organization\Task", inversedBy="subtasks")
      */
     private $task;
 
     public function __construct()
     {
-        $this->description = "New subtask";
+        $this->name = "New subtask";
         $this->description = "";
+        $this->duration = 0;
+        $this->finished = false;
     }
 
     public function setDescription($description)
@@ -81,5 +93,42 @@ class Subtask extends \Model
     public function getOrderIndex()
     {
         return $this->order_index;
+    }
+
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    public function setFinished($finished)
+    {
+        $this->finished = $finished;
+    }
+
+    public function getFinished()
+    {
+        return $this->finished;
+    }
+
+    public function toArray($full = true)
+    {
+        $myArray = array();
+        $myArray["id"] = $this->id;
+        $myArray["name"] = $this->name;
+        $myArray["description"] = $this->description;
+        $myArray["duration"] = $this->duration;
+        $myArray["finished"] = $this->finished;
+        $myArray["order_index"] = $this->order_index;
+        if ($full)
+        {
+            $myArray["task"] = $this->task->toArray(true, true, true, true, false);
+        }
+
+        return $myArray;
     }
 }
