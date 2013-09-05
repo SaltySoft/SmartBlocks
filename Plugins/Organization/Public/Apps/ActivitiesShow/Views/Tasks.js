@@ -89,7 +89,7 @@ define([
 
             tasks = tasks.slice(page_begin, page_end);
 
-            console.log(tasks);
+//            console.log(tasks);
 
 
             base.$el.find(".tasks_container").html("");

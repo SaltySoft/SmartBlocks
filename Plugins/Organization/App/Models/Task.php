@@ -121,6 +121,11 @@ class Task extends \Model
     private $children;
 
     /**
+     * @OneToMany(targetEntity="\Organization\Subtask", mappedBy="task")
+     */
+    private $subtasks;
+
+    /**
      * @Column(type="bigint")
      */
     private $required_time;
@@ -324,7 +329,6 @@ class Task extends \Model
     }
 
 
-
     public static function getTypes()
     {
         if (file_exists(ROOT . DS . "Plugins" . DS . "Organization" . DS . "Config" . DS . "task_types.json"))
@@ -421,14 +425,16 @@ class Task extends \Model
     {
         $planned = array();
 
-        foreach ($task->planned_tasks as $planned_task) {
+        foreach ($task->planned_tasks as $planned_task)
+        {
 
             if ($planned_task->getActive())
-            $planned[] = $planned_task->toArray(true, false);
+                $planned[] = $planned_task->toArray(true, false);
 
         }
 
-        foreach ($task->children as $stask) {
+        foreach ($task->children as $stask)
+        {
             $planned = array_merge($planned, self::getAllPlannedTasks($stask));
         }
 
@@ -446,14 +452,15 @@ class Task extends \Model
         }
 
 
-        if (is_object($task->parent)) {
+        if (is_object($task->parent))
+        {
             $activities = array_merge($activities, self::getUserActivities($task->parent));
         }
 
         return $activities;
     }
 
-    public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true)
+    public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true, $show_subtasks = true)
     {
         $tags = array();
         foreach ($this->tags as $tag)
@@ -476,7 +483,8 @@ class Task extends \Model
             "tags" => $tags
         );
 
-        if ($show_children) {
+        if ($show_children)
+        {
             $planned_tasks = self::getAllPlannedTasks($this);
             $array["planned_tasks"] = $planned_tasks;
         }
@@ -506,7 +514,7 @@ class Task extends \Model
         }
         if ($show_parent)
         {
-            $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false,false,true, false) : null;
+            $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false, false, true, false) : null;
         }
 
         if ($show_children)
@@ -523,6 +531,15 @@ class Task extends \Model
                 $children[] = $child->toArray(false, false, false, true);
             }
             $array["children"] = $children;
+        }
+
+        if ($show_subtasks)
+        {
+            $subtasks = array();
+            foreach ($this->subtasks as $subtask)
+            {
+                $subtasks[] = $subtask->toArray(false);
+            }
         }
 
         return $array;
