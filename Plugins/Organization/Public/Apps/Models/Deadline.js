@@ -30,9 +30,9 @@ define([
             var start = new Date(now);
             var stop = new Date(now);
 
-            start.setTime(now.getTime() - (Math.random() * 10000000));
+            start.setTime(now.getTime() - (Math.random() * 100000));
 
-            stop.setTime(now.getTime() + (Math.random() * 10000000));
+            stop.setTime(now.getTime() + (Math.random() * 100000));
 
             var deadline = new Model({
                 name: "Deadline " + i,

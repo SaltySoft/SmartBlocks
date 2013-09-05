@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../Templates/main.html'
+    'text!../Templates/deadline.html'
 ], function ($, _, Backbone, main_template) {
     var View = Backbone.View.extend({
         tagName: "div",
@@ -12,17 +12,20 @@ define([
             base.deadline = deadline;
             base.model = deadline;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, params) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.show_activity = params.show_activity !== false;
 
             base.render();
+            base.registerEvents();
         },
         render: function () {
             var base = this;
 
             var template = _.template(main_template, {
-                deadline: base.deadline
+                deadline: base.deadline,
+                show_activity:base.show_activity
             });
             base.$el.html(template);
 
@@ -45,8 +48,27 @@ define([
 
             timeleft_container.html((now < end ? "-" : "+") + " "+ OrgApp.common.getFullTimeString(time_left));
         },
+        expand: function () {
+            var base = this;
+
+            if (base.$el.hasClass("expanded")) {
+                base.$el.find(".deadline_body").slideUp(500);
+                base.$el.removeClass("expanded");
+                base.$el.parent().css("transform", "translateY(+" + parseInt(base.$el.position().top) + "px)");
+            } else {
+                base.$el.find(".deadline_body").slideDown(500);
+                base.$el.addClass("expanded");
+                base.$el.parent().css("transform", "translateY(-" + parseInt(base.$el.position().top) + "px)");
+            }
+
+
+        },
         registerEvents: function () {
             var base = this;
+
+            base.$el.delegate(".deadline_header", "click", function() {
+                base.expand();
+            });
         }
     });
 

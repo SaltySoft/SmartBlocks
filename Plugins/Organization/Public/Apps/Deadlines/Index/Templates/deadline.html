@@ -1,0 +1,13 @@
+<div class="deadline_header">
+    <span class="name"><%= deadline.get('name') %></span>
+    <span class="timeleft"></span>
+    <% if (show_activity) { %>
+    <span class="activity_link">
+        <a href="#activities/<%= deadline.get('activity').get('id') %>"><%= deadline.get("activity").get("name") %></a>
+    </span>
+    <% } %>
+    <div class="clearer"></div>
+</div>
+<div class="deadline_body">
+
+</div>

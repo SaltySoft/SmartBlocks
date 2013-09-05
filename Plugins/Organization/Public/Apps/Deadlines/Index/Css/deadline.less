@@ -6,7 +6,7 @@
     color: gray;
     font-weight: bold;
     position: relative;
-
+    cursor: pointer;
 
     .name {
       display: block;
@@ -29,10 +29,26 @@
       font-size: 22px;
     }
 
+
+    .activity_link {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      width: 150px;
+      a {
+
+      }
+    }
   }
 
   .deadline_body {
     display: none;
+    height: 500px;
+    background: #f5f5f5;
   }
 
   &.expanded {
