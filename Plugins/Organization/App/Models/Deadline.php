@@ -24,9 +24,9 @@
 namespace Organization;
 
 /**
- * @Entity @Table(name="organization_activity")
+ * @Entity @Table(name="organization_deadline")
  */
-class Activity extends \Model
+class Deadline extends \Model
 {
     /**
      * @Id @GeneratedValue(strategy="AUTO") @Column(type="integer")
@@ -39,34 +39,24 @@ class Activity extends \Model
     private $name;
 
     /**
-     * @Column(type="text", nullable=true)
-     */
-    private $description;
-
-    /**
      * @ManyToOne(targetEntity="\User")
      */
     private $creator;
 
     /**
-     * @ManyToMany(targetEntity="\Organization\Task", inversedBy="activities")
+     * @OneToMany(targetEntity="\Organization\Task", mappedBy="deadline")
      */
     private $tasks;
 
     /**
      * @Column(type="datetime")
      */
-    private $created;
+    private $start_time;
 
     /**
-     * @Column(type="datetime")
+     * @Colum(type="datetime")
      */
-    private $updated;
-
-    /**
-     * @ManyToOne(targetEntity="\Organization\ActivityType")
-     */
-    private $type;
+    private $stop_time;
 
     /**
      * @Column(type="boolean")
@@ -74,31 +64,21 @@ class Activity extends \Model
     private $archived;
 
     /**
-     * @OneToMany*(targetEntity="\Organization\Deadline", mappedBy="activity")
+     * @ManyToOne(targetEntity="\Organization\Activity")
      */
-    private $deadlines;
+    private $activity;
 
     public function __construct()
     {
         $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->created = new \DateTime();
-        $this->updated = new \DateTime();
+        $this->start_time = new \DateTime();
+        $this->stop_time = new \DateTime();
         $this->archived = false;
     }
 
     public function getId()
     {
         return $this->id;
-    }
-
-    public function setCreated($created)
-    {
-        $this->created = $created;
-    }
-
-    public function getCreated()
-    {
-        return $this->created;
     }
 
     public function setCreator($creator)
@@ -109,16 +89,6 @@ class Activity extends \Model
     public function getCreator()
     {
         return $this->creator;
-    }
-
-    public function setDescription($description)
-    {
-        $this->description = htmlentities($description);
-    }
-
-    public function getDescription()
-    {
-        return str_replace("\n", "<br/>", $this->description);
     }
 
     public function setName($name)
@@ -136,31 +106,6 @@ class Activity extends \Model
         return $this->tasks;
     }
 
-    public function setUpdated($updated)
-    {
-        $this->updated = $updated;
-    }
-
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    public function before_save()
-    {
-        $this->updated = new \DateTime();
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
     public function setArchived($archived)
     {
         $this->archived = $archived;
@@ -171,9 +116,34 @@ class Activity extends \Model
         return $this->archived;
     }
 
-    public function getDeadlines()
+    public function setActivity($activity)
     {
-        return $this->deadlines;
+        $this->activity = $activity;
+    }
+
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    public function setStartTime($start_time)
+    {
+        $this->start_time = $start_time;
+    }
+
+    public function getStartTime()
+    {
+        return $this->start_time;
+    }
+
+    public function setStopTime($stop_time)
+    {
+        $this->stop_time = $stop_time;
+    }
+
+    public function getStopTime()
+    {
+        return $this->stop_time;
     }
 
     function delete()
@@ -186,7 +156,7 @@ class Activity extends \Model
             }
             else
             {
-                $task->getActivities()->removeElement($this);
+//                $task->getActivities()->removeElement($this);
             }
         }
         parent::delete();
@@ -197,12 +167,9 @@ class Activity extends \Model
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
-            "description" => $this->getDescription(),
             "creator" => $this->creator->toArray(0),
-
-            "created" => $this->created,
-            "updated" => $this->updated,
-            "type" => $this->type->toArray(),
+            "start" => $this->start_time->getTime() * 1000,
+            "stop" => $this->stop_time->getTime() * 1000,
             "archived" => $this->archived
         );
 

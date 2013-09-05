@@ -125,6 +125,11 @@ class Task extends \Model
      */
     private $required_time;
 
+    /**
+     * @ManyToOne(targetEntity="\Organization\Deadline")
+     */
+    private $deadline;
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -309,6 +314,17 @@ class Task extends \Model
         $this->required_time = $required_time;
     }
 
+    public function setDeadline($deadline)
+    {
+        $this->deadline = $deadline;
+    }
+
+    public function getDeadline()
+    {
+        return $this->deadline;
+    }
+
+
     public function getRequiredTime()
     {
         $required_time = $this->required_time;
@@ -472,6 +488,7 @@ class Task extends \Model
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
+            "deadline" => $this->deadline,
             "type" => $this->type != null ? $this->type->toArray() : null,
             "tags" => $tags
         );
