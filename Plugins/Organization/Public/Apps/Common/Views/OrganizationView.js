@@ -21,11 +21,14 @@ define([
     'Organization/Apps/Common/Collections/Activities',
     'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Tasks/Models/Task',
+    'Organization/Apps/Models/Deadline',
+    'Organization/Apps/Collections/Deadlines',
+    'Organization/Apps/Daily/Models/PlannedTask',
     'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -40,6 +43,13 @@ define([
             base.activities = new ActivitiesCollection();
             base.activity_types = new ActivityTypesCollection();
             base.events = $.extend({}, Backbone.Events);
+
+            base.Task = Task;
+            base.PlannedTask = PlannedTask;
+            base.PlannedTasksCollection = PlannedTasksCollection;
+            base.TasksCollection = TasksCollection;
+            base.Deadline = Deadline;
+            base.DeadlinesCollection = DeadlinesCollection;
 
             base.ForceReturn = undefined;
         },
