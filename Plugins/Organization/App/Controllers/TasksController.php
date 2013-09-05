@@ -215,6 +215,16 @@ class TasksController extends \Controller
             }
         }
 
+        if (isset($data["active"]))
+        {
+            $task->setActive($data["active"]);
+        }
+
+        if (isset($data["creation_date"]))
+        {
+            $task->setCreationDate($data["creation_date"]);
+        }
+
         if (isset($data["parent"]))
         {
             if (is_array($data["parent"]))
@@ -353,29 +363,16 @@ class TasksController extends \Controller
                 }
             }
 
-//            foreach ($data["linked_users"] as $user_array)
-//            {
-//                $user = \User::find($user_array['id']);
-//                $add = true;
-//                if (is_object($user))
-//                {
-//                    foreach ($task->getLinkedUsers() as $task_user)
-//                    {
-//                        if ($task_user->getUser()->getId() == $user->getId())
-//                        {
-//                            $add = false;
-//                        }
-//                    }
-//                }
-//                if ($add)
-//                {
-//                    $task_user = new \Organization\TaskUser();
-//                    $task_user->setUser($user);
-//                    $task_user->setTask($task);
-//                    $task_user->setPending(true);
-//                    $task_user->save();
-//                }
-//            }
+            if (isset($data["creation_date"]))
+            {
+                $task->setCreationDate($data["creation_date"]);
+            }
+
+            if (isset($data["active"]))
+            {
+                $task->setActive($data["active"]);
+            }
+
             $em = \Model::getEntityManager();
             if (isset($data["children"]))
             {

@@ -56,7 +56,7 @@ class Task extends \Model
     private $linked_users;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private $creation_date;
 
@@ -130,7 +130,7 @@ class Task extends \Model
         $this->owner = \User::current_user();
         $this->name = "New task";
         $this->description = "";
-        $this->creation_date = time();
+        $this->creation_date = microtime();
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->last_updated = time();
@@ -466,8 +466,9 @@ class Task extends \Model
             "name" => $this->name,
             "description" => $this->description,
             "required_time" => $this->getRequiredTime(),
+            "active" => $this->active,
             "owner" => $this->owner->toArray(0),
-            "creation_date" => $this->creation_date * 1000,
+            "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,

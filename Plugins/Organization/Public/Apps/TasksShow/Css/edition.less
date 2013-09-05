@@ -1,0 +1,74 @@
+.task_edition {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  .fields_container {
+
+    .explain_text {
+      margin-bottom: 10px;
+
+      em {
+        margin-top: 10px;
+        font-weight: bold;
+        color: black;
+      }
+      p {
+        margin-bottom: 10px;
+      }
+
+    }
+
+    padding: 10px;
+    .field {
+      clear: both;
+      width: 75%;
+      margin: auto;
+      line-height: 30px;
+
+      input[type="text"], select {
+        width: 150px;
+        float: right;
+      }
+
+      .times_inputs {
+        float: right;
+      }
+
+      input[type="number"] {
+        width: 70px;
+        text-align: center;
+      }
+
+      &.archived_field {
+
+        label {
+          float: right;
+          width: auto;
+        }
+      }
+
+      textarea {
+        width: 100%;
+        resize: none;
+        height: 150px;
+      }
+
+    }
+
+  }
+
+  .delete_button {
+
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .controls {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+  }
+}
+

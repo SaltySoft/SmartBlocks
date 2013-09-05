@@ -241,22 +241,22 @@ define([
             }
 
         },
-        launchTasksShow: function (id) {
+        launchTasksShow: function (id, subpage) {
             var base = this;
             var task = base.tasks.get(id);
             base.current_view = new TasksShow(task);
-            base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks, subpage);
         },
         launchTasksIndex: function () {
             var base = this;
             base.current_view = new TasksIndex();
-            base.current_view.init(base.SmartBlocks);
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
         },
         launchPlanningView: function () {
             var base = this;
