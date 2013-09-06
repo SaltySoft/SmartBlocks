@@ -57,7 +57,8 @@ class SubtasksController extends \Controller
 
         $model = new Subtask();
         $data = $this->getRequestData();
-        $model->setName($data["name"]);
+        if (isset($data["name"]))
+            $model->setName($data["name"]);
 
         if (is_array($data["task"]))
         {
@@ -66,6 +67,7 @@ class SubtasksController extends \Controller
             if ($task && is_object($task))
             {
                 $model->setTask($task);
+                $task->addSubtask($model);
             }
         }
 
@@ -101,6 +103,7 @@ class SubtasksController extends \Controller
             if ($task && is_object($task))
             {
                 $model->setTask($task);
+                $task->addSubtask($model);
             }
         }
 

@@ -8,13 +8,13 @@ define([
         defaults:{
         },
         parse:function (response) {
-
-            if (response.task != null && response.task != undefined) {
-                var task = new Task(response.task);
-
-                if (task !== undefined)
-                    response.task = task;
-            }
+//            console.log("response", response);
+//            if (response.task != null && response.task !== undefined) {
+//                var task = new Task(response.task);
+//
+//                if (task !== undefined)
+//                    response.task = task;
+//            }
 
             return response;
         }

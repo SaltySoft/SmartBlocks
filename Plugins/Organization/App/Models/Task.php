@@ -148,6 +148,7 @@ class Task extends \Model
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subtasks = new \Doctrine\Common\Collections\ArrayCollection();
         $this->required_time = 0;
         $this->planned_tasks = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -429,6 +430,10 @@ class Task extends \Model
         {
             $child->delete();
         }
+        foreach ($this->getSubtasks() as $subtask)
+        {
+            $subtask->delete();
+        }
         \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
             "app" => "organizer",
             "action" => "task_deleted",
@@ -560,6 +565,16 @@ class Task extends \Model
         }
 
         return $array;
+    }
+
+    public function addSubtask($subtask)
+    {
+        $this->subtasks[] = $subtask;
+    }
+
+    public function getSubtasks()
+    {
+        return $this->subtasks;
     }
 }
 
