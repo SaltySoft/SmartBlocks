@@ -66,6 +66,18 @@ define([
                 }
             }
             return pt_collection;
+        },
+        getTasks: function () {
+            var base = this;
+            var tasks_c = new OrgApp.TasksCollection();
+            var self_tasks = base.get("tasks");
+            for (var k in self_tasks.models) {
+                var task = self_tasks.models[k];
+                if (OrgApp.tasks.get(task.get('id')) !== undefined) {
+                    tasks_c.add(OrgApp.tasks.get(task.get('id')));
+                }
+            }
+            return tasks_c;
         }
     });
 

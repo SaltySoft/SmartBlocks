@@ -21,7 +21,9 @@ define([
         render: function () {
             var base = this;
 
-            var template = _.template(subtask_line_tpl, {});
+            var template = _.template(subtask_line_tpl, {
+                subtask: base.subtask
+            });
             base.$el.html(template);
         },
         registerEvents: function () {
@@ -30,10 +32,13 @@ define([
             base.$el.delegate(".edit_button", "click", function () {
                 base.$el.toggleClass("edition");
                 if (base.$el.hasClass("edition")) {
+                    base.$el.find('.name_input').val(base.subtask.get("name"));
+
                     base.$el.find(".edit_button").html("Done");
                 } else {
                     base.$el.find(".edit_button").html("Edit");
 
+                    base.subtask.set("name", base.$el.find('.name_input').val());
                 }
             });
         }
