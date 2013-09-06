@@ -1,11 +1,12 @@
 define([
     'jquery',
     'underscore',
-    'backbone'
-], function ($, _, Backbone) {
+    'backbone',
+    'text!../Templates/main.html'
+], function ($, _, Backbone, main_template) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "a_class",
+        className: "task_normal_thumbnail",
         initialize: function () {
             var base = this;
         },
@@ -18,8 +19,8 @@ define([
         render: function () {
             var base = this;
 
-            //var template = _.template(SomeTemplate, {});
-            //base.$el.html(template);
+            var template = _.template(main_template, {});
+            base.$el.html(template);
         },
         registerEvents: function () {
             var base = this;

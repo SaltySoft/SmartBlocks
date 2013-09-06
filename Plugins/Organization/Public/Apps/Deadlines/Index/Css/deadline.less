@@ -20,8 +20,6 @@
     position: relative;
     cursor: pointer;
 
-
-
     .name {
       display: block;
       float: left;
@@ -57,12 +55,17 @@
         position: absolute;
         top: 0px;
       }
-      transition: height 500ms;
-      &:hover {
-        height: 15px;
-      }
+      transition: height 300ms;
+
     }
 
+    &:hover {
+      .wt_pb_container {
+        height: 15px;
+        opacity: 0.5;
+      }
+
+    }
 
     .activity_link {
       display: block;
@@ -78,7 +81,6 @@
       }
     }
 
-
   }
 
   .deadline_body {
@@ -89,8 +91,7 @@
   }
 
   &.expanded {
-    .deadline_body {
-//      display: block;
+    .deadline_body { //      display: block;
     }
   }
 
