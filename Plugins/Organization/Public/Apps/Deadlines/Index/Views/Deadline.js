@@ -25,7 +25,7 @@ define([
 
             var template = _.template(main_template, {
                 deadline: base.deadline,
-                show_activity:base.show_activity
+                show_activity: base.show_activity
             });
             base.$el.html(template);
 
@@ -46,19 +46,21 @@ define([
             var time_left = Math.abs(end.getTime() - now.getTime());
             var timeleft_container = base.$el.find(".timeleft");
 
-            timeleft_container.html((now < end ? "-" : "+") + " "+ OrgApp.common.getFullTimeString(time_left));
+            timeleft_container.html((now < end ? "-" : "+") + " " + OrgApp.common.getFullTimeString(time_left));
         },
         expand: function () {
             var base = this;
 
             if (base.$el.hasClass("expanded")) {
-                base.$el.find(".deadline_body").slideUp(500);
                 base.$el.removeClass("expanded");
-                base.$el.parent().css("transform", "translateY(+" + parseInt(base.$el.position().top) + "px)");
+                base.$el.parent().animate({'margin-top': 0}, 500);
             } else {
-                base.$el.find(".deadline_body").slideDown(500);
+                base.$el.parent().find(".expanded").removeClass("expanded");
+
                 base.$el.addClass("expanded");
-                base.$el.parent().css("transform", "translateY(-" + parseInt(base.$el.position().top) + "px)");
+                var transform_n = -parseInt(base.$el.position().top - parseInt(base.$el.parent().css("margin-top")));
+                var transform = "translateY(-" + parseInt(base.$el.position().top) + "px)";
+                base.$el.parent().animate({'margin-top': transform_n}, 500);
             }
 
 
@@ -66,7 +68,7 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.delegate(".deadline_header", "click", function() {
+            base.$el.delegate(".deadline_header", "click", function () {
                 base.expand();
             });
         }

@@ -6,7 +6,10 @@ define([
 ], function ($, _, Backbone, Deadline) {
     var Collection = Backbone.Collection.extend({
         model: Deadline,
-        url: "/Organization/Deadlines"
+        url: "/Organization/Deadlines",
+        comparator: function (deadline) {
+            return deadline.get("stop");
+        }
     });
 
     return Collection;
