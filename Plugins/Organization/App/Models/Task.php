@@ -331,6 +331,16 @@ class Task extends \Model
         return $this->deadline;
     }
 
+    public function addSubtask($subtask)
+    {
+        $this->subtasks[] = $subtask;
+    }
+
+    public function getSubtasks()
+    {
+        return $this->subtasks;
+    }
+
 
     public function getRequiredTime()
     {
@@ -558,24 +568,21 @@ class Task extends \Model
 
         if ($show_subtasks)
         {
+//            $em = \Model::getEntityManager();
+//            $qb = $em->createQueryBuilder();
+//            $qb->select("subtask")->from('\Organization\Subtask', 'subtask');
+//            $qb->where("subtask.task = :task")->setParameter("task", $this);
+//            $result = $qb->getQuery()->getResult();
+
             $subtasks = array();
             foreach ($this->subtasks as $subtask)
             {
                 $subtasks[] = $subtask->toArray(false);
             }
+            $array["subtasks"] = $subtasks;
         }
 
         return $array;
-    }
-
-    public function addSubtask($subtask)
-    {
-        $this->subtasks[] = $subtask;
-    }
-
-    public function getSubtasks()
-    {
-        return $this->subtasks;
     }
 }
 
