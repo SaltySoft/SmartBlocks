@@ -1,4 +1,4 @@
-.deadline_show {
+.deadline_show_container {
   &:last-of-type {
     border-bottom: 1px solid #dddddd;
   }
@@ -51,10 +51,15 @@
       height: 5px;
       border-left: 1px #dddddd solid;
       border-top: 1px #dddddd solid;
+      overflow: hidden;
 
       canvas {
         position: absolute;
         top: 0px;
+      }
+      transition: height 500ms;
+      &:hover {
+        height: 15px;
       }
     }
 

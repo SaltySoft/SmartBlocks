@@ -3,11 +3,12 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/deadline.html',
-    'Organization/Apps/Common/Subapps/WorktimeProgressBar/WorktimeProgressBar'
-], function ($, _, Backbone, main_template, WtProgressbar) {
+    'Organization/Apps/Common/Subapps/WorktimeProgressBar/WorktimeProgressBar',
+    'Organization/Apps/Deadlines/Show/Views/Main'
+], function ($, _, Backbone, main_template, WtProgressbar, ShowView) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "deadline_show",
+        className: "deadline_show_container",
         initialize: function (deadline) {
             var base = this;
             base.deadline = deadline;
@@ -30,7 +31,7 @@ define([
             });
             base.$el.html(template);
             var canvas = base.$el.find(".worktime_progressbar");
-            base.worktime_pb = new WtProgressbar(canvas[0], base.deadline.getWork());
+            base.worktime_pb = new WtProgressbar(canvas[0], base.deadline.getWork(), undefined, 15);
             base.update();
 
             window.setInterval(function () {
@@ -38,6 +39,10 @@ define([
                     base.update();
                 }
             }, 1000);
+
+            var deadline_show = new ShowView(base.deadline);
+            base.$el.find(".deadline_body").html(deadline_show.$el);
+            deadline_show.init(base.SmartBlocks);
 
         },
         update: function () {
@@ -81,6 +86,8 @@ define([
             base.$el.delegate(".deadline_header", "click", function () {
                 base.expand();
             });
+
+
         }
     });
 

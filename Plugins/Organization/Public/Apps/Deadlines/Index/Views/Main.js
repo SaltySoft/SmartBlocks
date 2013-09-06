@@ -50,8 +50,8 @@ define([
 
             base.$el.delegate(".deadline_header", "click", function() {
                 base.$el.find(".deadline_body").hide();
-                base.$el.find(".deadline_show").removeClass("expanded");
-                base.$el.find(".deadline_show").css("transform", "none");
+                base.$el.find(".deadline_show_container").removeClass("expanded");
+                base.$el.find(".deadline_show_container").css("transform", "none");
             });
         }
     });
