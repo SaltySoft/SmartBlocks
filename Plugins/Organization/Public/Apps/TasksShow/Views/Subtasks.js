@@ -53,6 +53,17 @@ define([
 
                 console.log("add_subtasks click, task", base.task);
             });
+
+            base.$el.delegate(".subtask_infos", "click", function () {
+                console.log("click subtask_infos");
+            });
+
+
+            $('table tr').hover(function () {
+                $(this).addClass('table-line-hover');
+            }, function () {
+                $(this).removeClass('table-line-hover');
+            });
         }
     });
 

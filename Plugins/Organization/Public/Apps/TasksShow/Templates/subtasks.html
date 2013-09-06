@@ -1,7 +1,37 @@
 <button class="add_subtasks pure-button" >Add subtasks</button >
 <div class="subtasks_container" >
-    <% _.each(subtasks, function (subtask) { %>
-    <div >Name: <%= subtask.get('name') %></div >
-    <div >Description: <%= subtask.get('description') %></div >
-    <% }); %>
+
+    <div class="subtask_container" >
+
+        <table class="pure-table pure-table-horizontal" >
+            <thead >
+            <tr >
+                <th >#</th >
+                <th >Name</th >
+                <th >Duration</th >
+                <th >Finished</th >
+            </tr >
+            </thead >
+
+            <tbody >
+            <% _.each(subtasks, function (subtask, num) { %>
+            <% if (num % 2) {%>
+            <tr class="subtask_infos pure-table-odd" >
+                <% } else {%>
+            <tr class="subtask_infos" >
+                <% }%>
+                <td ><%= num %></td >
+                <td ><%= subtask.get('name') %></td >
+                <td > <%= subtask.get('duration') %></td >
+                <td ><%= subtask.get('finished') %></td >
+            </tr >
+            <% }); %>
+            </tbody >
+        </table >
+    </div >
+
+
+    <div class="subtask_show_container" >
+        <div >Description:</div >
+    </div >
 </div >
