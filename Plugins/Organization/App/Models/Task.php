@@ -150,6 +150,7 @@ class Task extends \Model
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
         $this->required_time = 0;
         $this->planned_tasks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subtasks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()

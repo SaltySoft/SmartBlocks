@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../Templates/deadline.html'
-], function ($, _, Backbone, main_template) {
+    'text!../Templates/deadline.html',
+    'Organization/Apps/Common/Subapps/WorktimeProgressBar/WorktimeProgressBar'
+], function ($, _, Backbone, main_template, WtProgressbar) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "deadline_show",
@@ -28,7 +29,8 @@ define([
                 show_activity: base.show_activity
             });
             base.$el.html(template);
-
+            var canvas = base.$el.find(".worktime_progressbar");
+            base.worktime_pb = new WtProgressbar(canvas[0], base.deadline.getWork());
             base.update();
 
             window.setInterval(function () {
@@ -47,6 +49,7 @@ define([
             var timeleft_container = base.$el.find(".timeleft");
 
             timeleft_container.html((now < end ? "-" : "+") + " " + OrgApp.common.getFullTimeString(time_left));
+            base.worktime_pb.updateWorktime(base.deadline.getWork());
         },
         expand: function () {
             var base = this;
