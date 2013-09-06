@@ -1,0 +1,61 @@
+.subtask_line {
+
+  clear: both;
+  line-height: 30px;
+  height: 30px;
+  margin-bottom: 1px;
+  background: #e5e5e5;
+  padding-right: 5px;
+  padding-left: 5px;
+
+  .pure-button {
+    padding: 3px;
+    margin-top: 5px;
+  }
+
+  input {
+    margin-top: 5px;
+
+  }
+
+  .name {
+    width: 150px;
+    height: 25px;
+    line-height: 25px;
+    display: block;
+    float:left;
+  }
+
+  .name_input {
+    width: 100px;
+    float:left;
+  }
+
+  .time_input {
+    width: 30px;
+    float:left;
+  }
+
+  .edit_button {
+      float: right;
+  }
+
+  .for_edition, .for_edition_i {
+    display: none;
+  }
+
+  &.edition {
+    .for_edition {
+      display: block;
+    }
+
+    .for_edition_i {
+      display: inline;
+    }
+
+    .for_normal, .for_normal_i {
+      display: none;
+    }
+
+  }
+}

@@ -31,7 +31,7 @@ define([
             });
             base.$el.html(template);
             var canvas = base.$el.find(".worktime_progressbar");
-            base.worktime_pb = new WtProgressbar(canvas[0], base.deadline.getWork(), undefined, 15);
+            base.worktime_pb = new WtProgressbar(canvas[0], base.deadline.getWork(), undefined, base.$el.height());
             base.update();
 
             window.setInterval(function () {
