@@ -56,10 +56,7 @@ define([
 
             base.$el.delegate(".subtask_infos", "click", function () {
                 var elt = $(this);
-                console.log("click subtask_infos");
                 var subtask_id = elt.attr("data-id");
-                console.log("subtask_id", subtask_id);
-
                 base.$el.find(".subtask_show_container").html('<div >' + 'Description:' + elt.attr("data-description") + '</div >');
             });
 
@@ -74,9 +71,8 @@ define([
                     subtask_infos.addClass("edition");
                     subtask_infos.find(".subtask_display").each(function () {
                         var elt = $(this);
-                        var closest_input = elt.closest("");
-                        console.log("subtask_display1", elt.html());
-
+                        var closest_input = elt.closest("td").find(".subtask_input");
+                        closest_input.val(elt.html());
                     });
                 }
                 if (action == "save") {
