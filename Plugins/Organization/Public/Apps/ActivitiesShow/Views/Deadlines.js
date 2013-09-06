@@ -21,8 +21,8 @@ define([
         },
         render: function () {
             var base = this;
-
-            var deadlines_index = new DeadlinesIndex(base.activity);
+            var deadlines = new OrgApp.DeadlinesCollection(OrgApp.Deadline.generateStubs(base.activity));
+            var deadlines_index = new DeadlinesIndex(deadlines);
             base.$el.html(deadlines_index.$el);
             deadlines_index.init(base.SmartBlocks);
         },

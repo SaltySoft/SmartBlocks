@@ -37,7 +37,7 @@ define([
                 if (base.$el.height() > 0) {
                     base.update();
                 }
-            }, 500);
+            }, 1000);
 
         },
         update: function () {
@@ -48,6 +48,12 @@ define([
             var time_left = Math.abs(end.getTime() - now.getTime());
             var timeleft_container = base.$el.find(".timeleft");
 
+            if (now < end) {
+                base.$el.removeClass("late");
+            } else {
+                base.$el.addClass("late");
+            }
+
             timeleft_container.html((now < end ? "-" : "+") + " " + OrgApp.common.getFullTimeString(time_left));
             base.worktime_pb.updateWorktime(base.deadline.getWork());
         },
@@ -56,14 +62,15 @@ define([
 
             if (base.$el.hasClass("expanded")) {
                 base.$el.removeClass("expanded");
-                base.$el.parent().animate({'margin-top': 0}, 500);
+                base.$el.parent().animate({'margin-top': 0}, 200);
+                base.$el.parent().find(".deadline_body").slideUp(200);
             } else {
                 base.$el.parent().find(".expanded").removeClass("expanded");
-
                 base.$el.addClass("expanded");
+                base.$el.find(".deadline_body").slideDown(200);
                 var transform_n = -parseInt(base.$el.position().top - parseInt(base.$el.parent().css("margin-top")));
                 var transform = "translateY(-" + parseInt(base.$el.position().top) + "px)";
-                base.$el.parent().animate({'margin-top': transform_n}, 500);
+                base.$el.parent().animate({'margin-top': transform_n}, 200);
             }
 
 
