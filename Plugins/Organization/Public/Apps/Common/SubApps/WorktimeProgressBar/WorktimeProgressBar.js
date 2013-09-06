@@ -5,13 +5,25 @@ define([
     var WorktimeProgressBar = new Class();
 
     WorktimeProgressBar.include({
-        init: function (canvas, worktime_object) {
+        init: function (canvas, worktime_object, width, height) {
             var base = this;
             base.canvas = canvas;
             base.worktime = worktime_object;
             base.ctx = base.canvas.getContext('2d');
-            $(canvas).attr("width", $(canvas).parent().width());
-            $(canvas).attr("height", $(canvas).parent().height());
+            if (!width) {
+                $(canvas).attr("width", $(canvas).parent().width());
+            } else {
+                $(canvas).attr("width", width);
+            }
+            if (!height) {
+                $(canvas).attr("height", $(canvas).parent().height());
+            } else {
+                $(canvas).attr("height", height);
+            }
+
+
+            base.$canvas = $(canvas);
+            base.registerEvents();
             base.run();
         },
         run: function () {
@@ -21,6 +33,7 @@ define([
                 base.logic();
                 base.draw();
             }
+
             requestAnimationFrame($.proxy(base.run, base), base.canvas);
         },
         logic: function () {
@@ -44,22 +57,28 @@ define([
             ctx.beginPath();
             var completex = completed_time / required_time * canvas.width;
             ctx.rect(0, 0, completed_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#3da02b";
+            ctx.fillStyle = "whitesmoke";
             ctx.fill();
 
             ctx.beginPath();
             var plannedx = completex + planned_time / required_time * canvas.width;
             ctx.rect(completex, 0, planned_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#1d7373";
+            ctx.fillStyle = "lightgray";
             ctx.fill();
             ctx.beginPath();
             ctx.rect(plannedx, 0, missing_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#a62000";
+            ctx.fillStyle = "gray";
             ctx.fill();
         },
         updateWorktime: function (worktime_object) {
             var base = this;
             base.worktime = worktime_object;
+        },
+        registerEvents: function () {
+            var base = this;
+            var elt = base.$canvas;
+
+
         }
     });
 

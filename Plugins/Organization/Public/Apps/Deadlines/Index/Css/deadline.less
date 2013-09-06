@@ -1,6 +1,12 @@
-.deadline_show {
+.deadline_show_container {
   &:last-of-type {
     border-bottom: 1px solid #dddddd;
+  }
+
+  &.late {
+    .timeleft {
+      color: red;
+    }
   }
 
   .deadline_header {
@@ -41,8 +47,20 @@
       position: absolute;
       bottom: 0;
       right: 151px;
-      width: 150px;
-      height: 20px;
+      width: ~"calc(100% - 151px)";
+      height: 5px;
+      border-left: 1px #dddddd solid;
+      border-top: 1px #dddddd solid;
+      overflow: hidden;
+
+      canvas {
+        position: absolute;
+        top: 0px;
+      }
+      transition: height 500ms;
+      &:hover {
+        height: 15px;
+      }
     }
 
 
@@ -72,7 +90,7 @@
 
   &.expanded {
     .deadline_body {
-      display: block;
+//      display: block;
     }
   }
 

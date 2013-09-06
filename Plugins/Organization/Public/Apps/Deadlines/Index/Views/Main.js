@@ -3,15 +3,18 @@ define([
     'underscore',
     'backbone',
     './Deadline',
-    'text!../Templates/main.html'
-], function ($, _, Backbone, DeadlineShow, main_template) {
+    'text!../Templates/main.html',
+    'text!../Templates/new_deadline_btn.html'
+], function ($, _, Backbone, DeadlineShow, main_template, new_dl_btn_tpl) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "deadlines_index",
-        initialize: function (activity) {
+        initialize: function (deadlines) {
             var base = this;
-            base.activity = activity;
+            base.deadlines = deadlines;
 
+            base.current_page = 1;
+            base.page_count = 0;
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -26,25 +29,29 @@ define([
 
             });
 
+            var new_deadline_button = _.template(new_dl_btn_tpl, {});
+
             base.$el.html(template);
 
-            var deadlines = new OrgApp.DeadlinesCollection(OrgApp.Deadline.generateStubs(base.activity));
 
-            for (var k in deadlines.models) {
-                var deadline_view = new DeadlineShow(deadlines.models[k]);
+
+            for (var k in base.deadlines.models) {
+                var deadline_view = new DeadlineShow(base.deadlines.models[k]);
                 base.$el.find(".deadlines_container").append(deadline_view.$el);
                 deadline_view.init(base.SmartBlocks, {
                     show_activity: base.activity === undefined
                 });
             }
+
+            base.$el.find();
         },
         registerEvents: function () {
             var base = this;
 
             base.$el.delegate(".deadline_header", "click", function() {
                 base.$el.find(".deadline_body").hide();
-                base.$el.find(".deadline_show").removeClass("expanded");
-                base.$el.find(".deadline_show").css("transform", "none");
+                base.$el.find(".deadline_show_container").removeClass("expanded");
+                base.$el.find(".deadline_show_container").css("transform", "none");
             });
         }
     });

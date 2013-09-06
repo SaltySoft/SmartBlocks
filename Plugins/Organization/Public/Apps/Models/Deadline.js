@@ -51,7 +51,6 @@ define([
                 left: left,
                 done: done
             };
-            console.log(work);
             return work;
         },
         getPlannedTasks: function () {
