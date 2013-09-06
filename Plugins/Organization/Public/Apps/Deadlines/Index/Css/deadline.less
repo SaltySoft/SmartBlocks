@@ -1,0 +1,80 @@
+.deadline_show {
+  &:last-of-type {
+    border-bottom: 1px solid #dddddd;
+  }
+
+  .deadline_header {
+    height: 50px;
+    background: #f9f9f9;
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    color: #424242;
+    font-weight: bold;
+    position: relative;
+    cursor: pointer;
+
+
+
+    .name {
+      display: block;
+      float: left;
+      font-size: 30px;
+      padding: 10px;
+    }
+
+    .timeleft {
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      width: 150px;
+      border-left: 1px #dddddd solid;
+      border-top: 1px #dddddd solid;
+      font-size: 22px;
+    }
+
+    .wt_pb_container {
+      position: absolute;
+      bottom: 0;
+      right: 151px;
+      width: 150px;
+      height: 20px;
+    }
+
+
+    .activity_link {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      width: 150px;
+      a {
+
+      }
+    }
+
+
+  }
+
+  .deadline_body {
+    display: none;
+    height: 611px;
+    background: #f5f5f5;
+    border-top: 1px solid #dddddd;
+  }
+
+  &.expanded {
+    .deadline_body {
+      display: block;
+    }
+  }
+
+//@imports
+}

@@ -9,6 +9,17 @@ define([
             stop: new Date()
         },
         urlRoot: "/Organization/Deadlines",
+        parse: function (response) {
+            if (response.tasks) {
+                var tasks_collection = new OrgApp.TasksCollection();
+                for (var k in response.tasks) {
+                    var task = new OrgApp.Task(response.tasks[k]);
+                    tasks_collection.add(task);
+                }
+                response.tasks = tasks_collection;
+            }
+            return response;
+        },
         getStop: function () {
             var base = this;
             var date = new Date();
@@ -18,6 +29,44 @@ define([
         setStop: function (date) {
             var base = this;
             base.set("stop", date.getTime());
+        },
+        getWork: function () {
+            var base = this;
+
+            var tasks = base.get("tasks");
+            var total = 0;
+            var left = 0;
+            var done = 0;
+            for (var k in tasks.models) {
+                var task = tasks.models[k];
+                if (task.get("name")) {
+                    var task_work = task.getWork();
+                    total += task_work.total;
+                    left += task_work.left;
+                    done += task_work.done;
+                }
+            }
+            var work = {
+                total: total,
+                left: left,
+                done: done
+            };
+            console.log(work);
+            return work;
+        },
+        getPlannedTasks: function () {
+            var base = this;
+
+            var tasks = base.get("tasks");
+            var pt_collection = new OrgApp.PlannedTasksCollection();
+            for (var k in tasks.models) {
+                var pts = tasks.models[k].get("planned_tasks");
+                for (var i in pts.models) {
+                    var pt = pts.models[i];
+                    pt_collection.add(pt_collection);
+                }
+            }
+            return pt_collection;
         }
     });
 
@@ -30,15 +79,23 @@ define([
             var start = new Date(now);
             var stop = new Date(now);
 
-            start.setTime(now.getTime() - (Math.random() * 10000000));
+            start.setTime(now.getTime() - (Math.random() * 100000));
 
-            stop.setTime(now.getTime() + (Math.random() * 10000000));
+            stop.setTime(now.getTime() + (Math.random() * 100000));
+
+            var tasks = new OrgApp.TasksCollection();
+
+            for (var j = 0; j < 5; j++) {
+                var rand = Math.round(Math.random() * OrgApp.tasks.models.length);
+                tasks.add(OrgApp.tasks.at(rand));
+            }
 
             var deadline = new Model({
                 name: "Deadline " + i,
                 start: start,
                 stop: stop,
-                activity: activity
+                activity: activity,
+                tasks: tasks
             });
 
             return_array.push(deadline);

@@ -3,11 +3,11 @@ define([
     'underscore',
     'backbone',
     'text!../Templates/deadlines.html',
-    'Organization/Apps/Deadlines/Show/Views/Main'
-], function ($, _, Backbone, deadline_template, DeadlineShow) {
+    'Organization/Apps/Deadlines/Index/Views/Main'
+], function ($, _, Backbone, deadline_template, DeadlinesIndex) {
     var View = Backbone.View.extend({
         tagName: "div",
-        className: "a_class",
+        className: "activity_deadlines",
         initialize: function (activity) {
             var base = this;
             base.model = activity;
@@ -22,16 +22,9 @@ define([
         render: function () {
             var base = this;
 
-            var template = _.template(deadline_template, {});
-            base.$el.html(template);
-
-            var deadlines = new OrgApp.DeadlinesCollection(OrgApp.Deadline.generateStubs(base.activity));
-
-            for (var k in deadlines.models) {
-                var deadline_view = new DeadlineShow(deadlines.models[k]);
-                base.$el.append(deadline_view.$el);
-                deadline_view.init(base.SmartBlocks);
-            }
+            var deadlines_index = new DeadlinesIndex(base.activity);
+            base.$el.html(deadlines_index.$el);
+            deadlines_index.init(base.SmartBlocks);
         },
         registerEvents: function () {
             var base = this;

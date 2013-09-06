@@ -71,6 +71,7 @@ define([
             var planned_tasks_collection = new PlannedTasksCollection();
             for (var k in planned_tasks_array) {
                 var planned_task = new PlannedTask(planned_tasks_array[k]);
+//                var planned_task = OrgApp.planned_tasks.get(planned_tasks_array[k].id);
                 planned_tasks_collection.add(planned_task);
             }
             response.planned_tasks = planned_tasks_collection;
@@ -132,6 +133,7 @@ define([
                     var planned_tasks_collection = new PlannedTasksCollection();
                     for (var k in planned_tasks_array) {
                         var planned_task = new PlannedTask(planned_tasks_array[k]);
+//                        var planned_task = OrgApp.planned_tasks.get(planned_tasks_array[k].id);
                         planned_tasks_collection.add(planned_task);
                     }
                     this.attributes.planned_tasks = planned_tasks_collection;
@@ -205,6 +207,51 @@ define([
             var base = this;
             console.log(base.get('completion_date'));
             return base.get('completion_date') != null;
+        },
+        getRequiredTime: function () {
+            //TODO: change that to subtasks time sum
+            return parseInt(this.get("required_time") ? this.get("required_time") : 0);
+        },
+        getPlannedTasks: function () {
+            var base = this;
+            var filtered = OrgApp.planned_tasks.filter(function (pt) {
+                return pt.get("task").get("id") === base.get("id");
+            });
+            return new OrgApp.PlannedTasksCollection(filtered);
+        },
+        getWork: function () {
+            var base = this;
+
+            var total = 0;
+            var left = 0;
+            var done = 0;
+
+            total += base.getRequiredTime();
+            var pts = base.getPlannedTasks();
+
+
+
+            for (var l in pts.models) {
+                var pt = pts.models[l];
+                var now = new Date();
+                var start = pt.getStart();
+                var end = new Date(start);
+                end.setTime(start.getTime() + pt.get("duration"));
+                if (start > now) {
+                    left +=  pt.get("duration");
+                } else if (end < now) {
+                    done += pt.get("duration");
+                } else {
+                    left += end.getTime() - now.getTime();
+                    done += now.getTime() - start.getTime();
+                }
+            }
+
+            return {
+                total: total,
+                left: left,
+                done: done
+            };
         }
     });
 
