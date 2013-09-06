@@ -62,6 +62,7 @@ define([
                     base.$el.find(".type_field_error").show();
                 }
                 var deadline_check = base.$el.find(".deadline_input");
+                base.task.set("required_time", base.$el.find(".needed_time_input").val() * 3600000);
                 if (deadline_check.is(":checked")) {
                     var date_ms = Date.parse(base.$el.find(".deadline_date_input").val());
                     var date = new Date();
@@ -70,7 +71,6 @@ define([
                     var minute = base.$el.find(".deadline_minute_input").val();
                     date.setHours(hour, minute, 0, 0);
                     base.task.setDueDate(date);
-                    base.task.set("required_time", base.$el.find(".needed_time_input").val() * 3600000);
 
                 }
                 if (valid) {

@@ -44,17 +44,17 @@ define([
             ctx.beginPath();
             var completex = completed_time / required_time * canvas.width;
             ctx.rect(0, 0, completed_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#3da02b";
+            ctx.fillStyle = "#47a447";
             ctx.fill();
 
             ctx.beginPath();
             var plannedx = completex + planned_time / required_time * canvas.width;
             ctx.rect(completex, 0, planned_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#1d7373";
+            ctx.fillStyle = "#3276b1";
             ctx.fill();
             ctx.beginPath();
             ctx.rect(plannedx, 0, missing_time / required_time * canvas.width, canvas.height);
-            ctx.fillStyle = "#a62000";
+            ctx.fillStyle = "#d2322d";
             ctx.fill();
         },
         updateWorktime: function (worktime_object) {
