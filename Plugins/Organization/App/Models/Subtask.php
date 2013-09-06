@@ -33,7 +33,7 @@ class Subtask extends \Model
     private $finished;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", nullable=true)
      */
     private $order_index;
 
@@ -45,7 +45,7 @@ class Subtask extends \Model
     public function __construct()
     {
         $this->name = "New subtask";
-        $this->description = "";
+        $this->description = "New subtask description.";
         $this->duration = 0;
         $this->finished = false;
     }

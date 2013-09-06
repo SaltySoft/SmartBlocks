@@ -1,3 +1,7 @@
+<button class="add_subtasks pure-button" >Add subtasks</button >
 <div class="subtasks_container" >
-
+    <% _.each(subtasks, function (subtask) { %>
+    <div >Name: <%= subtask.get('name') %></div >
+    <div >Description: <%= subtask.get('description') %></div >
+    <% }); %>
 </div >
