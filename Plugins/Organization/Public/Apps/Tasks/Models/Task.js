@@ -31,7 +31,6 @@ define([
             var base = this;
             var activity = undefined;
             var activities_list = base.get("activities");
-//            console.log(activities_list);
             for (var k in activities_list) {
                 var current_activity = activities_list[k];
                 if (current_activity.creator.id == user.get('id')) {
@@ -109,6 +108,8 @@ define([
             }
 
 
+
+            console.log(response);
             return response;
         },
         initialize:function (model) {
@@ -154,6 +155,17 @@ define([
                     }
                     this.attributes.tags = tags_collection;
                 }
+
+
+                if (model.subtasks && !model.subtasks.models) {
+                    var subtasks_collection = new OrgApp.SubtasksCollection();
+                    for (var k in model.subtasks) {
+                        var subtask = new OrgApp.Subtask(model.subtasks[k]);
+                        subtasks_collection.add(subtask);
+                    }
+                    this.attributes.subtasks = subtasks_collection;
+                }
+
 //                if (!Activity) {
 //                    Activity  = require('Organization/Apps/Common/Models/Activity');
 //                }

@@ -24,6 +24,8 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+
         }
     });
 

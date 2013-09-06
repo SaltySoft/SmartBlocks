@@ -24,11 +24,13 @@ define([
     'Organization/Apps/Models/Deadline',
     'Organization/Apps/Collections/Deadlines',
     'Organization/Apps/Daily/Models/PlannedTask',
+    'Organization/Apps/Models/Subtask',
+    'Organization/Apps/Collections/Subtasks',
     'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -50,6 +52,8 @@ define([
             base.TasksCollection = TasksCollection;
             base.Deadline = Deadline;
             base.DeadlinesCollection = DeadlinesCollection;
+            base.Subtask = Subtask;
+            base.SubtasksCollection = SubtasksCollection;
 
             base.ForceReturn = undefined;
         },
