@@ -54,7 +54,7 @@ class Deadline extends \Model
     private $start_time;
 
     /**
-     * @Colum(type="datetime")
+     * @Column(type="datetime")
      */
     private $stop_time;
 
@@ -171,7 +171,8 @@ class Deadline extends \Model
             "creator" => $this->creator->toArray(0),
             "start" => $this->start_time->getTimestamp() * 1000,
             "stop" => $this->stop_time->getTimestamp() * 1000,
-            "archived" => $this->archived
+            "archived" => $this->archived,
+            "activity" => is_object($this->activity) ? $this->activity->toArray(false) : null
         );
 
         if ($show_tasks)

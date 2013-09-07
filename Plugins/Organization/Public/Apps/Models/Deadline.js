@@ -6,7 +6,8 @@ define([
         default: {
             name: "my deadline",
             start: new Date(),
-            stop: new Date()
+            stop: new Date(),
+            archived: false
         },
         urlRoot: "/Organization/Deadlines",
         parse: function (response) {
@@ -18,6 +19,12 @@ define([
                 }
                 response.tasks = tasks_collection;
             }
+
+            if (response.activity) {
+                var activity = new OrgApp.Activity(response.activity);
+                response.activity = activity;
+            }
+
             return response;
         },
         getStop: function () {
@@ -29,6 +36,16 @@ define([
         setStop: function (date) {
             var base = this;
             base.set("stop", date.getTime());
+        },
+        getStart: function () {
+            var base = this;
+            var date = new Date();
+            date.setTime(base.get("start"));
+            return date;
+        },
+        setStart: function (date) {
+            var base = this;
+            base.set("start", date.getTime());
         },
         getWork: function () {
             var base = this;

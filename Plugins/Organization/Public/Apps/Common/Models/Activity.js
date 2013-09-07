@@ -45,6 +45,17 @@ define([
             var result = Backbone.Model.prototype.save.call(this, attributes, options);
             base.has_changed = false;
             return result;
+        },
+        getDeadlines: function () {
+            var base = this;
+
+            var deadlines_array = OrgApp.deadlines.filter(function (deadline) {
+                return deadline.get('activity').get('id') == base.get('id');
+            });
+
+            var deadlines = new OrgApp.DeadlinesCollection(deadlines_array);
+
+            return deadlines;
         }
     });
     return Activity;

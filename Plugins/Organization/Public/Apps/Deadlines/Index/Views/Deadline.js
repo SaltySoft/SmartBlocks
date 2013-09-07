@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!../Templates/deadline.html',
     'Organization/Apps/Common/Subapps/WorktimeProgressBar/WorktimeProgressBar',
-    'Organization/Apps/Deadlines/Show/Views/Main'
-], function ($, _, Backbone, main_template, WtProgressbar, ShowView) {
+    'Organization/Apps/Deadlines/Show/Views/Main',
+    'ContextMenuView'
+], function ($, _, Backbone, main_template, WtProgressbar, ShowView, ContextMenu) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "deadline_show_container",
@@ -17,10 +18,12 @@ define([
         init: function (SmartBlocks, params) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.show_activity = params.show_activity !== false;
+            base.activity = params.activity;
+            base.show_activity = params.activity !== undefined;
 
             base.render();
             base.registerEvents();
+            base.$el.attr("oncontextmenu", "return false;");
         },
         render: function () {
             var base = this;
@@ -83,9 +86,41 @@ define([
         registerEvents: function () {
             var base = this;
 
-            base.$el.delegate(".deadline_header", "click", function () {
-                base.expand();
+            base.$el.delegate(".deadline_header", "mouseup", function (e) {
+                if (e.which == 1) {
+                    base.expand();
+                }
+
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton(!base.$el.hasClass("expanded") ? "Open" : "Close", function () {
+                        base.expand();
+                    });
+
+                    context_menu.addButton("Delete", function () {
+                        if (confirm("Are you sure you want to delete this deadline ?")) {
+                            base.deadline.destroy({
+                                success: function () {
+                                    OrgApp.deadlines.remove(base.deadline);
+                                    base.$el.remove();
+                                    base.SmartBlocks.show_message("Successfully deleted deadline");
+                                },
+                                error: function () {
+                                    base.SmartBlocks.show_message("Couldn't delete deadline");
+                                }
+                            });
+                        }
+                    });
+
+                    context_menu.show(e);
+
+
+                }
+                console.log(e.which);
+
             });
+
+
         }
     });
 

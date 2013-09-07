@@ -19,6 +19,7 @@ define([
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',
+    'Organization/Apps/Common/Models/ActivityType',
     'Organization/Apps/Common/Collections/ActivityTypes',
     'Organization/Apps/Tasks/Models/Task',
     'Organization/Apps/Models/Deadline',
@@ -30,7 +31,7 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -54,6 +55,10 @@ define([
             base.DeadlinesCollection = DeadlinesCollection;
             base.Subtask = Subtask;
             base.SubtasksCollection = SubtasksCollection;
+            base.ActivitiesCollection = ActivitiesCollection;
+            base.Activity = Activity;
+            base.ActivityType = ActivityType;
+            base.ActivityTypesCollection = ActivityTypesCollection;
 
             base.ForceReturn = undefined;
         },
@@ -145,6 +150,8 @@ define([
             loading_screen.setMax(10);
             var app_router = new Router();
 
+            base.deadlines = new base.DeadlinesCollection();
+
             loading_screen.setLoad(0);
             loading_screen.setText("Loading tasks");
             base.tasks.fetch({
@@ -161,8 +168,15 @@ define([
                                     loading_screen.setText("Loading activity types");
                                     base.activity_types.fetch({
                                         success: function () {
-                                            loading_screen.setLoad(10);
-                                            Backbone.history.start();
+                                            loading_screen.setLoad(9);
+                                            loading_screen.setText("Loading deadlines");
+                                            base.deadlines.fetch({
+                                                success: function () {
+                                                    loading_screen.setLoad(10);
+                                                    Backbone.history.start();
+                                                }
+                                            });
+
                                         }
                                     });
                                 }

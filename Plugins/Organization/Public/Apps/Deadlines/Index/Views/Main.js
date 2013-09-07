@@ -17,9 +17,10 @@ define([
             base.current_page = 1;
             base.page_count = 0;
         },
-        init: function (SmartBlocks) {
+        init: function (SmartBlocks, activity) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.activity = activity;
 
             base.render();
         },
@@ -29,28 +30,26 @@ define([
             var template = _.template(main_template, {
 
             });
-
-            var new_deadline_button = _.template(new_dl_btn_tpl, {});
-
             base.$el.html(template);
+
+
+            base.renderPage();
+        },
+        renderPage: function (page) {
+            var base = this;
+            base.$el.find(".deadlines_container").html("");
 
             var new_ddl_view = new NewDeadlineView();
             base.$el.find(".deadlines_container").append(new_ddl_view.$el);
-            new_ddl_view.init(base.SmartBlocks);
+            new_ddl_view.init(base.SmartBlocks, {
+                activity: base.activity
+            });
 
             for (var k in base.deadlines.models) {
                 var deadline_view = new DeadlineShow(base.deadlines.models[k]);
                 base.$el.find(".deadlines_container").append(deadline_view.$el);
                 deadline_view.init(base.SmartBlocks, {
-                    show_activity: base.activity === undefined
-                });
-            }
-        },
-        renderPage: function () {
-            for (var k in base.deadlines.models) {
-                var deadline_view = new DeadlineShow(base.deadlines.models[k]);
-                base.$el.find(".deadlines_container").append(deadline_view.$el);
-                deadline_view.init(base.SmartBlocks, {
+                    activity: base.activity,
                     show_activity: base.activity === undefined
                 });
             }

@@ -9,7 +9,8 @@
 namespace Organization;
 
 
-class DeadlinesController extends \Controller {
+class DeadlinesController extends \Controller
+{
 
     public function index()
     {
@@ -65,12 +66,17 @@ class DeadlinesController extends \Controller {
         }
 
         $deadline->setName($data["name"]);
-        $deadline->setArchived($data["archived"]);
-        $activity = Activity::find($data["activity"]["id"]);
-        if (is_object($activity))
+        if (isset($data["archived"]))
+            $deadline->setArchived($data["archived"]);
+        if (isset($data["activity"]) && is_array($data["activity"]))
         {
-            $deadline->setActivity($activity);
+            $activity = Activity::find($data["activity"]["id"]);
+            if (is_object($activity))
+            {
+                $deadline->setActivity($activity);
+            }
         }
+
         $start = new \DateTime();
         $start->setTimestamp($data["start"] / 1000);
         $stop = new \DateTime();
@@ -124,7 +130,7 @@ class DeadlinesController extends \Controller {
         }
     }
 
-    public function delete($params = array())
+    public function destroy($params = array())
     {
         $deadline = Deadline::find($params["id"]);
         if ($deadline->getCreator() == \User::current_user())

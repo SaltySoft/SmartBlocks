@@ -14,6 +14,7 @@ if (app !== undefined) {
 
 
 $(document).ready(function () {
+    $("body").attr("oncontextmenu", "return false");
     requirejs(apps,
         function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, UserRequester, App) {
             if ("WebSocket" in window) {
