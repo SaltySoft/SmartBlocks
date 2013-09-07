@@ -45,9 +45,9 @@ define([
             tasks = tasks.slice(page_begin, page_end);
 
             base.$el.find(".tasks_list").html("");
-
             for (var k in tasks) {
                 var task = tasks[k];
+
                 var task_thumbnail = new TaskNormalThumbnail(task);
                 base.$el.find(".tasks_list").append(task_thumbnail.$el);
                 task_thumbnail.init(base.SmartBlocks);
@@ -60,6 +60,25 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            OrgApp.tasks.on('add', function () {
+                base.renderPage();
+            });
+
+            base.$el.delegate(".task_normal_thumbnail.new", 'click', function () {
+                var task = new OrgApp.Task();
+                task.set('deadline', base.deadline);
+                task.set('activity', base.deadline.getActivity());
+                task.set('name', 'New task');
+                task.set('required_time', 4);
+                task.save({}, {
+                    success: function () {
+                        base.SmartBlocks.show_message('Successfully created task');
+                    }
+                });
+                OrgApp.tasks.add(task);
+
+            });
         }
     });
 

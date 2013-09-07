@@ -8,15 +8,19 @@ define([
     'Organization/Apps/Collections/Subtasks',
     'UsersCollection',
     'Organization/Apps/Common/Models/TaskTag',
-    'Organization/Apps/Common/Collections/TaskTags'
-], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection) {
+    'Organization/Apps/Common/Collections/TaskTags',
+    'Organization/Apps/Models/Deadline',
+    'Organization/Apps/Collections/Subtasks'
+], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection, Deadline, SubtasksCollection) {
 
 
     var Task = Backbone.Model.extend({
         urlRoot:"/Organization/Tasks",
         defaults:{
             "model_type":"Task",
-            activities:[]
+            activities:[],
+            subtasks: new SubtasksCollection(),
+            creation_time: new Date().getTime()
         },
         hasDeadline:function () {
             return this.get("due_date");
@@ -90,6 +94,12 @@ define([
                 tags_collection.add(tag);
             }
             response.tags = tags_collection;
+
+
+            if (response.deadline) {
+                var deadline = new Deadline(response.deadline);
+                response.deadline = deadline;
+            }
 
 //            if (!Activity) {
 //                Activity  = require('Organization/Apps/Common/Models/Activity');

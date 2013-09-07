@@ -513,7 +513,8 @@ class Task extends \Model
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
             "deadline" => $this->deadline,
             "type" => $this->type != null ? $this->type->toArray() : null,
-            "tags" => $tags
+            "tags" => $tags,
+            "deadline" => $this->deadline != null ? $this->deadline->toArray(false) : null
         );
 
         if ($show_children)

@@ -225,6 +225,15 @@ class TasksController extends \Controller
             $task->setCreationDate($data["creation_date"]);
         }
 
+        if (isset($data['deadline']))
+        {
+            $deadline = Deadline::find($data['deadline']);
+            if (is_object($deadline))
+            {
+                $task->setDeadline($deadline);
+            }
+        }
+
         if (isset($data["parent"]))
         {
             if (is_array($data["parent"]))
@@ -371,6 +380,15 @@ class TasksController extends \Controller
             if (isset($data["active"]))
             {
                 $task->setActive($data["active"]);
+            }
+
+            if (isset($data['deadline']))
+            {
+                $deadline = Deadline::find($data['deadline']);
+                if (is_object($deadline))
+                {
+                    $task->setDeadline($deadline);
+                }
             }
 
             $em = \Model::getEntityManager();
