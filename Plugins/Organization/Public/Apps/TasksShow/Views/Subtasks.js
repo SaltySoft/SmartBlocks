@@ -55,7 +55,36 @@ define([
             });
 
             base.$el.delegate(".subtask_infos", "click", function () {
-                console.log("click subtask_infos");
+                var elt = $(this);
+                var subtask_id = elt.attr("data-id");
+                base.$el.find(".subtask_show_container").html('<div >' + 'Description:' + elt.attr("data-description") + '</div >');
+            });
+
+            base.$el.delegate(".subtask_button", "click", function () {
+                var elt = $(this);
+                var action = elt.attr("data-action");
+                var subtask_infos = elt.closest(".subtask_infos");
+                var subtask_id = subtask_infos.attr("data-id");
+                var subtask = base.task.get('subtasks').get(subtask_id);
+
+                if (action == "edit") {
+                    subtask_infos.addClass("edition");
+                    subtask_infos.find(".subtask_display").each(function () {
+                        var elt = $(this);
+                        var closest_input = elt.closest("td").find(".subtask_input");
+                        closest_input.val(elt.html());
+                    });
+                }
+                if (action == "save") {
+
+                }
+                if (action == "cancel") {
+                    subtask_infos.removeClass("edition");
+                }
+                if (action == "delete") {
+
+                }
+
             });
 
 
@@ -63,7 +92,7 @@ define([
                 $(this).addClass('table-line-hover');
             }, function () {
                 $(this).removeClass('table-line-hover');
-            });
+            })
         }
     });
 
