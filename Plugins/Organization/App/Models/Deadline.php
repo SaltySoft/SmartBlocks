@@ -74,6 +74,7 @@ class Deadline extends \Model
         $this->start_time = new \DateTime();
         $this->stop_time = new \DateTime();
         $this->archived = false;
+        $this->creator = \User::current_user();
     }
 
     public function getId()
@@ -168,8 +169,8 @@ class Deadline extends \Model
             "id" => $this->id,
             "name" => $this->name,
             "creator" => $this->creator->toArray(0),
-            "start" => $this->start_time->getTime() * 1000,
-            "stop" => $this->stop_time->getTime() * 1000,
+            "start" => $this->start_time->getTimestamp() * 1000,
+            "stop" => $this->stop_time->getTimestamp() * 1000,
             "archived" => $this->archived
         );
 
