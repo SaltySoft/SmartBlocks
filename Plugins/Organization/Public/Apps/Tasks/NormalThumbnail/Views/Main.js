@@ -4,9 +4,10 @@ define([
     'backbone',
     'text!../Templates/main.html',
     'text!../Templates/new_task_thb.html',
+    'text!../Templates/new_subtask_tpl.html',
     './SubtaskLine',
     'ContextMenuView'
-], function ($, _, Backbone, main_template, new_tpl, SubtaskLineView, ContextMenu) {
+], function ($, _, Backbone, main_template, new_tpl, new_subtask_tpl, SubtaskLineView, ContextMenu) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "task_normal_thumbnail",
@@ -46,6 +47,9 @@ define([
                 base.$el.find(".subtasks_list").append(subtask_line.$el);
                 subtask_line.init(base.SmartBlocks);
             }
+
+            var new_subtask_template = _.template(new_subtask_tpl, {});
+            base.$el.find(".subtasks_list").append(new_subtask_template);
 
 
             //paginator construction
@@ -126,6 +130,19 @@ define([
             });
 
 
+
+            base.$el.delegate('.create_subtask_button', 'click', function () {
+                var subtask = new OrgApp.Subtask();
+                subtask.set('task', base.task);
+                subtask.set('name', "New subtask");
+                subtask.set('duration', 3600000);
+
+                subtask.save();
+
+                base.task.get("subtasks").add(subtask);
+
+                base.renderSubtasksList();
+            });
         }
     });
 
