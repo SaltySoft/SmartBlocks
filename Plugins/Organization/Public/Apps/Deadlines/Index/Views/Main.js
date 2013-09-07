@@ -4,8 +4,9 @@ define([
     'backbone',
     './Deadline',
     'text!../Templates/main.html',
-    'text!../Templates/new_deadline_btn.html'
-], function ($, _, Backbone, DeadlineShow, main_template, new_dl_btn_tpl) {
+    'text!../Templates/new_deadline_btn.html',
+    './NewDeadline'
+], function ($, _, Backbone, DeadlineShow, main_template, new_dl_btn_tpl, NewDeadlineView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "deadlines_index",
@@ -33,7 +34,9 @@ define([
 
             base.$el.html(template);
 
-
+            var new_ddl_view = new NewDeadlineView();
+            base.$el.find(".deadlines_container").append(new_ddl_view.$el);
+            new_ddl_view.init(base.SmartBlocks);
 
             for (var k in base.deadlines.models) {
                 var deadline_view = new DeadlineShow(base.deadlines.models[k]);
@@ -42,8 +45,15 @@ define([
                     show_activity: base.activity === undefined
                 });
             }
-
-            base.$el.find();
+        },
+        renderPage: function () {
+            for (var k in base.deadlines.models) {
+                var deadline_view = new DeadlineShow(base.deadlines.models[k]);
+                base.$el.find(".deadlines_container").append(deadline_view.$el);
+                deadline_view.init(base.SmartBlocks, {
+                    show_activity: base.activity === undefined
+                });
+            }
         },
         registerEvents: function () {
             var base = this;

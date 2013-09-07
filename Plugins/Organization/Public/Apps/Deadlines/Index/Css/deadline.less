@@ -21,6 +21,21 @@
     position: relative;
     cursor: pointer;
 
+    &.new {
+      transition: all 200ms;
+
+      font-size: 50px;
+      color: #cdcdcd;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+
+      &:hover {
+        background: #cdcdcd;
+        color: white;
+      }
+    }
+
     .name {
       display: block;
       float: left;

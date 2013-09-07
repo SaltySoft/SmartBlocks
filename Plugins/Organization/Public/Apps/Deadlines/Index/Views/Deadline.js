@@ -86,8 +86,6 @@ define([
             base.$el.delegate(".deadline_header", "click", function () {
                 base.expand();
             });
-
-
         }
     });
 
