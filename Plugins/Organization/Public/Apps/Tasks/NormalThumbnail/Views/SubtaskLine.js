@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../Templates/subtask_line.html'
-], function ($, _, Backbone, subtask_line_tpl) {
+    'text!../Templates/subtask_line.html',
+    'ContextMenuView'
+], function ($, _, Backbone, subtask_line_tpl, ContextMenu) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "subtask_line",
@@ -17,6 +18,7 @@ define([
 
             base.render();
             base.registerEvents();
+
         },
         render: function () {
             var base = this;
@@ -28,6 +30,26 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.$el.mouseup(function (e) {
+
+                if (e.which == 3) {
+                    var context_menu = new ContextMenu();
+                    context_menu.addButton('Subtask menu');
+
+                    context_menu.addButton('Delete', function () {
+                        if (confirm("Are you sure you want to delete this subtask ?")) {
+                            base.subtask.destroy();
+                            base.$el.remove();
+                        }
+                    });
+
+                    context_menu.show(e);
+                }
+
+
+                e.stopPropagation();
+            });
 
             base.$el.delegate(".edit_button", "click", function () {
                 base.$el.toggleClass("edition");

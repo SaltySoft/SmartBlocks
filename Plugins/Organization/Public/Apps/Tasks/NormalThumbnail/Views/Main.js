@@ -16,7 +16,8 @@ define([
             base.task = task;
             base.model = task;
             base.current_page = 1;
-            base.page_size = 5;
+            base.page_size = 4;
+            base.page_count = 0;
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -40,9 +41,30 @@ define([
 
 
             var subtasks = base.task.get("subtasks");
+            if (page)
+                base.current_page = page;
+
+
+
+            base.page_count = Math.ceil(subtasks.models.length / base.page_size);
+
+            if (base.current_page < 1) {
+                base.current_page = 1;
+            }
+            if (base.current_page > base.page_count) {
+                base.current_page = base.page_count;
+            }
+
+            var page_start = (base.current_page - 1) * base.page_size;
+            var page_end = page_start + base.page_size;
+
+            var subtasks_to_show = subtasks.slice(page_start, page_end);
+
+
+
             base.$el.find(".subtasks_list").html('');
-            for (var k in subtasks.models) {
-                var subtask = subtasks.models[k];
+            for (var k in subtasks_to_show) {
+                var subtask = subtasks_to_show[k];
                 var subtask_line = new SubtaskLineView(subtask);
                 base.$el.find(".subtasks_list").append(subtask_line.$el);
                 subtask_line.init(base.SmartBlocks);
@@ -52,9 +74,12 @@ define([
             base.$el.find(".subtasks_list").append(new_subtask_template);
 
 
+
             //paginator construction
-            for (var i = 1; i < base.page_size; i++) {
-                var link = $('<a href="javascript:void(0)" class="page_button" data-page="' + i + '"><div></div></a>');
+            base.$el.find(".pagination").html("");
+            for (var i = 1; i <= base.page_count; i++) {
+                var link = $('<a href="javascript:void(0)" class="page_button' + (i == base.current_page ? ' selected' : '') + '" data-page="' + i + '"><div></div></a>');
+                base.$el.find(".pagination").append(link);
             }
 
         },
@@ -131,16 +156,29 @@ define([
 
 
 
-            base.$el.delegate('.create_subtask_button', 'click', function () {
-                var subtask = new OrgApp.Subtask();
-                subtask.set('task', base.task);
-                subtask.set('name', "New subtask");
-                subtask.set('duration', 3600000);
+            base.$el.delegate('.create_subtask_button', 'mouseup', function (e) {
+                if (e.which == 1) {
+                    var subtask = new OrgApp.Subtask();
+                    subtask.set('task', base.task);
+                    subtask.set('name', "New subtask");
+                    subtask.set('duration', 3600000);
 
-                subtask.save();
+                    subtask.save();
 
-                base.task.get("subtasks").add(subtask);
+                    base.task.get("subtasks").add(subtask);
+                    base.renderSubtasksList();
+                    base.renderSubtasksList(base.page_count);
+                }
+                e.stopPropagation();
+            });
 
+
+            base.$el.delegate('.pagination a', 'click', function () {
+                var elt = $(this);
+                base.renderSubtasksList(elt.attr('data-page'));
+            });
+
+            base.task.get('subtasks').on('remove', function () {
                 base.renderSubtasksList();
             });
         }
