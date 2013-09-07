@@ -9,9 +9,7 @@
 
 
   .name {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 10px;
+
   }
 
   &.new {
@@ -29,6 +27,25 @@
       background: #ffffff;
       color: darkgray;
 
+    }
+  }
+
+  .name_container {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    .task_name_input {
+      display: none;
+      width: ~"calc(100% - 5px)";
+    }
+
+    &.edition {
+      .name {
+        display: none;
+      }
+      .task_name_input {
+        display: block;
+      }
     }
   }
 

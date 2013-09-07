@@ -1,5 +1,6 @@
-<div class="name">
-    <%= task.get('name') %>
+<div class="name_container">
+    <span class="name"><%= task.get('name') %></span>
+    <input type="text" value="<%= task.get('name') %>" class="task_name_input" placeholder="Enter a name for the task" />
 </div>
 <ul class="subtasks_list">
 
