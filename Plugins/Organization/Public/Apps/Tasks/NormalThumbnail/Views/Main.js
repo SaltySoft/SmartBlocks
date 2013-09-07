@@ -13,7 +13,8 @@ define([
             var base = this;
             base.task = task;
             base.model = task;
-
+            base.current_page = 1;
+            base.page_size = 5;
         },
         init: function (SmartBlocks) {
             var base = this;
@@ -31,8 +32,10 @@ define([
 
             base.renderSubtasksList();
         },
-        renderSubtasksList: function () {
+        renderSubtasksList: function (page) {
             var base = this;
+
+
             var subtasks = base.task.get("subtasks");
             base.$el.find(".subtasks_list").html('');
             for (var k in subtasks.models) {
@@ -40,12 +43,18 @@ define([
                 var subtask_line = new SubtaskLineView(subtask);
                 base.$el.find(".subtasks_list").append(subtask_line.$el);
                 subtask_line.init(base.SmartBlocks);
-
             }
+
+
+            //paginator construction
+            for (var i = 1; i < base.page_size; i++) {
+                var link = $('<a href="javascript:void(0)" class="page_button" data-page="' + i +'"><div></div></a>');
+            }
+
         },
         registerEvents: function () {
             var base = this;
-
+            
 
         }
     });

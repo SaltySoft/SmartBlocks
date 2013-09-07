@@ -6,16 +6,6 @@
         <a href="#activities/<%= deadline.get('activity').get('id') %>"><%= deadline.get("activity").get("name") %></a>
     </span>
     <% } %>
-
-    <!--<span class="done_work">-->
-        <!--<%= (deadline.getWork().done / 3600000).toFixed(1) %>-->
-    <!--</span>/-->
-    <!--<span class="total_work">-->
-        <!--<%= (deadline.getWork().total / 3600000).toFixed(1) %>-->
-    <!--</span>h --->
-    <!--<span class="left_work">-->
-        <!--<%= (deadline.getWork().left / 3600000).toFixed(1) %>-->
-    <!--</span>h left-->
     <div class="wt_pb_container">
         <canvas class="worktime_progressbar"></canvas>
     </div>

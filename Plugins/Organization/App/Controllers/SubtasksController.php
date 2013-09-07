@@ -92,11 +92,11 @@ class SubtasksController extends \Controller
         $data = $this->getRequestData();
         $model->setName($data["name"]);
         $model->setDescription($data["description"]);
-        $model->setOrderIndex($data["orderIndex"]);
+        $model->setOrderIndex(isset($data["orderIndex"]) ? $data["orderIndex"] : $model->getOrderIndex());
         $model->setDuration($data["duration"]);
-        $model->setFinished($data["finished"]);
+        $model->setFinished(isset($data["finished"]) ? $data["finished"] : $model->getFinished());
 
-        if (is_array($data["task"]))
+        if (isset($data["task"]) && is_array($data["task"]))
         {
             $task = Task::find($data["task"]["id"]);
 

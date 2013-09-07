@@ -23,7 +23,7 @@ class Subtask extends \Model
     private $description;
 
     /**
-     * @Column(type="float")
+     * @Column(type="bigint")
      */
     private $duration;
 
