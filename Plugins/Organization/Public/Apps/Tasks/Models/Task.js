@@ -230,9 +230,28 @@ define([
             console.log(base.get('completion_date'));
             return base.get('completion_date') != null;
         },
-        getRequiredTime: function () {
-            //TODO: change that to subtasks time sum
-            return parseInt(this.get("required_time") ? this.get("required_time") : 0);
+        getRequiredWork: function () {
+            var base = this;
+
+            var subtasks = base.get('subtasks');
+            var required_time = 0;
+            var left = 0;
+            var done = 0;
+            for (var k in subtasks.models) {
+                var st = subtasks.models[k];
+                required_time += parseInt(st.get('duration'));
+                if (st.get('finished')) {
+                    done += parseInt(st.get('duration'));
+                } else {
+                    left += parseInt(st.get('duration'));
+                }
+            }
+
+            return {
+                total: required_time,
+                left: left,
+                done: done
+            };
         },
         getPlannedTasks: function () {
             var base = this;
@@ -248,7 +267,7 @@ define([
             var left = 0;
             var done = 0;
 
-            total += base.getRequiredTime();
+            total += base.getRequiredWork().total;
             var pts = base.getPlannedTasks();
 
 
