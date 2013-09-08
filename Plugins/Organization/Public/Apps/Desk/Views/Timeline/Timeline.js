@@ -29,7 +29,7 @@ define([
             base.$el.html(template);
 
             base.$el.find(".descriptor_container_top").addClass("disabled");
-            var firstHour = new Date().getUTCHours() - 5;
+            var firstHour = new Date().getHours();
             base.events = [];
             for (var k in OrgApp.planned_tasks.models) {
                 var planned_task = OrgApp.planned_tasks.models[k];
@@ -51,7 +51,7 @@ define([
 
             base.$el.find(".calendar_container").fullCalendar({
                 header: {
-                    left: 'title',
+                    left: '',
                     center: '',
                     right: ''
                 },
@@ -186,6 +186,10 @@ define([
 
                 return now > pt.getStart() && now < pt.getEnd();
             });
+
+            if (base.planned_task && planned_task && base.planned_task.get('id') == planned_task.get('id') && base.manual) {
+                base.manual = false;
+            }
 
             if (!base.planned_task || !base.manual && planned_task && base.planned_task.get('id') != planned_task.get('id')) {
                 base.planned_task = planned_task;
