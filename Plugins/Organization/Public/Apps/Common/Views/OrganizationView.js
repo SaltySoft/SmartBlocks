@@ -8,7 +8,7 @@ define([
     'Organization/Apps/Tasks/Views/MainView',
     'Organization/Apps/Daily/Views/MainView',
     'Organization/Apps/Recap/Views/MainView',
-    'Organization/Apps/ActivitiesIndex/Views/MainView',
+    'Organization/Apps/Activities/ActivitiesIndex/Views/MainView',
     'Organization/Apps/ActivitiesShow/Views/MainView',
     'Organization/Apps/TasksBoard/Views/MainView',
     'Organization/Apps/TasksShow/Views/MainView',
