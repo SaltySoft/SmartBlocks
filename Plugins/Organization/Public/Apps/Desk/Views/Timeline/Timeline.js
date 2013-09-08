@@ -17,6 +17,8 @@ define([
             base.SmartBlocks = SmartBlocks;
             base.manual = false;
 
+
+
             base.render();
             base.registerEvents();
         },
@@ -51,7 +53,7 @@ define([
                 header: {
                     left: 'title',
                     center: '',
-                    right: 'today prev,next'
+                    right: ''
                 },
                 editable: true,
                 droppable: true,
@@ -163,7 +165,7 @@ define([
                 if (base.$el.height() > 0) {
                     base.update();
                 }
-            }, 1000);
+            }, 250);
             base.update();
         },
         renderDescriptor: function () {

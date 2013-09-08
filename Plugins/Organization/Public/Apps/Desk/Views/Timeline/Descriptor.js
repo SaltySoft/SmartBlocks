@@ -2,8 +2,10 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../Templates/Timeline/descriptor.html'
-], function ($, _, Backbone, descriptor_tpl) {
+    'text!../../Templates/Timeline/descriptor.html',
+    'Organization/Apps/Tasks/NormalThumbnail/Views/Main',
+    'text!../../Templates/Timeline/current_event_timing.html'
+], function ($, _, Backbone, descriptor_tpl, NormalThumbnailView, current_event_tpl) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "descriptor",
@@ -28,17 +30,37 @@ define([
             var template = _.template(descriptor_tpl, {});
             base.$el.html(template);
 
+            var task_thumbnail = new NormalThumbnailView(base.task);
+            base.$el.find(".task_thb_container").html(task_thumbnail.$el);
+            task_thumbnail.init(base.SmartBlocks);
+
             base.update();
 
             setInterval(function () {
                 if (base.$el.height() > 0)
                     base.update();
-            }, 1000);
+            }, 500);
         },
         update: function () {
             var base = this;
 
-            base.$el.find('.name').html(base.task.get('name'));
+//            base.$el.find('.name').html(base.task.get('name'));
+            var now = new Date();
+            if (base.planned_task.getStart() < now && base.planned_task.getEnd() > now) {
+                var end_time = base.planned_task.getEnd();
+                var time = (end_time.getHours() < 10 ? '0' : '') + end_time.getHours() + ":" +
+                    (end_time.getMinutes() < 10 ? '0' : '') + end_time.getMinutes();
+
+
+                var timing_tpl = _.template(current_event_tpl, {
+                    end_time: time,
+                    worked_time: OrgApp.common.getTimeString(now.getTime() - base.planned_task.getStart().getTime()),
+                    time_to_end: OrgApp.common.getTimeString(base.planned_task.getEnd().getTime() - now.getTime()),
+                    total_task_worked_time: OrgApp.common.getTimeString(base.task.getWork().done)
+                });
+
+                base.$el.find(".timing_container").html(timing_tpl);
+            }
         },
         registerEvents: function () {
             var base = this;
