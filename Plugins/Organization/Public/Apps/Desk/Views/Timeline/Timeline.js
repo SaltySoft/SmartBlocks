@@ -15,6 +15,7 @@ define([
         init: function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
+            base.manual = false;
 
             base.render();
             base.registerEvents();
@@ -48,9 +49,9 @@ define([
 
             base.$el.find(".calendar_container").fullCalendar({
                 header: {
-                    left:   'title',
+                    left: 'title',
                     center: '',
-                    right:  'today prev,next'
+                    right: 'today prev,next'
                 },
                 editable: true,
                 droppable: true,
@@ -133,54 +134,80 @@ define([
                 },
                 eventClick: function (event, e) {
                     var elt = $(this);
-                    $(".planned_task_popup").remove();
-//                    var planned_task = OrgApp.planned_tasks.get(event.id);
-//                    if (planned_task) {
-//                        var popup = new PlannedTaskPopup(planned_task);
-//                        popup.init(base.SmartBlocks, e, event);
-//
-//                        popup.events.on("deleted", function () {
-//                            base.$el.fullCalendar( 'removeEvents', event.id)
-//                            base.parent.events.trigger("updated_planned_task");
-//                        });
-//                        popup.events.on("saved", function (event) {
-//                            base.$el.fullCalendar( 'updateEvent', event)
-//                            base.parent.events.trigger("updated_planned_task");
-//                        });
-//                    }
+                    if (!elt.hasClass("selected")) {
+                        base.$el.find(".selected").removeClass("selected");
+                        elt.addClass("selected");
+                        base.planned_task = OrgApp.planned_tasks.get(event.id);
+                        base.renderDescriptor();
+                        base.manual = true;
 
+                    } else {
+                        base.$el.find(".selected").removeClass("selected");
+                        base.planned_task = undefined;
+                        base.$el.find(".descriptor_container_top").addClass("disabled");
+                        base.manual = false;
+                    }
                 },
                 eventRender: function (event, element) {
                     var elt = $(element);
+                    elt.addClass("planned_task_evt_" + event.id);
                     elt.mouseup(function (e) {
                         if (e.which == 1) {
-                            if (!elt.hasClass("selected")) {
-                                base.$el.find(".selected").removeClass("selected");
-                                elt.addClass("selected");
-                                base.planned_task = OrgApp.planned_tasks.get(event.id);
-                                base.$el.find(".descriptor_container_top").removeClass("disabled");
-                                base.renderDescriptor();
 
-                            } else {
-                                base.$el.find(".selected").removeClass("selected");
-                                base.planned_task = undefined;
-                                base.$el.find(".descriptor_container_top").addClass("disabled");
-                            }
                         }
                     });
                 }
             });
+
+            setInterval(function () {
+                if (base.$el.height() > 0) {
+                    base.update();
+                }
+            }, 1000);
+            base.update();
         },
         renderDescriptor: function () {
             var base = this;
             if (base.planned_task) {
+                console.log(base.planned_task);
                 var descriptor_view = new DescriptorView(base.planned_task);
                 base.$el.find('.descriptor_container').html(descriptor_view.$el);
                 descriptor_view.init(base.SmartBlocks);
+                base.$el.find(".descriptor_container_top").removeClass("disabled");
             }
         },
         update: function () {
-            //Check if current planned task. If no event selected, show it in descriptor.
+            var base = this;
+
+            var planned_task = OrgApp.planned_tasks.find(function (pt) {
+                var now = new Date();
+
+                return now > pt.getStart() && now < pt.getEnd();
+            });
+
+            if (!base.planned_task || !base.manual && planned_task && base.planned_task.get('id') != planned_task.get('id')) {
+                base.planned_task = planned_task;
+                base.$el.find(".selected").removeClass("selected");
+                base.$el.find(".planned_task_evt_" + base.planned_task.get('id')).addClass("selected");
+
+                base.renderDescriptor();
+            }
+
+            if (base.manual) {
+                if (base.planned_task) {
+                    base.$el.find(".selection_type").html("Manual selection");
+                } else {
+                    base.$el.find(".selection_type").html("");
+                }
+            } else {
+                if (base.planned_task) {
+                    base.$el.find(".selection_type").html("Auto selection");
+                } else {
+                    base.$el.find(".selection_type").html("");
+                }
+            }
+
+
         },
         registerEvents: function () {
             var base = this;
