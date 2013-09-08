@@ -68,23 +68,62 @@ define([
                 var subtask = base.task.get('subtasks').get(subtask_id);
 
                 if (action == "edit") {
-                    subtask_infos.addClass("edition");
+                    if (subtask_infos.hasClass("edition")) {
+                        subtask_infos.removeClass("edition");
+                    }
+                    else {
+                        subtask_infos.addClass("edition");
+                        subtask_infos.find(".subtask_display").each(function () {
+                            var elt = $(this);
+                            var closest_input = elt.closest("td").find(".subtask_input");
+                            closest_input.val(elt.html());
+                        });
+                    }
+                }
+                if (action == "save") {
+                    subtask_infos.removeClass("edition");
+                    var name;
+                    var duration;
+                    var finished;
                     subtask_infos.find(".subtask_display").each(function () {
                         var elt = $(this);
                         var closest_input = elt.closest("td").find(".subtask_input");
-                        closest_input.val(elt.html());
+                        elt.html(closest_input.val());
+                        if (closest_input.attr("data-field") == "name") {
+                            name = closest_input.val();
+                        }
+                        if (closest_input.attr("data-field") == "duration") {
+                            duration = closest_input.val();
+                        }
+                        if (closest_input.attr("data-field") == "finished") {
+                            finished = closest_input.val();
+                        }
                     });
-                }
-                if (action == "save") {
-
+                    subtask.save({
+                        name:name,
+                        duration:duration,
+                        finished:finished
+                    }, {
+                        success:function () {
+                            console.log("success new_subtask update");
+                        },
+                        error:function () {
+                            console.log("error new_subtask update");
+                        }
+                    });
                 }
                 if (action == "cancel") {
                     subtask_infos.removeClass("edition");
                 }
                 if (action == "delete") {
-
+                    if (confirm("Do you want to delete this subtask ?")) {
+                        subtask.destroy({
+                            success:function () {
+                                subtask_infos.remove();
+                            }
+                        });
+                    }
                 }
-
             });
 
 
