@@ -39,8 +39,8 @@ define([
             console.log("id : " + base.activity.get("id"));
             base.$el.find(".name").html(base.activity.get("name"));
 
-            var description = base.activity.get("description") ? base.activity.get("description") : "No description...";
-            base.$el.find(".description").html(description);
+//            var description = base.activity.get("description") ? base.activity.get("description") : "No description...";
+//            base.$el.find(".description").html(description);
 
             var planned_tasks = new PlannedTasksCollection();
             var tasks = base.activity.get("tasks").models;
