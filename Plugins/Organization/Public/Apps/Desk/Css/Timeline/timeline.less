@@ -1,0 +1,44 @@
+.desk_timeline_view {
+  .fc-header-title {
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .fc-header-left {
+    vertical-align: middle;
+  }
+
+  .planned_task_cal {
+    &.selected {
+      background: #f5f5f5 !important;
+      color: black !important;
+    }
+  }
+
+  .descriptor_container_top {
+
+    .disabled_message {
+      display: none;
+    }
+
+    &.disabled {
+      .descriptor_container {
+        display: none;
+      }
+
+      .disabled_message {
+        display: block;
+        text-align: center;
+        height: 50px;
+        color: gray;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: ~"calc(50% - 25px)";
+      }
+    }
+
+  }
+
+  @import "descriptor.less";
+}

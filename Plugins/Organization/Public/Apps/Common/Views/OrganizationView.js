@@ -16,6 +16,7 @@ define([
     'Organization/Apps/TasksIndex/Views/MainView',
     'Organization/Apps/ActivityCreation/Views/MainView',
     'Organization/Apps/TaskCreation/Views/MainView',
+    'Organization/Apps/Desk/Views/Main',
     'Organization/Apps/Common/Collections/TaskUsers',
     'Organization/Apps/Common/Models/Activity',
     'Organization/Apps/Common/Collections/Activities',
@@ -31,7 +32,7 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, DeskView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -95,7 +96,8 @@ define([
                     "tasks/:id": "tasksShow",
                     "tasks/:id/:subpage": "tasksShowSubpage",
                     "tasks": "tasksIndex",
-                    "planning": "planning"
+                    "planning": "planning",
+                    'desk': 'desk'
 
                 },
                 week: function () {
@@ -139,6 +141,9 @@ define([
                 },
                 taskCreation: function (id) {
                     base.launchTaskCreation(id);
+                },
+                desk: function () {
+                    base.launchDesk();
                 }
 
             });
@@ -311,6 +316,14 @@ define([
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks, id);
+        },
+        launchDesk: function () {
+            var base = this;
+            base.current_view = new DeskView();
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.desk_link").addClass("selected");
+            base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
         },
         checkForNotifications: function () {
             var base = this;
