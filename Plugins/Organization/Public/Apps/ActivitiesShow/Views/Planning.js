@@ -38,7 +38,7 @@ define([
         },
         renderTasksList: function () {
             var base = this;
-            var tasks = base.activity.get('tasks');
+            var tasks = base.activity.getTasks();
             for (var k in tasks.models) {
                 var task = OrgApp.tasks.get(tasks.models[k].get('id'));
                 var task_thumbnail = new TaskThumbnail(task);

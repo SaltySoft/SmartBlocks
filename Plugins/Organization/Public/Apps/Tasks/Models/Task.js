@@ -8,15 +8,19 @@ define([
     'Organization/Apps/Collections/Subtasks',
     'UsersCollection',
     'Organization/Apps/Common/Models/TaskTag',
-    'Organization/Apps/Common/Collections/TaskTags'
-], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection) {
+    'Organization/Apps/Common/Collections/TaskTags',
+    'Organization/Apps/Models/Deadline',
+    'Organization/Apps/Collections/Subtasks'
+], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection, Deadline, SubtasksCollection) {
 
 
     var Task = Backbone.Model.extend({
         urlRoot:"/Organization/Tasks",
         defaults:{
             "model_type":"Task",
-            activities:[]
+            activities:[],
+            subtasks: new SubtasksCollection(),
+            creation_time: new Date().getTime()
         },
         hasDeadline:function () {
             return this.get("due_date");
@@ -90,6 +94,12 @@ define([
                 tags_collection.add(tag);
             }
             response.tags = tags_collection;
+
+
+            if (response.deadline) {
+                var deadline = new Deadline(response.deadline);
+                response.deadline = deadline;
+            }
 
 //            if (!Activity) {
 //                Activity  = require('Organization/Apps/Common/Models/Activity');
@@ -220,9 +230,28 @@ define([
             console.log(base.get('completion_date'));
             return base.get('completion_date') != null;
         },
-        getRequiredTime: function () {
-            //TODO: change that to subtasks time sum
-            return parseInt(this.get("required_time") ? this.get("required_time") : 0);
+        getRequiredWork: function () {
+            var base = this;
+
+            var subtasks = base.get('subtasks');
+            var required_time = 0;
+            var left = 0;
+            var done = 0;
+            for (var k in subtasks.models) {
+                var st = subtasks.models[k];
+                required_time += parseInt(st.get('duration'));
+                if (st.get('finished')) {
+                    done += parseInt(st.get('duration'));
+                } else {
+                    left += parseInt(st.get('duration'));
+                }
+            }
+
+            return {
+                total: required_time,
+                left: left,
+                done: done
+            };
         },
         getPlannedTasks: function () {
             var base = this;
@@ -238,7 +267,7 @@ define([
             var left = 0;
             var done = 0;
 
-            total += base.getRequiredTime();
+            total += base.getRequiredWork().total;
             var pts = base.getPlannedTasks();
 
 

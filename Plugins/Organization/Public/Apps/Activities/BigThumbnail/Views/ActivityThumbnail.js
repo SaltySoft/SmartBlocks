@@ -4,8 +4,9 @@ define([
     'backbone',
     'text!../Templates/activity_thumbnail.html',
     'Organization/Apps/Daily/Collections/PlannedTasks',
-    'Organization/Apps/Common/Views/WorkloadTimeline'
-], function ($, _, Backbone, ActivityThumbnailTemplate, PlannedTasksCollection, WorkloadTimelineView) {
+    'Organization/Apps/Common/Views/WorkloadTimeline',
+    './Deadlines'
+], function ($, _, Backbone, ActivityThumbnailTemplate, PlannedTasksCollection, WorkloadTimelineView, DeadlinesView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "activity_thumbnail_view",
@@ -38,8 +39,8 @@ define([
             console.log("id : " + base.activity.get("id"));
             base.$el.find(".name").html(base.activity.get("name"));
 
-            var description = base.activity.get("description") ? base.activity.get("description") : "No description...";
-            base.$el.find(".description").html(description);
+//            var description = base.activity.get("description") ? base.activity.get("description") : "No description...";
+//            base.$el.find(".description").html(description);
 
             var planned_tasks = new PlannedTasksCollection();
             var tasks = base.activity.get("tasks").models;
@@ -55,6 +56,10 @@ define([
             var workload_timeline_view = new WorkloadTimelineView(planned_tasks, required_time);
             base.$el.find(".workload_timeline_container").html(workload_timeline_view.$el);
             workload_timeline_view.init(base.SmartBlocks);
+
+            var deadlines_view = new DeadlinesView(base.activity);
+            base.$el.find(".deadlines_list_container").html(deadlines_view.$el);
+            deadlines_view.init(base.SmartBlocks);
 
             base.update();
         },

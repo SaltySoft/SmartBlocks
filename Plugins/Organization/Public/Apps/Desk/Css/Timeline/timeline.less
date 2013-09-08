@@ -1,0 +1,71 @@
+.desk_timeline_view {
+  .fc-header-title {
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .fc-header-left {
+    vertical-align: middle;
+  }
+
+  .planned_task_cal {
+    transition: all 200ms;
+    &.selected {
+      background: #f5f5f5 !important;
+      color: black !important;
+    }
+  }
+
+  .fc-button {
+    font-size: 100%;
+    *font-size: 90%; /*IE 6/7 - To reduce IE's oversized button text*/
+    *overflow: visible; /*IE 6/7 - Because of IE's overly large left/right padding on buttons */
+    padding: 0.36em 0.69em 0.36em;
+    color: #144c57; /* rgba not supported (IE 8) */
+  /* color: rgba(0, 0, 0, 0.80); rgba supported */
+  /* *color: #444; IE 6 & 7 */
+    border: 1px solid #7bcfe0; /*IE 6/7/8*/
+    border: none rgba(0, 0, 0, 0); /*IE9 + everything else*/
+    background-color: #98dae7;
+    border-radius: 1px;
+    text-decoration: none;
+    -webkit-font-smoothing: antialiased;
+  /* Transitions */
+    -webkit-transition: 0.1s linear -webkit-box-shadow;
+    -moz-transition: 0.1s linear -moz-box-shadow;
+    -ms-transition: 0.1s linear box-shadow;
+    -o-transition: 0.1s linear box-shadow;
+    transition: 0.1s linear box-shadow;
+  }
+
+  .selection_type {
+    float: right;
+  }
+
+  .descriptor_container_top {
+
+    .disabled_message {
+      display: none;
+    }
+
+    &.disabled {
+      .descriptor_container {
+        display: none;
+      }
+
+      .disabled_message {
+        display: block;
+        text-align: center;
+        height: 50px;
+        color: gray;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: ~"calc(50% - 25px)";
+      }
+    }
+
+  }
+
+  @import "descriptor.less";
+}

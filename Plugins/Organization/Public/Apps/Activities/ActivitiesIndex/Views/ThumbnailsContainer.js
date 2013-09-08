@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'Organization/Apps/Common/Views/ActivityThumbnail',
+    'Organization/Apps/Activities/BigThumbnail/Views/ActivityThumbnail',
     'text!../Templates/add_activity_thumb.html'
 ], function ($, _, Backbone, TaskThumbnail, AddActivityThumbTemplate) {
     var View = Backbone.View.extend({
