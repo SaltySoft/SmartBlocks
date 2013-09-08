@@ -135,15 +135,15 @@ define([
 
                     context_menu.addButton("Delete", function () {
                         if (confirm("Are you sure you want to delete this task ?")) {
-                            base.task.destroy({
-                                success: function () {
-                                    base.SmartBlocks.show_message("Successfully deleted task");
-                                },
-                                error: function () {
-                                    base.SmartBlocks.show_message("Couldn't delete task");
-                                }
-                            });
                             base.$el.hide(200, function () {
+                                base.task.destroy({
+                                    success: function () {
+                                        base.SmartBlocks.show_message("Successfully deleted task");
+                                    },
+                                    error: function () {
+                                        base.SmartBlocks.show_message("Couldn't delete task");
+                                    }
+                                });
                                 base.$el.remove();
                             });
 

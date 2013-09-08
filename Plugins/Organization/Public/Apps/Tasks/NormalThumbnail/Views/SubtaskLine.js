@@ -39,8 +39,10 @@ define([
 
                     context_menu.addButton('Delete', function () {
                         if (confirm("Are you sure you want to delete this subtask ?")) {
-                            base.subtask.destroy();
-                            base.$el.remove();
+                            base.$el.slideUp(200, function () {
+                                base.subtask.destroy();
+                                base.$el.remove();
+                            });
                         }
                     });
 
