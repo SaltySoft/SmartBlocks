@@ -52,9 +52,9 @@ $(document).ready(function () {
                 if (App) {
                     App.initialize(SmartBlocks);
                     if (App.sync) {
-//                        setInterval(function () {
-//                            App.sync();
-//                        }, 2500);
+                        setInterval(function () {
+                            App.sync();
+                        }, 60000);
 
                         $(document).keyup(function (e) {
                             if (e.keyCode == 107) {
