@@ -40,17 +40,19 @@ define([
             return response;
         },
         getImageUrl: function (size, callback) {
+            var base = this;
             Externals.webshell.exec({
                 code: function () {
                     echo(apis.gravatar({
-                        mail: "a.j.william26@gmail.com",
+                        mail: args.usermail,
                         size: args.size
                     }, {
                         view: null
                     }));
                 },
                 args: {
-                    size: size
+                    size: size,
+                    usermail: base.get('email')
                 },
                 process: function (json, meta) {
                     if (callback) {

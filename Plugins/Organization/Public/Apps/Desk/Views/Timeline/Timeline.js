@@ -18,7 +18,6 @@ define([
             base.manual = false;
 
 
-
             base.render();
             base.registerEvents();
         },
@@ -48,7 +47,7 @@ define([
                 };
                 base.events.push(event);
             }
-
+            var first = true;
             base.$el.find(".calendar_container").fullCalendar({
                 header: {
                     left: '',
@@ -158,6 +157,21 @@ define([
 
                         }
                     });
+                },
+                viewDisplay: function (view) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        window.clearInterval(timelineInterval);
+                    }
+                    var timelineInterval = window.setInterval(function () {
+                        base.setTimeline(view);
+                    }, 250);
+                    try {
+                        base.setTimeline(view);
+                    } catch (err) {
+                    }
+
                 }
             });
 
@@ -167,6 +181,44 @@ define([
                 }
             }, 250);
             base.update();
+        },
+        setTimeline: function (view) {
+            var base = this;
+            var parentDiv = base.$el.find(".fc-agenda-slots").parent();
+            var timeline = parentDiv.children(".ltimeline");
+            if (timeline.length == 0) {
+                timeline = $("<div></div>").addClass("ltimeline");
+                parentDiv.prepend(timeline);
+            }
+
+
+
+            var curTime = new Date();
+
+            var curCalView = base.$el.find(".calendar_container").fullCalendar('getView');
+            if (curCalView.visStart < curTime && curCalView.visEnd > curTime) {
+                timeline.show();
+            } else {
+                timeline.hide();
+                return;
+            }
+
+            var curSeconds = (curTime.getHours() * 60 * 60) + (curTime.getMinutes() * 60) + curTime.getSeconds();
+            var percentOfDay = curSeconds / 86400; //24 * 60 * 60 = 86400, # of seconds in a day
+            var topLoc = Math.floor(parentDiv.height() * percentOfDay);
+
+            timeline.css("top", topLoc + "px");
+
+            if (curCalView.name == "agendaWeek") { //week view, don't want the timeline to go the whole way across
+                var dayCol = jQuery(".fc-today:visible");
+                var left = dayCol.position().left + 1;
+                var width = dayCol.width() - 2;
+                timeline.css({
+                    left: left + "px",
+                    width: width + "px"
+                });
+            }
+
         },
         renderDescriptor: function () {
             var base = this;
