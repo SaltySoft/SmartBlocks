@@ -499,10 +499,14 @@ class TasksController extends \Controller
 
         $planned_tasks = $qb->getQuery()->getResult();
 
+        //Distant update
         $gcal_diplomat->addEvents($planned_tasks);
 
         $list = $gcal_diplomat->getEvents();
         $ids = array();
+
+        //Local update - Looping through gcal events
+        //
         foreach ($list as $event)
         {
             $date = $event->getStart();
@@ -512,9 +516,11 @@ class TasksController extends \Controller
             if (is_object($date) && $event->getSummary() != null && !isset($planned_tasks[0]))
             {
                 $planned_task = new PlannedTask();
+                $planned_task->setValidated(false);
 
                 $date = new \DateTime($date->getDateTime());
                 $stop = $event->getEnd();
+
                 if (is_object($stop))
                 {
                     $stop = new \DateTime($stop->getDateTime());
@@ -538,35 +544,24 @@ class TasksController extends \Controller
                     ->setParameter('user', \User::current_user())
                     ->setParameter('name', $event->getSummary());
                 $tasks = $qb->getQuery()->getResult();
-                echo $event->getSummary() . "SUMMARY" . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600))) . " " . ($date->getTimestamp() - ($date->getTimestamp() % (24 * 3600)) + 24 * 3600);
                 if (isset($tasks[0]))
                 {
                     $task = $tasks[0];
                     echo "\nTOOK EXISTING TASK\n";
-                }
-                else
-                {
-                    $task = new Task();
-                }
-                if (is_object($stop))
-                {
-                    $task->setDueDate($stop);
-                }
+                    $planned_task->setTask($task);
+                    $planned_task->setStart($date);
+                    $planned_task->setGcalId($event->getId());
 
-                $task->setName($event->getSummary());
-                $task->setOwner(\User::current_user());
-                $task->save();
-                $planned_task->setTask($task);
-                $planned_task->setStart($date);
-                $planned_task->setGcalId($event->getId());
-
-                \Model::persist($planned_task);
+                    \Model::persist($planned_task);
+                }
             }
             else
             {
                 $gcal_diplomat->updateEvent($planned_tasks[0], $event);
             }
         }
+
+        //End of local update
 
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();

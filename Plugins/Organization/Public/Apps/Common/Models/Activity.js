@@ -61,7 +61,7 @@ define([
             var base = this;
 
             var tasks_array = OrgApp.tasks.filter(function (task) {
-                return task.get('activity').get ? task.get('activity').get('id') == base.get('id') : task.get('activity').id == base.get('id')
+                return task.get('activity') != null && task.get('activity').get ? task.get('activity').get('id') == base.get('id') : task.get('activity').id == base.get('id')
             });
 
             return new OrgApp.TasksCollection(tasks_array);

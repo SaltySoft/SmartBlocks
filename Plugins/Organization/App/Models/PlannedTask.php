@@ -100,6 +100,7 @@ class PlannedTask extends \Model
         $this->duration = 30 * 60;
         $this->active = true;
         $this->completed = false;
+        $this->validated = false;
     }
 
     public function getId()
