@@ -18,14 +18,11 @@ define([
         init: function (SmartBlocks, parent) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
-            base.planned_tasks = new PlannedTasksCollection();
+            base.planned_tasks = OrgApp.planned_tasks;
             base.parent = parent;
-            base.planned_tasks.fetch({
-                success: function () {
-                    base.render();
-                    base.registerEvents();
-                }
-            });
+            base.render();
+            base.registerEvents();
+
 
         },
         render: function () {
@@ -56,7 +53,7 @@ define([
                 };
                 base.events.push(event);
             }
-
+            base.$el.html("");
             base.$el.fullCalendar({
                 header: {
                     left: 'prev, next today',
@@ -149,11 +146,11 @@ define([
                         popup.init(base.SmartBlocks, e, event);
 
                         popup.events.on("deleted", function () {
-                            base.$el.fullCalendar( 'removeEvents', event.id)
+                            base.$el.fullCalendar('removeEvents', event.id)
                             base.parent.events.trigger("updated_planned_task");
                         });
                         popup.events.on("saved", function (event) {
-                            base.$el.fullCalendar( 'updateEvent', event)
+                            base.$el.fullCalendar('updateEvent', event)
                             base.parent.events.trigger("updated_planned_task");
                         });
                     }
@@ -165,9 +162,13 @@ define([
             var base = this;
 
 
-
             base.$el.delegate(".planned_task_cal", "mousedown", function (e) {
 
+            });
+
+            base.planned_tasks.on("change", function () {
+                console.log("stuff was changed in some planned task");
+                base.render();
             });
 
         }
