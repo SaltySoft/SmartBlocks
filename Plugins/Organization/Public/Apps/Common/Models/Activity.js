@@ -65,6 +65,22 @@ define([
             });
 
             return new OrgApp.TasksCollection(tasks_array);
+        },
+        getPlannedTasks: function () {
+            var base = this;
+            var planned_tasks = new OrgApp.PlannedTasksCollection();
+
+            var tasks = base.getTasks();
+
+            for (var k in tasks.models) {
+                var pts = OrgApp.planned_tasks.filter(function (pt) {
+                    return pt.get('task').get('id') == tasks.models[k].get('id')
+                });
+                for (var i in pts) {
+                    planned_tasks.add(pts[i]);
+                }
+            }
+            return planned_tasks;
         }
     });
     return Activity;

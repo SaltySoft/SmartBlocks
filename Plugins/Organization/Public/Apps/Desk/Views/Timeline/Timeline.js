@@ -223,12 +223,15 @@ define([
         renderDescriptor: function () {
             var base = this;
             if (base.planned_task) {
+
                 console.log(base.planned_task);
                 var descriptor_view = new DescriptorView(base.planned_task);
+                base.$el.find(".descriptor_container_top").removeClass("disabled");
                 base.$el.find('.descriptor_container').html(descriptor_view.$el);
                 descriptor_view.init(base.SmartBlocks);
-                base.$el.find(".descriptor_container_top").removeClass("disabled");
+
                 base.$el.find(".planned_task_evt_" + base.planned_task.get('id')).addClass("selected");
+
             }
         },
         update: function () {

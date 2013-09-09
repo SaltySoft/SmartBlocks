@@ -6,8 +6,9 @@ define([
     'Organization/Apps/Tasks/NormalThumbnail/Views/Main',
     'text!../../Templates/Timeline/current_event_timing.html',
     'text!../../Templates/Timeline/future_event_timing.html',
-    './DeadlineLine'
-], function ($, _, Backbone, descriptor_tpl, NormalThumbnailView, current_event_tpl, future_event_tpl, DeadlineLineView) {
+    './DeadlineLine',
+    './ActivityBox'
+], function ($, _, Backbone, descriptor_tpl, NormalThumbnailView, current_event_tpl, future_event_tpl, DeadlineLineView, ActivityBoxView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "descriptor",
@@ -25,6 +26,7 @@ define([
             base.activity = OrgApp.activities.get(base.task.get('activity').id);
 
             base.render();
+
         },
         render: function () {
             var base = this;
@@ -39,6 +41,10 @@ define([
             var deadline_line_view = new DeadlineLineView(base.deadline);
             base.$el.find(".deadline_line_container").html(deadline_line_view.$el);
             deadline_line_view.init(base.SmartBlocks);
+
+            var activity_box_view = new ActivityBoxView(base.activity);
+            base.$el.find(".activity_box_container").html(activity_box_view.$el);
+            activity_box_view.init(base.SmartBlocks);
 
             base.update();
 
