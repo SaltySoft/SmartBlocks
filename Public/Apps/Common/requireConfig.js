@@ -33,7 +33,8 @@ var sb_paths = {
     fullCalendar: "/javascript/fullcalendar.min",
 
     LoadingTemplate: "/Apps/Common/Templates/loading.html",
-    LoadingScreen: "/Apps/Common/Views/LoadingScreen"
+    LoadingScreen: "/Apps/Common/Views/LoadingScreen",
+    'Externals': 'Apps/Common/Useful/External'
 };
 
 var sb_shims = {

@@ -5,7 +5,7 @@ requirejs.config({
 });
 
 /*Fill with default apps (file sharing and chat)*/
-var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "Apps/NotificationsCenter/app", "UserModel", "UsersCollection", "Apps/UserRequester/app"];
+var apps = ["underscore", "backbone", "SmartBlocks", "Apps/Chat/app", "Apps/FileSharing/app", "Apps/NotificationsCenter/app", "UserModel", "UsersCollection", "Apps/UserRequester/app", "Externals"];
 
 if (app !== undefined) {
     apps.push(app);
@@ -17,7 +17,7 @@ $(document).ready(function () {
     //Uncomment next line to disable default context menu everywhere in SmartBlocks
 //    $("body").attr("oncontextmenu", "return false");
     requirejs(apps,
-        function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, UserRequester, App) {
+        function (/*defaults, */_, Backbone, SmartBlocks, ChatApp, FileSharingApp, NotifCenterApp, User, UsersCollection, UserRequester, Externals, App) {
             if ("WebSocket" in window) {
                 var websocket = new WebSocket(socket_server, "muffin-protocol");
                 SmartBlocks.websocket = websocket;
