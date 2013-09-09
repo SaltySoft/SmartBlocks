@@ -53,9 +53,9 @@ $(document).ready(function () {
                     App.initialize(SmartBlocks);
                     if (App.sync) {
                         var sync_timer = 0;
-                        sync_timer = setInterval(function () {
-                            App.sync();
-                        }, 60000);
+//                        sync_timer = setInterval(function () {
+//                            App.sync();
+//                        }, 60000);
 
                         $(document).keyup(function (e) {
                             if (e.keyCode == 107) {

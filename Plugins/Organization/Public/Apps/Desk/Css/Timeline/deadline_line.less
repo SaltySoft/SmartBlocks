@@ -1,0 +1,35 @@
+.deadline_line {
+  height: 40px;
+  position: relative;
+
+  margin: 10px;
+  padding: 5px;
+  background: #ffffff;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+
+  .deadline_name {
+    float: left;
+    font-size: 30px;
+    color: gray;
+  }
+
+  .timeleft {
+    float: right;
+    font-size: 30px;
+    color: gray;
+  }
+
+  .worktime_progress_bar_container {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 5px;
+    width: 100%;
+    border-top: 1px gray solid;
+    border-bottom: 1px gray solid;
+    canvas {
+      position: absolute;
+
+    }
+  }
+}

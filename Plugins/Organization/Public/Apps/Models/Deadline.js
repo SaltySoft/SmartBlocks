@@ -95,6 +95,14 @@ define([
         getActivity: function () {
             var base = this;
             return base.get('activity');
+        },
+        getTimeLeft: function () {
+            var base = this;
+
+            var now = new Date();
+            var stop = base.getStop();
+
+            return now.getTime() - stop.getTime();
         }
     });
 
