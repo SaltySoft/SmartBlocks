@@ -480,11 +480,14 @@ class TasksController extends \Controller
 
     }
 
+    /**
+     *
+     */
     public function gcal_sync()
     {
         $this->render = false;
         $gcal_diplomat = new GoogleCalDiplomat();
-////
+
         $em = \Model::getEntityManager();
         $qb = $em->createQueryBuilder();
         $qb->select("pt")
@@ -497,7 +500,7 @@ class TasksController extends \Controller
         $planned_tasks = $qb->getQuery()->getResult();
 
         $gcal_diplomat->addEvents($planned_tasks);
-//
+
         $list = $gcal_diplomat->getEvents();
         $ids = array();
         foreach ($list as $event)
@@ -593,6 +596,19 @@ class TasksController extends \Controller
         $gcal_diplomat->setLastSync();
     }
 
+    /**
+     * This function syncs planned tasks with Todoist.
+     * That way the user can use his todoist app on his phone to visualize which
+     * tasks he has to work on today.
+     *
+     * How it all works :
+     *
+     * First, we get data from Todoist, to see if updates were made on planned tasks there.
+     * We update our planned tasks locally if they are older than the update of todoist.
+     *
+     * Then we call a function from the todoist diplomat that will send all our updated local
+     * data to todoist, updating the distant data.
+     */
     public function todoist_sync()
     {
         $this->render = false;
@@ -603,7 +619,7 @@ class TasksController extends \Controller
         if ($todoist_diplomat->isReady())
         {
 
-            $todoist_data = $todoist_diplomat->get();
+            $todoist_data = $todoist_diplomat->get(); //Get state of todoist
             foreach ($todoist_data["Projects"] as $project)
             {
 
@@ -619,9 +635,9 @@ class TasksController extends \Controller
                 }
 
             }
-            print_r($items);
             foreach ($items as $item)
             {
+                //Looping through items to update our local planned tasks (validation only)
                 $ids[] = $item["id"];
 
                 $pts = PlannedTask::where(array('todoist_id' => $item["id"]));
@@ -652,6 +668,7 @@ class TasksController extends \Controller
             $results = $qb->getQuery()->getResult();
 
             $todoist_diplomat->setLastSynced();
+            //Call to the todoist diplomat function to add planned tasks.
             $this->return_json($todoist_diplomat->addItems($results));
         }
     }
