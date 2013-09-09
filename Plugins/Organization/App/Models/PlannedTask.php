@@ -65,6 +65,16 @@ class PlannedTask extends \Model
     private $gcal_id;
 
     /**
+     * @Column(type="string", nullable=true)
+     */
+    private $todoist_id;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $todoist_proj_id;
+
+    /**
      * @Column(type="boolean")
      */
     private $active;
@@ -78,6 +88,11 @@ class PlannedTask extends \Model
      * @ManyToOne(targetEntity="\User")
      */
     private $owner;
+
+    /**
+     * @Column(type="boolean")
+     */
+    private $validated;
 
     public function __construct()
     {
@@ -181,6 +196,37 @@ class PlannedTask extends \Model
     {
         return $this->owner;
     }
+
+    public function setTodoistId($todoist_id)
+    {
+        $this->todoist_id = $todoist_id;
+    }
+
+    public function getTodoistId()
+    {
+        return $this->todoist_id;
+    }
+
+    public function getValidated()
+    {
+        return $this->validated;
+    }
+
+    public function setValidated($validated)
+    {
+        $this->validated = $validated;
+    }
+
+    public function setTodoistProjId($todoist_proj_id)
+    {
+        $this->todoist_proj_id = $todoist_proj_id;
+    }
+
+    public function getTodoistProjId()
+    {
+        return $this->todoist_proj_id;
+    }
+
 
 
     public function getContent($force = false)
