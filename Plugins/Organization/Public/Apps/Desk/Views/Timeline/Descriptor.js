@@ -45,7 +45,6 @@ define([
         update: function () {
             var base = this;
 
-//            base.$el.find('.name').html(base.task.get('name'));
             var now = new Date();
             if (base.planned_task.getStart() < now && base.planned_task.getEnd() > now) {
                 var end_time = base.planned_task.getEnd();
@@ -78,6 +77,21 @@ define([
                 });
 
                 base.$el.find(".timing_container").html(timing_tpl);
+            } else if (base.planned_task.getStop() < now) {
+                var end_time = base.planned_task.getEnd();
+                var start_time = base.planned_task.getStart();
+                var etime = (end_time.getHours() < 10 ? '0' : '') + end_time.getHours() + ":" +
+                    (end_time.getMinutes() < 10 ? '0' : '') + end_time.getMinutes();
+                var stime = (start_time.getHours() < 10 ? '0' : '') + start_time.getHours() + ":" +
+                    (start_time.getMinutes() < 10 ? '0' : '') + start_time.getMinutes();
+
+
+                var timing_tpl = _.template(future_event_tpl, {
+                    end_time: etime,
+                    start_time: stime,
+                    duration: OrgApp.common.getTimeString(base.planned_task.get('duration')),
+                    total_task_worked_time: base.task.getWork().done ? OrgApp.common.getTimeString(base.task.getWork().done) : '-'
+                });
             }
         },
         registerEvents: function () {
