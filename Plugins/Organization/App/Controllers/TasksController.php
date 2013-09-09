@@ -480,6 +480,21 @@ class TasksController extends \Controller
 
     }
 
+    public function gcal_link()
+    {
+        $this->render = false;
+        $api_key = GoogleCalDiplomat::authenticate($_POST["google_calendar_id"]);
+        if (is_object($api_key))
+        {
+            $this->json_message("Your account has been linked");
+        }
+        else
+        {
+            $this->json_error("Your account could not be linked");
+        }
+
+    }
+
     /**
      *
      */
@@ -487,109 +502,112 @@ class TasksController extends \Controller
     {
         $this->render = false;
         $gcal_diplomat = new GoogleCalDiplomat();
-
-        $em = \Model::getEntityManager();
-        $qb = $em->createQueryBuilder();
-        $qb->select("pt")
-            ->from("\\Organization\\PlannedTask", "pt")
-            ->join("pt.task", "task")
-            ->where("task.owner = :user")
-            ->andWhere("pt.gcal_id is NULL")
-            ->setParameter("user", \User::current_user());
-
-        $planned_tasks = $qb->getQuery()->getResult();
-
-        //Distant update
-        $gcal_diplomat->addEvents($planned_tasks);
-
-        $list = $gcal_diplomat->getEvents();
-        $ids = array();
-
-        //Local update - Looping through gcal events
-        //
-        foreach ($list as $event)
+        if ($gcal_diplomat->isReady())
         {
-            $date = $event->getStart();
+            $em = \Model::getEntityManager();
+            $qb = $em->createQueryBuilder();
+            $qb->select("pt")
+                ->from("\\Organization\\PlannedTask", "pt")
+                ->join("pt.task", "task")
+                ->where("task.owner = :user")
+                ->andWhere("pt.gcal_id is NULL")
+                ->setParameter("user", \User::current_user());
 
-            $planned_tasks = PlannedTask::where(array("gcal_id" => $event->getId()));
-            $ids[] = $event->getId();
-            if (is_object($date) && $event->getSummary() != null && !isset($planned_tasks[0]))
+            $planned_tasks = $qb->getQuery()->getResult();
+
+            //Distant update
+            $gcal_diplomat->addEvents($planned_tasks);
+
+            $list = $gcal_diplomat->getEvents();
+            $ids = array();
+
+            //Local update - Looping through gcal events
+            //
+            foreach ($list as $event)
             {
-                $planned_task = new PlannedTask();
-                $planned_task->setValidated(false);
+                $date = $event->getStart();
 
-                $date = new \DateTime($date->getDateTime());
-                $stop = $event->getEnd();
-
-                if (is_object($stop))
+                $planned_tasks = PlannedTask::where(array("gcal_id" => $event->getId()));
+                $ids[] = $event->getId();
+                if (is_object($date) && $event->getSummary() != null && !isset($planned_tasks[0]))
                 {
-                    $stop = new \DateTime($stop->getDateTime());
-                    $planned_task->setDuration($stop->getTimestamp() * 1000 - $date->getTimestamp() * 1000);
+                    $planned_task = new PlannedTask();
+                    $planned_task->setValidated(false);
+
+                    $date = new \DateTime($date->getDateTime());
+                    $stop = $event->getEnd();
+
+                    if (is_object($stop))
+                    {
+                        $stop = new \DateTime($stop->getDateTime());
+                        $planned_task->setDuration($stop->getTimestamp() * 1000 - $date->getTimestamp() * 1000);
+                    }
+                    else
+                    {
+                        $planned_task->setDuration(3600000);
+                        $stop = new \DateTime($date->getTimestamp() + 3600);
+                    }
+                    $em = \Model::getEntityManager();
+                    $qb = $em->createQueryBuilder();
+                    $stop = clone $date;
+                    $stop->modify("+" . ($planned_task->getDuration() / 1000) . " seconds");
+                    $qb->select("task")
+                        ->from('\Organization\Task', 'task')
+                        ->where('task.due_date >= :date')
+                        ->andWhere('task.owner = :user')
+                        ->andWhere('task.name = :name')
+                        ->setParameter("date", $stop)
+                        ->setParameter('user', \User::current_user())
+                        ->setParameter('name', $event->getSummary());
+                    $tasks = $qb->getQuery()->getResult();
+                    if (isset($tasks[0]))
+                    {
+                        $task = $tasks[0];
+                        echo "\nTOOK EXISTING TASK\n";
+                        $planned_task->setTask($task);
+                        $planned_task->setStart($date);
+                        $planned_task->setGcalId($event->getId());
+
+                        \Model::persist($planned_task);
+
+                    }
                 }
                 else
                 {
-                    $planned_task->setDuration(3600000);
-                    $stop = new \DateTime($date->getTimestamp() + 3600);
-                }
-                $em = \Model::getEntityManager();
-                $qb = $em->createQueryBuilder();
-                $stop = clone $date;
-                $stop->modify("+" . ($planned_task->getDuration() / 1000) . " seconds");
-                $qb->select("task")
-                    ->from('\Organization\Task', 'task')
-                    ->where('task.due_date >= :date')
-                    ->andWhere('task.owner = :user')
-                    ->andWhere('task.name = :name')
-                    ->setParameter("date", $stop)
-                    ->setParameter('user', \User::current_user())
-                    ->setParameter('name', $event->getSummary());
-                $tasks = $qb->getQuery()->getResult();
-                if (isset($tasks[0]))
-                {
-                    $task = $tasks[0];
-                    echo "\nTOOK EXISTING TASK\n";
-                    $planned_task->setTask($task);
-                    $planned_task->setStart($date);
-                    $planned_task->setGcalId($event->getId());
-
-                    \Model::persist($planned_task);
-
+                    $gcal_diplomat->updateEvent($planned_tasks[0], $event);
                 }
             }
-            else
+
+
+            //End of local update
+
+            $em = \Model::getEntityManager();
+            $qb = $em->createQueryBuilder();
+
+            $qb->select("pt")
+                ->from('\Organization\PlannedTask', 'pt')
+                ->leftJoin("pt.task", "task")
+                ->where("task.owner = :user")
+                ->setParameter("user", \User::current_user())
+                ->andWhere("pt.gcal_id is not NULL")
+                ->andWhere("pt.active = true");
+            $i = 0;
+            foreach ($ids as $id)
             {
-                $gcal_diplomat->updateEvent($planned_tasks[0], $event);
+                $qb->andWhere("pt.gcal_id <> :id" . $i)
+                    ->setParameter("id" . $i++, $id);
             }
+            $result = $qb->getQuery()->getResult();
+            echo $qb->getQuery()->getDql();
+            foreach ($result as $pt)
+            {
+                $pt->setActive(false);
+                \Model::persist($pt);
+            }
+
+            \Model::flush();
+            $gcal_diplomat->setLastSync();
         }
-
-        //End of local update
-
-        $em = \Model::getEntityManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select("pt")
-            ->from('\Organization\PlannedTask', 'pt')
-            ->leftJoin("pt.task", "task")
-            ->where("task.owner = :user")
-            ->setParameter("user", \User::current_user())
-            ->andWhere("pt.gcal_id is not NULL")
-            ->andWhere("pt.active = true");
-        $i = 0;
-        foreach ($ids as $id)
-        {
-            $qb->andWhere("pt.gcal_id <> :id" . $i)
-                ->setParameter("id" . $i++, $id);
-        }
-        $result = $qb->getQuery()->getResult();
-        echo $qb->getQuery()->getDql();
-        foreach ($result as $pt)
-        {
-            $pt->setActive(false);
-            \Model::persist($pt);
-        }
-
-        \Model::flush();
-        $gcal_diplomat->setLastSync();
     }
 
     /**

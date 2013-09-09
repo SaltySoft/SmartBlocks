@@ -383,7 +383,7 @@ class Model
     {
         $em = $GLOBALS["em"];
         $object->setLastUpdated(time());
-        $object->beforeSave();
+        $object->before_save();
         $em->persist($object);
     }
 

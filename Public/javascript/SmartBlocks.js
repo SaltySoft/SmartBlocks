@@ -72,7 +72,10 @@ define([
 
         },
         parseWs: function (message) {
+
             if (message) {
+                message.data = message.data.replace(':ecom:', '&');
+                console.log(JSON.parse(message.data));
                 var ob = JSON.parse(JSON.parse(message.data));
                 return ob;
             } else {
