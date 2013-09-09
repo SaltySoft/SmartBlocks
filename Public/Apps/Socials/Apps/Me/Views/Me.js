@@ -39,6 +39,10 @@ define([
             var template = _.template(MeTemplate, {user: base.user});
             base.$el.html(template);
 
+            base.SmartBlocks.current_user.getImageUrl(250, function (url) {
+                base.$el.find('.user_picture').attr('src', url);
+            });
+
         },
         renderList: function () {
             var base = this;

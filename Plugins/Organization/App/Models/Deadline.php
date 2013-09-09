@@ -68,6 +68,7 @@ class Deadline extends \Model
      */
     private $activity;
 
+
     public function __construct()
     {
         $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -146,6 +147,7 @@ class Deadline extends \Model
     {
         return $this->stop_time;
     }
+
 
     function delete()
     {

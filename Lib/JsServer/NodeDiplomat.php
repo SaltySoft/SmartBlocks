@@ -27,10 +27,10 @@ class NodeDiplomat
         {
             if (is_array($value))
             {
-                $v = json_encode($value);
+                $v = urlencode(json_encode($value));
             }
             else
-                $v = $value;
+                $v = urlencode($value);
             $fields .= $key . "=" . $v . '&';
         }
 

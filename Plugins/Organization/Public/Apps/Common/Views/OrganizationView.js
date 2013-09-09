@@ -30,9 +30,8 @@ define([
     'Organization/Apps/Collections/Subtasks',
     'Organization/Apps/Tasks/Collections/Tasks',
     'Organization/Apps/Daily/Collections/PlannedTasks',
-    'Organization/Apps/Common/Organization',
-    'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, DeskView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+    'Organization/Apps/Common/Organization'
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, DeskView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods) {
     var OrganizationView = Backbone.View.extend({
         tagName: "div",
         className: "organization_view",
@@ -202,6 +201,24 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.type == "data_update") {
+                    console.log(message);
+                    if (message.class == "planned_task") {
+
+                        var planned_task = base.planned_tasks.get(message.object.id);
+                        console.log(planned_task);
+                        if (planned_task) {
+                            planned_task.set(message.object);
+                        } else {
+                            var planned_task = new OrgApp.PlannedTask(message.object);
+                            base.planned_tasks.add(planned_task);
+                        }
+                        console.log(planned_task);
+                    }
+                }
+            });
         },
         setContent: function (element) {
             var base = this;

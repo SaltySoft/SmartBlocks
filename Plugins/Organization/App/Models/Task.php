@@ -135,6 +135,7 @@ class Task extends \Model
      */
     private $deadline;
 
+
     public function __construct()
     {
         $this->owner = \User::current_user();
@@ -340,6 +341,8 @@ class Task extends \Model
     {
         return $this->subtasks;
     }
+
+
 
 
     public function getRequiredTime()
@@ -551,21 +554,21 @@ class Task extends \Model
             $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false, false, true, false) : null;
         }
 
-        if ($show_children)
-        {
-            $children = array();
-            $em = \Model::getEntityManager();
-            $qb = $em->createQueryBuilder();
-            $qb->select("task")->from('\Organization\Task', 'task');
-            $qb->where("task.parent = :parent")->setParameter("parent", $this);
-            $result = $qb->getQuery()->getResult();
-
-            foreach ($result as $child)
-            {
-                $children[] = $child->toArray(false, false, false, true);
-            }
-            $array["children"] = $children;
-        }
+//        if ($show_children)
+//        {
+//            $children = array();
+//            $em = \Model::getEntityManager();
+//            $qb = $em->createQueryBuilder();
+//            $qb->select("task")->from('\Organization\Task', 'task');
+//            $qb->where("task.parent = :parent")->setParameter("parent", $this);
+//            $result = $qb->getQuery()->getResult();
+//
+//            foreach ($result as $child)
+//            {
+//                $children[] = $child->toArray(false, false, false, true);
+//            }
+//            $array["children"] = $children;
+//        }
 
         if ($show_subtasks)
         {

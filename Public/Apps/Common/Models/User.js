@@ -38,6 +38,26 @@ define([
 
             response.contacts = contacts;
             return response;
+        },
+        getImageUrl: function (size, callback) {
+            Externals.webshell.exec({
+                code: function () {
+                    echo(apis.gravatar({
+                        mail: "a.j.william26@gmail.com",
+                        size: args.size
+                    }, {
+                        view: null
+                    }));
+                },
+                args: {
+                    size: size
+                },
+                process: function (json, meta) {
+                    if (callback) {
+                        callback(meta.view);
+                    }
+                }
+            });
         }
     });
     User.getCurrent = function (callback) {

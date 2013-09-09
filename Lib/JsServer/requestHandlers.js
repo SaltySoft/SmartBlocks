@@ -19,6 +19,7 @@ function send(request, response, connections) {
         {
             for (key in connections[session_id])
             {
+                console.log(post.data);
                 connections[session_id][key].sendUTF(JSON.stringify(post.data));
                // console.log("Sent data to pages : " + JSON.stringify(post.data) + " to " + session_id);
             }
