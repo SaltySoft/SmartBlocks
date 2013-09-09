@@ -553,6 +553,7 @@ class TasksController extends \Controller
                     $planned_task->setGcalId($event->getId());
 
                     \Model::persist($planned_task);
+
                 }
             }
             else

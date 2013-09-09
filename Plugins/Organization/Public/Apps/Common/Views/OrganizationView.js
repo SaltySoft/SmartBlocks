@@ -202,6 +202,24 @@ define([
         },
         registerEvents: function () {
             var base = this;
+
+            base.SmartBlocks.events.on("ws_notification", function (message) {
+                if (message.type == "data_update") {
+                    console.log(message);
+                    if (message.class == "planned_task") {
+
+                        var planned_task = base.planned_tasks.get(message.object.id);
+                        console.log(planned_task);
+                        if (planned_task) {
+                            planned_task.set(message.object);
+                        } else {
+                            var planned_task = new OrgApp.PlannedTask(message.object);
+                            base.planned_tasks.add(planned_task);
+                        }
+                        console.log(planned_task);
+                    }
+                }
+            });
         },
         setContent: function (element) {
             var base = this;

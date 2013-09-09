@@ -140,6 +140,7 @@ class PlannedTask extends \Model
 
     public function setLastUpdated($last_updated)
     {
+
         $this->last_updated = $last_updated;
     }
 
@@ -160,6 +161,12 @@ class PlannedTask extends \Model
 
     public function before_save()
     {
+        echo "UPDATE"."UPDATE"."UPDATE"."UPDATE"."UPDATE";
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "type" => "data_update",
+            "class" => "planned_task",
+            "object" => $this->toArray(false, false)
+        ));
         $this->last_updated = time();
     }
 

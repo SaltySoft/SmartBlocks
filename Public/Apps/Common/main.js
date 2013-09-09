@@ -52,7 +52,8 @@ $(document).ready(function () {
                 if (App) {
                     App.initialize(SmartBlocks);
                     if (App.sync) {
-                        setInterval(function () {
+                        var sync_timer = 0;
+                        sync_timer = setInterval(function () {
                             App.sync();
                         }, 60000);
 
@@ -60,7 +61,7 @@ $(document).ready(function () {
                             if (e.keyCode == 107) {
                                 console.log("Syncing");
                                 App.sync();
-
+                                clearInterval(sync_timer);
                             }
                         });
                     }
@@ -89,7 +90,7 @@ $(document).ready(function () {
                 });
 
                 setInterval(function () {
-                    SmartBlocks.heartBeat(current_user);
+//                    SmartBlocks.heartBeat(current_user);
                 }, 5000);
             });
         });

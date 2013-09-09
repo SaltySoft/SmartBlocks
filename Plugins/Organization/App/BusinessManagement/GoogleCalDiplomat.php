@@ -37,7 +37,6 @@ class GoogleCalDiplomat
         {
             if (isset($_SESSION["google_oauth_token"]) && is_string($_SESSION["google_oauth_token"]))
             {
-                print_r($_SESSION["google_oauth_token"]);
                 $this->api_client->setAccessToken($_SESSION["google_oauth_token"]);
                 $api_key = new \ApiKey();
                 $api_key->setApiName("google_refresh_token");
@@ -148,7 +147,6 @@ class GoogleCalDiplomat
 
                 $date2 = clone $planned_task->getStart();
                 $date2->modify('+ '. ($planned_task->getDuration() / 1000). 'seconds');
-                echo $date->format(DATE_RFC2822) + " " + $date2->format(DATE_RFC2822);
                 $event->setSummary($task->getName());
                 $start = new \Google_EventDateTime();
                 $start->setDateTime($date->format(DATE_RFC3339));
@@ -161,7 +159,6 @@ class GoogleCalDiplomat
                 $event = $this->service->events->insert('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $event);
                 $planned_task->setGcalId($event->getId());
                 \Model::persist($planned_task);
-                echo "\n";
             }
         }
 

@@ -72,8 +72,12 @@ define([
 
         },
         parseWs: function (message) {
-            var ob = JSON.parse(JSON.parse(message.data));
-            return ob;
+            if (message) {
+                var ob = JSON.parse(JSON.parse(message.data));
+                return ob;
+            } else {
+                return undefined;
+            }
         },
         startLoading: function (message) {
             var base = this;
