@@ -13,6 +13,7 @@ define([
     'Organization/Apps/TasksBoard/Views/MainView',
     'Organization/Apps/TasksShow/Views/MainView',
     'Organization/Apps/Planning/Views/MainView',
+    'Organization/Apps/Settings/Views/MainView',
     'Organization/Apps/TasksIndex/Views/MainView',
     'Organization/Apps/ActivityCreation/Views/MainView',
     'Organization/Apps/TaskCreation/Views/MainView',
@@ -32,11 +33,11 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Common/Organization',
     'Apps/Common/Useful/External'
-], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, TasksIndex, ActivityCreationView, TaskCreationView, DeskView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
+], function ($, _, Backbone, LoadingScreen, Template, CalendarView, WeekView, DailyView, RecapView, ActivitiesIndexView, ActivitiesShowView, TasksBoardView, TasksShow, PlanningView, SettingsView, TasksIndex, ActivityCreationView, TaskCreationView, DeskView, TaskUsersCollection, Activity, ActivitiesCollection, ActivityType, ActivityTypesCollection, Task, Deadline, DeadlinesCollection, PlannedTask, Subtask, SubtasksCollection, TasksCollection, PlannedTasksCollection, CommonMethods, External) {
     var OrganizationView = Backbone.View.extend({
-        tagName: "div",
-        className: "organization_view",
-        initialize: function () {
+        tagName:"div",
+        className:"organization_view",
+        initialize:function () {
             var base = this;
             base.task_users = new TaskUsersCollection();
             window.OrgApp = base;
@@ -63,7 +64,7 @@ define([
 
             base.ForceReturn = undefined;
         },
-        goTo: function (url) {
+        goTo:function (url) {
             var base = this;
 
             if (url) {
@@ -75,77 +76,79 @@ define([
                 }
             }
         },
-        init: function (SmartBlocks) {
+        init:function (SmartBlocks) {
             var base = this;
             base.SmartBlocks = SmartBlocks;
             base.render();
             base.registerEvents();
 
             var Router = Backbone.Router.extend({
-                routes: {
-                    "week": "week",
-                    "month": "month",
-                    "daily": "daily",
-                    "recap": "recap",
-                    "activities/new": "activityCreation",
-                    "activities": "activitiesIndex",
-                    "activities/:id": "activitiesShow",
-                    "activities/:id/:subpage": "activitiesShowSubpage",
-                    "tasks/new": "taskCreation",
-                    "tasks/new/activity=:id": "taskCreation",
-                    "tasks/:id": "tasksShow",
-                    "tasks/:id/:subpage": "tasksShowSubpage",
-                    "tasks": "tasksIndex",
-                    "planning": "planning",
-                    'desk': 'desk'
-
+                routes:{
+                    "week":"week",
+                    "month":"month",
+                    "daily":"daily",
+                    "recap":"recap",
+                    "activities/new":"activityCreation",
+                    "activities":"activitiesIndex",
+                    "activities/:id":"activitiesShow",
+                    "activities/:id/:subpage":"activitiesShowSubpage",
+                    "tasks/new":"taskCreation",
+                    "tasks/new/activity=:id":"taskCreation",
+                    "tasks/:id":"tasksShow",
+                    "tasks/:id/:subpage":"tasksShowSubpage",
+                    "tasks":"tasksIndex",
+                    "planning":"planning",
+                    'desk':'desk',
+                    'settings':'settings'
                 },
-                week: function () {
+                week:function () {
                     base.launchWeek();
                 },
-                month: function () {
+                month:function () {
                     base.launchCalendar();
                 },
-                daily: function () {
+                daily:function () {
                     base.launchPlanning();
                 },
-                recap: function () {
+                recap:function () {
                     base.launchRecap();
                 },
-                activitiesIndex: function () {
+                activitiesIndex:function () {
                     base.launchActivitiesIndex();
                 },
-                tasksBoard: function () {
+                tasksBoard:function () {
                     base.launchTasksBoard();
                 },
-                activitiesShow: function (id) {
+                activitiesShow:function (id) {
                     base.launchActivitiesShow(id, "summary");
                 },
-                activitiesShowSubpage: function (id, subpage) {
+                activitiesShowSubpage:function (id, subpage) {
                     base.launchActivitiesShow(id, subpage);
                 },
-                tasksShow: function (id) {
+                tasksShow:function (id) {
                     base.launchTasksShow(id, "summary");
                 },
-                tasksShowSubpage: function (id, subpage) {
+                tasksShowSubpage:function (id, subpage) {
                     base.launchTasksShow(id, subpage);
                 },
-                planning: function () {
+                planning:function () {
                     base.launchPlanningView();
                 },
-                tasksIndex: function () {
+                settings:function () {
+                    base.launchSettingsView();
+                },
+                tasksIndex:function () {
                     base.launchTasksIndex();
                 },
-                activityCreation: function () {
+                activityCreation:function () {
                     base.launchActivityCreation();
                 },
-                taskCreation: function (id) {
+                taskCreation:function (id) {
                     base.launchTaskCreation(id);
                 },
-                desk: function () {
+                desk:function () {
                     base.launchDesk();
                 }
-
             });
 
 
@@ -160,23 +163,23 @@ define([
             loading_screen.setLoad(0);
             loading_screen.setText("Loading tasks");
             base.tasks.fetch({
-                success: function () {
+                success:function () {
                     loading_screen.setLoad(4);
                     loading_screen.setText("Loading activities");
                     base.activities.fetch({
-                        success: function () {
+                        success:function () {
                             loading_screen.setLoad(6);
                             loading_screen.setText("Loading planned tasks");
                             base.planned_tasks.fetch({
-                                success: function () {
+                                success:function () {
                                     loading_screen.setLoad(8);
                                     loading_screen.setText("Loading activity types");
                                     base.activity_types.fetch({
-                                        success: function () {
+                                        success:function () {
                                             loading_screen.setLoad(9);
                                             loading_screen.setText("Loading deadlines");
                                             base.deadlines.fetch({
-                                                success: function () {
+                                                success:function () {
                                                     loading_screen.setLoad(10);
                                                     Backbone.history.start();
                                                 }
@@ -195,19 +198,19 @@ define([
 
 
         },
-        render: function () {
+        render:function () {
             var base = this;
             var template = _.template(Template, {});
             base.$el.html(template);
         },
-        registerEvents: function () {
+        registerEvents:function () {
             var base = this;
         },
-        setContent: function (element) {
+        setContent:function (element) {
             var base = this;
             base.$el.find(".sub_app_holder").html(element);
         },
-        launchCalendar: function () {
+        launchCalendar:function () {
             var base = this;
             base.current_view = new CalendarView();
             base.current_view.init(base.SmartBlocks);
@@ -215,7 +218,7 @@ define([
             base.$el.find(".control_bar a.month").addClass("selected");
             base.setContent(base.current_view.$el)
         },
-        launchWeek: function () {
+        launchWeek:function () {
             var base = this;
             base.current_view = new WeekView();
             base.current_view.init(base.SmartBlocks);
@@ -223,7 +226,7 @@ define([
             base.$el.find(".control_bar a.week").addClass("selected");
             base.setContent(base.current_view.$el)
         },
-        launchPlanning: function () {
+        launchPlanning:function () {
             var base = this;
             base.current_view = new DailyView();
             base.current_view.init(base.SmartBlocks);
@@ -232,7 +235,7 @@ define([
             base.setContent(base.current_view.$el);
 
         },
-        launchRecap: function () {
+        launchRecap:function () {
             var base = this;
             base.current_view = new RecapView();
             base.current_view.init(base.SmartBlocks);
@@ -240,7 +243,7 @@ define([
             base.$el.find(".control_bar a.recap").addClass("selected");
             base.setContent(base.current_view.$el);
         },
-        launchActivitiesIndex: function () {
+        launchActivitiesIndex:function () {
             var base = this;
             base.current_view = new ActivitiesIndexView();
             base.current_view.init(base.SmartBlocks);
@@ -248,7 +251,7 @@ define([
             base.$el.find(".control_bar a.activities").addClass("selected");
             base.setContent(base.current_view.$el);
         },
-        launchTasksBoard: function () {
+        launchTasksBoard:function () {
             var base = this;
 
             base.current_view = new TasksBoardView();
@@ -257,12 +260,12 @@ define([
             base.$el.find(".control_bar a.tasks").addClass("selected");
             base.setContent(base.current_view.$el);
         },
-        launchActivitiesShow: function (id, subpage) {
+        launchActivitiesShow:function (id, subpage) {
             var base = this;
             if (!base.current_view || base.current_view.app_name != "activity_show" || id != base.current_view.activity.get('id')) {
                 var activity = base.activities.get(id);
                 if (!activity) {
-                    activity = new Activity({id: id});
+                    activity = new Activity({id:id});
                 }
                 base.current_view = new ActivitiesShowView(activity);
                 base.current_view.init(base.SmartBlocks, subpage);
@@ -274,7 +277,7 @@ define([
             }
 
         },
-        launchTasksShow: function (id, subpage) {
+        launchTasksShow:function (id, subpage) {
             var base = this;
             var task = base.tasks.get(id);
             base.current_view = new TasksShow(task);
@@ -283,7 +286,7 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks, subpage);
         },
-        launchTasksIndex: function () {
+        launchTasksIndex:function () {
             var base = this;
             base.current_view = new TasksIndex();
             base.$el.find(".control_bar a").removeClass("selected");
@@ -291,7 +294,7 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
-        launchPlanningView: function () {
+        launchPlanningView:function () {
             var base = this;
             base.current_view = new PlanningView();
 
@@ -300,7 +303,16 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
-        launchActivityCreation: function () {
+        launchSettingsView:function () {
+            var base = this;
+            base.current_view = new SettingsView();
+
+            base.$el.find(".control_bar a").removeClass("selected");
+            base.$el.find(".control_bar a.settings").addClass("selected");
+            base.setContent(base.current_view.$el);
+            base.current_view.init(base.SmartBlocks);
+        },
+        launchActivityCreation:function () {
             var base = this;
             base.current_view = new ActivityCreationView();
 
@@ -309,7 +321,7 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
-        launchTaskCreation: function (id) {
+        launchTaskCreation:function (id) {
             var base = this;
             base.current_view = new TaskCreationView();
             base.$el.find(".control_bar a").removeClass("selected");
@@ -317,7 +329,7 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks, id);
         },
-        launchDesk: function () {
+        launchDesk:function () {
             var base = this;
             base.current_view = new DeskView();
             base.$el.find(".control_bar a").removeClass("selected");
@@ -325,10 +337,10 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
         },
-        checkForNotifications: function () {
+        checkForNotifications:function () {
             var base = this;
             base.task_users.fetch({
-                success: function () {
+                success:function () {
                     if (base.task_users.models.length > 0) {
 
                     }

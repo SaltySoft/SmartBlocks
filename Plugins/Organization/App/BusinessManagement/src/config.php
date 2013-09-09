@@ -25,8 +25,15 @@ $apiConfig = array(
     'application_name' => 'SmartBlocks',
 
     // OAuth2 Settings, you can get these keys at https://code.google.com/apis/console
-    'oauth2_client_id' => '850249449787-ord751rqtpuc7nkoj4gid81n8j3589cn.apps.googleusercontent.com',
-    'oauth2_client_secret' => 'q7bWo_lAEVJvxLXd7oLwkLnB',
+
+    /* ANTOINE JACKSON */
+//    'oauth2_client_id' => '850249449787-ord751rqtpuc7nkoj4gid81n8j3589cn.apps.googleusercontent.com',
+//    'oauth2_client_secret' => 'q7bWo_lAEVJvxLXd7oLwkLnB',
+//    'oauth2_redirect_uri' => 'http://localhost:8080/Organization/Tasks/gcal_sync',
+
+    /* VINCENT LEFEBVRE */
+    'oauth2_client_id' => '639064107610.apps.googleusercontent.com',
+    'oauth2_client_secret' => 'eRddHDD1uttMripvpVSINNDn',
     'oauth2_redirect_uri' => 'http://localhost:8080/Organization/Tasks/gcal_sync',
 
     // The developer key, you get this at https://code.google.com/apis/console
@@ -58,6 +65,5 @@ $apiConfig = array(
                 "https://www.googleapis.com/auth/calendar"
             )
         ),
-
     )
 );

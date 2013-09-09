@@ -4,7 +4,6 @@ require_once("src/config.php");
 require_once("src/Google_Client.php");
 require_once("src/contrib/Google_CalendarService.php");
 
-
 class GoogleCalDiplomat
 {
     private $api_client;
@@ -12,12 +11,13 @@ class GoogleCalDiplomat
     private $ready = false;
     private $api_key = null;
 
-    private $calendar_id = '8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com';
-
+    /* ANTOINE JACKSON */
+//    private $calendar_id = '8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com';
+    /* VINCENT LEFEBVRE */
+    private $calendar_id = '7jbj75ru3747nclabiqiker2l0@group.calendar.google.com';
 
     public function __construct()
     {
-
         $this->api_client = new \Google_Client();
 
         $this->service = new \Google_CalendarService($this->api_client);
@@ -64,8 +64,6 @@ class GoogleCalDiplomat
                 $_SESSION["google_oauth_token"] = $token;
             }
         }
-
-
     }
 
     public function addEvent($planned_task)
@@ -85,7 +83,7 @@ class GoogleCalDiplomat
             $event->setEnd($end);
             //To be modified to the user's calendar
             //We need to handle several calendars... or not destroy the primary calendar
-            $event = $this->service->events->insert('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $event);
+            $event = $this->service->events->insert($this->calendar_id, $event);
             $planned_task->setGcalId($event->getId());
             \Model::persist($planned_task);
         }
@@ -93,7 +91,7 @@ class GoogleCalDiplomat
 
     public function updateSingleEvent(PlannedTask $planned_task)
     {
-        $event = $this->service->events->get('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $planned_task->getGcalId());
+        $event = $this->service->events->get($this->calendar_id, $planned_task->getGcalId());
 
         $updated = new \DateTime($event->getUpdated());
 
@@ -109,7 +107,7 @@ class GoogleCalDiplomat
             $end = new \Google_EventDateTime();
             $end->setDateTime(gmdate("Y-m-d\\TH:i:s\\Z", $date2));
             $event->setEnd($end);
-            $this->service->events->update('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $planned_task->getGcalId(), $event);
+            $this->service->events->update($this->calendar_id, $planned_task->getGcalId(), $event);
         }
         else
         {
@@ -147,7 +145,7 @@ class GoogleCalDiplomat
                 $date = $planned_task->getStart();
 
                 $date2 = clone $planned_task->getStart();
-                $date2->modify('+ '. ($planned_task->getDuration() / 1000). 'seconds');
+                $date2->modify('+ ' . ($planned_task->getDuration() / 1000) . 'seconds');
                 echo $date->format(DATE_RFC2822) + " " + $date2->format(DATE_RFC2822);
                 $event->setSummary($task->getName());
                 $start = new \Google_EventDateTime();
@@ -158,7 +156,7 @@ class GoogleCalDiplomat
                 $event->setEnd($end);
                 //To be modified to the user's calendar
                 //We need to handle several calendars... or not destroy the primary calendar
-                $event = $this->service->events->insert('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $event);
+                $event = $this->service->events->insert($this->calendar_id, $event);
                 $planned_task->setGcalId($event->getId());
                 \Model::persist($planned_task);
                 echo "\n";
@@ -183,7 +181,7 @@ class GoogleCalDiplomat
                 $task = $planned_task->getTask();
                 $date = $planned_task->getStart();
                 $date2 = clone $date;
-                $date2->modify('+'.($planned_task->getDuration() / 1000).' seconds');
+                $date2->modify('+' . ($planned_task->getDuration() / 1000) . ' seconds');
                 $event->setSummary($task->getName());
                 $start = new \Google_EventDateTime();
                 $start->setDateTime($date->format(DATE_RFC3339));
@@ -194,7 +192,7 @@ class GoogleCalDiplomat
                 //To be modified to the user's calendar
                 //We need to handle several calendars... or not destroy the primary calendar
 
-                $this->service->events->update('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com', $planned_task->getGcalId(), $event);
+                $this->service->events->update($this->calendar_id, $planned_task->getGcalId(), $event);
             }
             else
             {
@@ -225,7 +223,7 @@ class GoogleCalDiplomat
 
     public function getEvents()
     {
-        $list = $this->service->events->listEvents('8iao4ib0lnqj398eoaoq1iaamo@group.calendar.google.com');
+        $list = $this->service->events->listEvents($this->calendar_id);
 
         $items = $list->getItems();
         return $items;
