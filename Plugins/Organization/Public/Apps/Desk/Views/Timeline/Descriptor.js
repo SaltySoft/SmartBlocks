@@ -7,8 +7,9 @@ define([
     'text!../../Templates/Timeline/current_event_timing.html',
     'text!../../Templates/Timeline/future_event_timing.html',
     './DeadlineLine',
-    './ActivityBox'
-], function ($, _, Backbone, descriptor_tpl, NormalThumbnailView, current_event_tpl, future_event_tpl, DeadlineLineView, ActivityBoxView) {
+    './ActivityBox',
+    'Organization/Apps/Recap/Views/Clock'
+], function ($, _, Backbone, descriptor_tpl, NormalThumbnailView, current_event_tpl, future_event_tpl, DeadlineLineView, ActivityBoxView, Clock) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "descriptor",
@@ -45,6 +46,11 @@ define([
             var activity_box_view = new ActivityBoxView(base.activity);
             base.$el.find(".activity_box_container").html(activity_box_view.$el);
             activity_box_view.init(base.SmartBlocks);
+
+            var clock_view = new Clock();
+            base.$el.find(".clock_container").html(clock_view.$el);
+            clock_view.init(base.SmartBlocks, OrgApp.planned_tasks);
+
 
             base.update();
 
