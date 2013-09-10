@@ -20,6 +20,10 @@ define([
             end.setTime(start.getTime() + this.get('duration'));
             return end;
         },
+        getStop: function () {
+            var base = this;
+            return base.getEnd();
+        },
         getName: function () {
             var base = this;
             return base.get("content") ? base.get("content") : "No name";
