@@ -96,7 +96,8 @@ define([
                     "tasks/:id/:subpage": "tasksShowSubpage",
                     "tasks": "tasksIndex",
                     "planning": "planning",
-                    'desk': 'desk'
+                    'desk': 'desk',
+                    'desk/:subapp': 'desk'
 
                 },
                 week: function () {
@@ -141,8 +142,11 @@ define([
                 taskCreation: function (id) {
                     base.launchTaskCreation(id);
                 },
-                desk: function () {
-                    base.launchDesk();
+                desk: function (subapp) {
+                    if (subapp)
+                        base.launchDesk(subapp);
+                    else
+                        base.launchDesk("timeline");
                 }
 
             });
@@ -334,13 +338,14 @@ define([
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks, id);
         },
-        launchDesk: function () {
+        launchDesk: function (subapp) {
             var base = this;
             base.current_view = new DeskView();
             base.$el.find(".control_bar a").removeClass("selected");
             base.$el.find(".control_bar a.desk_link").addClass("selected");
             base.setContent(base.current_view.$el);
             base.current_view.init(base.SmartBlocks);
+            base.current_view.setSubapp(subapp);
         },
         checkForNotifications: function () {
             var base = this;

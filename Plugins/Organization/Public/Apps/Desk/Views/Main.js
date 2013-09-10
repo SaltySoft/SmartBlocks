@@ -4,9 +4,10 @@ define([
     'backbone',
     'text!../Templates/main.html',
     './Timeline/Timeline',
+    './Review/Review',
     'jqueryui',
     'fullCalendar'
-], function ($, _, Backbone, main_tpl, TimelineView) {
+], function ($, _, Backbone, main_tpl, TimelineView, ReviewView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "desk_view",
@@ -18,8 +19,7 @@ define([
             base.SmartBlocks = SmartBlocks;
 
             base.render();
-
-            base.setSubapp('timeline');
+            base.registerEvents();
         },
         render: function () {
             var base = this;
@@ -32,6 +32,10 @@ define([
 
             if (subapp == 'timeline') {
                 var subapp = new TimelineView();
+                base.$el.find(".desk_subapp_container").html(subapp.$el);
+                subapp.init(base.SmartBlocks);
+            } else if (subapp == 'review') {
+                var subapp = new ReviewView();
                 base.$el.find(".desk_subapp_container").html(subapp.$el);
                 subapp.init(base.SmartBlocks);
             }
