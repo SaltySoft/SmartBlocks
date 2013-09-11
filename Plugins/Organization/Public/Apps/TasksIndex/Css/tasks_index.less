@@ -1,0 +1,218 @@
+.tasks_index_view {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+  > .header {
+    padding: 10px;
+    h1 {
+      float: left;
+    }
+  }
+
+  .filters_container {
+    margin-left: 150px;
+    line-height: 30px;
+
+    .hidden_filters {
+      float: left;
+    }
+
+    .shown_filters {
+      float: left;
+    }
+
+    &.normal .for_expanded_b, &.normal .for_expanded_i {
+      display: none;
+    }
+
+    &.expanded .for_expanded_b {
+      display: block;
+    }
+
+    &.expanded .for_expanded_i {
+      display: inline;
+    }
+
+    &.normal .for_normal_b {
+      display: block;
+    }
+
+    &.normal .for_normal_i {
+      display: inline;
+    }
+
+    &.expanded .for_normal_i, &.expanded .for_normal_b {
+      display: none;
+    }
+  }
+
+  .thumbnails_container {
+    position: absolute;
+    left: 0;
+    right: 0px;
+    bottom: 0px;
+    top: 50px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+
+    .thumbnail_subcontainer {
+      float: left;
+      width: 480px;
+    }
+    .task_thumbnails_container_view {
+
+    }
+
+
+
+    .task_thumbnail_view { //      float: left;
+      background: white;
+      margin: 10px;
+      padding: 10px;
+      height: 100%;
+      position: relative;
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+      transform: translate(0px, 0);
+      transition: transform 10s ease;
+      &.small {
+        height: 300px;
+        width: 300px;
+
+        .for_small {
+          display: block;
+        }
+        .not_for_small {
+          display: none;
+        }
+
+        .description {
+          width: 150px;
+
+        }
+
+      }
+
+      &.medium {
+        height: 235px;
+        width: 450px;
+
+        .for_medium {
+          display: block;
+        }
+        .not_for_medium {
+          display: none;
+        }
+
+      }
+
+      &.big {
+
+        width: 900px;
+
+        .for_big {
+          display: block;
+        }
+        .not_for_big {
+          display: none;
+        }
+
+        .description {
+          width: 300px;
+
+        }
+      }
+
+      .deadline_thumbnail_view {
+        position: absolute;
+        right: 10px;
+        bottom: 0px;
+
+      }
+    }
+
+  }
+
+  .add_task_button_container {
+    width: 450px;
+    .add_task_button {
+      text-decoration: none;
+      display: block;
+      width: 100%;
+      height: 140px;
+      padding-top: 95px;
+      position: relative;
+      cursor: pointer;
+      background: white;
+      -webkit-transition: background 100ms linear;
+      -moz-transition: background 100ms linear;
+      -o-transition: background 100ms linear;
+      -ms-transition: background 100ms linear;
+      transition: background 100ms linear;
+      font-size: xx-large;
+      color: gray;
+      text-align: center;
+
+      .add_text {
+        -webkit-transition: opacity 100ms linear;
+        -moz-transition: opacity 100ms linear;
+        -o-transition: opacity 100ms linear;
+        -ms-transition: opacity 100ms linear;
+        transition: opacity 100ms linear;
+        opacity: 0;
+      }
+
+      .plus_container {
+        width: 50px;
+        height: 50px;
+        margin: auto;
+        background: #d3d3d3;
+        border-radius: 50%;
+
+        line-height: 50px;
+        -webkit-transition: background 500ms linear;
+        -moz-transition: background 500ms linear;
+        -o-transition: background 500ms linear;
+        -ms-transition: background 500ms linear;
+        transition: background 500ms linear;
+        -webkit-transition: color 500ms linear;
+        -moz-transition: color 500ms linear;
+        -o-transition: color 500ms linear;
+        -ms-transition: color 500ms linear;
+        transition: color 500ms linear;
+      }
+    }
+
+    .add_task_button:hover {
+      background: #e3e3e3;
+
+      .add_text {
+        opacity: 1;
+      }
+
+      .plus_container {
+        background: #ffffff;
+        border-radius: 50%;
+        color: #646464;
+      }
+    }
+  }
+
+
+
+  &.loading .thumbnails_container {
+    display: none;
+  }
+}

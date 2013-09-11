@@ -1,0 +1,18 @@
+<div id="k_um_user_list_container">
+    <ul class="k_um_user_list">
+        <% _.each(users, function(user){ %>
+        <li><a class="k_um_user_card_link" href="#edit_user/<%= user.get('id') %>"><%= user.get("username") %></a></li>
+        <% }); %>
+    </ul>
+    <% if (users.length == 0) { %>
+    No more results
+    <% } %>
+</div>
+<div class="k_um_user_list_controls">
+    <% if (current_page > 1) { %>
+    <a href="javascript:void(0);" class="previous_button">Previous</a>
+    <% } %>
+    <% if (users.length >= page_size) { %>
+    <a href="javascript:void(0)" class="next_button">Next</a>
+    <% } %>
+</div>

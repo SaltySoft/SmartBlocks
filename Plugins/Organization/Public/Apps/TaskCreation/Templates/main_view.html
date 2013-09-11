@@ -1,0 +1,89 @@
+<div class="header">
+    <h1>Tasks : new task</h1>
+</div>
+
+<form class="pure-form creation_form" action="javascript:void(0);">
+    <div class="explain_text">
+        <h4>Task Creation</h4>
+        You need to provide the name and type of the task you want to create, then you will be redirected to its page
+        where
+        you'll be able to edit it. Click on cancel to go to the tasks index.
+    </div>
+    <div class="name_field field">
+        <div class="name_field_error field_error">
+            Must be alphabetical & non empty
+        </div>
+        <label>
+                <span>
+                    Name of the task
+                </span>
+            <input type="text" class="name_input" placeholder="Enter a name"/>
+
+        </label>
+    </div>
+    <div class="name_field field">
+        <label>
+                <span>
+                    Description
+                </span>
+            <textarea class="description_input" name="description"></textarea>
+        </label>
+    </div>
+    <div class="type_field field">
+        <div class="type_field_error field_error">
+            You must provide an activity
+        </div>
+        <label>
+                <span>
+                    Activity
+                </span>
+            <select class="type_input">
+                <option value="0">Select an activity</option>
+                <% for (var k in activities) { %>
+                <option <% if (selected_activity) { %><% if (selected_activity.get('id') == activities[k].get('id')) { %>selected="true"<% } %><% } %> value="<%= activities[k].get('id') %>"><%= activities[k].get('name') %></option>
+                <% } %>
+            </select>
+        </label>
+    </div>
+    <div class="field">
+        <div class="type_field_error field_error">
+
+        </div>
+        <label>
+
+            <span>
+                    This task has a deadline
+            </span>
+            <input type="checkbox" name="deadline" class="deadline_input" />
+        </label>
+    </div>
+    <div class="name_field field">
+        <label>
+                <span>
+                    Needed time
+                </span>
+            <div class="needed_time_input_container">
+                <input type="number" class="needed_time_input" min="0" step="0.1" value="1" /> hours
+            </div>
+        </label>
+    </div>
+    <div class="field deadline_time">
+        <label>
+            Deadline date
+            <input type="text" class="deadline_date_input"  />
+        </label>
+        <div class="time_choice" id="time_choice">
+            <input type="number" class="deadline_hour_input" min="0" max="23" value="23" /> : <input type="number" class="deadline_minute_input" min="0" max="59" value="59" />
+        </div>
+        <label for="time_choice">
+            Deadline time
+        </label>
+
+    </div>
+
+    <div class="clearer"></div>
+    <div class="pure-controls">
+        <a href="javascript:void(0);" class="pure-button pure-button-warning cancel_button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-success">Create</button>
+    </div>
+</form>

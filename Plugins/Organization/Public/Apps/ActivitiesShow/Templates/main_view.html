@@ -1,0 +1,17 @@
+<div class="header">
+    <h1>Activities : <%= activity.get('name') %></h1>
+</div>
+<div class="activity_show">
+    <div class="pure-menu pure-menu-open pure-menu-horizontal menu">
+        <a href="#activities/<%= activity.get('id') %>" class="pure-menu-heading"><%= activity.get('name') %></a>
+
+        <ul>
+            <li class="pure-menu-selected summary_tab_button menu_button"><a href="#activities/<%= activity.get('id') %>">Summary</a></li>
+            <li class="deadlines_tab_button menu_button"><a href="#activities/<%= activity.get('id') %>/deadlines">Deadlines</a></li>
+            <li class="tasks_tab_button menu_button"><a href="#activities/<%= activity.get('id') %>/tasks">Tasks</a></li>
+            <li class="planning_tab_button menu_button"><a href="#activities/<%= activity.get('id') %>/planning">Planning</a></li>
+            <li class="edition_tab_button menu_button"><a href="#activities/<%= activity.get('id') %>/edition">Edition</a></li>
+        </ul>
+    </div>
+    <div class="activity_subapp_container"></div>
+</div>

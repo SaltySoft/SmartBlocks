@@ -1,0 +1,62 @@
+.activity_create_view {
+  .creation_form {
+    margin: auto;
+    width: 400px;
+    height: 200px;
+    background: white;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    margin-top: 100px;
+    position: relative;
+    .pure-controls {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+    }
+    .name_field {
+      margin-top: 20px;
+    }
+
+    .field {
+      margin: 40px;
+      width: 300px;
+      margin: auto;
+      margin-bottom: 10px;
+      clear: both;
+      line-height: 29px;
+      input[type="text"], select {
+        float: right;
+        width: 150px;
+        font-size: 13px;
+        color: black;
+      }
+    }
+
+    .field_error {
+      position: relative;
+      float: right;
+      width: 200px;
+      height: 11px;
+      font-size: 13px;
+      background: #cc918e;
+      color: #aa1317;
+      padding: 10px;
+      margin-right: -230px;
+      line-height: 11px;
+      display: none;
+    }
+
+    .field_error:before {
+      content: "";
+      position: absolute;
+      top: 5;
+      left: -10px;
+      border-right: 11px solid #cc918e;
+      border-right-color: #cc918e;
+      border-bottom: 8px solid transparent;
+      border-top: 8px solid transparent;
+
+    }
+  }
+
+}

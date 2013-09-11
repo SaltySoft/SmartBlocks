@@ -1,0 +1,7 @@
+<div>
+    <span class="start_time"></span>
+    <span class="name"><%= planned_task.get("content") %></span>
+    <span class="start_hour"></span><br/>
+    <span class="linked_task"><%= (planned_task.get("task")) ? "Deadline : " + planned_task.get("task").get("name") : "Not linked with a deadline" %></span>
+    <div class="handle"></div>
+</div>

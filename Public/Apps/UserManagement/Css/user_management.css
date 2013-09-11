@@ -1,0 +1,204 @@
+.k_um_card {
+    width: 500px;
+
+    border: 1px solid #cccccc;
+    background-color: #f0f3f7;
+    border-radius: 10px;
+    padding: 10px;
+    float: left;
+    margin-top: 25px;
+    margin-left: 150px;
+}
+
+.k_um_card_title {
+    font-size:  20px;
+}
+
+.k_um_card_field {
+    clear: both;
+}
+
+.k_um_card_field input[type="text"] {
+    float: right
+}
+
+.k_um_card_field label {
+    line-height: 20px;
+}
+
+.k_um_user_list {
+    padding: 0px;
+    margin: 0px;
+    list-style: none;
+
+}
+
+.k_um_user_list li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.k_users_list {
+    width: 200px;
+    border: 1px solid #cccccc;
+    background-color: #f0f3f7;
+    padding: 10px;
+    float: left;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.k_um_user_list_controls {
+    text-align: center;
+}
+
+.job_list_container {
+}
+
+.k_um_job_list {
+    list-style: none;
+}
+.owned_job {
+    background-color: #44cc67 !important;
+    border: 2px solid #309249 !important;
+}
+
+.k_um_job_list li {
+    float: left;
+    background-color: #f8403b;
+    border: 2px solid #d63632;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.owned_group {
+    background-color: #44cc67 !important;
+    border: 2px solid #309249 !important;
+}
+
+.k_um_group_list {
+    list-style: none;
+}
+
+.k_um_group_list li {
+    float: left;
+    background-color: #f8403b;
+    border: 2px solid #d63632;
+    padding: 10px;
+    color: white;
+    margin: 1px;
+    cursor: pointer;
+    width: 150px;
+    text-align: center;
+}
+
+.field input[type="text"], .field input[type="password"]{
+    float: right
+}
+
+.field {
+    clear: right;
+    margin-top: 15px;
+}
+
+.k_um_direct_data {
+    width: 240px;
+    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.tab {
+    display: none;
+}
+
+.tab_controller li {
+    float: left;
+}
+/*User Creation*/
+.k_um_creation_form {
+    width: 275px;
+    margin: auto;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.block
+{
+    width: 400px;
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    border: 1px solid #cccccc;
+    background-color: #f0f3f7;
+}
+
+.k_um_fieldset
+{
+    margin: auto;
+    width: 360px;
+    margin-bottom: 25px;
+    border: 3px solid white;
+    border-radius: 7px;
+}
+
+#k_um_search_user_field
+{
+    margin: auto;
+    width: 150px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.next_button, .previous_button
+{
+    margin-top: 20px;
+    padding: 10px 10px 10px 10px;
+    background-color: #6e90fe;
+    border: 1px solid #dddddd;
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+
+
+    /* Firefox */
+    -moz-transition: all 50ms ease-in;
+    /* WebKit */
+    -webkit-transition: all 50ms ease-in;
+    /* Opera */
+    -o-transition: all 50ms ease-in;
+    /* Standard */
+    transition: all 50ms ease-in;
+}
+
+.next_button:hover, .previous_button:hover
+{
+    background-color: #ffffff;
+    color: #6e90fe;
+    /* Firefox */
+    -moz-transition: all 50ms ease-in;
+    /* WebKit */
+    -webkit-transition: all 50ms ease-in;
+    /* Opera */
+    -o-transition: all 50ms ease-in;
+    /* Standard */
+    transition: all 50ms ease-in;
+}
+
+.k_um_user_card_link
+{
+    text-decoration: none;
+    color: #6e90fe;
+    padding: 10px 10px 10px 10px;
+}
+
+.k_um_user_card_link:hover
+{
+    text-decoration: underline;
+    text-decoration-color: #6e90fe;
+}

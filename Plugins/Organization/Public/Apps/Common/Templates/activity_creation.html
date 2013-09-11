@@ -1,0 +1,32 @@
+<div class="activity_creation_view">
+    <h3>Create a new activity</h3>
+
+    <form class="pure-form pure-form-stacked" action="javascript:void(0);">
+        <div class="pure-control-group">
+            <label>
+                Name
+                <input type="text" name="name" placeholder="Enter a name..."/>
+            </label>
+        </div>
+        <div class="pure-control-group">
+            <label>
+                Description of the activity
+                <textarea name="description"></textarea>
+            </label>
+        </div>
+        <div class="pure-control-group">
+            <label>
+                Type
+                <select name="type">
+                    <% for (var k in types) {%>
+                    <option value="<%= types[k].get('id') %>"><%= types[k].get('name') %></option>
+                    <% }%>
+                </select>
+            </label>
+        </div>
+    </form>
+    <div class="pure-controls">
+        <button class="cancel_button pure-button pure-button-error">Cancel</button>
+        <button class="create_button pure-button pure-button-success">Create</button>
+    </div>
+</div>

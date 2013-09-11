@@ -1,0 +1,194 @@
+@elts_bg: whitesmoke;
+
+.header {
+  padding: 10px;
+  h1 {
+    float: left;
+  }
+}
+
+.explain_text {
+  padding: 10px;
+  background: #eeeeee;
+  color: #747474;
+  text-align: justify;
+}
+
+.activity_creation_view {
+  margin: auto;
+  width: 400px;
+  height: 200px;
+  background: white;
+  padding: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  margin-top: 100px;
+  position: relative;
+
+  textarea {
+    width: 300px;
+    resize: none;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px grey solid;
+  }
+
+  .pure-controls {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+}
+
+.planned_list_item {
+  padding: 9px;
+  background: rgba(43, 184, 203, 0.5);
+  margin-bottom: 1px;
+}
+
+.task_popup_container {
+  .required_time {
+    width: 75px;
+  }
+}
+
+.task_tags_list {
+  overflow: auto;
+  margin-top: 8px;
+}
+
+.task_tag_item {
+  background: @elts_bg;
+  border: 1px black solid;
+  margin: 1px;
+  text-align: center;
+  line-height: 20px;
+  float: left;
+  cursor: pointer;
+  height: 20px;
+  padding: 1px 6px;
+  margin: 2px 2px;
+}
+
+.tag_search_results {
+  position: absolute;
+  width: 150px;
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.add_tag_button {
+  cursor: pointer;
+
+  display: block;
+  padding: 5px;
+
+  color: gray;
+
+  text-decoration: none;
+}
+
+.add_tag_button:hover {
+  background: #0076a3;
+
+}
+
+.task_list_item {
+  position: relative;
+  cursor: pointer;
+  .ti_due_on_ctn {
+    position: absolute;
+    right: 15px;
+  }
+  transition: background 500ms;
+  -webkit-transition: background 500ms;
+  margin-bottom: 1px;
+}
+
+.task_list_item:hover, .task_list_item.overdue:hover {
+  background: white;
+}
+
+.planned_task_popup {
+  padding: 10px;
+  background: white;
+  position: fixed;
+  top: -90px;
+  z-index: 1000;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  color: black;
+
+  #form_content {
+    width: 175px;
+  }
+
+  .time_input {
+    text-align: center;
+    font-size: 1.5em;
+    padding: 2px;
+    width: 50px;
+    width: 86px;
+  }
+}
+
+.deadline_thumbnail_view {
+  width: 300px;
+  padding: 10px;
+
+  position: relative;
+  a {
+    padding: 5px;
+    width: calc(~"50% - 12px");
+  }
+  .controls {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 100px;
+  }
+  .time_information {
+    float: right;
+    font-weight: bold;
+    margin-top: 30px;
+    text-align: right;
+
+    .due_hour {
+      color: #8c8585;
+    }
+  }
+
+  .time_desc {
+
+  }
+}
+
+.deadline_thumbnail_view.inpage {
+  .name {
+    display: none;
+  }
+  .controls {
+    display: none;
+  }
+}
+
+.planned_task_cal {
+  transition: background 200ms;
+  &.selected {
+    background: #f5f5f5 !important;
+    color: black !important;
+  }
+  border-radius: 0px !important;
+  border: none !important;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+  background: #6f6f6f !important;
+  padding: 5px;
+}
+
+@import "/Organization/Apps/TaskCreation/Css/task_creation.less";
+@import "/Organization/Apps/Deadlines/Css/deadlines.less";
+
+@import "/Organization/Apps/Tasks/Css/main.less";
+
+@import "/Organization/Apps/Activities/Css/main.less";
+
+@import "/Organization/Apps/Desk/Css/main.less";

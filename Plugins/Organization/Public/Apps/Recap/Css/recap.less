@@ -1,0 +1,358 @@
+body {
+  background-color: rgb(241, 241, 241);
+}
+
+.recap_main_view {
+  height: 100%;
+}
+
+.recap_main_view {
+
+  .deadline_thumbnail_view {
+    float: left;
+  }
+
+  .recap_today {
+    .current_work, .next_work, .current_work_none_inner {
+      text-align: center;
+
+      padding: 11.5px;
+      background: #6c92b8;
+      color: white;
+      font-size: 1em;
+      .work_name { //        font-weight: bold;
+      }
+    }
+    .next_work_container {
+      display: none;
+    }
+
+    .right_now {
+      .current_work_none {
+        display: none;
+      }
+      .current_work_container {
+        display: block;
+      }
+    }
+
+    .right_now.nothing_to_do {
+      .current_work_none {
+        display: block;
+      }
+      .current_work_container {
+        display: none;
+      }
+    }
+  }
+
+  .timeline_view {
+    .timeline_overlay {
+      z-index: 1;
+      position: absolute;
+      width: 280px;
+      padding: 10px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.89);
+      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      top: 0px;
+      left: 0px;
+
+      .save_button {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+      }
+
+      .close_button {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
+    }
+
+    .controls {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+    }
+
+    .controls a {
+      width: 20px;
+      padding: 5px;
+    }
+
+    position: relative;
+  }
+
+  .now_view {
+    padding: 10px;
+  }
+
+  .next_info {
+    position: relative;
+    height: 301.5px;
+    .clock_view {
+      width: 200px;
+      height: 200px; //      background: whitesmoke;
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+    }
+
+    .current_task_end {
+      font-size: 1.3em;
+    }
+    .current_task_time_left {
+      font-weight: bold;
+    }
+    span.pause {
+      display: none;
+    }
+    .pause_info {
+      display: none;
+    }
+
+    .current_controls {
+      width: 150px;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      > div {
+        padding: 5px;
+      }
+      button {
+        width: 100%;
+      }
+    }
+
+    .paused {
+      span.working {
+        display: none;
+      }
+      span.pause {
+        display: inline;
+      }
+      .pause_info {
+        background: rgba(255, 255, 255, 0.67);
+        display: block;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+
+        .information {
+          padding: 20px;
+          width: 200px;
+          background: white;
+          margin: auto;
+          margin-top: 50px;
+
+          color: grey;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+          text-align: center;
+          .pause_time {
+            font-size: 1.3em;
+            height: 30px;
+            line-height: 30px;
+          }
+        }
+      }
+    }
+
+    .no_task_message {
+      display: none;
+    }
+    .loader {
+      display: none;
+    }
+
+    .no_task {
+      .no_task_message {
+        display: block;
+      }
+      .now_view_inner {
+        display: none;
+      }
+      .loader {
+        display: none;
+      }
+      .plan_day_controls {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+      }
+    }
+
+    .loading {
+      .no_task_message {
+        display: noe;
+      }
+      .now_view_inner {
+        display: none;
+      }
+      .loader {
+        display: block;
+        text-align: center;
+        padding-top: 50px;
+        font-size: big;
+      }
+      .clock_view {
+        display: none;
+      }
+    }
+  }
+
+
+
+  .next_days_view {
+    .days_container {
+      width: 896px;
+      margin: auto;
+      .next_day_view {
+        padding: 10px;
+        width: 180px;
+        height: 175px;
+        position: relative;
+        float: left;
+        background: whitesmoke;
+        margin: 10px;
+        border-top: 5px #2bb8cb solid;
+
+        .tasks_nb_container {
+          display: none;
+        }
+
+        .deadlines_nb_container {
+          display: none;
+        }
+
+        .empty {
+          color: gray;
+          font-style: italic;
+        }
+
+        .details {
+          position: absolute;
+          bottom: 10px;
+          left: 10px;
+
+          .main_deadline_container {
+            display: none;
+          }
+          .main_deadline {
+            font-weight: bold;
+          }
+          .planned_hours_count_container {
+            display: none;
+          }
+          .planned_hours_count {
+            font-weight: bold;
+          }
+        }
+
+        h3 {
+          margin-bottom: 10px;
+        }
+
+        .year {
+          color: #A5A5A5;
+        }
+        .close_button {
+          float: right;
+        }
+
+        .for_expanded {
+          display: none;
+        }
+
+        .day_nb {
+          font-size: 0.7em;
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          color: gray;
+        }
+
+      }
+      .next_day_view .expanded {
+        border-top: 5px #2bb8cb solid;
+
+        .day_nb {
+          right: 27px;
+        }
+        .for_expanded {
+          display: block;
+        }
+        .for_normal {
+          display: none;
+        }
+        padding: 10px;
+        position: absolute;
+        width: 280px;
+        min-height: 275px;
+        margin-left: -50px;
+        margin-top: -50px;
+        z-index: 2;
+        background: white;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+
+      }
+
+      .planned_list_item {
+        padding: 10px;
+        background: rgba(43, 184, 203, 0.8);
+        margin-bottom: 1px;
+        cursor: pointer;
+        .task_name_ {
+          font-size: 1.1em;
+          font-weight: bold;
+        }
+      }
+
+    }
+
+  }
+
+  @media (max-width: 1000px) {
+    .next_days_view {
+      .days_container {
+        width: -moz-fit-content;
+        width: -webkit-fit-content;
+        width: fit-content;
+        margin: auto;
+      }
+    }
+  }
+
+  .past_recap {
+    .work_time {
+      font-size: 1.3em;
+    }
+  }
+
+  .recap_square { //    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    background: white;
+    border: 1px grey solid;
+    margin: 10px;
+    margin: 10px;
+  }
+
+  .deadlines_container {
+    width: 960px;
+    margin: auto;
+  }
+}
+
+@media (min-width: 1000px) {
+  .recap_main_view {
+    width: 1000px;
+    margin: auto;
+  }
+}
+
+.deadlines_information {
+
+  padding: 15px;
+}

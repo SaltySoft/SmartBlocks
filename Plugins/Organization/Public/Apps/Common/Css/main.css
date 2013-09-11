@@ -1,0 +1,74 @@
+.organization_view {
+    margin: auto;
+    border-top: 10px #1c7783 solid;
+    bottom: 0px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+}
+.control_bar h2 {
+    float:right
+
+}
+
+
+.control_bar a {
+    display: block;
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    float: left;
+    text-align: center;
+    font-size: 18px;
+    color: grey;
+    border-bottom: 2px #5f7f83 solid;
+    margin-right: 5px;
+    text-decoration: none;
+    background: ghostwhite;
+}
+
+.control_bar a .small_title {
+    display: none;
+}
+
+@media (max-width : 900px) {
+
+
+    .control_bar a {
+        width: 30px;
+    }
+    .control_bar a .small_title {
+        display: inline;
+    }
+    .control_bar a .big_title {
+        display: none;
+    }
+
+    .control_bar h2 {
+        font-size: small;
+        font-weight: bold;
+    }
+}
+
+.control_bar a.selected {
+    background: #2bb8cb;
+    color: white;
+}
+
+.control_bar a:hover {
+    background: #d3d3d3;
+    color: ghostwhite;
+}
+
+.sub_app_holder {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 33px;
+    bottom: 0px;
+}
+
+#ui-datepicker-div {
+    z-index: 150  !important;
+}

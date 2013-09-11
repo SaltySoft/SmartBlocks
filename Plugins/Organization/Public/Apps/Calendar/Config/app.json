@@ -1,0 +1,8 @@
+{
+    "name":"Monthly Tasks",
+    "token":"calendar",
+    "description":"This app allows users to manage their tasks in a calendar.",
+    "link":"/Organization/Tasks/app#month",
+    "logo_url":"/Organization/Apps/Calendar/Resources/logo.png",
+    "block_token":"organization"
+}

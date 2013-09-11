@@ -1,0 +1,9 @@
+<!--class="task <% if (task.get('completion_date') != null) { %>done<% } %> <% if (task.getDueDate().getDate() < new Date().getDate() + 1 && task.getDueDate().getFullYear() <= new Date().getFullYear() && task.getDueDate().getMonth() <= new Date().getMonth()) {%>late<%}%>"-->
+<div class="task task_container" data-id="<%= task.get('id') %>"  data-index="<%= index %>">
+    <div class="task_square"></div>
+    <span class="cal_task_name"><%= task.get("name") %><a href="javascript:void(0);"><img src="/images/icons/pencil.png" /></a></span>
+    <span class="buttons">
+        <a href="javascript:void(0);" class="finished_button">Done</a>
+        <a href="javascript:void(0);" class="cancel_finish_button">Replan</a>
+    </span>
+</div>

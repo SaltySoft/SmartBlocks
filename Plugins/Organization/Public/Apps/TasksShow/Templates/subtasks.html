@@ -1,0 +1,63 @@
+<button class="add_subtasks pure-button" >Add subtasks</button >
+<div class="subtasks_container" >
+    <div class="subtask_container" >
+        <table class="pure-table pure-table-horizontal" >
+            <thead >
+            <tr >
+                <th >#</th >
+                <th >Name</th >
+                <th >Duration</th >
+                <th >Finished</th >
+                <th ></th >
+            </tr >
+            </thead >
+
+            <tbody >
+            <% _.each(subtasks, function (subtask, num) { %>
+            <% if (num % 2) {%>
+            <tr class="subtask_infos table-line-odd" data-id="<%= subtask.get('id') %>"
+                data-description="<%= subtask.get('description') %>" >
+                <% } else {%>
+            <tr class="subtask_infos" data-id="<%= subtask.get('id') %>"
+                data-description="<%= subtask.get('description') %>" >
+                <% }%>
+                <td ><%= num %></td >
+                <td >
+                    <span class="subtask_display" href="javascript:void(0);" ><%= subtask.get('name') %></span >
+                    <span class="subtask_edition" href="javascript:void(0);" >
+                <input type="text" class="subtask_input" data-field="name">
+                </span >
+                </td >
+                <td >
+                    <span class="subtask_display" href="javascript:void(0);" ><%= subtask.get('duration') %></span >
+                    <span class="subtask_edition" href="javascript:void(0);" >
+                <input type="text" class="subtask_input" data-field="duration">
+                </span >
+                </td >
+                <td >
+                    <span class="subtask_display" href="javascript:void(0);" ><%= subtask.get('finished') %></span >
+                    <span class="subtask_edition" href="javascript:void(0);" >
+                <input type="text" class="subtask_input" data-field="finished">
+                </span >
+                </td >
+                <td >
+                    <div class="edit_option_container" >
+                        <a href="javascript:void(0);" class="subtask_button" data-action="edit" >
+                            <img src="/images/icons/pencil.png" />
+                        </a >
+                    <span class="mode_edition" >
+                        <button class="subtask_button edition_command_button" data-action="save" >Save</button >
+                        <button class="subtask_button edition_command_button" data-action="cancel" >Cancel</button >
+                        <button class="subtask_button edition_command_button" data-action="delete" >Delete</button >
+                    </span >
+                    </div >
+                </td >
+            </tr >
+            <% }); %>
+            </tbody >
+        </table >
+    </div >
+
+    <div class="subtask_show_container" >
+    </div >
+</div >

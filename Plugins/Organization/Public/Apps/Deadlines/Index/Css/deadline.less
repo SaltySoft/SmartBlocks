@@ -1,0 +1,124 @@
+.deadline_show_container {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #dddddd;
+  &:last-of-type {
+
+  }
+
+  &.late {
+    .timeleft {
+      color: red;
+    }
+  }
+
+  .deadline_header {
+    height: 50px;
+    background: #f9f9f9;
+    transition: background 200ms;
+    border-top: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    color: #424242;
+    font-weight: bold;
+    position: relative;
+    cursor: pointer;
+
+    &.new {
+      transition: all 200ms;
+
+      font-size: 50px;
+      color: #cdcdcd;
+      text-align: center;
+      display: block;
+      text-decoration: none;
+
+      &:hover {
+        background: #cdcdcd;
+        color: white;
+      }
+    }
+
+    .name {
+      display: block;
+      float: left;
+      font-size: 30px;
+      padding: 10px;
+    }
+
+    .timeleft {
+      display: block;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      width: 150px;
+      border-left: 1px #dddddd solid;
+      border-top: 1px #dddddd solid;
+      font-size: 22px;
+      background: #f9f9f9;
+    }
+
+    .wt_pb_container {
+      position: absolute;
+      bottom: 0;
+      right: 151px;
+      width: ~"calc(100% - 151px)";
+      height: 5px;
+      border-left: 1px #dddddd solid;
+      border-top: 1px #dddddd solid;
+      overflow: hidden;
+
+      canvas {
+        position: absolute;
+        top: 0px;
+      }
+      transition: height 300ms;
+
+    }
+
+    &:hover {
+      background: #f0f0f0;
+      .name {
+        color: #737373;
+      }
+      .wt_pb_container { //        height: 15px;
+      //        opacity: 0.5;
+      }
+
+    }
+
+    .activity_link {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 25px;
+      line-height: 25px;
+      text-align: center;
+      width: 150px;
+      a {
+
+      }
+    }
+
+  }
+
+  .deadline_body {
+    display: none;
+    height: 611px;
+    background: #f5f5f5;
+    border-top: 1px solid #dddddd;
+  }
+
+  &.expanded {
+    .deadline_body { //      display: block;
+    }
+  }
+
+//  &:nth-child(even) .deadline_header {
+//    background: #ececec;
+//  }
+//@imports
+}

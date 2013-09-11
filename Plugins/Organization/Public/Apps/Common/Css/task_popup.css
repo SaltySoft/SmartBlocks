@@ -1,0 +1,55 @@
+.task_popup {
+    width: 450px;
+    background-color: white;
+    box-shadow: 0px 0px 5px black;
+    padding: 20px;
+    position: relative;
+    margin: auto;
+    top: 50px;
+}
+
+.task_popup > div {
+    /*margin: 20px 20px 0px 0;*/
+    margin-top: 20px;
+}
+
+.task_popup > div input {
+    margin-bottom: 20px;
+}
+
+.task_popup_close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.task_popup .pure-control-group {
+    margin: 15px;
+
+}
+
+.task_popup .pure-controls {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.task_form .hour, .task_form .minute {
+    width: 62px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+.task_form input[type="text"] {
+    width: 200px;
+}
+
+.ui-datepicker {
+    z-index: 10;
+}
+
+.form_description {
+    margin: 0px;
+    height: 80px;
+    width: 260px;
+    resize: none;
+}

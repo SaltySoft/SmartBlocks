@@ -1,0 +1,71 @@
+<div class="clock_container">
+
+</div>
+<div class="now_container">
+    <div class="now_view_inner">
+        <h2>Now : <span class="current_task_name"></span></h2>
+
+        <div>
+            Until <span class="current_task_end"></span> - <span class="current_task_time_left"></span> left
+        </div>
+        <div class="deadline_linked">
+            The current task is linked with the deadline "<span class="deadline_name"></span>".
+        </div>
+        <div class="current_controls pure-g">
+            <div class="pure-u-1">
+                <button class="pure-button pause_button pure-button-warning">
+                    Pause
+                </button>
+            </div>
+            <div class="pure-g">
+                <div class="pure-u-1-2">
+                    <button class="pure-button prepone_button"><<</button>
+                </div>
+                <div class="pure-u-1-2">
+                    <button class="pure-button postpone_button pure-button-warning">>></button>
+                </div>
+            </div>
+            <div class="pure-u-1">
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <button class="pure-button remtime_button">- 30m</button>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <button class="pure-button addtime_button pure-button-warning">+ 30m</button>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="pure-u-1">
+                <button class="pure-button edit_button">Edit</button>
+            </div>-->
+        </div>
+    </div>
+    <div class="no_task_message">
+        <h2>Right now : Nothing planned</h2>
+
+        <ul class="plan_day_controls">
+            <!--<li>-->
+                <!--<button class="pure-button create_plannedtask_button">What are you doing ?</button>-->
+            <!--</li>-->
+            <li>
+                <a href="#planning" class="pure-button pure-button-warning">Plan your day</a>
+            </li>
+        </ul>
+    </div>
+    <div class="loader">
+        <img src="/images/loader.gif"/>
+        <br/>
+        Loading...
+    </div>
+    <div class="pause_info">
+        <div class="information">
+            Paused for
+            <div class="pause_time">0s</div>
+            <div>
+                <button class="pause_button pure-button pure-button-success">Resume task</button>
+                <button class="cancel_pause_button pure-button pure-button-error">Cancel pause</button>
+            </div>
+        </div>
+    </div>
+</div>

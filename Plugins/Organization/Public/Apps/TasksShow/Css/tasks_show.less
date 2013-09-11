@@ -1,0 +1,26 @@
+@elts_bg: whitesmoke;
+
+.task_show_main_view {
+  position: relative;
+
+  .task_show {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    position: relative;
+    height: 700px;
+    width: 800px;
+
+    background: white;
+    padding: 10px;
+    margin-top: 50px;
+
+    .task_subapp_container {
+      height: ~"calc(100% - 36px)";
+    @import "summary.less";
+    @import "edition.less";
+    @import "planning.less";
+    @import "subtasks.less";
+    }
+
+  }
+}

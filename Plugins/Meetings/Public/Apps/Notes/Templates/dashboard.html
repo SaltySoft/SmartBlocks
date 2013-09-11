@@ -1,0 +1,16 @@
+<ul>
+    <% _.each(notes, function (note) {%>
+    <li class="dashboard_note normal" href="javascript:void(0);" data-id="<%= note.get('id') %>"
+        data-description="<%= note.get('description') %>">
+        <div class="name_link ">
+            <span class="display">
+                <%= note.get('title') %>
+            </span>
+        </div>
+        <a href="javascript:void(0);" class="note_div_button delete_note_button"></a>
+    </li>
+    <% });%>
+    <li class="create_note_button_container" href="javascript:void(0);">
+        <a href="javascript:void(0);" class="create_note_button">Create a note</a>
+    </li>
+</ul>

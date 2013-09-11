@@ -1,0 +1,5 @@
+<% _.each(users, function (user) { %>
+        <li>
+            <a href="javascript:void(0);" class="select_user" data-id="<%= user.get('id') %>" data-name="<%= user.get('username') %>"><%= user.get('username') %></a>
+        </li>
+<% }); %>

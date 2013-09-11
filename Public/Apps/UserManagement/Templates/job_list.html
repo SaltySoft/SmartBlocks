@@ -1,0 +1,5 @@
+<ul class="k_um_job_list">
+    <% _.each(jobs, function (job){ %>
+    <li data-job_id="<%= job.get('id') %>"><%= job.get("name") %></li>
+    <% }); %>
+</ul>

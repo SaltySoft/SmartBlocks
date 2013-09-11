@@ -1,0 +1,53 @@
+<a href="javascript:void(0);" class="task_popup_close_button" ><img src="/images/icons/cross_close.png" /></a >
+<h2 >Task details</h2 >
+<form action="javascript:void(0);" class="pure-form pure-form-aligned task_form" >
+    <div class="pure-control-group" >
+        <label for="form_task_name" >Task name :</label >
+        <input type="text" id="form_task_name" value="<%= task.get('name') %>" placeholder="Enter a name here" />
+    </div >
+    <% if (task.get('parent')) { %>
+    <% } else { if (activities.length > 0) {%>
+    <div class="pure-control-group" >
+        <label for="form_task_activity" >Activity :</label >
+        <select id="form_task_activity" class="task_activity" >
+            <% _.each(activities, function (myactivity) {%>
+            <option value="<%= myactivity.get('id') %>" ><%= myactivity.get('name') %></option >
+            <% });%>
+        </select >
+    </div >
+    <% }}%>
+    <div class="pure-control-group" >
+        <label for="form_task_type" >Type of task</label >
+        <select id="form_task_type" class="task_type" >
+            <option value="0" >General task</option >
+            <option value="1" >Deadline</option >
+        </select >
+    </div >
+    <div class="pure-control-group" >
+        <label for="form_task_type" >Description</label >
+        <textarea class="form_description" ><%= task.get('description') %></textarea >
+    </div >
+    <div class="pure-control-group for_deadlines" >
+        <label for="form_task_name" >Due date :</label >
+        <input type="text" id="form_task_date" placeholder="Click here to change date" />
+    </div >
+    <div class="pure-control-group for_deadlines" >
+        <label for="form_task_time" >Due time :</label >
+        <input type="number" class="hour" value="23" id="form_task_time" min="0" max="23" />
+        &nbsp;:&nbsp;
+        <input type="number" class="minute" value="59" min="0" max="59" />
+    </div >
+    <div class="pure-control-group" >
+        <label for="required_time" >
+            Estimated time :
+        </label >
+        <input type="number" min="0"
+               value="0"
+               id="required_time"
+               class="required_time" name="required_time" /> hours
+    </div >
+    <div class="pure-controls" >
+        <button class="action_button pure-button pure-button-primary" data-action="save" >Save</button >
+        <button class="action_button pure-button" data-action="cancel" >Cancel</button >
+    </div >
+</form >

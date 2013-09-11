@@ -1,0 +1,106 @@
+<form class="edition_form pure-form" action="javascript:void(0);">
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <div class="fields_container">
+                <div class="explain_text">
+                    <em>Editing your task</em>
+
+                    <p>
+                        Here you can edit the basic information of the current task.
+                    </p>
+                    <em>Saving changes</em>
+
+                    <p>
+                        Click on the green "Save changes"
+                        button to save on the server, or on the orange "Cancel changes" button to reset the form to
+                        its last save state.
+                    </p>
+                    <em>Deletion</em>
+
+                    <p>
+                        You can delete the task by clicking on the red "Delete task" button.
+                    </p>
+                </div>
+
+            </div>
+            <a href="javascript:void(0);" class="delete_button pure-button pure-button-error">Delete task</a>
+        </div>
+        <div class="pure-u-1-2">
+
+            <div class="fields_container">
+                <fieldset>
+                    <legend>Main information</legend>
+                    <div class="name field">
+                        <label>
+                            Name:
+                            <input type="text" placeholder="Enter a name" class="name_input"
+                                   value="<%= task.get('name') %>"/>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>
+                            Activity :
+                            <select class="type_input" name="type">
+                                <option value="0">No activity selected</option>
+                                <% for (var k in activities) { %>
+                                <option value="<%= activities[k].get('id') %>"
+                                <% if (task.get('activity').id == activities[k].get('id')) { %>selected="true"<% } %>
+                                ><%=
+                                activities[k].get('name') %></option>
+                                <% } %>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="field">
+                        <label>
+                            Description
+                            <textarea class="description_input" name="description"><%=
+                                task.get('description').replace('<br/>', "\n")
+                                %></textarea>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Start date</legend>
+                    <div class="field start_date_field">
+                        <label>
+                            On
+                            <input type="text" class="start_date_input" name="start_date"
+                                   value="<%= start_date.getFullYear() %>/<%= start_date.getMonth() + 1 %>/<%= start_date.getDate() %>"/>
+                        </label>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Due date</legend>
+                    <div class="field due_date_field">
+                        <label>
+                            On
+                            <input type="text" class="due_date_input" name="due_date"
+                                   value="<%= due_date.getFullYear() %>/<%= due_date.getMonth() + 1 %>/<%= due_date.getDate() %>"/>
+                        </label>
+                    </div>
+                    <div class="field due_date_field">
+                        <label>
+                            At
+                        </label>
+
+                        <div class="times_inputs">
+                            <input type="number" class="due_hour_input"
+                                   name="due_date" value="<%= due_date.getHours() %>"/> :
+                            <input type="number" class="due_minute_input"
+                                   name="due_date" value="<%= due_date.getMinutes() %>"/>
+                        </div>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="pure-controls controls">
+        <button type="reset" class="pure-button pure-button-warning">Cancel changes</button>
+        <button type="submit" class="pure-button pure-button-success">Save changes</button>
+    </div>
+
+</form>

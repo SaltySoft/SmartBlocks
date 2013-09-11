@@ -1,0 +1,34 @@
+<div class="header">
+    <div>
+        <h1>Activities</h1>
+
+        <form class="pure-form filters_container normal">
+            <div class="shown_filters">
+                <input type="text" class="name_filter" placeholder="Filter by name"/>
+                <select class="types_filter">
+                    <option value="0">Any type</option>
+                    <% for (var k in activity_types) { %>
+                    <option value="<%= activity_types[k].get('id') %>"><%= activity_types[k].get("name") %></option>
+                    <% } %>
+                </select>
+            </div>
+            &nbsp;
+            <a href="javascript:void(0)" class="more_filters_button"><span class="for_expanded_i">Less</span><span
+                    class="for_normal_i">More</span></a>
+
+            <div class="for_expanded_b hidden_filters">
+                &nbsp;
+                <label>
+                    <input type="checkbox" class="archived_filter"/> Show archived
+                </label>
+            </div>
+            <span class="found_count"><span class="found_count_nb"></span> items found</span>
+        </form>
+    </div>
+    <div class="clearer"></div>
+</div>
+<div class="thumbnails_container">
+</div>
+<div class="loader_container">
+    <img src="/images/loader3.gif"/><br/>
+</div>

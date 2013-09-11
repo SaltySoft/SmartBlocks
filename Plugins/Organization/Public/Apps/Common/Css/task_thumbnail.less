@@ -1,0 +1,129 @@
+.task_thumbnail_view {
+  position: relative;
+
+  .for_small_b, .for_small_i {
+    display: none;
+  }
+
+  &.deadline {
+    .clock_container {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      opacity: 0.7;
+      transition: opacity 500ms;
+      -webkit-transition: opacity 500ms;
+    }
+
+    .clock_container:hover {
+      opacity: 1;
+    }
+
+  }
+
+  &.normal {
+
+    .clock_container {
+      display: none;
+    }
+  }
+
+  &.small {
+    width: 150px;
+    height: 75px;
+    background: #f0f0f0;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    margin: 10px;
+    padding: 5px;
+
+    .description_container {
+      display: none;
+    }
+
+    .controls {
+      display: none;
+    }
+
+    .progress_bar_container {
+//      display: none;
+    }
+
+    .tags_container {
+      display: none;
+    }
+
+    .clock_container {
+      opacity: 1;
+      right: -20px;
+      top: -20px;
+//      position: relative;
+      > canvas {
+//        margin: auto;
+//        display: block;
+      }
+    }
+
+    h3 .task_name {
+      font-size: 17px;
+      text-align: center;
+      line-height: 19px;
+
+    }
+    h3 a {
+      color: #000405;
+      font-weight: bold;
+      text-decoration: none;
+      transition: all 500ms;
+    }
+
+    h3 a:hover {
+      color: #009cc2;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .for_small_b {
+      display: block;
+    }
+
+    .for_small_i {
+      display: inline;
+    }
+  }
+
+  .controls {
+    float: left;
+    text-align: center;
+    .pure-button {
+      padding: 5px;
+      text-align: center;
+      width: 80px; //      width: 100px;
+    }
+  }
+
+  .progress_bar_container {
+    position: absolute;
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+  }
+  .tags_container {
+    float: left;
+    li {
+      float: left;
+      margin-right: 5px;
+    }
+  }
+
+  .description_container {
+    position: absolute;
+    margin-top: 34px;
+    right: 10px;
+    left: 10px;
+    > div {
+      padding: 10px;
+      background: #f5f5f5;
+      height: 100px;
+    }
+  }
+}

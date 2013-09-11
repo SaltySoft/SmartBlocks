@@ -1,0 +1,44 @@
+<div class="role_container" >
+    <table >
+        <thead >
+        <tr >
+            <th scope="col" rowspan="1" ><%= project.get('name') %></th >
+        </tr >
+
+        <tr >
+            <th scope="col" >Username</th >
+            <th scope="col" >Rolename</th >
+            <th scope="col" >Cost (€ / hour)</th >
+            <th scope="col" >Total spent</th >
+        </tr >
+        </thead >
+
+        <tbody >
+        <% _.each(roles, function (role) {%>
+        <tr >
+
+            <td class="role_td" >
+                <div class="role_info" ><%= role.get('user').get('username') %></div >
+            </td >
+
+            <td class="role_td" >
+                <span class="display" href="javascript:void(0);" ><%= role.get('name') %></span >
+                <span class="edition" href="javascript:void(0);" >
+                <input type="text" class="input" data-type="name" data-rid="<%= role.get('id') %>" >
+                </span >
+            </td >
+
+            <td class="role_td" >
+                <span class="display" href="javascript:void(0);" ><%= role.get('cost') %></span >
+                <span class="edition" href="javascript:void(0);" >
+                <input type="text" class="input" data-type="cost" data-rid="<%= role.get('id') %>" >
+                </span >
+            </td >
+
+            <td class="" >
+            </td >
+        </tr >
+        <% });%>
+        </tbody >
+    </table >
+</div >

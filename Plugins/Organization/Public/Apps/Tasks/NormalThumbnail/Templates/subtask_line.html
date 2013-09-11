@@ -1,0 +1,7 @@
+<button class="pure-button edit_button">Edit</button>
+<input type="checkbox" class="finished_input" <% if (subtask.get('finished')) { %>checked="true"<% } %> />&nbsp;
+<span class="st_name for_normal_i"><%= subtask.get('name') %></span>
+<input type="text" class="st_name_input for_edition_i name_input" value="<%= subtask.get('name')%>" />
+<span class="st_time for_normal_i"><%= parseInt(subtask.get('duration')) / 3600000 %></span> h
+<input type="number" min="0" step="0.25" class="st_name_input for_edition_i time_input" value="<%= subtask.get('duration') %>" />
+<div class="clearer"></div>

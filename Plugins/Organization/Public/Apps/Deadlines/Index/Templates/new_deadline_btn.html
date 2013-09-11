@@ -1,0 +1,52 @@
+<a class="deadline_header new" href="javascript:void(0);">
+    +
+</a>
+
+<div class="deadline_body">
+    <form action="javascript:void(0);" class="pure-form pure-form-aligned">
+        <fieldset>
+            <legend>Deadline details</legend>
+            <div class="pure-control-group">
+                <label for="deadline_name_input">Name</label>
+                <input name="name" type="text" class="deadline_name_input" id="deadline_name_input"
+                       placeholder="Enter a name here"/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Deadline's starting point</legend>
+            <div class="pure-control-group">
+                <label for="deadline_start_date_input">Start</label>
+                <input type="text" class="deadline_start_date_input" placeholder="Click to enter a date"
+                       value="<%= (now.getMonth() + 1 < 10 ? '0' : '') %><%= now.getMonth() + 1 %>/<%= (now.getDate() < 10 ? '0' : '') %><%= now.getDate() %>/<%= now.getFullYear() %>"
+                       id="deadline_start_date_input"/>
+            </div>
+            <div class="pure-control-group">
+                <label for="deadline_start_time_input">At</label>
+                <input type="number" min="0" max="23" class="deadline_start_hour_input"
+                       id="deadline_start_time_input" value="0" size="2"/>
+                <input type="number" min="0" max="59" class="deadline_start_minute_input" value="0" size="2"/>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Deadline's due date</legend>
+            <div class="pure-control-group">
+                <label for="deadline_start_date_input">Stop</label>
+                <input type="text" class="deadline_stop_date_input" placeholder="Click to enter a date"
+                       id="deadline_stop_date_input"/>
+
+            </div>
+            <div class="pure-control-group">
+                <label for="deadline_stop_time_input">At</label>
+                <input type="number" min="0" max="23" class="deadline_stop_hour_input" value="18"
+                       id="deadline_stop_time_input"
+                       size="2"/>
+                <input type="number" min="0" max="59" class="deadline_stop_minute_input" value="59" size="2"/>
+            </div>
+
+            <div class="pure-controls">
+                <button type="reset" class="pure-button pure-button-warning">Cancel</button>
+                <button type="submit" class="pure-button pure-button-success">Create</button>
+            </div>
+        </fieldset>
+    </form>
+</div>

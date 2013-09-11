@@ -1,0 +1,167 @@
+@elts_bg: whitesmoke;
+
+.task_list_view {
+  .task_list_item {
+    padding: 9px;
+    background: #0094cc;
+    color: white;
+  }
+
+  .task_list_item.overdue {
+    padding: 9px;
+    background: rgba(204, 0, 0, 0.60);
+    color: white;
+  }
+}
+
+.activities_index_view {
+  margin: auto;
+  position: relative;
+  height: 99%;
+  width: 800px;
+
+  > div {
+    height: 99%;
+    position: relative;
+  }
+
+  .empty_content {
+    text-align: center;
+    font-size: 1.2em;
+    color: #c3b9b9;
+    padding-top: 200px;
+
+  }
+
+  .app_body {
+    position: absolute;
+    bottom: 0px;
+    top: 80px;
+    left: 0px;
+    right: 0px;
+    .panel {
+      position: absolute;
+      bottom: 50px;
+      top: 0px;
+      left: 0px;
+      right: 0px;
+    }
+
+    > div {
+      height: 99%;
+
+      > div {
+        height: 99%;
+        position: relative;
+      }
+    }
+  }
+
+  .panel {
+    margin: 5px;
+    padding: 10px;
+    background: white;
+  }
+
+  .search_controls_container {
+    .search_ctrls_form {
+      line-height: 30px;
+      .types_select {
+        width: 150px;
+      }
+    }
+  }
+
+  .activities_list_container {
+    .activity_list_item a {
+      display: block;
+      text-decoration: none;
+      padding: 10px;
+      margin-bottom: 1px;
+      color: whitesmoke;
+      transition: background 500ms;
+      -webkit-transition: background 500ms; /* Safari */
+    }
+    .activity_list_item a:hover {
+      background: #d3d3d3;
+      color: #525252;
+    }
+    .activity_list {
+      height: 100%;
+      position: relative;
+
+      .activities_list {
+        height: calc(~'100% - 41px');
+        overflow-y: overlay;
+      }
+      .activity_creation_button {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+      }
+    }
+  }
+
+  .activity_preview_container {
+
+    .activity_prev {
+      display: block;
+    }
+    .empty_content {
+      display: none;
+    }
+
+    .for_archived {
+      display: none;
+    }
+
+    .for_normal {
+      display: inline;
+    }
+
+    .preview_controls_container {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      .deletion_button {
+        position: absolute;
+        right: 0px;
+        bottom: 0px;
+      }
+    }
+
+    .workload_timeline_container {
+      height: 160px;
+      margin: 5px 0px;
+      background: whitesmoke;
+    }
+
+    .tasks_list_container {
+      position: absolute;
+      left: 9px;
+      right: 9px;
+      bottom: 45px;
+      top: 240px;
+      overflow-y: overlay;
+      background: @elts_bg;
+    }
+  }
+  .empty {
+    .activity_prev {
+      display: none;
+    }
+    .empty_content {
+      display: block;
+    }
+  }
+  .activity_preview.archived {
+    .for_archived {
+      display: inline;
+    }
+
+    .for_normal {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+<div class="header" >
+    <h1 >Tasks : <%= task.get('name') %></h1 >
+</div >
+<div class="task_show" >
+    <div class="pure-menu pure-menu-open pure-menu-horizontal menu" >
+        <a href="#tasks/<%= task.get('id') %>" class="pure-menu-heading" ><%= task.get('name') %></a >
+
+        <ul >
+            <li class="pure-menu-selected summary_tab_button menu_button" ><a href="#tasks/<%= task.get('id') %>" >Summary</a >
+            </li >
+            <li class="tasks_tab_button menu_button" ><a href="#tasks/<%= task.get('id') %>/subtasks" >Subtasks</a >
+            </li >
+            <li class="planning_tab_button menu_button" ><a href="#tasks/<%= task.get('id') %>/planning" >Planning</a >
+            </li >
+            <li class="edition_tab_button menu_button" ><a href="#tasks/<%= task.get('id') %>/edition" >Edition</a >
+            </li >
+        </ul >
+    </div >
+    <div class="task_subapp_container" ></div >
+</div >

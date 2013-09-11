@@ -1,0 +1,10 @@
+{
+    "name": "UserManagement",
+    "admin": true,
+    "token": "user_management",
+    "id": "user_management",
+    "description":"This is the user management application.",
+    "link":"/Users/user_management",
+    "logo_url":"/Apps/UserManagement/Resources/logo.png",
+    "block_token":"kernel"
+}

@@ -1,0 +1,8 @@
+{
+    "name":"Daily Tasks",
+    "token":"planning",
+    "description":"This app allows users to plan their tasks on a hourly basis.",
+    "link":"/Organization/Tasks/app#daily",
+    "logo_url":"/Organization/Apps/Calendar/Resources/logo.png",
+    "block_token":"organization"
+}

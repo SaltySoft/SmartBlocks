@@ -1,0 +1,30 @@
+<h3 class="name">
+</h3>
+<div class="time_information">
+    <div class="time_desc">
+        <span class="due_on_d"></span>
+    </div>
+    <div class="time_desc">
+        <span class="due_hour"></span>
+    </div>
+    <div class="time_desc">
+        <span class="timeleft"></span>
+    </div>
+    <div class="time_desc">
+        <span class="status"></span>
+    </div>
+    <div class="time_desc">
+        <span class="timeontime"></span>
+    </div>
+</div>
+<div class="clock_container">
+    <canvas class="deadline_clock" width="100" height="100"></canvas>
+</div>
+<div class="progress_bar_container">
+    <canvas class="progress_bar" width="300" height="30"></canvas>
+</div>
+
+<div class="controls">
+    <a href="javascript:void(0);" class="pure-button completed_button"><img src="/images/icons/tick.png"/></a>
+    <a href="#tasks/<%= task.get('id') %>" class="pure-button"><img src="/images/icons/eye.png"/></a>
+</div>

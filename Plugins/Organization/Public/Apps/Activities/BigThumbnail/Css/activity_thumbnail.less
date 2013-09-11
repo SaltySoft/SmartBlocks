@@ -1,0 +1,56 @@
+.activity_thumbnail_view {
+  position: relative;
+
+  .timeline_title {
+    padding: 5px;
+    text-align: center;
+    background: #f4f4f4;
+    display: block;
+    color: gray;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 200ms;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .description_container {
+    width: 440px;
+    height: 30px;
+
+    margin: 1px;
+    .description {
+      height: 20px;
+      min-height: 20px;
+      width: 430px;
+      padding: 5px;
+      background: rgb(241, 241, 241);
+      color: gray;
+      overflow: hidden;
+      line-height: 20px;
+      cursor: default;
+      text-align: justify;
+      transition: height 200ms;
+    }
+
+    .description:hover {
+      position: absolute;
+      height: auto;
+    }
+  }
+
+  .deadlines_list_container {
+    height: 100%;
+
+    @import "deadlines.less";
+  }
+
+  .controls {
+    a {
+      float: right;
+      margin-left: 5px;
+    }
+  }
+}

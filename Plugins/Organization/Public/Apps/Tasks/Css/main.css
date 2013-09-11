@@ -1,0 +1,118 @@
+.ent_tsk {
+    width: 800px;
+    position: relative;
+    height: 600px;
+
+    margin: auto;
+    top: 50px;
+
+}
+
+.ent_tsk .tasks_list {
+    margin-top: 30px;
+}
+
+.ent_tsk .tasks_mv_button {
+    float: right;
+    margin-top: 20px;
+}
+
+
+.ent_tsk .task_item {
+    border-top: 1px #d3d3d3 solid;
+    padding: 5px;
+    background-color: white;
+    cursor:pointer;
+    line-height: 35px;
+}
+
+.ent_tsk .task_item:hover {
+    background-color: #f4f4f4;
+}
+
+.ent_tsk .task_item .checkbox_container input[type="checkbox"]{
+    display: none;
+
+}
+
+.ent_tsk .task_item .checkbox {
+    float: left;
+    height: 15px;
+    width: 15px;
+    border: 1px black solid;
+    cursor: pointer;
+    margin-top: 7px;
+}
+
+.ent_tsk .task_item .date {
+    float: right;
+    display: block;
+}
+
+.task_item_button.delete {
+    float: right;
+    display: block;
+    line-height: 18px;
+    margin-left: 5px;
+}
+
+.ent_tsk .task_item.completed .checkbox {
+    background-image: url("/images/icons/tick.png");
+    border: 1px grey solid;
+}
+
+.ent_tsk .task_item .checkbox:hover {
+    background-color: #f7f7f7;
+}
+
+
+.ent_tsk .task_item.completed {
+    color: #979797;
+}
+
+.ent_tsk .task_item.normal .task_edition {
+     display: none;
+ }
+
+.ent_tsk .task_item.normal .task_display {
+    display: inline;
+}
+
+.ent_tsk .task_item.edition .task_edition {
+    display: inline;
+}
+
+.ent_tsk .task_item.edition .task_display {
+    display: none;
+}
+
+.ent_tsk .task_item .handle {
+    background-color: #e9e9e9;
+    width: 15px;
+    height: 20px;
+    float: left;
+    margin-right: 10px;
+    cursor: move;
+    border-radius: 5px;
+    background-image: url("/Organization/Apps/Tasks/Resources/handle.png");
+}
+
+.task_separator {
+    margin-top: 20px;
+}
+
+
+.share_button {
+    float: right;
+}
+
+.due_on {
+    float: right;
+    line-height: 35px;
+    font-weight: bold;
+}
+
+.task_name {
+    font-size: 22px;
+    line-height: 35px;
+}

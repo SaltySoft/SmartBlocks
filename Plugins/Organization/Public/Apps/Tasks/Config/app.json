@@ -1,0 +1,8 @@
+{
+    "name":"Weekly Tasks",
+    "token":"tasks",
+    "description":"This app allows users to manage their weekly tasks.",
+    "link":"/Organization/Tasks/app#week",
+    "logo_url":"/Organization/Apps/Tasks/Resources/logo.png",
+    "block_token":"organization"
+}

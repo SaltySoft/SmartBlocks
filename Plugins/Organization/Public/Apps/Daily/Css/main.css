@@ -1,0 +1,285 @@
+.planning_main_view {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+.planning_view {
+    margin-top: 20px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+/* DATE CHOOSER */
+.date_chooser {
+    width: 200px;
+
+    margin: auto;
+    padding: 10px;
+    text-align: center;
+}
+
+.date {
+    font-size: 20px;
+    text-decoration: none;
+    color: #d3d3d3;
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+.prev_month_button {
+    float: left;
+}
+
+.next_month_button {
+    float: right;
+}
+
+input[type="text"].datepicker {
+    height: 0px;
+    opacity: 0;
+}
+
+.pane_container {
+    position: absolute;
+    left: 0px;
+    bottom: 11px;
+    top: 57px;
+    right: 0px;
+    border-top: 5px #1c7783 solid;
+}
+
+.pane_inner_container {
+    height: 100%;
+}
+
+/* PANES */
+.pane_container .pane {
+    padding: 5px;
+    height: 100%;
+    width: 98%;
+    margin: auto;
+    position: relative;
+}
+
+.pane > div {
+
+    position: absolute;
+    left: 0px;
+    bottom: 37px;
+    top: 0px;
+    right: 0px;
+}
+
+/* TASKS LIST */
+.tasks_container {
+    float: left;
+    position: relative;
+    width: 100%;
+}
+
+.task_item {
+    padding: 10px;
+    background:rgba(150, 202, 209, 0.9);
+    margin-bottom: 1px;
+    cursor: pointer;
+}
+
+.task_item.over {
+    background: rgba(43, 184, 203, 0.5);
+}
+
+.task_item.overdue {
+    background: #f3a487;
+}
+
+.task_item.ui-draggable-dragging {
+    z-index: 10;
+}
+
+.daily_list .title_container {
+    float: left;
+    height: 38px;
+}
+
+.daily_list .title {
+    padding: 10px 0 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.daily_list .li-state-disabled {
+    min-height: 38px;
+}
+
+.tasks_list_controls {
+    position: relative;
+}
+
+.action {
+    position: absolute;
+    right: 0px;
+    line-height: 24px;
+}
+
+.task_item .name {
+    font-weight: bold;
+}
+
+/**
+TODAY'S PLANNED
+*/
+.planned_list {
+    /*margin-top: 20px;*/
+}
+
+.planned_list .todays_planned {
+    padding: 10px;
+    background: rgba(172, 212, 174, 0.8);
+    margin-bottom: 1px;
+}
+
+.planned_list .todays_planned:hover {
+    padding: 10px;
+    background: rgba(43, 184, 203, 0.5);
+}
+
+/* DAY PLANNING */
+.daily_planning_container {
+    float: left;
+    border-bottom: 2px #b3b3b3 solid;
+    overflow: hidden;
+}
+
+.daily_planning_view {
+    background: white;
+}
+
+.hour_view {
+    height: 48px;
+    border-top: 2px #b3b3b3 solid;
+
+}
+
+.hour_view.night {
+    background: #dbdbdb;
+}
+
+.hour_view > div {
+    padding: 5px;
+}
+
+.daily_planning_view {
+    position: relative;
+}
+
+.hour_view .hour {
+    float: left;
+    font-size: larger;
+    width: 30px;
+    height: 38px;
+    text-align: center;
+    border-right: 1px black solid;
+
+}
+
+.hour_view .hour_content {
+    margin-left: 61px;
+}
+
+.planned_task {
+    position: absolute;
+
+    /*background-color: #ca625a;*/
+
+    /*border-radius: 5px;*/
+    left: 45px;
+    /*border-left: 5px rgba(51, 219, 242, 0.89) solid;*/
+    border-top: 5px gray solid;
+    margin-top: -5px;
+    right: 5px;
+    z-index: 2;
+    color: rgb(63, 51, 51);
+    background: rgba(150, 202, 209, 0.9);
+    font-size: 12px;
+}
+
+.planned_task > div {
+    padding: 5px;
+}
+
+.planned_task.over {
+    /*background: rgba(185, 183, 177, 0.80);*/
+    /*background: rgba(43, 184, 203, 0.9);*/
+    /*left: 45px;*/
+    /*border-left: 5px rgba(85, 178, 198, 0.88) solid;*/
+
+}
+
+.line::before {
+    content: "Now";
+    position: absolute;
+    top: -15px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px red solid;
+}
+
+.line {
+    width: 100%;
+    height: 3px;
+    background-color: red;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: none;
+    z-index: 3;
+}
+
+.handle {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    bottom: 5px;
+    width: 20px;
+    /*background: url(/images/handle_repeat_vert.png) repeat-y top center;*/
+    cursor: move;
+}
+
+/** TODAY'S DEADLINES */
+
+.deadline {
+    height: 10px;
+    margin-top: -11px;
+    background: rgba(255, 255, 255, 0.8);
+    border-bottom: 3px rgba(204, 0, 0, 0.68) solid;
+    position: absolute;
+    left: 41px;
+    right: 0px;
+    z-index: 3;
+    font-size: 0.7em;
+}
+
+.deadline.done {
+    border-bottom: 3px rgba(46, 144, 38, 0.70) solid;
+}
+
+@media (min-width: 1000px) {
+    .planning_main_view {
+        margin: auto;
+        width: 1000px;
+    }
+}
+
+@media (max-width: 800px) {
+    /*.tasks_container {*/
+    /*width: 200px;*/
+    /*display: none;*/
+    /*}*/
+}

@@ -1,0 +1,42 @@
+@elts_bg: whitesmoke;
+
+.activity_show_view {
+  position: relative;
+
+  .loader_container {
+    display: none;
+  }
+
+  &.loading .loader_container {
+    display: block;
+    text-align: center;
+    margin-top: 200px;
+  }
+
+  &.loading .activity_show {
+    display: none;
+  }
+
+  .activity_show {
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+    margin: auto;
+    position: relative;
+    height: 700px;
+    width: 800px;
+
+    background: white;
+    padding: 10px;
+    margin-top: 50px;
+
+    .activity_subapp_container {
+      height: ~"calc(100% - 36px)";
+    @import "summary.less";
+    @import "edition.less";
+    @import "planning.less";
+    @import "tasks.less";
+    @import "deadlines.less";
+    }
+
+  }
+
+}

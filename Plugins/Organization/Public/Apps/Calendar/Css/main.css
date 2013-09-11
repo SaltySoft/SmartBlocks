@@ -1,0 +1,247 @@
+.calendar_view {
+
+    margin: auto;
+    position: relative;
+    top: 30px;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    width: fit-content;
+}
+
+.calendar_view .current_month {
+    width: 300px;
+    text-align: center;
+    font-size: 1.5em;
+    margin: auto;
+}
+
+.calendar_line {
+    clear: both;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    width: fit-content;
+}
+
+.calendar_view .box {
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 2px;
+}
+
+.calendar_view .box.top {
+    float: left;
+    width: 100px;
+    height: 30px;
+    background-color: #2bb8cb;
+    line-height: 30px;
+    color: #ffffff;
+    margin: 3px;
+    text-align: center;
+}
+
+.calendar_view .box.day {
+    position: relative;
+    cursor: pointer;
+    background-color: #fdf5ce;
+    float: left;
+    width: 100px;
+    height: 100px;
+    margin: 3px;
+    box-shadow: 0px 0px 3px orange;
+}
+
+.calendar_view .day.current_day {
+    box-shadow: 0px 0px 5px blue;
+}
+
+.calendar_view .day.inactive {
+    background-color: #e9e9e9;
+    box-shadow: 0px 0px 3px grey;
+}
+
+.calendar_view .box.day:hover {
+    background-color: white;
+}
+
+.calendar_view .box.day.inactive:hover {
+    background-color: #e9e9e9;
+}
+
+.calendar_view .day.expanded .day_content {
+    left: -90px;
+    top: -50px;
+    width: 255px;
+    height: 205px;
+    background-color: #fffde3;
+    position: absolute;
+    z-index: 3;
+    box-shadow: 0px 0px 10px rgba(255, 166, 65, 0.47);
+    padding: 6px;
+}
+
+.calendar_view .day .day_number {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 1.5em;
+}
+
+.calendar_view .day .close_button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+}
+
+.calendar_view .day .more {
+    display: none;
+}
+
+.calendar_view .day.expanded .more {
+    display: block;
+}
+
+.calendar_view .day.expanded .day_number {
+    left: 5px;
+    right: auto;
+    font-size: 2em;
+}
+
+.calendar_view .day.expanded .tasks {
+    margin-top: 30px;
+}
+
+.calendar_view .calendar_days {
+    width: 742px;
+}
+
+.calendar_view .day .task {
+    float: left;
+
+}
+
+.calendar_view .day.expanded .task {
+    float: none;
+    height: 20px;
+}
+
+.calendar_view .day .task_square {
+    background-color: #2bb8cb;
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 1px;
+}
+
+.calendar_view .day .task_container.late .task_square {
+    background-color: red;
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 1px;
+}
+
+.calendar_view .day .task_container.done .task_square {
+    background-color: #adadad;
+}
+
+.calendar_view .finished_button {
+    display: inline;
+}
+
+.calendar_view .day .task_container.done .finished_button {
+    display: none;
+}
+
+.calendar_view .done .cancel_finish_button {
+    display: inline;
+}
+
+.calendar_view .cancel_finish_button {
+    display: none;
+}
+
+.calendar_view .day .cal_task_name, .calendar_view .day .buttons {
+    display: none;
+}
+
+.calendar_view .expanded .cal_task_name, .calendar_view .day.expanded .buttons {
+    display: inline;
+}
+
+.calendar_view .calendar_month {
+    margin: auto;
+    width: 316px;
+}
+
+.calendar_view .calendar_month .next_month_button {
+    float: right;
+    margin-top: 3px;
+}
+
+.calendar_view .calendar_month .prev_month_button {
+    float: left;
+    margin-top: 3px;
+}
+
+.calendar_view .add_button {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+.calendar_view .add_button a {
+    color: gray;
+    font-size: large;
+    text-decoration: none;
+}
+
+.calendar_view .add_button a:hover {
+    color: black;
+    font-size: large;
+    text-decoration: none;
+}
+
+.tasks {
+    height: 60px;
+}
+
+.task {
+    z-index: 2;
+    position: relative;
+}
+
+.task_container:hover {
+    z-index: 10;
+}
+
+.day.expanded .task:hover {
+    z-index: 2;
+    position: relative;
+}
+
+.day.expanded .task_container:hover .cal_task_name {
+    display: inline;
+    background: none;
+    color: black;
+    position: static;
+    width: auto;
+    padding: 0;
+
+    box-shadow: none;
+}
+
+.task_container:hover .cal_task_name {
+    display: block;
+    background: white;
+    box-shadow: 0px 0px 10px gray;
+    color: black;
+    position: absolute;
+    z-index: 10;
+    width: 150px;
+    left: -75px;
+    top: 25px;
+    padding: 5px;
+    text-align: center;
+}
