@@ -1,0 +1,8 @@
+{
+    "name":"Timeline",
+    "token":"organization_desk",
+    "description":"What you are supposed to do today, right now and later   .",
+    "link":"/Organization/Tasks/app#desk",
+    "logo_url":"/Organization/Apps/Tasks/Resources/logo.png",
+    "block_token":"organization"
+}

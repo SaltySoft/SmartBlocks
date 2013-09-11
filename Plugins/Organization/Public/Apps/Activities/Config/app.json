@@ -1,0 +1,8 @@
+{
+    "name":"Activities",
+    "token":"organization_activities",
+    "description":"Your activities and their deadlines.",
+    "link":"/Organization/Tasks/app#activities",
+    "logo_url":"/Organization/Apps/Tasks/Resources/logo.png",
+    "block_token":"organization"
+}
