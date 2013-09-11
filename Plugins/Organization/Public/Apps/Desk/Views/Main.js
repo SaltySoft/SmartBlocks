@@ -5,9 +5,10 @@ define([
     'text!../Templates/main.html',
     './Timeline/Timeline',
     './Review/Review',
+    './Tomorrow/Views/Tomorrow',
     'jqueryui',
     'fullCalendar'
-], function ($, _, Backbone, main_tpl, TimelineView, ReviewView) {
+], function ($, _, Backbone, main_tpl, TimelineView, ReviewView, TomorrowView) {
     var View = Backbone.View.extend({
         tagName: "div",
         className: "desk_view",
@@ -43,6 +44,9 @@ define([
                 base.$el.find(".todayreview").addClass("pure-menu-selected");
             } else if (subapp == "tomorrow") {
                 base.$el.find(".tomorrow_tab_button").addClass("pure-menu-selected");
+                var subapp = new TomorrowView();
+                base.$el.find(".desk_subapp_container").html(subapp.$el);
+                subapp.init(base.SmartBlocks);
             }
 
         },
