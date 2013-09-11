@@ -1,4 +1,31 @@
 .day_review {
   position: relative;
   height: 100%;
+
+  .explain_panel {
+    float: left;
+    width: 240px;
+    background: rgb(167, 167, 167);
+    padding: 30px;
+    height: ~"calc(100% - 60px)";
+    color: white;
+    text-align: justify;
+    font-size: 18px;
+  }
+
+  .pagination_container {
+    right: 0px;
+    width: ~"calc(100% - 300px)";
+    left: auto;
+  }
+
+  .tasks_list_container {
+    margin-left: 300px;
+    .tasks_list {
+      width: -moz-fit-content;
+      width: -webkit-fit-content;
+      width: fit-content;
+      margin: auto;
+    }
+  }
 }
