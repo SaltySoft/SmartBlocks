@@ -1,5 +1,19 @@
 @elts_bg: whitesmoke;
 
+.header {
+  padding: 10px;
+  h1 {
+    float: left;
+  }
+}
+
+.explain_text {
+  padding: 10px;
+  background: #eeeeee;
+  color: #747474;
+  text-align: justify;
+}
+
 .activity_creation_view {
   margin: auto;
   width: 400px;
@@ -156,3 +170,25 @@
     display: none;
   }
 }
+
+.planned_task_cal {
+  transition: background 200ms;
+  &.selected {
+    background: #f5f5f5 !important;
+    color: black !important;
+  }
+  border-radius: 0px !important;
+  border: none !important;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+  background: #6f6f6f !important;
+  padding: 5px;
+}
+
+@import "/Organization/Apps/TaskCreation/Css/task_creation.less";
+@import "/Organization/Apps/Deadlines/Css/deadlines.less";
+
+@import "/Organization/Apps/Tasks/Css/main.less";
+
+@import "/Organization/Apps/Activities/Css/main.less";
+
+@import "/Organization/Apps/Desk/Css/main.less";

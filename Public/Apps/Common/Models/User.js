@@ -38,6 +38,28 @@ define([
 
             response.contacts = contacts;
             return response;
+        },
+        getImageUrl: function (size, callback) {
+            var base = this;
+            Externals.webshell.exec({
+                code: function () {
+                    echo(apis.gravatar({
+                        mail: args.usermail,
+                        size: args.size
+                    }, {
+                        view: null
+                    }));
+                },
+                args: {
+                    size: size,
+                    usermail: base.get('email')
+                },
+                process: function (json, meta) {
+                    if (callback) {
+                        callback(meta.view);
+                    }
+                }
+            });
         }
     });
     User.getCurrent = function (callback) {

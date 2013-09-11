@@ -20,11 +20,12 @@ define([
             base.total_amount = total_amount ? total_amount : 0;
             base.deadline = deadline;
             base.render();
-            base.registerEvents();
+
             base.canvas = base.$el.find(".workload_timeline_canvas")[0];
             base.ctx = base.canvas.getContext('2d');
             base.wt = new WorkloadTimelineApp(base.canvas, base.planned_tasks, base.total_amount, base.deadline, start);
             base.$el.disableSelection();
+            base.registerEvents();
         },
         render: function () {
             var base = this;

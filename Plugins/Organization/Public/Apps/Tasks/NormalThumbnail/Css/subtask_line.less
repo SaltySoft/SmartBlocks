@@ -1,0 +1,110 @@
+.subtask_line {
+
+  clear: both;
+  line-height: 30px;
+  height: 30px;
+  margin-bottom: 1px;
+  background: #e5e5e5;
+  padding-right: 5px;
+  padding-left: 5px;
+  cursor: default;
+
+  &.new {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    transition: all 200ms;
+    .add_subtask_title {
+      font-weight: normal;
+      font-size: 22px;
+      height: 30px;
+      line-height: 30px;
+      display: block;
+      float: left;
+      width: 0px;
+      transition: all 200ms;
+      overflow: hidden;
+
+      text-align: left;
+
+      .inner_title {
+        display: block;
+        width: 150px;
+      }
+    }
+
+    &:hover {
+      background: #bababa;
+
+      .add_subtask_title {
+        width: 210px;
+      }
+    }
+
+    &:active {
+      background: #95d7d8;
+    }
+
+
+  }
+
+  .pure-button {
+    padding: 3px;
+    margin-top: 5px;
+  }
+
+  input {
+    margin-top: 5px;
+
+  }
+
+  .finished_input {
+    float: left;
+    margin-top: 10px;
+  }
+
+  .name {
+    width: 150px;
+    height: 25px;
+    line-height: 25px;
+    display: block;
+    float:left;
+  }
+
+  .name_input {
+    width: 100px;
+    float:left;
+  }
+
+  .time_input {
+    width: 50px;
+    float:left;
+    text-align: center;
+  }
+
+  .edit_button {
+      float: right;
+  }
+
+  .for_edition, .for_edition_i {
+    display: none;
+  }
+
+  &.edition {
+    .for_edition {
+      display: block;
+    }
+
+    .for_edition_i {
+      display: inline;
+    }
+
+    .for_normal, .for_normal_i {
+      display: none;
+    }
+
+  }
+}

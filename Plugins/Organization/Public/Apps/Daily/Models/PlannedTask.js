@@ -14,6 +14,16 @@ define([
             this.set("start", date.getTime());
             console.log(this);
         },
+        getEnd: function () {
+            var start = new Date(this.get("start"));
+            var end = new Date();
+            end.setTime(start.getTime() + this.get('duration'));
+            return end;
+        },
+        getStop: function () {
+            var base = this;
+            return base.getEnd();
+        },
         getName: function () {
             var base = this;
             return base.get("content") ? base.get("content") : "No name";

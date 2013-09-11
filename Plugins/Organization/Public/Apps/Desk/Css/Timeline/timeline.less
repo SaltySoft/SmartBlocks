@@ -1,0 +1,57 @@
+.desk_timeline_view {
+  .fc-header-title {
+    h2 {
+      font-size: 20px;
+    }
+  }
+
+  .fc-header-left {
+    vertical-align: middle;
+  }
+
+
+
+  .selection_type {
+    float: right;
+  }
+
+  .descriptor_container_top {
+
+    .disabled_message {
+      display: none;
+    }
+
+    &.disabled {
+      .descriptor_container {
+        display: none;
+      }
+
+      .disabled_message {
+        display: block;
+        text-align: center;
+        height: 50px;
+        color: gray;
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: ~"calc(50% - 25px)";
+      }
+    }
+
+  }
+
+  .ltimeline {
+    position: absolute;
+    left: 59px;
+    border: none;
+    border-top: 1px solid red;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    z-index: 999;
+  }
+
+@import "descriptor.less";
+
+}
+
+

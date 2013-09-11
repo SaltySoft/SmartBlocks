@@ -65,6 +65,16 @@ class PlannedTask extends \Model
     private $gcal_id;
 
     /**
+     * @Column(type="string", nullable=true)
+     */
+    private $todoist_id;
+
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $todoist_proj_id;
+
+    /**
      * @Column(type="boolean")
      */
     private $active;
@@ -79,12 +89,18 @@ class PlannedTask extends \Model
      */
     private $owner;
 
+    /**
+     * @Column(type="boolean")
+     */
+    private $validated;
+
     public function __construct()
     {
         $this->start = time();
         $this->duration = 30 * 60;
         $this->active = true;
         $this->completed = false;
+        $this->validated = false;
     }
 
     public function getId()
@@ -124,6 +140,7 @@ class PlannedTask extends \Model
 
     public function setLastUpdated($last_updated)
     {
+
         $this->last_updated = $last_updated;
     }
 
@@ -144,6 +161,11 @@ class PlannedTask extends \Model
 
     public function before_save()
     {
+        \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
+            "type" => "data_update",
+            "class" => "planned_task",
+            "object" => $this->toArray(false, false)
+        ));
         $this->last_updated = time();
     }
 
@@ -181,6 +203,37 @@ class PlannedTask extends \Model
     {
         return $this->owner;
     }
+
+    public function setTodoistId($todoist_id)
+    {
+        $this->todoist_id = $todoist_id;
+    }
+
+    public function getTodoistId()
+    {
+        return $this->todoist_id;
+    }
+
+    public function getValidated()
+    {
+        return $this->validated;
+    }
+
+    public function setValidated($validated)
+    {
+        $this->validated = $validated;
+    }
+
+    public function setTodoistProjId($todoist_proj_id)
+    {
+        $this->todoist_proj_id = $todoist_proj_id;
+    }
+
+    public function getTodoistProjId()
+    {
+        return $this->todoist_proj_id;
+    }
+
 
 
     public function getContent($force = false)

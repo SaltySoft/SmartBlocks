@@ -1,0 +1,43 @@
+<div class="header">
+    <h1>Activities : new activity</h1>
+</div>
+
+<form class="pure-form creation_form" action="javascript:void(0);">
+    <div class="explain_text">
+        <h4>Activity Creation</h4>
+        You need to provide the name and type of the activity you want to create, then you will be redirected to its page where
+        you'll be able to edit it. Click on cancel to go to the activity index.
+    </div>
+    <div class="name_field field">
+        <div class="name_field_error field_error">
+            Must be alphabetical & non empty
+        </div>
+        <label>
+                <span>
+                    Name of the activity
+                </span>
+            <input type="text" class="name_input" placeholder="Enter a name"/>
+
+        </label>
+    </div>
+    <div class="type_field field">
+        <div class="type_field_error field_error">
+            You must provide a type
+        </div>
+        <label>
+                <span>
+                    Type of the activity
+                </span>
+            <select class="type_input">
+                <option value="0">Any type</option>
+                <% for (var k in activity_types) { %>
+                <option value="<%= activity_types[k].get('id') %>"><%= activity_types[k].get("name") %></option>
+                <% } %>
+            </select>
+        </label>
+    </div>
+    <div class="pure-controls">
+        <a href="#activities" class="pure-button pure-button-warning">Cancel</a>
+        <button type="submit" class="pure-button pure-button-success">Create</button>
+    </div>
+</form>

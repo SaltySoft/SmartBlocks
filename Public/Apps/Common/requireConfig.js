@@ -30,7 +30,11 @@ var sb_paths = {
     jDeepCopy: "/javascript/jqueryDeepCopy",
     amplify_lib: "/javascript/amplify.min",
     amplify: "/javascript/amplify.min",
-    fullCalendar: "/javascript/fullcalendar.min"
+    fullCalendar: "/javascript/fullcalendar.min",
+
+    LoadingTemplate: "/Apps/Common/Templates/loading.html",
+    LoadingScreen: "/Apps/Common/Views/LoadingScreen",
+    'Externals': 'Apps/Common/Useful/External'
 };
 
 var sb_shims = {

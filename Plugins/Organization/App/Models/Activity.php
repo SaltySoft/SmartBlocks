@@ -73,6 +73,11 @@ class Activity extends \Model
      */
     private $archived;
 
+    /**
+     * @OneToMany*(targetEntity="\Organization\Deadline", mappedBy="activity")
+     */
+    private $deadlines;
+
     public function __construct()
     {
         $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -108,12 +113,12 @@ class Activity extends \Model
 
     public function setDescription($description)
     {
-        $this->description = $description;
+        $this->description = htmlentities($description);
     }
 
     public function getDescription()
     {
-        return $this->description;
+        return str_replace("\n", "<br/>", $this->description);
     }
 
     public function setName($name)
@@ -166,6 +171,11 @@ class Activity extends \Model
         return $this->archived;
     }
 
+    public function getDeadlines()
+    {
+        return $this->deadlines;
+    }
+
     function delete()
     {
         foreach ($this->getTasks() as $task)
@@ -187,7 +197,7 @@ class Activity extends \Model
         $array = array(
             "id" => $this->id,
             "name" => $this->name,
-            "description" => $this->description,
+            "description" => $this->getDescription(),
             "creator" => $this->creator->toArray(0),
 
             "created" => $this->created,

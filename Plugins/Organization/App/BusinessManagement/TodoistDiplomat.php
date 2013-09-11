@@ -40,15 +40,15 @@ class TodoistDiplomat
 
     public function __construct()
     {
-        $this->api_diplomat = new \ApiDiplomat("https://api.todoist.com");
-            $api_keys = \ApiKey::where(array("api_name" => "todoist", "user" => \User::current_user()));
+        $api_keys = \ApiKey::where(array("api_name" => "todoist", "user" => \User::current_user()));
 
-            if (isset($api_keys[0]))
-            {
-                $this->api_key = $api_keys[0];
-                $this->is_ready = true;
-
-            }
+        if (isset($api_keys[0]))
+        {
+            $this->api_diplomat = new \ApiDiplomat("https://api.todoist.com");
+            $this->old_api_diplomat = new \ApiDiplomat("https://todoist.com/API");
+            $this->api_key = $api_keys[0];
+            $this->is_ready = true;
+        }
         else
         {
             \NodeDiplomat::sendMessage(\User::current_user()->getSessionId(), array(
@@ -76,6 +76,7 @@ class TodoistDiplomat
             $this->is_ready = false;
         }
 
+
     }
 
     public function get()
@@ -86,7 +87,25 @@ class TodoistDiplomat
         return $data;
     }
 
-    public function addItems($tasks = array())
+    public function getCompletedItems($project_id)
+    {
+        $data = $this->old_api_diplomat->post2json("/getCompletedItems", array(
+            'token' => $this->api_key->getToken(),
+            'project_id' => $project_id
+        ), false);
+        return $data;
+    }
+
+    public function getUncompletedItems($project_id)
+    {
+        $data = $this->old_api_diplomat->post2json("/getUncompletedItems", array(
+            'token' => $this->api_key->getToken(),
+            'project_id' => $project_id
+        ), false);
+        return $data;
+    }
+
+    public function addItems($planned_tasks = array())
     {
         $get_data = $this->get();
         $commands_ = array();
@@ -115,47 +134,84 @@ class TodoistDiplomat
                 "timestamp" => time()
             );
         }
-
-        foreach ($tasks as $task)
+        foreach ($planned_tasks as $pt)
         {
-            //Correction for todoist system
-            $date = $task->getDueDate() + 23 * 3600 + 59 * 60 + 59;
-            if ($task->getTodoistId() == null)
-            {
+            $task = $pt->getTask();
+            $pt_end = new \DateTime();
+            $pt_end->setTimestamp($pt->getStart()->getTimeStamp() + $pt->getDuration() / 1000);
+            $date = $pt_end->getTimeStamp();
 
+            if ($pt->getTodoistId() == null)
+            {
                 $commands_[] = array(
                     "type" => "item_add",
-                    "temp_id" => $task->getId(),
+                    "temp_id" => $pt->getId(),
                     "timestamp" => time(),
                     "args" => array(
                         "content" => $task->getName(),
                         "project_id" => $id,
                         "priority" => 1,
-                        "date_string" => gmdate("Y-m-d\\TH:i:s\\Z", $date),
-                        "due_date_utc" => gmdate("Y-m-d\\TH:i:s\\Z", $date),
+                        "date_string" => $date != null ? gmdate("Y-m-d\\TH:i:s\\Z", $date) : null,
+                        "date_string" => $date != null ? gmdate("Y-m-d\\TH:i:s\\Z", $date) : null,
+                        "checked" => $pt->getValidated(),
                         "item_order" => 1
                     )
                 );
             }
             else
             {
-                echo $task->getLastUpdated() . " " . $this->api_key->getLastSync() . " - ";
-                if ($task->getLastUpdated() > $this->api_key->getLastSync())
+                if ($pt->getActive())
                 {
-                    echo "UPDATING";
                     $commands_[] = array(
                         "type" => "item_update",
                         "timestamp" => time(),
                         "args" => array(
                             "content" => $task->getName(),
-                            "date_string" => gmdate("Y-m-d\\TH:i:s\\Z", $date),
-                            "due_date_utc" => gmdate("Y-m-d\\TH:i:s\\Z", $date),
-                            "id" => $task->getTodoistId()
+                            "date_string" => $date != null ? gmdate("Y-m-d\\TH:i:s\\Z", $date) : null,
+                            "date_string" => $date != null ? gmdate("Y-m-d\\TH:i:s\\Z", $date) : null,
+                            "id" => $pt->getTodoistId()
+                        )
+                    );
+
+                    if ($pt->getValidated()) {
+                        $commands_[] = array(
+                            "type" => "item_complete",
+                            "timestamp" => time(),
+                            "args" => array(
+                                "ids" => array(
+                                    $pt->getTodoistId()
+                                ),
+                                "project_id" => $pt->getTodoistProjId(),
+                                "force_history"=> 1
+                            )
+                        );
+                    } else {
+                        $commands_[] = array(
+                            "type" => "item_uncomplete",
+                            "timestamp" => time(),
+                            "args" => array(
+                                "ids" => array(
+                                    $pt->getTodoistId()
+                                ),
+                                "project_id" => $pt->getTodoistProjId(),
+                                "force_history"=> 1
+                            )
+                        );
+                    }
+                }
+                else
+                {
+                    $commands_[] = array(
+                        "type" => "item_delete",
+                        "timestamp" => time(),
+                        "args" => array(
+                            "ids" => array($pt->getTodoistId())
                         )
                     );
                 }
 
             }
+
         }
 
         $data = $this->api_diplomat->post2json("/TodoistSync/v2/syncAndGetUpdated", array(
@@ -165,16 +221,18 @@ class TodoistDiplomat
         $em = \Model::getEntityManager();
         foreach ($data["TempIdMapping"] as $key => $id)
         {
-            $task = Task::find($key);
-            if (is_object($task))
+            $pt = PlannedTask::find($key);
+            if (is_object($pt))
             {
-                $task->setTodoistId($id);
-                $em->persist($task);
+                $pt->setTodoistId($id);
+                $em->persist($pt);
             }
         }
+
+
         $em->flush();
 
-        return $data;
+        return $commands_; // $data;
     }
 
     public function constructCommand()

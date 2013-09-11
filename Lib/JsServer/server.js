@@ -47,6 +47,7 @@ function start(route, handle) {
 
 
         connection.on('message', function (message) {
+           
             var base = this;
             var session_id = JSON.parse(message.utf8Data).identification;
             if (session_id) {

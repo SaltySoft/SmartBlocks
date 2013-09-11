@@ -56,7 +56,7 @@ class Task extends \Model
     private $linked_users;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="bigint")
      */
     private $creation_date;
 
@@ -121,16 +121,27 @@ class Task extends \Model
     private $children;
 
     /**
+     * @OneToMany(targetEntity="\Organization\Subtask", mappedBy="task")
+     */
+    private $subtasks;
+
+    /**
      * @Column(type="bigint")
      */
     private $required_time;
+
+    /**
+     * @ManyToOne(targetEntity="\Organization\Deadline")
+     */
+    private $deadline;
+
 
     public function __construct()
     {
         $this->owner = \User::current_user();
         $this->name = "New task";
         $this->description = "";
-        $this->creation_date = time();
+        $this->creation_date = microtime();
         $this->order_index = self::count() + 1;
         $this->linked_users = new \Doctrine\Common\Collections\ArrayCollection();
         $this->last_updated = time();
@@ -138,8 +149,10 @@ class Task extends \Model
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subtasks = new \Doctrine\Common\Collections\ArrayCollection();
         $this->required_time = 0;
         $this->planned_tasks = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->subtasks = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -309,6 +322,29 @@ class Task extends \Model
         $this->required_time = $required_time;
     }
 
+    public function setDeadline($deadline)
+    {
+        $this->deadline = $deadline;
+    }
+
+    public function getDeadline()
+    {
+        return $this->deadline;
+    }
+
+    public function addSubtask($subtask)
+    {
+        $this->subtasks[] = $subtask;
+    }
+
+    public function getSubtasks()
+    {
+        return $this->subtasks;
+    }
+
+
+
+
     public function getRequiredTime()
     {
         $required_time = $this->required_time;
@@ -322,7 +358,6 @@ class Task extends \Model
         }
         return $required_time;
     }
-
 
 
     public static function getTypes()
@@ -409,6 +444,10 @@ class Task extends \Model
         {
             $child->delete();
         }
+        foreach ($this->getSubtasks() as $subtask)
+        {
+            $subtask->delete();
+        }
         \NodeDiplomat::sendMessage($this->owner->getSessionId(), array(
             "app" => "organizer",
             "action" => "task_deleted",
@@ -421,14 +460,16 @@ class Task extends \Model
     {
         $planned = array();
 
-        foreach ($task->planned_tasks as $planned_task) {
+        foreach ($task->planned_tasks as $planned_task)
+        {
 
             if ($planned_task->getActive())
-            $planned[] = $planned_task->toArray(true, false);
+                $planned[] = $planned_task->toArray(true, false);
 
         }
 
-        foreach ($task->children as $stask) {
+        foreach ($task->children as $stask)
+        {
             $planned = array_merge($planned, self::getAllPlannedTasks($stask));
         }
 
@@ -446,14 +487,15 @@ class Task extends \Model
         }
 
 
-        if (is_object($task->parent)) {
+        if (is_object($task->parent))
+        {
             $activities = array_merge($activities, self::getUserActivities($task->parent));
         }
 
         return $activities;
     }
 
-    public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true)
+    public function toArray($show_task_users = true, $show_activities = true, $show_parent = true, $show_children = true, $show_subtasks = true)
     {
         $tags = array();
         foreach ($this->tags as $tag)
@@ -466,16 +508,20 @@ class Task extends \Model
             "name" => $this->name,
             "description" => $this->description,
             "required_time" => $this->getRequiredTime(),
+            "active" => $this->active,
             "owner" => $this->owner->toArray(0),
-            "creation_date" => $this->creation_date * 1000,
+            "creation_date" => $this->creation_date,
             "completion_date" => $this->completion_date,
             "order_index" => $this->order_index,
             "due_date" => is_object($this->due_date) ? $this->due_date->getTimeStamp() : null,
+            "deadline" => $this->deadline,
             "type" => $this->type != null ? $this->type->toArray() : null,
-            "tags" => $tags
+            "tags" => $tags,
+            "deadline" => $this->deadline != null ? $this->deadline->toArray(false) : null
         );
 
-        if ($show_children) {
+        if ($show_children)
+        {
             $planned_tasks = self::getAllPlannedTasks($this);
             $array["planned_tasks"] = $planned_tasks;
         }
@@ -505,23 +551,39 @@ class Task extends \Model
         }
         if ($show_parent)
         {
-            $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false,false,true, false) : null;
+            $array["parent"] = is_object($this->parent) ? $this->parent->toArray(false, false, true, false) : null;
         }
 
-        if ($show_children)
-        {
-            $children = array();
-            $em = \Model::getEntityManager();
-            $qb = $em->createQueryBuilder();
-            $qb->select("task")->from('\Organization\Task', 'task');
-            $qb->where("task.parent = :parent")->setParameter("parent", $this);
-            $result = $qb->getQuery()->getResult();
+//        if ($show_children)
+//        {
+//            $children = array();
+//            $em = \Model::getEntityManager();
+//            $qb = $em->createQueryBuilder();
+//            $qb->select("task")->from('\Organization\Task', 'task');
+//            $qb->where("task.parent = :parent")->setParameter("parent", $this);
+//            $result = $qb->getQuery()->getResult();
+//
+//            foreach ($result as $child)
+//            {
+//                $children[] = $child->toArray(false, false, false, true);
+//            }
+//            $array["children"] = $children;
+//        }
 
-            foreach ($result as $child)
+        if ($show_subtasks)
+        {
+//            $em = \Model::getEntityManager();
+//            $qb = $em->createQueryBuilder();
+//            $qb->select("subtask")->from('\Organization\Subtask', 'subtask');
+//            $qb->where("subtask.task = :task")->setParameter("task", $this);
+//            $result = $qb->getQuery()->getResult();
+
+            $subtasks = array();
+            foreach ($this->subtasks as $subtask)
             {
-                $children[] = $child->toArray(false, false, false, true);
+                $subtasks[] = $subtask->toArray(false);
             }
-            $array["children"] = $children;
+            $array["subtasks"] = $subtasks;
         }
 
         return $array;

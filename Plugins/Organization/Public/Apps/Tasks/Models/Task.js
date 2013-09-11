@@ -4,31 +4,37 @@ define([
     'Organization/Apps/Daily/Collections/PlannedTasks',
     'Organization/Apps/Daily/Models/PlannedTask',
     'UserModel',
+    'Organization/Apps/Models/Subtask',
+    'Organization/Apps/Collections/Subtasks',
     'UsersCollection',
     'Organization/Apps/Common/Models/TaskTag',
-    'Organization/Apps/Common/Collections/TaskTags'
-], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, UsersCollection, TaskTag, TaskTagsCollection) {
+    'Organization/Apps/Common/Collections/TaskTags',
+    'Organization/Apps/Models/Deadline',
+    'Organization/Apps/Collections/Subtasks'
+], function (_, Backbone, PlannedTasksCollection, PlannedTask, User, Subtask, SubtasksCollection, UsersCollection, TaskTag, TaskTagsCollection, Deadline, SubtasksCollection) {
 
 
     var Task = Backbone.Model.extend({
-        urlRoot: "/Organization/Tasks",
-        defaults: {
-            "model_type": "Task"
+        urlRoot:"/Organization/Tasks",
+        defaults:{
+            "model_type":"Task",
+            activities:[],
+            subtasks: new SubtasksCollection(),
+            creation_time: new Date().getTime()
         },
-        hasDeadline: function () {
+        hasDeadline:function () {
             return this.get("due_date");
         },
-        getDueDate: function () {
+        getDueDate:function () {
             return new Date(this.get("due_date") * 1000);
         },
-        setDueDate: function (date) {
+        setDueDate:function (date) {
             this.set("due_date", date.getTime() / 1000);
         },
-        getActivityForUser: function (user) {
+        getActivityForUser:function (user) {
             var base = this;
             var activity = undefined;
             var activities_list = base.get("activities");
-//            console.log(activities_list);
             for (var k in activities_list) {
                 var current_activity = activities_list[k];
                 if (current_activity.creator.id == user.get('id')) {
@@ -37,7 +43,7 @@ define([
             }
             return activity;
         },
-        parse: function (response) {
+        parse:function (response) {
 
             var children_array = response.children;
             if (!TasksCollection) {
@@ -51,10 +57,24 @@ define([
             }
             response.children = subtasks;
 
+            var subtasks = new SubtasksCollection();
+            if (response.subtasks != null && response.subtasks != undefined) {
+                var subtasks_array = response.subtasks;
+
+                for (var k in subtasks_array) {
+                    var subtask = new Subtask(subtasks_array[k]);
+                    if (subtask) {
+                        subtasks.add(subtask);
+                    }
+                }
+            }
+            response.subtasks = subtasks;
+
             var planned_tasks_array = response.planned_tasks;
             var planned_tasks_collection = new PlannedTasksCollection();
             for (var k in planned_tasks_array) {
                 var planned_task = new PlannedTask(planned_tasks_array[k]);
+//                var planned_task = OrgApp.planned_tasks.get(planned_tasks_array[k].id);
                 planned_tasks_collection.add(planned_task);
             }
             response.planned_tasks = planned_tasks_collection;
@@ -75,6 +95,12 @@ define([
             }
             response.tags = tags_collection;
 
+
+            if (response.deadline) {
+                var deadline = new Deadline(response.deadline);
+                response.deadline = deadline;
+            }
+
 //            if (!Activity) {
 //                Activity  = require('Organization/Apps/Common/Models/Activity');
 //            }
@@ -92,9 +118,11 @@ define([
             }
 
 
+
+//            console.log(response);
             return response;
         },
-        initialize: function (model) {
+        initialize:function (model) {
             if (model) {
                 var children_array = model.children;
                 if (children_array && !model.children.models) {
@@ -116,6 +144,7 @@ define([
                     var planned_tasks_collection = new PlannedTasksCollection();
                     for (var k in planned_tasks_array) {
                         var planned_task = new PlannedTask(planned_tasks_array[k]);
+//                        var planned_task = OrgApp.planned_tasks.get(planned_tasks_array[k].id);
                         planned_tasks_collection.add(planned_task);
                     }
                     this.attributes.planned_tasks = planned_tasks_collection;
@@ -136,6 +165,17 @@ define([
                     }
                     this.attributes.tags = tags_collection;
                 }
+
+
+                if (model.subtasks && !model.subtasks.models) {
+                    var subtasks_collection = new OrgApp.SubtasksCollection();
+                    for (var k in model.subtasks) {
+                        var subtask = new OrgApp.Subtask(model.subtasks[k]);
+                        subtasks_collection.add(subtask);
+                    }
+                    this.attributes.subtasks = subtasks_collection;
+                }
+
 //                if (!Activity) {
 //                    Activity  = require('Organization/Apps/Common/Models/Activity');
 //                }
@@ -159,7 +199,7 @@ define([
                     this.attributes.owner = owner;
             }
         },
-        fullyPlanned: function () {
+        fullyPlanned:function () {
             var base = this;
             var worked_time = 0;
             var now = new Date();
@@ -170,22 +210,95 @@ define([
                 var end = new Date(start);
                 end.setTime(end.getTime() + pt.get("duration"));
 
-                worked_time += pt.get("duration");
+                worked_time += parseInt(pt.get("duration"));
             }
 
             if (!base.get("due_date")) {
-                return false;
+                return 0;
             } else {
-                return  (worked_time >= base.get("required_time"));
+                if (worked_time == parseInt(base.get("required_time"))) {
+                    return 1;
+                } else if (worked_time < parseInt(base.get("required_time"))) {
+                    return -1;
+                } else if (worked_time > parseInt(base.get("required_time"))) {
+                    return 2;
+                }
+            }
+        },
+        isFinished:function () {
+            var base = this;
+            console.log(base.get('completion_date'));
+            return base.get('completion_date') != null;
+        },
+        getRequiredWork: function () {
+            var base = this;
+
+            var subtasks = base.get('subtasks');
+            var required_time = 0;
+            var left = 0;
+            var done = 0;
+            for (var k in subtasks.models) {
+                var st = subtasks.models[k];
+                required_time += parseInt(st.get('duration'));
+                if (st.get('finished')) {
+                    done += parseInt(st.get('duration'));
+                } else {
+                    left += parseInt(st.get('duration'));
+                }
             }
 
+            return {
+                total: required_time,
+                left: left,
+                done: done
+            };
+        },
+        getPlannedTasks: function () {
+            var base = this;
+            var filtered = OrgApp.planned_tasks.filter(function (pt) {
+                return pt.get("task").get("id") === base.get("id");
+            });
+            return new OrgApp.PlannedTasksCollection(filtered);
+        },
+        getWork: function () {
+            var base = this;
 
+            var total = 0;
+            var left = 0;
+            var done = 0;
+
+            total += base.getRequiredWork().total;
+            var pts = base.getPlannedTasks();
+
+
+
+            for (var l in pts.models) {
+                var pt = pts.models[l];
+                var now = new Date();
+                var start = pt.getStart();
+                var end = new Date(start);
+                end.setTime(start.getTime() + pt.get("duration"));
+                if (start > now) {
+                    left +=  pt.get("duration");
+                } else if (end < now) {
+                    done += pt.get("duration");
+                } else {
+                    left += end.getTime() - now.getTime();
+                    done += now.getTime() - start.getTime();
+                }
+            }
+
+            return {
+                total: total,
+                left: left,
+                done: done
+            };
         }
     });
 
     var TasksCollection = Backbone.Collection.extend({
-        url: "/Organization/Tasks",
-        model: Task
+        url:"/Organization/Tasks",
+        model:Task
     });
 
     window.Task = Task;

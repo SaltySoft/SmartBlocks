@@ -1,0 +1,72 @@
+<form class="edition_form pure-form" action="javascript:void(0);">
+    <div class="pure-g">
+        <div class="pure-u-1-2">
+            <div class="fields_container">
+                <div class="explain_text">
+                    <em>Editing your activity</em>
+                    <p>
+                        Here you can edit the basic information of the current activity.
+                    </p>
+                    <em>Saving changes</em>
+                    <p>
+                        Click on the green "Save changes"
+                        button to save on the server, or on the orange "Cancel changes" button to reset the form to
+                        its last save state.
+                    </p>
+                    <em>Deletion</em>
+                    <p>
+                        You can delete the activity by clicking on the red "Delete activity" button.
+                    </p>
+                </div>
+
+            </div>
+            <a href="javascript:void(0);" class="delete_button pure-button pure-button-error">Delete activity</a>
+        </div>
+        <div class="pure-u-1-2">
+
+            <div class="fields_container">
+                <div class="name field">
+                    <label>
+                        Name:
+                        <input type="text" placeholder="Enter a name" class="name_input"
+                               value="<%= activity.get('name') %>"/>
+                    </label>
+                </div>
+                <div class="field">
+                    <label>
+                        Type :
+                        <select class="type_input" name="type">
+                            <% for (var k in types) {%>
+                            <option
+                            <% if (activity.get('type').get('id') == types[k].get('id')) { %>
+                            selected
+                            <% }%> value="<%= types[k].get('id') %>"><%= types[k].get('name') %>
+                            </option>
+                            <% }%>
+                        </select>
+                    </label>
+                </div>
+                <div class="field archived_field">
+                    <label>
+                        Archived
+                        <input type="checkbox" class="archived_input" name="archived" <% if (activity.get('archived')) {
+                        %>checked="true"<% }%>/>
+                    </label>
+                </div>
+                <div class="field">
+                    <label>
+                        Description
+                        <textarea class="description_input" name="description"><%= activity.get('description').replace('<br/>', "\n")
+                            %></textarea>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pure-controls controls">
+        <button type="reset" class="pure-button pure-button-warning">Cancel changes</button>
+        <button type="submit" class="pure-button pure-button-success">Save changes</button>
+    </div>
+
+</form>
